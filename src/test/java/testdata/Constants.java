@@ -1,4 +1,4 @@
-package TestData;
+package testdata;
 
 import runner.ProjectProperties;
 

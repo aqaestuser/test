@@ -19,11 +19,11 @@ public abstract class BaseTest {
 
     @Parameters("browserType")
     @BeforeClass
-    protected void launchBrowser(@Optional("CHROMIUM") String browserType) {
+    protected void beforeClass(@Optional("CHROMIUM") String browserType) {
         this.browserType = browserType;
         try {
             playwright = Playwright.create();
-            browser = BrowserManager.getBrowser(playwright, browserType);
+            browser = BrowserFactory.getBrowser(playwright, browserType);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error occurred: " + e.getMessage());
@@ -31,12 +31,12 @@ public abstract class BaseTest {
     }
 
     @BeforeMethod
-    protected void createContextAndPage(Method method, ITestResult testResult) {
+    protected void beforeMethod(Method method, ITestResult testResult) {
         try {
             context = browser.newContext(PlaywrightOptions.contextOptions());
             context.tracing().start(PlaywrightOptions.tracingStartOptions());
             page = context.newPage();
-            BaseUtils.navigateToBaseURL(page);
+            ProjectUtils.navigateToBaseURL(page);
         } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("Error occurred: " + e.getMessage());
@@ -44,14 +44,14 @@ public abstract class BaseTest {
     }
 
     @AfterMethod(alwaysRun = true)
-    protected void closeContext(Method method, ITestResult testResult) {
+    protected void afterMethod(Method method, ITestResult testResult) {
         page.close();
         context.tracing().stop(PlaywrightOptions.tracingStopOptions(page, browserType, method, testResult));
         context.close();
     }
 
     @AfterClass(alwaysRun = true)
-    protected void closeBrowser() {
+    protected void afterClass() {
         browser.close();
         playwright.close();
     }

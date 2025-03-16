@@ -1,6 +1,5 @@
 package runner;
 
-import TestData.Constants;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import org.testng.ITestResult;
@@ -10,7 +9,7 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class BaseUtils {
+public class ProjectUtils {
 
     public static String getTestClassMethodName(Method method) {
         return method.getDeclaringClass().getSimpleName() + "." + method.getName();
@@ -31,10 +30,5 @@ public class BaseUtils {
     public static void navigateToBaseURL(Page page) {
         page.navigate("/");
         page.waitForLoadState(LoadState.LOAD);
-        if (page.title().equals(Constants.BASE_URL_TITLE)) {
-            System.out.println("Base URL is opened");
-        } else {
-            System.out.println("Failed to open Base URL");
-        }
     }
 }

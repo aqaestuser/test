@@ -1,9 +1,7 @@
-package tests;
-
-import TestData.Constants;
+import testdata.Constants;
 import org.testng.annotations.Test;
-import pages.HomePage;
-import pages.LoginPage;
+import page.HomePage;
+import page.LoginPage;
 import runner.BaseTest;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -23,8 +21,8 @@ public class LoginPageTest extends BaseTest {
     public void testLogin() {
 
         HomePage homePage = new LoginPage(getPage())
-                .fillUserEmailField(Constants.USER_EMAIL)
-                .fillUserPasswordField(Constants.USER_PASSWORD)
+                .fillEmailField(Constants.USER_EMAIL)
+                .fillPasswordField(Constants.USER_PASSWORD)
                 .clickLoginButton();
 
         assertThat(homePage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
