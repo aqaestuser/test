@@ -32,11 +32,10 @@ The project is structured as follows:
 📦:.
 └───test
     ├───java
-    │   ├───pages
+    │   ├───page
     │   ├───runner
     │   ├───testdata
     │   ├───tests
-    │   └───utils
     └───resources
 ```
 

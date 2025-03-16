@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class PlaywrightOptions {
 
-    private static final String RUN_DIR = BaseUtils.setNameFromDateAndTime();
+    private static final String RUN_DIR = ProjectUtils.setNameFromDateAndTime();
     private static final String TRACE_DIR = "target/testTracing/";
     public static final String TRACE_RUN_DIR = TRACE_DIR + RUN_DIR + "/";
     private static final String VIDEO_DIR = "target/video/";
@@ -41,7 +41,7 @@ public class PlaywrightOptions {
     }
 
     public static Tracing.StopOptions tracingStopOptions(Page page, String browserType, Method method, ITestResult testResult) {
-        String testName = BaseUtils.getTestClassMethodNameWithInvocationCount(method, testResult);
+        String testName = ProjectUtils.getTestClassMethodNameWithInvocationCount(method, testResult);
 
         Tracing.StopOptions tracingStopOptions = null;
         if (!testResult.isSuccess()) {
