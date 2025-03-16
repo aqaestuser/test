@@ -34,7 +34,7 @@ The project is structured as follows:
     ├───java
     │   ├───page
     │   ├───runner
-    │   ├───testdata
+    │   └───testdata
     └───resources
 ```
 
