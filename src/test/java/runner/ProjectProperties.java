@@ -76,7 +76,7 @@ public class ProjectProperties {
         return Double.valueOf(getPropertyValue("slowMoMode"));
     }
 
-    static int isViewportWidth() {
+    static int getViewportWidth() {
         return Integer.parseInt(getPropertyValue("viewportWidth"));
     }
 

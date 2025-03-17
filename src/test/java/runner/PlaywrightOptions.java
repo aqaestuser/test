@@ -27,7 +27,7 @@ public class PlaywrightOptions {
 
     public static Browser.NewContextOptions contextOptions() {
         return new Browser.NewContextOptions()
-                .setViewportSize(ProjectProperties.isViewportWidth(), ProjectProperties.getViewportHeight())
+                .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
                 .setBaseURL(ProjectProperties.getBaseUrl())
                 .setRecordVideoDir(Paths.get(VIDEO_RUN_DIR))
                 .setRecordVideoSize(1280, 720);
