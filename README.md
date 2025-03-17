@@ -56,13 +56,15 @@ The project is structured as follows:
 - The tests can be executed using *TestNG* as the test runner.
 - The tests can be executed from maven test command or individual TestNG test from local after cloning the repo.
 
-Maven commands to run tests:
+### Maven commands to run tests:
+ - To run all the unit tests
 
-    mvn clean test                                    / To run all the unit tests
+`mvn clean test`
 
-    mvn test -Dtest=testClasseName                    / To run a single test class
+ - To run a single test class
 
-    mvn test -Dtest=testClasseName#testMethodName     / To run a specific methods within test classes
+`mvn test -Dtest=LoginPageTest`
 
+- To run a specific methods within test classes
 
-
+`mvn -X test -Dtest=LoginTest#testLogin`
