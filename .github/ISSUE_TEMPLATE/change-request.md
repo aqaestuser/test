@@ -22,5 +22,3 @@ Add mockups/screenshots if needed.
 
 **Labels to be added**
 [change request: UI improvement]
-
-Epic: [Epic title with its link]
