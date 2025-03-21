@@ -2,7 +2,6 @@ package page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.LoadState;
 
 public final class LoginPage extends BasePage {
 
@@ -12,9 +11,9 @@ public final class LoginPage extends BasePage {
 
     public LoginPage(Page page) {
         super(page);
-        this.emailField = placeholder("Enter your email");
-        this.passwordField = placeholder("Enter your password");
-        this.loginButton = button("Login");
+        emailField = placeholder("Enter your email");
+        passwordField = placeholder("Enter your password");
+        loginButton = button("Login");
     }
 
     public LoginPage fillEmailField(String userEmail) {
@@ -29,7 +28,6 @@ public final class LoginPage extends BasePage {
 
     public HomePage clickLoginButton() {
         loginButton.click();
-        getPage().waitForLoadState(LoadState.LOAD);
         return new HomePage(getPage());
     }
 }
