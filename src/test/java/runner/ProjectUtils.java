@@ -17,7 +17,7 @@ public class ProjectUtils {
     public static String getTestClassCompleteMethodName(Method method, ITestResult testResult) {
         String testMethodName = getTestClassMethodName(method);
         if (!method.getAnnotation(Test.class).dataProvider().isEmpty()) {
-            testMethodName = String.format("%s(%d)", testMethodName, testResult.getMethod().getCurrentInvocationCount());
+            testMethodName = "%s(%d)".formatted(testMethodName, testResult.getMethod().getCurrentInvocationCount());
         }
         return testMethodName + setNameFromDateAndTime();
     }

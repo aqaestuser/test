@@ -67,4 +67,8 @@ The project is structured as follows:
 
 - To run a specific methods within test classes
 
-`mvn -X test -Dtest=LoginTest#testLogin`
+`mvn test -Dtest=LoginPageTest#testLogin`
+
+- To run in Debug Mode
+
+`mvn -X test -Dtest=LoginPageTest#testLogin`

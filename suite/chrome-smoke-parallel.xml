@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="Npgw parallel smoke tests" thread-count="3" parallel="tests" verbose="0">
+
+  <test name="Login tests">
+    <classes>
+      <class name="LoginPageTest"/>
+    </classes>
+  </test>
+
+  <test name="Dashboard tests">
+    <classes>
+    </classes>
+  </test>
+
+  <test name="Transactions tests">
+    <classes>
+    </classes>
+  </test>
+
+</suite>

@@ -9,9 +9,6 @@ import java.nio.file.Paths;
 
 public class PlaywrightOptions {
     private static final VideoSettings VIDEO = new VideoSettings(1280, 720, Paths.get("target/video"));
-    private static final boolean isScreenshotsEnabled = true;
-    private static final boolean isSnapshotsEnabled = true;
-    private static final boolean isSourcesEnabled = true;
 
     public static BrowserType.LaunchOptions browserOptions() {
         return new BrowserType.LaunchOptions()
@@ -33,9 +30,9 @@ public class PlaywrightOptions {
 
     public static Tracing.StartOptions tracingStartOptions() {
         return new Tracing.StartOptions()
-                .setScreenshots(isScreenshotsEnabled)
-                .setSnapshots(isSnapshotsEnabled)
-                .setSources(isSourcesEnabled);
+                .setScreenshots(true)
+                .setSnapshots(true)
+                .setSources(true);
     }
 
     public static Tracing.StopOptions tracingStopOptions(Path tracePath) {

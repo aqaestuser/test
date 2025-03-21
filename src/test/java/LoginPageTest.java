@@ -1,8 +1,8 @@
-import testdata.Constants;
 import org.testng.annotations.Test;
 import page.HomePage;
 import page.LoginPage;
 import runner.BaseTest;
+import testdata.Constants;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 

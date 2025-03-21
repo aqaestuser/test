@@ -21,7 +21,9 @@ public class ProjectProperties {
 
     private static void loadPropertiesFromEnv(String envKey) {
         String envValue = System.getenv(envKey);
-        if (envValue == null || envValue.isEmpty()) return;
+        if (envValue == null || envValue.isEmpty()) {
+            return;
+        }
 
         Arrays.stream(envValue.split(";"))
                 .map(option -> option.split("=", 2))

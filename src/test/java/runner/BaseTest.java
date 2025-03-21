@@ -4,6 +4,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import io.qameta.allure.Allure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.testng.ITestResult;
@@ -14,7 +15,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -69,6 +72,15 @@ public abstract class BaseTest {
         if (ProjectProperties.isVideoMode()) {
             page.video().saveAs(videoFilePath);
             page.video().delete();
+        }
+
+        if (!testResult.isSuccess()) { // && ProjectProperties.isServerRun()) {
+            try {
+                Allure.getLifecycle().addAttachment("video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
+                Allure.getLifecycle().addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
+            } catch (IOException e) {
+                LOGGER.error("Add artefacts to allure failed: {}", e.getMessage());
+            }
         }
 
         context.close();
