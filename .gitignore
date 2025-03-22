@@ -38,4 +38,4 @@ build/
 ### Project ###
 access.properties
 browser.properties
-/.allire/
+/.allure/

@@ -72,4 +72,3 @@ The project is structured as follows:
 - To run in Debug Mode
 
 `mvn -X test -Dtest=LoginPageTest#testLogin`
-`mvn -X test -Dtest=LoginPageTest#testNavigateToLoginPage`
