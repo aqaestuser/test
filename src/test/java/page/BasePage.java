@@ -23,4 +23,8 @@ public abstract class BasePage {
     protected Locator button(String text) {
         return page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName(text));
     }
+
+    protected Locator checkbox(String text) {
+        return page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(text));
+    }
 }
