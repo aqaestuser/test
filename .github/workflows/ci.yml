@@ -69,6 +69,10 @@ jobs:
           path: allure-report
 
   publish-report:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -76,6 +80,7 @@ jobs:
     needs: run-tests
     if: always()
     name: Report publication
+
 
     steps:
       - name: Deploy to gitHub Pages
