@@ -1,4 +1,4 @@
-package runner;
+package xyz.npgw.test.common;
 
 import com.microsoft.playwright.Page;
 import org.testng.ITestResult;

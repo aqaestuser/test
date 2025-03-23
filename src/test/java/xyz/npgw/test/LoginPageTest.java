@@ -1,12 +1,14 @@
+package xyz.npgw.test;
+
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
-import page.DashboardPage;
-import page.LoginPage;
-import runner.BaseTest;
-import testdata.Constants;
+import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.Constants;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
