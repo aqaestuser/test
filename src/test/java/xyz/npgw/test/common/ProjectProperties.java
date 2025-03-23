@@ -89,11 +89,11 @@ public class ProjectProperties {
         return Integer.parseInt(getPropertyValue("viewportHeight"));
     }
 
-    static boolean isTracingMode() {
+    public static boolean isTracingMode() {
         return getPropertyValueAsBoolean("tracingMode");
     }
 
-    static boolean isVideoMode() {
+    public static boolean isVideoMode() {
         return getPropertyValueAsBoolean("videoMode");
     }
 
