@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -41,8 +42,8 @@ public class ProjectProperties {
     }
 
     private static void loadPropertiesFromFile(String fileName) {
-        try (FileInputStream fileInputStream = new FileInputStream(RESOURCE_PATH + fileName)) {
-            properties.load(fileInputStream);
+        try (InputStream inputStream = ProjectProperties.class.getClassLoader().getResourceAsStream(fileName)) {
+            properties.load(inputStream);
         } catch (IOException e) {
             LOGGER.error("The \u001B[31m{}\u001B[0m file not found.", fileName);
             LOGGER.error("You need to create it from {}.TEMPLATE file.", fileName);
