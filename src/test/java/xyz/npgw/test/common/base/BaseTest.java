@@ -1,4 +1,4 @@
-package runner;
+package xyz.npgw.test.common.base;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
@@ -14,6 +14,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+import xyz.npgw.test.common.BrowserFactory;
+import xyz.npgw.test.common.PlaywrightOptions;
+import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.ProjectUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;

@@ -1,9 +1,10 @@
-package runner;
+package xyz.npgw.test.common;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.Playwright;
 
 public enum BrowserFactory {
+
     CHROMIUM {
         @Override
         public Browser createInstance(Playwright playwright) {

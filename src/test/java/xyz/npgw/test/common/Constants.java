@@ -1,6 +1,4 @@
-package testdata;
-
-import runner.ProjectProperties;
+package xyz.npgw.test.common;
 
 public class Constants {
 

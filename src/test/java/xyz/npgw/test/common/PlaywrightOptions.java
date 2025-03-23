@@ -1,4 +1,4 @@
-package runner;
+package xyz.npgw.test.common;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class PlaywrightOptions {
+
     private static final VideoSettings VIDEO = new VideoSettings(1280, 720, Paths.get("target/video"));
 
     public static BrowserType.LaunchOptions browserOptions() {
