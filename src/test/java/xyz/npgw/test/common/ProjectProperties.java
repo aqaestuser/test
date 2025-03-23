@@ -13,7 +13,6 @@ public class ProjectProperties {
 
     private static final Logger LOGGER = LogManager.getLogger(ProjectProperties.class.getName());
 
-    private static final String RESOURCE_PATH = "./src/test/resources/";
     private static final String ENV_ACCESS_OPTIONS = "ACCESS_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
 
