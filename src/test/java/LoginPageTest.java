@@ -47,4 +47,20 @@ public class LoginPageTest extends BaseTest {
 
         assertThat(loginPage.getEmailField()).hasValue(Constants.USER_EMAIL);
     }
+
+    @Test
+    @TmsLink("82")
+    @Epic("Login page")
+    @Feature("Remember me")
+    @Description("User email is NOT remembered after first successful login with unchecked 'Remember me'")
+    public void testRememberMeUncheckedDontSaveUserEmail() {
+        LoginPage loginPage = new LoginPage(getPage())
+                .fillEmailField(Constants.USER_EMAIL)
+                .fillPasswordField(Constants.USER_PASSWORD)
+                .uncheckRememberMeCheckbox()
+                .clickLoginButton()
+                .clickLogOutButton();
+
+        assertThat(loginPage.getEmailField()).hasValue("");
+    }
 }

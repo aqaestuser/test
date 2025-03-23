@@ -19,7 +19,7 @@ public final class LoginPage extends BasePage {
         rememberMeCheckbox = checkbox("Remember me");
     }
 
-    @Step("Ввести в поле Email '{userEmail}'")
+    @Step("Ввести в поле Email - email пользователя")
     public LoginPage fillEmailField(String userEmail) {
         emailField.fill(userEmail);
         return this;
@@ -29,7 +29,7 @@ public final class LoginPage extends BasePage {
         return emailField;
     }
 
-    @Step("Ввести в поле Password '{userPassword}'")
+    @Step("Ввести в поле Password - пароль пользователя")
     public LoginPage fillPasswordField(String userPassword) {
         passwordField.fill(userPassword);
         return this;
