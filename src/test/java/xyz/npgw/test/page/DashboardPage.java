@@ -12,7 +12,7 @@ public final class DashboardPage extends BasePage {
         super(page);
     }
 
-    @Step("Нажать на кнопку 'Log out'")
+    @Step("Press 'Log out' button")
     public LoginPage clickLogOutButton() {
         logOutButton.click();
         return new LoginPage(getPage());

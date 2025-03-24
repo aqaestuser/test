@@ -20,7 +20,7 @@ public final class LoginPage extends BasePage {
         rememberMeCheckbox = checkbox("Remember me");
     }
 
-    @Step("Ввести в поле Email - email пользователя")
+    @Step("Enter the user's email in the 'Email' field")
     public LoginPage fillEmailField(String userEmail) {
         emailField.fill(userEmail);
         return this;
@@ -30,25 +30,25 @@ public final class LoginPage extends BasePage {
         return emailField;
     }
 
-    @Step("Ввести в поле Password - пароль пользователя")
+    @Step("Enter the user's password in the 'Password' field")
     public LoginPage fillPasswordField(String userPassword) {
         passwordField.fill(userPassword);
         return this;
     }
 
-    @Step("Нажать на кнопку 'Login'")
+    @Step("Press 'Login' button")
     public DashboardPage clickLoginButton() {
         loginButton.click();
         return new DashboardPage(getPage());
     }
 
-    @Step("Отметить чекбокс 'Remember me'")
+    @Step("Check 'Remember me' checkbox")
     public LoginPage checkRememberMeCheckbox() {
         rememberMeCheckbox.setChecked(true);
         return this;
     }
 
-    @Step("Снять отметку c чекбокса 'Remember me'")
+    @Step("Uncheck 'Remember me' checkbox")
     public LoginPage uncheckRememberMeCheckbox() {
         rememberMeCheckbox.setChecked(false);
         return this;
