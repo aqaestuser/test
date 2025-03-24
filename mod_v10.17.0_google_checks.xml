@@ -58,7 +58,10 @@
   <module name="TreeWalker">
     <!-- sun_checks -->
     <module name="HideUtilityClassConstructor"/>
-    <module name="ConstantName"/>
+    <module name="ConstantName">
+      <property name="format"
+               value="^properties$|[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+    </module>
     <module name="LocalFinalVariableName"/>
     <module name="StaticVariableName"/>
     <!-- sun_checks_end -->
@@ -156,7 +159,7 @@
     <module name="EmptyLineSeparator">
       <property name="tokens"
                value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
-                    STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF,
+                    STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
       <property name="allowNoEmptyLineBetweenFields" value="true"/>
     </module>
