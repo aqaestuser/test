@@ -6,9 +6,7 @@ on:
 
 permissions:
   contents: write
-#  actions: read
   checks: write
-#  pages: read
 
 jobs:
   run-tests-job:
