@@ -4,10 +4,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-#permissions:
-#  contents: write
-#  pages: write
-#  id-token: write
 permissions:
   contents: write
   actions: write
@@ -15,9 +11,7 @@ permissions:
   pages: write
 
 jobs:
-  run-tests:
-
-#    permissions: write-all
+  run-tests-job:
     name: 'Run tests'
     runs-on: ubuntu-latest
 
@@ -68,18 +62,16 @@ jobs:
           reporter: java-junit
 
       - name: Attach artifacts on failure
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.6.2
         if: failure()
         with:
           name: Artifacts
+          retention-days: 1
           path: |
             target/artefact/
-#            target/video/
-#            target/screenshot/savedbenchmarkscreenshot/
-          retention-days: 1
 
       - name: Get Allure history
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
         if: always()
         continue-on-error: true
         with:
