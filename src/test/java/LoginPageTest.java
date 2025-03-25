@@ -7,6 +7,7 @@ import testdata.Constants;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class LoginPageTest extends BaseTest {
+    private static final int bogusCONSTANT = 1;
 
     @Test
     public void testNavigateToLoginPage() {
