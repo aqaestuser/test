@@ -61,9 +61,9 @@ jobs:
         with:
           name: Artifacts
           path: |
-            target/testTracing/
-            target/video/
-            target/screenshot/savedbenchmarkscreenshot/
+            target/artefact/
+#            target/video/
+#            target/screenshot/savedbenchmarkscreenshot/
           retention-days: 2
 
       - name: Get Allure history
