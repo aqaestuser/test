@@ -13,7 +13,7 @@ jobs:
   run-tests:
     permissions:
       contents: read
-      actions: read
+      actions: write
       checks: write
 #    permissions: write-all
     name: 'Run tests'
