@@ -81,7 +81,6 @@ jobs:
     if: always()
     name: Report publication
 
-
     steps:
       - name: Deploy to gitHub Pages
         id: deployment
