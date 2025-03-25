@@ -68,20 +68,24 @@ jobs:
         with:
           path: allure-report
 
-  publish-report:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: run-tests
-    if: always()
-    name: Report publication
-
-    steps:
       - name: Deploy to gitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4.0.5
+
+#  publish-report:
+#    permissions:
+#      contents: read
+#      pages: write
+#      id-token: write
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+#    runs-on: ubuntu-latest
+#    needs: run-tests
+#    if: always()
+#    name: Report publication
+#
+#    steps:
+#      - name: Deploy to gitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v4.0.5
