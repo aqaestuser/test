@@ -84,6 +84,14 @@ jobs:
           allure_history: allure-history
           allure_results: target/allure-results
 
+      - name: Queue deployment
+        uses: softprops/turnstyle@v2.3.1
+        with:
+          poll-interval-seconds: 20
+          timeout-seconds: 1200
+        env:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Deploy Allure report to GitHub pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         if: always()
