@@ -29,7 +29,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
           tool_name: 'Checkstyle'
-          properties_file: 'suite/checkstyle-suppressions.xml'
 
       - name: Run tests
         run: mvn test -Dsurefire
