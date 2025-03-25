@@ -11,7 +11,11 @@ permissions:
 
 jobs:
   run-tests:
-    permissions: write-all
+    permissions:
+      contents: read
+      actions: read
+      checks: write
+#    permissions: write-all
     name: 'Run tests'
     runs-on: ubuntu-latest
 
