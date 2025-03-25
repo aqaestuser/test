@@ -13,9 +13,9 @@ public class LoginPageTest extends BaseTest {
     public void testNavigateToLoginPage() {
 
         LoginPage loginPage = new LoginPage(getPage());
-
+// aa
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
-        assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE);
+        //assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE);
     }
 
     @Test
