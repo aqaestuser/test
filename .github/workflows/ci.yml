@@ -21,7 +21,7 @@ jobs:
           cache: maven
 
       - name: Run checkstyle
-        uses: nikitasavinov/checkstyle-action@master
+        uses: nikitasavinov/checkstyle-action@0.6.0
         continue-on-error: true
         with:
           checkstyle_version: 10.17.0
