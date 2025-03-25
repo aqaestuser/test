@@ -9,6 +9,14 @@ jobs:
     name: 'Run tests'
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -67,6 +75,8 @@ jobs:
         uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: allure-report
+
+
 
       - name: Deploy to gitHub Pages
         id: deployment
