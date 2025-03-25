@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+#      contents: read
       pages: write
       id-token: write
     environment:
@@ -75,8 +75,6 @@ jobs:
         uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: allure-report
-
-
 
       - name: Deploy to gitHub Pages
         id: deployment
