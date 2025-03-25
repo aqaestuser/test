@@ -7,15 +7,14 @@ import testdata.Constants;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class LoginPageTest extends BaseTest {
-    private static final int bogusCONSTANT = 1;
 
     @Test
     public void testNavigateToLoginPage() {
 
         LoginPage loginPage = new LoginPage(getPage());
-// aa
+
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
-        //assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE);
+        assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE+"a");
     }
 
     @Test
