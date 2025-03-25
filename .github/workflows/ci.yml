@@ -69,6 +69,7 @@ jobs:
           path: target/artefact/
           retention-days: 1
 #
+      
 #      - name: Build Allure report with history
 #        uses: simple-elf/allure-report-action@v1.9
 #        if: always()
