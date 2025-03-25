@@ -64,7 +64,7 @@ jobs:
             target/artefact/
 #            target/video/
 #            target/screenshot/savedbenchmarkscreenshot/
-          retention-days: 2
+          retention-days: 1
 
       - name: Get Allure history
         uses: actions/checkout@v4
