@@ -71,7 +71,7 @@ jobs:
           allure_results: target/allure-results
 
       - name: Store generated report
-        id: deployment
+#        id: deployment
         uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: allure-report
