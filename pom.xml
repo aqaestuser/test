@@ -21,8 +21,7 @@
 
         <checkstyle.version>10.17.0</checkstyle.version>
         <checkstyle.plugin.version>3.5.0</checkstyle.plugin.version>
-        <checkstyle.config.location>mod_v10.17.0_google_checks.xml</checkstyle.config.location>
-        <checkstyle.suppressions.location>checkstyle-suppressions.xml</checkstyle.suppressions.location>
+        <checkstyle.config.location>config/checkstyle/mod_v10.17.0_google_checks.xml</checkstyle.config.location>
     </properties>
 
     <dependencies>

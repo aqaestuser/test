@@ -26,12 +26,12 @@ jobs:
           distribution: 'corretto'
           cache: maven
 
-      - name: Run checkstyle
-        uses: nikitasavinov/checkstyle-action@master
+      - name: Run check style
+        uses: nikitasavinov/checkstyle-action@0.6.0
         continue-on-error: true
         with:
           checkstyle_version: 10.17.0
-          checkstyle_config: 'mod_v10.17.0_google_checks.xml'
+          checkstyle_config: 'config/checkstyle/mod_v10.17.0_google_checks.xml'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: 'github-pr-check'
           tool_name: 'Checkstyle'
