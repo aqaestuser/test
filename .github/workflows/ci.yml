@@ -30,7 +30,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           checkstyle_version: 10.17.0
-          checkstyle_config: 'config/checkstyle/mod_v10.17.0_google_checks.xml'
+          checkstyle_config: './config/checkstyle/mod_v10.17.0_google_checks.xml'
           reporter: 'github-pr-check'
           tool_name: 'Checkstyle'
 
@@ -65,36 +65,35 @@ jobs:
         with:
           name: Artifacts
           retention-days: 1
-          path: |
-            target/artefact/
+          path: './target/artefact/'
 
       - name: Get Allure history
         uses: actions/checkout@v4.2.2
-        if: always()
-        continue-on-error: true
+#        if: always()
+#        continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
 
       - name: Build Allure report with history
         uses: simple-elf/allure-report-action@v1.12
-        if: always()
+#        if: always()
         with:
           allure_results: target/allure-results
 
-      - name: Queue deployment
-        uses: softprops/turnstyle@v2.3.1
-        with:
-          poll-interval-seconds: 20
-#          timeout-seconds: 1200
-        env:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Queue deployment
+#        uses: softprops/turnstyle@v2.3.1
+#        with:
+#          poll-interval-seconds: 20
+##          timeout-seconds: 1200
+#        env:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy Allure report to GitHub pages
         uses: peaceiris/actions-gh-pages@v4.0.0
-        if: always()
+#        if: always()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-          force_orphan: true
+#          force_orphan: true
