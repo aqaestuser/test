@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -61,14 +61,24 @@ jobs:
           path: target/artefact/
           retention-days: 1
 
-      - name: Set up GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: Store generated report
-        id: deployment
-        uses: actions/upload-pages-artifact@v3.0.1
+      - name: Get Allure history
+        uses: actions/checkout@v4.2.2
+        if: always()
+        continue-on-error: true
         with:
-          path: './target/allure-results'
+          ref: gh-pages
+          path: gh-pages
 
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4.0.5
+      - name: Build Allure report with history
+        uses: simple-elf/allure-report-action@v1.12
+        if: always()
+        with:
+          allure_results: './target/allure-results'
+
+      - name: Deploy Allure report to GitHub pages
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
