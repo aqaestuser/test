@@ -17,6 +17,7 @@ public class LoginPageTest extends BaseTest {
         assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE);
     }
 
+
     @Test
     public void testLogin() {
 
