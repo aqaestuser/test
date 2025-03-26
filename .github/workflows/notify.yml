@@ -12,10 +12,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Notification
-        uses: evgnick/notify-action@v1
+      - name: Find the latest CI run
+        uses: actions/github-script@v6
+        id: find_ci_run
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          telegram-token: ${{ secrets.TELEGRAM_TOKEN }}
-          telegram-chat-id: "-1002222760706"
-          workflow-name: "CI"
+          script: |
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+             per_page: 100,
+            });
+            const ciRuns = runs.data.workflow_runs
+              .filter(run => run.name === "CI" && run.status === "completed" && (run.conclusion === "success" || run.conclusion === "failure"))
+              .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const latestCiRun = ciRuns[0];
+            const runNumber = latestCiRun.run_number;
+            core.setOutput("run_number", runNumber);
+            core.setOutput("run_id", latestCiRun.id);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Slack Notification
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+          REPORT_LINK="https://npgw.github.io/npgw-ui-test/${{ steps.find_ci_run.outputs.run_number }}/"
+          CI_RUN_LINK="https://github.com/${{ github.repository }}/actions/runs/${{ steps.find_ci_run.outputs.run_id }}"
+
+          MESSAGE="*Новый отчет Allure*\n📅 *Дата и время*: $TIMESTAMP\n⚙️ *Сборка*: ${{ steps.find_ci_run.outputs.run_number }}\n🔗 *<$REPORT_LINK|Открыть отчет>*\n🔗 *<$CI_RUN_LINK|Посмотреть запуск>*"
+
+          curl -X POST -H 'Content-type: application/json' \
+            --data "{\"text\": \"$MESSAGE\"}" \
+            ${{ secrets.SLACK_WEBHOOK_URL }}
