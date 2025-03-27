@@ -1,4 +1,4 @@
-package xyz.npgw.test;
+package xyz.npgw.test.tests;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
@@ -20,7 +20,10 @@ public class LoginPageTest extends BaseTest {
 
         LoginPage loginPage = new LoginPage(getPage());
 
+        Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
+
+        Allure.step("Verify: Login Page Title");
         assertThat(loginPage.getPage()).hasTitle(Constants.BASE_URL_TITLE);
     }
 
@@ -31,7 +34,10 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(Constants.USER_PASSWORD)
                 .clickLoginButton();
 
+        Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
+
+        Allure.step("Verify: Dashboard Page Title");
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
@@ -44,8 +50,9 @@ public class LoginPageTest extends BaseTest {
         LoginPage loginPage = new LoginPage(getPage())
                 .fillEmailField(Constants.USER_EMAIL)
                 .fillPasswordField(Constants.USER_PASSWORD)
-                .checkRememberMeCheckbox()
+                .clickRememberMeCheckbox(true)
                 .clickLoginButton()
+                .getHeader()
                 .clickLogOutButton();
 
         Allure.step("The user's email is in the email field");
@@ -61,8 +68,9 @@ public class LoginPageTest extends BaseTest {
         LoginPage loginPage = new LoginPage(getPage())
                 .fillEmailField(Constants.USER_EMAIL)
                 .fillPasswordField(Constants.USER_PASSWORD)
-                .uncheckRememberMeCheckbox()
+                .clickRememberMeCheckbox(false)
                 .clickLoginButton()
+                .getHeader()
                 .clickLogOutButton();
 
         Allure.step("The user's email is not in the email field");

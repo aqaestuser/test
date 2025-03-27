@@ -23,6 +23,7 @@ public final class LoginPage extends BasePage {
     @Step("Enter the user's email in the 'Email' field")
     public LoginPage fillEmailField(String userEmail) {
         emailField.fill(userEmail);
+
         return this;
     }
 
@@ -33,24 +34,21 @@ public final class LoginPage extends BasePage {
     @Step("Enter the user's password in the 'Password' field")
     public LoginPage fillPasswordField(String userPassword) {
         passwordField.fill(userPassword);
+
         return this;
     }
 
     @Step("Press 'Login' button")
     public DashboardPage clickLoginButton() {
         loginButton.click();
+
         return new DashboardPage(getPage());
     }
 
-    @Step("Check 'Remember me' checkbox")
-    public LoginPage checkRememberMeCheckbox() {
-        rememberMeCheckbox.setChecked(true);
-        return this;
-    }
+    @Step("Check 'Remember me' status '{option}'")
+    public LoginPage clickRememberMeCheckbox(boolean option) {
+        rememberMeCheckbox.setChecked(option);
 
-    @Step("Uncheck 'Remember me' checkbox")
-    public LoginPage uncheckRememberMeCheckbox() {
-        rememberMeCheckbox.setChecked(false);
         return this;
     }
 }
