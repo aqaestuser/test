@@ -3,7 +3,6 @@ package xyz.npgw.test.common;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -31,7 +30,8 @@ public class ProjectProperties {
     private static void loadPropertiesFromEnv(String envKey) {
         String envValue = System.getenv(envKey);
         if (envValue == null || envValue.isEmpty()) {
-            return;
+            LOGGER.error("The \u001B[31m{}\u001B[0m not found.", envKey);
+            System.exit(3);
         }
 
         Arrays.stream(envValue.split(";"))
@@ -43,7 +43,7 @@ public class ProjectProperties {
     private static void loadPropertiesFromFile(String fileName) {
         try (InputStream inputStream = ProjectProperties.class.getClassLoader().getResourceAsStream(fileName)) {
             properties.load(inputStream);
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
             LOGGER.error("The \u001B[31m{}\u001B[0m file not found.", fileName);
             LOGGER.error("You need to create it from {}.TEMPLATE file.", fileName);
             System.exit(3);
