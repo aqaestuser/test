@@ -12,27 +12,31 @@ public class TransactionsPage extends AuthenticatedPage {
     private final Locator currencyColumnHeader = columnHeader("Currency");
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
-
+    private final Locator nextPageButton = button("next page button");
+    private final Locator paginationItemTwoActiveButton = button("pagination item 2 active");
 
     public TransactionsPage(Page page) {
         super(page);
     }
 
-    @Step(" Click Currency Selector")
+    @Step("Click Currency Selector")
     public TransactionsPage clickCurrencySelector() {
         currencySelector.click();
+
         return this;
     }
 
     @Step("Click Options Currency {value}")
     public TransactionsPage clickCurrency(String value) {
         optionByExactName(value).click();
+
         return this;
     }
 
-    @Step(" Click Icon Apply Data")
+    @Step("Click Icon Apply Data")
     public TransactionsPage clickApplyDataIcon() {
         applyDataIcon.click();
+
         return this;
     }
 
@@ -56,10 +60,22 @@ public class TransactionsPage extends AuthenticatedPage {
     @Step("Click Button Rows Per Page")
     public TransactionsPage clickRowsPerPageButton() {
         rowsPerPageButton.click();
+
         return this;
     }
 
     public Locator getRowsPerPageOptions() {
         return rowsPerPageOptions;
+    }
+
+    @Step("Click next Page Button")
+    public TransactionsPage clickNextPageButton() {
+        nextPageButton.click();
+
+        return this;
+    }
+
+    public Locator getPaginationItemTwoActiveButton() {
+        return paginationItemTwoActiveButton;
     }
 }

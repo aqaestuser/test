@@ -47,7 +47,6 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: currency filter - EUR");
         assertTrue(transactionsPage.getTableRow("EUR"));
-
     }
 
     @Test
@@ -75,5 +74,19 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: displaying all options when clicking on Selector Rows");
         assertThat(transactionsPage.getRowsPerPageOptions()).hasText("102550100");
+    }
+
+    @Test
+    @TmsLink("130")
+    @Epic("Transactions")
+    @Feature("Pagination")
+    @Description("Verifying that we can switch the page when we click next button")
+    public void testPaginationNextButton() {
+        TransactionsPage transactionsPage = new LoginPage(getPage()).login()
+                .clickTransactionsLink()
+                .clickNextPageButton();
+
+        Allure.step("Verify: button 2 is active");
+        assertThat(transactionsPage.getPaginationItemTwoActiveButton()).isVisible();
     }
 }
