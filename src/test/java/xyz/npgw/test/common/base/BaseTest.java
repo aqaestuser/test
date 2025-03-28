@@ -26,7 +26,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public abstract class BaseTest {
+
     protected static final Logger LOGGER = LogManager.getLogger(BaseTest.class.getName());
+
     private static final String ARTEFACT_DIR = "target/artefact";
     private Playwright playwright;
     private Browser browser;
@@ -59,7 +61,14 @@ public abstract class BaseTest {
         }
 
         page = context.newPage();
+
+        Allure.step("Navigate to the base url");
         ProjectUtils.navigateToBaseURL(page);
+
+        if (!method.getDeclaringClass().getSimpleName().contains("LoginPageTest")) {
+            Allure.step("Login to the site");
+            ProjectUtils.login(page);
+        }
     }
 
     @AfterMethod(alwaysRun = true)
