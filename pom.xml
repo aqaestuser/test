@@ -16,7 +16,7 @@
 
         <playwright.version>1.51.0</playwright.version>
 
-        <aspectj.version>1.9.20.1</aspectj.version>
+        <aspectj.version>1.9.22.1</aspectj.version>
         <allure.version>2.29.1</allure.version>
 
         <checkstyle.version>10.17.0</checkstyle.version>

@@ -28,6 +28,26 @@ public abstract class BasePage {
         return page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(text));
     }
 
+    protected Locator linkByName(String text) {
+        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
+    }
+
+    protected Locator optionByExactName(String text) {
+        return page.getByLabel(text, new Page.GetByLabelOptions().setExact(true)).getByText(text);
+    }
+
+    protected Locator locator(String selector) {
+        return page.locator(selector);
+    }
+
+    protected Locator columnHeader(String name) {
+        return page.getByRole(AriaRole.COLUMNHEADER, new Page.GetByRoleOptions().setName(name));
+    }
+
+    protected Locator dialog() {
+        return page.getByRole(AriaRole.DIALOG);
+    }
+
     protected Locator link(String text) {
         return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
     }

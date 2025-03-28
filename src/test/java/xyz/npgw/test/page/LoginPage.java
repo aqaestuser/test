@@ -3,6 +3,7 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
+import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.page.base.BasePage;
 
 public final class LoginPage extends BasePage {
@@ -50,5 +51,14 @@ public final class LoginPage extends BasePage {
         rememberMeCheckbox.setChecked(option);
 
         return this;
+    }
+
+    @Step("Login")
+    public DashboardPage login() {
+        fillEmailField(Constants.USER_EMAIL);
+        fillPasswordField(Constants.USER_PASSWORD);
+        clickLoginButton();
+
+        return new DashboardPage(getPage());
     }
 }
