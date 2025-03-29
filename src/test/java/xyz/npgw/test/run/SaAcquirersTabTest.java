@@ -24,19 +24,19 @@ public class SaAcquirersTabTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersButton();
 
-        Allure.step("Verify: Add Acquirer Img is visible");
-        assertThat(saAcquirersTab.getAddAcquirerImg()).isVisible();
+        Allure.step("Verify: Add Acquirer Button is visible");
+        assertThat(saAcquirersTab.getAddAcquirerButton()).isVisible();
 
-        Allure.step("Verify: Select Acquirer placeholder is visible");
-        assertThat(saAcquirersTab.getSelectAcquirerPlaceholder()).isVisible();
+        Allure.step("Verify: Select Acquirer label is visible");
+        assertThat(saAcquirersTab.getSelectAcquirerLabel()).isVisible();
 
-        Allure.step("Verify: Status placeholder is visible");
-        assertThat(saAcquirersTab.getStatusPlaceholder()).isVisible();
+        Allure.step("Verify: Status label is visible");
+        assertThat(saAcquirersTab.getStatusLabel()).isVisible();
 
-        Allure.step("Verify: Reset Filter Img is visible");
-        assertThat(saAcquirersTab.getResetFilterImg()).isVisible();
+        Allure.step("Verify: Reset Filter Button is visible");
+        assertThat(saAcquirersTab.getResetFilterButton()).isVisible();
 
-        Allure.step("Verify: Apply Filter Img is visible");
-        assertThat(saAcquirersTab.getApplyFilterImg()).isVisible();
+        Allure.step("Verify: Apply Filter Button is visible");
+        assertThat(saAcquirersTab.getApplyFilterButton()).isVisible();
     }
 }

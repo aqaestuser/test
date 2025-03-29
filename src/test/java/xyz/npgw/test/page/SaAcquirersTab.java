@@ -6,33 +6,33 @@ import xyz.npgw.test.page.base.BasePageWithHeader;
 
 public class SaAcquirersTab extends BasePageWithHeader {
 
-    private final Locator addAcquirerImg  = locator("svg[data-icon='circle-plus']");
-    private final Locator resetFilterImg  = locator("svg[data-icon='xmark']");
-    private final Locator applyFilterImg  = locator("svg[data-icon='filter']");
-    private final Locator selectAcquirerPlaceholder  = labelExact("Select acquirer");
-    private final Locator statusPlaceholder  = labelExact("Status");
+    private final Locator addAcquirerButton  = locator("svg[data-icon='circle-plus']");
+    private final Locator resetFilterButton  = locator("svg[data-icon='xmark']");
+    private final Locator applyFilterButton  = locator("svg[data-icon='filter']");
+    private final Locator selectAcquirerLabel  = labelExact("Select acquirer");
+    private final Locator statusLabel  = labelExact("Status");
 
     public SaAcquirersTab(Page page) {
         super(page);
     }
 
-    public Locator getAddAcquirerImg() {
-        return addAcquirerImg;
+    public Locator getAddAcquirerButton() {
+        return addAcquirerButton;
     }
 
-    public Locator getResetFilterImg() {
-        return resetFilterImg;
+    public Locator getResetFilterButton() {
+        return resetFilterButton;
     }
 
-    public Locator getApplyFilterImg() {
-        return applyFilterImg;
+    public Locator getApplyFilterButton() {
+        return applyFilterButton;
     }
 
-    public Locator getSelectAcquirerPlaceholder() {
-        return selectAcquirerPlaceholder;
+    public Locator getSelectAcquirerLabel() {
+        return selectAcquirerLabel;
     }
 
-    public Locator getStatusPlaceholder() {
-        return statusPlaceholder;
+    public Locator getStatusLabel() {
+        return statusLabel;
     }
 }
