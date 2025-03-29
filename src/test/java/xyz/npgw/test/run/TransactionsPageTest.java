@@ -20,16 +20,16 @@ public class TransactionsPageTest extends BaseTest {
     @TmsLink("108")
     @Epic("Transactions")
     @Feature("Navigation")
-    @Description("User navigate to 'Transactions page' after clicking on 'Transactions' menu on the header")
+    @Description("User navigate to 'Transactions page' after clicking on 'Transactions' link on the header")
     public void testNavigateToTransactionsPage() {
-        TransactionsPage transaction = new DashboardPage(getPage())
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
-        assertThat(transaction.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
+        assertThat(transactionsPage.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
 
         Allure.step("Verify: Transactions Page Title");
-        assertThat(transaction.getPage()).hasTitle(Constants.TRANSACTIONS_URL_TITLE);
+        assertThat(transactionsPage.getPage()).hasTitle(Constants.TRANSACTIONS_URL_TITLE);
     }
 
     @Test

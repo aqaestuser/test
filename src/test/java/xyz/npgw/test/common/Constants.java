@@ -10,7 +10,7 @@ public class Constants {
     public static final String DASHBOARD_PAGE_URL = BASE_URL + "/dashboard";
     public static final String TRANSACTIONS_PAGE_URL = BASE_URL + "/transactions";
 
-    public static final String BASE_URL_TITLE = "NPGW";
+    public static final String LOGIN_URL_TITLE = "NPGW";
     public static final String DASHBOARD_URL_TITLE = "NPGW";
     public static final String TRANSACTIONS_URL_TITLE = "NPGW";
 }

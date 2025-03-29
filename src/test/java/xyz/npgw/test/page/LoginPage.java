@@ -44,9 +44,16 @@ public final class LoginPage extends BasePage {
         return new DashboardPage(getPage());
     }
 
-    @Step("Check 'Remember me' status '{option}'")
-    public LoginPage clickRememberMeCheckbox(boolean option) {
-        rememberMeCheckbox.setChecked(option);
+    @Step("Check 'Remember me' checkbox")
+    public LoginPage checkRememberMeCheckbox() {
+        rememberMeCheckbox.setChecked(true);
+
+        return this;
+    }
+
+    @Step("Uncheck 'Remember me' checkbox")
+    public LoginPage uncheckRememberMeCheckbox() {
+        rememberMeCheckbox.setChecked(false);
 
         return this;
     }
