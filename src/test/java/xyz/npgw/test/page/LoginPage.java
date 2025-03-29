@@ -2,9 +2,12 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.page.base.BasePage;
+
+import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage {
 
@@ -33,7 +36,7 @@ public final class LoginPage extends BasePage {
     }
 
     @Step("Enter the user's password in the 'Password' field")
-    public LoginPage fillPasswordField(String userPassword) {
+    public LoginPage fillPasswordField(@Param(name = "Password", mode = MASKED) String userPassword) {
         passwordField.fill(userPassword);
 
         return this;
