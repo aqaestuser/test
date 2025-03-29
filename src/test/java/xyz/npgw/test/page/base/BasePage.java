@@ -51,4 +51,12 @@ public abstract class BasePage {
     protected Locator link(String text) {
         return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
     }
+
+    protected Locator tab(String text) {
+        return getPage().getByRole(AriaRole.TAB, new Page.GetByRoleOptions().setName(text));
+    }
+
+    protected Locator labelExact(String text) {
+        return getPage().getByLabel(text, new Page.GetByLabelOptions().setExact(true));
+    }
 }
