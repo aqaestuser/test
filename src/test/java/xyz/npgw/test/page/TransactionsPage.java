@@ -3,9 +3,9 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.AuthenticatedPage;
+import xyz.npgw.test.page.base.BasePageWithHeader;
 
-public class TransactionsPage extends AuthenticatedPage {
+public class TransactionsPage extends BasePageWithHeader {
 
     private final Locator currencySelector = button("ALL Currency");
     private final Locator applyDataIcon = locator("button:nth-child(9)");

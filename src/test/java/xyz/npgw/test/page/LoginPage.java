@@ -4,24 +4,19 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.page.base.BasePage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage {
 
-    private final Locator emailField;
-    private final Locator passwordField;
-    private final Locator loginButton;
-    private final Locator rememberMeCheckbox;
+    private final Locator emailField = placeholder("Enter your email");
+    private final Locator passwordField = placeholder("Enter your password");
+    private final Locator loginButton = button("Login");
+    private final Locator rememberMeCheckbox = checkbox("Remember me");
 
     public LoginPage(Page page) {
         super(page);
-        emailField = placeholder("Enter your email");
-        passwordField = placeholder("Enter your password");
-        loginButton = button("Login");
-        rememberMeCheckbox = checkbox("Remember me");
     }
 
     @Step("Enter the user's email in the 'Email' field")
@@ -54,14 +49,5 @@ public final class LoginPage extends BasePage {
         rememberMeCheckbox.setChecked(option);
 
         return this;
-    }
-
-    @Step("Login")
-    public DashboardPage login() {
-        fillEmailField(Constants.USER_EMAIL);
-        fillPasswordField(Constants.USER_PASSWORD);
-        clickLoginButton();
-
-        return new DashboardPage(getPage());
     }
 }
