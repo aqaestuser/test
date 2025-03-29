@@ -1,11 +1,13 @@
 package xyz.npgw.test.common;
 
+import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Tracing;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public class PlaywrightOptions {
 
@@ -38,6 +40,12 @@ public class PlaywrightOptions {
 
     public static Tracing.StopOptions tracingStopOptions(Path tracePath) {
         return new Tracing.StopOptions().setPath(tracePath);
+    }
+
+    public static APIRequest.NewContextOptions apiContextOptions(String idToken) {
+        return new APIRequest.NewContextOptions()
+                .setBaseURL(Constants.BASE_URL)
+                .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(idToken)));
     }
 
     private record VideoSettings(int width, int height, Path videoDirPath) {

@@ -1,9 +1,13 @@
 package xyz.npgw.test.common.base;
 
+import com.google.gson.Gson;
+import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +19,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import xyz.npgw.test.common.BrowserFactory;
+import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.PlaywrightOptions;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.ProjectUtils;
@@ -24,6 +29,7 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 public abstract class BaseTest {
 
@@ -35,6 +41,7 @@ public abstract class BaseTest {
     private String browserType;
     private BrowserContext context;
     private Page page;
+    private APIRequestContext request;
 
     @Parameters("browserType")
     @BeforeClass
@@ -61,6 +68,19 @@ public abstract class BaseTest {
 
         if (ProjectProperties.isTracingMode()) {
             context.tracing().start(PlaywrightOptions.tracingStartOptions());
+        }
+
+        APIResponse tokenResponse = playwright.request().newContext().post(
+                Constants.BASE_URL + "/portal-v1/user/token",
+                RequestOptions.create().setData(
+                        Map.of("email", Constants.USER_EMAIL, "password", Constants.USER_PASSWORD)));
+        if (tokenResponse.ok()) {
+            LOGGER.debug(tokenResponse.text());
+            String idToken = new Gson().fromJson(tokenResponse.text(), TokenResponse.class).token().idToken;
+            request = playwright.request().newContext(PlaywrightOptions.apiContextOptions(idToken));
+        } else {
+            LOGGER.error("Retrieve API idToken failed: {}", tokenResponse.statusText());
+            System.exit(5);
         }
 
         page = context.newPage();
@@ -110,8 +130,6 @@ public abstract class BaseTest {
                 LOGGER.error("Add artefacts to allure failed: {}", e.getMessage());
             }
         }
-
-        context.close();
     }
 
     @AfterClass(alwaysRun = true)
@@ -126,5 +144,15 @@ public abstract class BaseTest {
 
     protected Page getPage() {
         return page;
+    }
+
+    protected APIRequestContext getRequest() {
+        return request;
+    }
+
+    private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
+    }
+
+    private record TokenResponse(String userChallengeType, Token token) {
     }
 }
