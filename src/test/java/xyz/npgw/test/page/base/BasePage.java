@@ -48,10 +48,6 @@ public abstract class BasePage {
         return page.getByRole(AriaRole.DIALOG);
     }
 
-    protected Locator link(String text) {
-        return page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
-    }
-
     protected Locator tab(String text) {
         return getPage().getByRole(AriaRole.TAB, new Page.GetByRoleOptions().setName(text));
     }

@@ -21,7 +21,7 @@ public class SaAcquirersTabTest extends BaseTest {
     @Description("Verify: The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
         SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAcquirersButton();
 
         Allure.step("Verify: Add Acquirer Button is visible");

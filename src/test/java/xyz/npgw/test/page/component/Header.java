@@ -1,53 +1,50 @@
-package xyz.npgw.test.page;
+package xyz.npgw.test.page.component;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.page.ReportsPage;
+import xyz.npgw.test.page.SystemAdministrationPage;
+import xyz.npgw.test.page.TransactionsPage;
 
-public class Header extends BasePage {
-
-    private final Locator dashboardLink = link("Dashboard");
-    private final Locator transactionLink = link("Transactions");
-    private final Locator reportsLink = link("Reports");
-    private final Locator systemAdministrationLink = link("System administration");
-    private final Locator logOutButton = button("Log out");
+public class Header extends Element {
 
     public Header(Page page) {
-        super(page);
+        super(page, "header");
     }
 
     @Step("Click on 'Dashboard' menu in Header")
     public DashboardPage clickDashboardLink() {
-        dashboardLink.click();
+        link("Dashboard").click();
 
         return new DashboardPage(getPage());
     }
 
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
-        transactionLink.click();
+        link("Transactions").click();
 
         return new TransactionsPage(getPage());
     }
 
     @Step("Click on 'Reports' menu in Header")
     public ReportsPage clickReportsLink() {
-        reportsLink.click();
+        link("Reports").click();
 
         return new ReportsPage(getPage());
     }
 
     @Step("Click on 'System administration' menu in Header")
     public SystemAdministrationPage clickSystemAdministrationLink() {
-        systemAdministrationLink.click();
+        link("System administration").click();
 
         return new SystemAdministrationPage(getPage());
     }
 
     @Step("Press 'Log out' button")
     public LoginPage clickLogOutButton() {
-        logOutButton.click();
+        button("Log out").click();
 
         return new LoginPage(getPage());
     }

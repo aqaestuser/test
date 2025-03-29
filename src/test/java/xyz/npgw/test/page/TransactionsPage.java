@@ -4,9 +4,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePageWithHeader;
+import xyz.npgw.test.page.component.ContentBlock;
 
 public class TransactionsPage extends BasePageWithHeader {
 
+    private final ContentBlock table;
     private final Locator currencySelector = button("ALL Currency");
     private final Locator applyDataIcon = locator("button:nth-child(9)");
     private final Locator currencyColumnHeader = columnHeader("Currency");
@@ -17,6 +19,7 @@ public class TransactionsPage extends BasePageWithHeader {
 
     public TransactionsPage(Page page) {
         super(page);
+        table = new ContentBlock(page);
     }
 
     @Step("Click Currency Selector")

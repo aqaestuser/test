@@ -40,7 +40,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(Constants.USER_PASSWORD)
                 .checkRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader().clickLogOutButton();
+                .clickLogOutButton();
 
         Allure.step("Verify: The user's email is in the email field");
         assertThat(loginPage.getEmailField()).hasValue(Constants.USER_EMAIL);
@@ -57,7 +57,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(Constants.USER_PASSWORD)
                 .uncheckRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader().clickLogOutButton();
+                .clickLogOutButton();
 
         Allure.step("Verify: The user's email is not in the email field");
         assertThat(loginPage.getEmailField()).hasValue("");
