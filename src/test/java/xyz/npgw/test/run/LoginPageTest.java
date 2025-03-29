@@ -1,4 +1,4 @@
-package xyz.npgw.test.tests;
+package xyz.npgw.test.run;
 
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;

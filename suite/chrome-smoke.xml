@@ -1,9 +1,0 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="Npgw smoke tests">
-    <test name="Login tests">
-        <parameter name="browser" value="chrome"/>
-        <classes>
-            <class name="LoginPageTest"/>
-        </classes>
-    </test>
-</suite>
