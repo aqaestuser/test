@@ -73,24 +73,36 @@ public abstract class BaseTest {
 
     @AfterMethod(alwaysRun = true)
     protected void afterMethod(Method method, ITestResult testResult) {
-        page.close();
-
         String testName = ProjectUtils.getTestClassCompleteMethodName(method, testResult);
         Path traceFilePath = Paths.get(ARTEFACT_DIR, browserType, testName + ".zip");
-        if (ProjectProperties.isTracingMode()) {
-            context.tracing().stop(PlaywrightOptions.tracingStopOptions(traceFilePath));
+        Path videoFilePath = Paths.get(ARTEFACT_DIR, browserType, testName + ".webm");
+
+        if (page != null) {
+            page.close();
+
+            if (ProjectProperties.isVideoMode()) {
+                page.video().saveAs(videoFilePath);
+                page.video().delete();
+            }
         }
 
-        Path videoFilePath = Paths.get(ARTEFACT_DIR, browserType, testName + ".webm");
-        if (ProjectProperties.isVideoMode()) {
-            page.video().saveAs(videoFilePath);
-            page.video().delete();
+        if (context != null) {
+            if (ProjectProperties.isTracingMode()) {
+                context.tracing().stop(PlaywrightOptions.tracingStopOptions(traceFilePath));
+            }
+            context.close();
         }
 
         if (!testResult.isSuccess()) { // && ProjectProperties.isServerRun()) {
             try {
-                Allure.getLifecycle().addAttachment("video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
-                Allure.getLifecycle().addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
+                if (ProjectProperties.isTracingMode()) {
+                    Allure.getLifecycle().addAttachment(
+                            "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
+                }
+                if (ProjectProperties.isTracingMode()) {
+                    Allure.getLifecycle().addAttachment(
+                            "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
+                }
             } catch (IOException e) {
                 LOGGER.error("Add artefacts to allure failed: {}", e.getMessage());
             }
@@ -101,8 +113,12 @@ public abstract class BaseTest {
 
     @AfterClass(alwaysRun = true)
     protected void afterClass() {
-        browser.close();
-        playwright.close();
+        if (browser != null) {
+            browser.close();
+        }
+        if (playwright != null) {
+            playwright.close();
+        }
     }
 
     protected Page getPage() {

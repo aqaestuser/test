@@ -30,7 +30,7 @@ public class ProjectProperties {
     private static void loadPropertiesFromEnv(String envKey) {
         String envValue = System.getenv(envKey);
         if (envValue == null || envValue.isEmpty()) {
-            LOGGER.error("The \u001B[31m{}\u001B[0m not found.", envKey);
+            LOGGER.error("The environment key {} not found.", envKey);
             System.exit(3);
         }
 
@@ -44,7 +44,7 @@ public class ProjectProperties {
         try (InputStream inputStream = ProjectProperties.class.getClassLoader().getResourceAsStream(fileName)) {
             properties.load(inputStream);
         } catch (NullPointerException | IOException e) {
-            LOGGER.error("The \u001B[31m{}\u001B[0m file not found.", fileName);
+            LOGGER.error("The file {} not found.", fileName);
             LOGGER.error("You need to create it from {}.TEMPLATE file.", fileName);
             System.exit(3);
         }
