@@ -44,6 +44,9 @@ public abstract class BaseTest {
             playwright = Playwright.create();
             browser = BrowserFactory.getBrowser(playwright, this.browserType);
         } catch (IllegalArgumentException e) {
+            if (playwright != null) {
+                playwright.close();
+            }
             LOGGER.error("Unsupported browser: {}", browserType);
             System.exit(1);
         } catch (RuntimeException e) {
