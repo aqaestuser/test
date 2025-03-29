@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class PlaywrightOptions {
 
-    private static final VideoSettings VIDEO = new VideoSettings(1280, 720, Paths.get("target/video"));
+    private static final VideoSettings VIDEO = new VideoSettings(1280, 720, Paths.get("target/artefact"));
 
     public static BrowserType.LaunchOptions browserOptions() {
         return new BrowserType.LaunchOptions()

@@ -18,9 +18,8 @@ public class LoginPageTest extends BaseTest {
     @TmsLink("149")
     @Epic("Login")
     @Feature("Navigation")
-    @Description("User can navigate to 'Login page'")
+    @Description("User navigate to 'Login page'")
     public void testNavigateToLoginPage() {
-
         LoginPage loginPage = new LoginPage(getPage());
 
         Allure.step("Verify: Login Page URL");
@@ -41,8 +40,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(Constants.USER_PASSWORD)
                 .checkRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader()
-                .clickLogOutButton();
+                .getHeader().clickLogOutButton();
 
         Allure.step("Verify: The user's email is in the email field");
         assertThat(loginPage.getEmailField()).hasValue(Constants.USER_EMAIL);
@@ -59,8 +57,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(Constants.USER_PASSWORD)
                 .uncheckRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader()
-                .clickLogOutButton();
+                .getHeader().clickLogOutButton();
 
         Allure.step("Verify: The user's email is not in the email field");
         assertThat(loginPage.getEmailField()).hasValue("");
