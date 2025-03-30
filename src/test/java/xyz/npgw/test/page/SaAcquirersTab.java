@@ -11,6 +11,8 @@ public class SaAcquirersTab extends BasePageWithHeader {
     private final Locator applyFilterButton  = locator("svg[data-icon='filter']");
     private final Locator selectAcquirerLabel  = labelExact("Select acquirer");
     private final Locator statusLabel  = labelExact("Status");
+    private final Locator acquirersListHeader = textExact("Acquirers list");
+    private final Locator acquirersList = locator("div[data-slot='base'] li");
 
     public SaAcquirersTab(Page page) {
         super(page);
@@ -34,5 +36,15 @@ public class SaAcquirersTab extends BasePageWithHeader {
 
     public Locator getStatusLabel() {
         return statusLabel;
+    }
+
+    public Locator getAcquirersListHeader() {
+        return acquirersListHeader;
+    }
+
+    public Locator getAcquirersList() {
+        getPage().waitForTimeout(1000);
+
+        return acquirersList;
     }
 }

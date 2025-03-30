@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -38,5 +39,26 @@ public class SaAcquirersTabTest extends BaseTest {
 
         Allure.step("Verify: Apply Filter Button is visible");
         assertThat(saAcquirersTab.getApplyFilterButton()).isVisible();
+    }
+
+    @Test
+    @TmsLink("157")
+    @Epic("SA/Acquirers")
+    @Feature("Acquirers list")
+    @Description("Verify: The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
+    public void testVisibilityHeaderAndAcquirersList() {
+        SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersButton();
+
+        Allure.step("Verify: Acquirers list header is visible");
+        assertThat(saAcquirersTab.getAcquirersListHeader()).isVisible();
+
+        Locator acquirersList = saAcquirersTab.getAcquirersList();
+
+        Allure.step(String.format(
+                "Verify: Acquirers list is visible and contains elements (%d elements)", acquirersList.count()));
+        assertThat(acquirersList.first()).isVisible();
+        assertThat(acquirersList.last()).isVisible();
     }
 }
