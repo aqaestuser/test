@@ -48,7 +48,7 @@ public class SaAcquirersTabTest extends BaseTest {
     @Description("Verify: The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
         SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAcquirersButton();
 
         Allure.step("Verify: Acquirers list header is visible");
