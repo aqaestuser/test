@@ -117,17 +117,21 @@ public abstract class BaseTest {
         }
 
         if (!testResult.isSuccess()) { // && ProjectProperties.isServerRun()) {
-            try {
-                if (ProjectProperties.isTracingMode()) {
+            if (ProjectProperties.isVideoMode()) {
+                try {
                     Allure.getLifecycle().addAttachment(
                             "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
+                } catch (IOException e) {
+                    LOGGER.error("Add video to allure failed: {}", e.getMessage());
                 }
-                if (ProjectProperties.isTracingMode()) {
+            }
+            if (ProjectProperties.isTracingMode()) {
+                try {
                     Allure.getLifecycle().addAttachment(
                             "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
+                } catch (IOException e) {
+                    LOGGER.error("Add traces to allure failed: {}", e.getMessage());
                 }
-            } catch (IOException e) {
-                LOGGER.error("Add artefacts to allure failed: {}", e.getMessage());
             }
         }
     }
