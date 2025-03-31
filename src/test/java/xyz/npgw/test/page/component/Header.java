@@ -1,6 +1,7 @@
 package xyz.npgw.test.page.component;
 
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
@@ -38,6 +39,7 @@ public class Header extends Element {
     @Step("Click on 'System administration' menu in Header")
     public SystemAdministrationPage clickSystemAdministrationLink() {
         link("System administration").click();
+        getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
         return new SystemAdministrationPage(getPage());
     }

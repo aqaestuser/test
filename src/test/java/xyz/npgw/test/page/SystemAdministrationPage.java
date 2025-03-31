@@ -10,7 +10,7 @@ public class SystemAdministrationPage extends BasePageWithHeader {
 
     private final ContentBlock table;
     private final Locator teamButton = tab("Team");
-    private final Locator companiesAndBusinessUnitsButton = tab("Companies and business units");
+    private final Locator companiesAndBusinessUnitsTabButton = tab("Companies and business units");
     private final Locator acquirersButton = tab("Acquirers");
     private final Locator gatewayButton = tab("Gateway");
     private final Locator fraudControlButton = tab("Fraud control");
@@ -26,5 +26,12 @@ public class SystemAdministrationPage extends BasePageWithHeader {
         acquirersButton.click();
 
         return new SaAcquirersTab(getPage());
+    }
+
+    @Step("Click 'Companies and business units' button")
+    public SaCompaniesAndBusinessUnitsTab clickCompaniesAndBusinessUnitsTabButton() {
+        companiesAndBusinessUnitsTabButton.click();
+
+        return new SaCompaniesAndBusinessUnitsTab(getPage());
     }
 }
