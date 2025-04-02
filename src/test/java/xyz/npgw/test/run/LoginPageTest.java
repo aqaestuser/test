@@ -11,6 +11,7 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.testdata.TestDataProvider;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -66,5 +67,18 @@ public class LoginPageTest extends BaseTest {
 
         Allure.step("Verify: The user's email is not in the email field");
         assertThat(loginPage.getEmailField()).hasValue("");
+    }
+
+    @Test(dataProvider = "getAuthenticatedEndpoints", dataProviderClass = TestDataProvider.class)
+    @TmsLink("165")
+    @Epic("Login")
+    @Feature("Navigation")
+    @Description("Unauthenticated users are automatically redirected to the 'Login page'")
+    public void testUnauthenticatedUserRedirectionToLoginPage(String userRole, String endpoint) {
+        LoginPage loginPage = new AboutBlankPage(getPage())
+                .navigate(endpoint);
+
+        Allure.step("Verify: Unauthenticated user is on 'Login page'");
+        assertThat(loginPage.getLoginFormTitle()).hasText("Welcome to NPGW");
     }
 }
