@@ -23,6 +23,7 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.PlaywrightOptions;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.ProjectUtils;
+import xyz.npgw.test.common.UserRole;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -63,7 +64,7 @@ public abstract class BaseTest {
     }
 
     @BeforeMethod
-    protected void beforeMethod(Method method, ITestResult testResult) {
+    protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
         context = browser.newContext(PlaywrightOptions.contextOptions());
 
         if (ProjectProperties.isTracingMode()) {
@@ -85,12 +86,17 @@ public abstract class BaseTest {
 
         page = context.newPage();
 
-        Allure.step("Navigate to the base url");
-        ProjectUtils.navigateToBaseURL(page);
-
-        if (!method.getDeclaringClass().getSimpleName().contains("LoginPageTest")) {
-            Allure.step("Login to the site");
-            ProjectUtils.login(page);
+        UserRole userRole = UserRole.SUPER;
+        if (args.length != 0 && (args[0] instanceof String)) {
+            try {
+                userRole = UserRole.valueOf((String) args[0]);
+            } catch (IllegalArgumentException e) {
+                LOGGER.info("Unknown UserRole, using 'SUPER' as default. {}", e.getMessage());
+            }
+        }
+        if (userRole != UserRole.GUEST) {
+            Allure.step("Login to the site as %s".formatted(userRole));
+            ProjectUtils.loginAsRole(page, userRole);
         }
     }
 

@@ -9,6 +9,8 @@ import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 public class ProjectUtils {
 
     public static String getTestClassMethodName(Method method) {
@@ -27,14 +29,13 @@ public class ProjectUtils {
         return new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
     }
 
-    public static void navigateToBaseURL(Page page) {
+    public static void loginAsRole(Page page, UserRole userRole) {
+        String emailPrefix = (userRole == UserRole.SUPER) ? "" : userRole.name().toLowerCase();
         page.navigate("/");
-    }
-
-    public static void login(Page page) {
-        page.getByPlaceholder("Enter your email").fill(Constants.USER_EMAIL);
+        page.getByPlaceholder("Enter your email").fill(emailPrefix + Constants.USER_EMAIL);
         page.getByPlaceholder("Enter your password").fill(Constants.USER_PASSWORD);
         page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("Remember me")).setChecked(false);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
+        assertThat(page).hasURL("/dashboard");
     }
 }

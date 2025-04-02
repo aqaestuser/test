@@ -2,7 +2,11 @@ package xyz.npgw.test.page.base;
 
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.*;
+import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.page.ReportsPage;
+import xyz.npgw.test.page.SystemAdministrationPage;
+import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.component.Header;
 
 public abstract class BasePageWithHeader extends BasePage {
