@@ -9,13 +9,21 @@ import xyz.npgw.test.page.component.ContentBlock;
 public class TransactionsPage extends BasePageWithHeader {
 
     private final ContentBlock table;
-    private final Locator currencySelector = button("ALL Currency");
-    private final Locator applyDataIcon = locator("button:nth-child(9)");
     private final Locator currencyColumnHeader = columnHeader("Currency");
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
     private final Locator nextPageButton = button("next page button");
     private final Locator paginationItemTwoActiveButton = button("pagination item 2 active");
+    private final Locator dateRangePicker = group("DateRange");
+    private final Locator businessUnitSelector = textExact("Business unit").locator("../../..");
+    private final Locator currencySelector = labelExact("Currency");
+    private final Locator paymentMethodSelector = labelExact("Payment method");
+    private final Locator statusSelector = labelExact("Status");
+    private final Locator amountButton = button("Amount");
+    private final Locator resetFilterButton = locator("svg[data-icon='xmark']");
+    private final Locator applyDataButton = locator("svg[data-icon='filter']");
+    private final Locator settingsButton = locator("svg[data-icon='gear']");
+    private final Locator downloadButton = locator("svg[data-icon='download']");
 
     public TransactionsPage(Page page) {
         super(page);
@@ -37,8 +45,8 @@ public class TransactionsPage extends BasePageWithHeader {
     }
 
     @Step("Click Icon Apply Data")
-    public TransactionsPage clickApplyDataIcon() {
-        applyDataIcon.click();
+    public TransactionsPage clickApplyDataButton() {
+        applyDataButton.click();
 
         return this;
     }
@@ -80,5 +88,45 @@ public class TransactionsPage extends BasePageWithHeader {
 
     public Locator getPaginationItemTwoActiveButton() {
         return paginationItemTwoActiveButton;
+    }
+
+    public Locator getDateRangePicker() {
+        return dateRangePicker;
+    }
+
+    public Locator getBusinessUnitSelector() {
+        return businessUnitSelector;
+    }
+
+    public Locator getCurrencySelector() {
+        return currencySelector;
+    }
+
+    public Locator getPaymentMethodSelector() {
+        return paymentMethodSelector;
+    }
+
+    public Locator getStatusSelector() {
+        return statusSelector;
+    }
+
+    public Locator getAmountButton() {
+        return amountButton;
+    }
+
+    public Locator getResetFilterButton() {
+        return resetFilterButton;
+    }
+
+    public Locator getApplyDataButton() {
+        return applyDataButton;
+    }
+
+    public Locator getSettingsButton() {
+        return settingsButton;
+    }
+
+    public Locator getDownloadButton() {
+        return downloadButton;
     }
 }

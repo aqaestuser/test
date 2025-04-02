@@ -59,4 +59,8 @@ public abstract class BasePage {
     protected Locator textExact(String text) {
         return getPage().getByText(text, new Page.GetByTextOptions().setExact(true));
     }
+
+    protected Locator group(String text) {
+        return page.getByRole(AriaRole.GROUP, new Page.GetByRoleOptions().setName(text));
+    }
 }

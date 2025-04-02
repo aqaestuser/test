@@ -42,7 +42,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .clickCurrencySelector()
                 .clickCurrency("EUR")
-                .clickApplyDataIcon();
+                .clickApplyDataButton();
 
         Allure.step("Verify: currency filter - EUR");
         assertTrue(transactionsPage.getTableRow("EUR"));
@@ -87,5 +87,50 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: button 2 is active");
         assertThat(transactionsPage.getPaginationItemTwoActiveButton()).isVisible();
+    }
+
+    @Test
+    @TmsLink("181")
+    @Epic("Transactions")
+    @Feature("Panel")
+    @Description("Verify that on Transactions Page after clicking on Transactions user can see Panel:"
+            + " Date range, Business unit, Currency, Payment method, Status, Amount, Reset filter, "
+            + "Apply data, Download file, Settings.")
+    public void testTheVisibilityOfTheControlPanelElementsOnTheTransactionsPage() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: DataRange picker is visible");
+        assertThat(transactionsPage.getDateRangePicker()).isVisible();
+
+        Allure.step("Verify: Business Unit selector is visible");
+        assertThat(transactionsPage.getBusinessUnitSelector()).isVisible();
+
+        Allure.step("Verify: Currency selector is visible");
+        assertThat(transactionsPage.getCurrencySelector()).isVisible();
+
+        Allure.step("Verify: Payment method selector is visible");
+        assertThat(transactionsPage.getPaymentMethodSelector()).isVisible();
+
+        Allure.step("Verify: Status selector is visible");
+        assertThat(transactionsPage.getStatusSelector()).isVisible();
+
+        Allure.step("Verify: Amount button is visible");
+        assertThat(transactionsPage.getAmountButton()).isVisible();
+
+        Allure.step("Verify: Reset filter button is visible");
+        assertThat(transactionsPage.getResetFilterButton()).isVisible();
+
+        Allure.step("Verify: Reset filter button is visible");
+        assertThat(transactionsPage.getResetFilterButton()).isVisible();
+
+        Allure.step("Verify: Apply data button is visible");
+        assertThat(transactionsPage.getApplyDataButton()).isVisible();
+
+        Allure.step("Verify: Settings button is visible");
+        assertThat(transactionsPage.getSettingsButton()).isVisible();
+
+        Allure.step("Verify: Download button is visible");
+        assertThat(transactionsPage.getDownloadButton()).isVisible();
     }
 }
