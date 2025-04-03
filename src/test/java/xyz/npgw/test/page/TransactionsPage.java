@@ -7,7 +7,6 @@ import xyz.npgw.test.page.base.BasePageWithHeaderAndTable;
 
 public class TransactionsPage extends BasePageWithHeaderAndTable {
 
-    private final Locator currencyColumnHeader = columnHeader("Currency");
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
     private final Locator nextPageButton = button("next page button");

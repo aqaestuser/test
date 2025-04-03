@@ -13,13 +13,6 @@ public class HeaderComponent extends BaseComponent {
         super(page);
     }
 
-    @Step("Click on 'Dashboard' menu in Header")
-    public DashboardPage clickDashboardLink() {
-        link("Dashboard").click();
-
-        return new DashboardPage(getPage());
-    }
-
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
         link("Transactions").click();
@@ -45,20 +38,6 @@ public class HeaderComponent extends BaseComponent {
     @Step("Press 'Log out' button")
     public LoginPage clickLogOutButton() {
         button("Log out").click();
-
-        return new LoginPage(getPage());
-    }
-
-    @Step("Click user profile icon")
-    public HeaderComponent clickUserProfileButton() {
-        getPage().locator("ul button span").click();
-
-        return this;
-    }
-
-    @Step("Press user profile 'Log out' button")
-    public LoginPage clickUserProfileLogOutButton() {
-        button("Log Out").click();
 
         return new LoginPage(getPage());
     }

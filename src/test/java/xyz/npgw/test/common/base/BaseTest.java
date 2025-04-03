@@ -156,10 +156,6 @@ public abstract class BaseTest {
         return page;
     }
 
-    protected APIRequestContext getRequest() {
-        return request;
-    }
-
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
     }
 
