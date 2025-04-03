@@ -8,7 +8,7 @@ import xyz.npgw.test.page.base.BasePage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public final class LoginPage extends BasePage<LoginPage> {
+public final class LoginPage extends BasePage {
 
     private final Locator emailField = placeholder("Enter your email");
     private final Locator passwordField = placeholder("Enter your password");
@@ -26,15 +26,6 @@ public final class LoginPage extends BasePage<LoginPage> {
 
     public Locator getLoginFormTitle() {
         return loginFormTitle;
-    }
-
-    @Step("Enter the user's email and password")
-    public DashboardPage login(String user, String pwd) {
-        return new LoginPage(getPage())
-                .fillEmailField(user)
-                .fillPasswordField(pwd)
-                .checkRememberMeCheckbox()
-                .clickLoginButton();
     }
 
     @Step("Enter the user's email in the 'Email' field")
@@ -68,13 +59,6 @@ public final class LoginPage extends BasePage<LoginPage> {
     @Step("Uncheck 'Remember me' checkbox")
     public LoginPage uncheckRememberMeCheckbox() {
         rememberMeCheckbox.setChecked(false);
-
-        return this;
-    }
-
-    @Step("Navigate to '{url}' endpoint")
-    public LoginPage navigate(String url) {
-        getPage().navigate(url);
 
         return this;
     }

@@ -4,7 +4,7 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePage;
 
-public class AboutBlankPage extends BasePage<AboutBlankPage> {
+public class AboutBlankPage extends BasePage {
 
     public AboutBlankPage(Page page) {
         super(page);

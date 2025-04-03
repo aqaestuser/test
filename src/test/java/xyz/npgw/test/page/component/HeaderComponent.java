@@ -3,18 +3,14 @@ package xyz.npgw.test.page.component;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.LoginPage;
-import xyz.npgw.test.page.ReportsPage;
-import xyz.npgw.test.page.SystemAdministrationPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.*;
 import xyz.npgw.test.page.base.BaseComponent;
-import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.systemadministration.TeamPage;
 
-public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
+public class HeaderComponent extends BaseComponent {
 
-    public HeaderComponent(Page page, T owner) {
-        super(page, owner);
+    public HeaderComponent(Page page) {
+        super(page);
     }
 
     @Step("Click on 'Dashboard' menu in Header")
@@ -39,11 +35,11 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
     }
 
     @Step("Click on 'System administration' menu in Header")
-    public SystemAdministrationPage clickSystemAdministrationLink() {
+    public TeamPage clickSystemAdministrationLink() {
         link("System administration").click();
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
-        return new SystemAdministrationPage(getPage());
+        return new TeamPage(getPage());
     }
 
     @Step("Press 'Log out' button")
@@ -54,7 +50,7 @@ public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
     }
 
     @Step("Click user profile icon")
-    public HeaderComponent<T> clickUserProfileButton() {
+    public HeaderComponent clickUserProfileButton() {
         getPage().locator("ul button span").click();
 
         return this;

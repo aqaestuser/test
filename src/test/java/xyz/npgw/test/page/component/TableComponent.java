@@ -1,18 +1,19 @@
-package xyz.npgw.test.page.base;
+package xyz.npgw.test.page.component;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import xyz.npgw.test.page.base.BaseComponent;
 
 import java.util.NoSuchElementException;
 
-public abstract class BaseTableComponent<T extends BasePage<T>> extends BaseComponent<T> {
+public class TableComponent extends BaseComponent {
 
     private final Locator header = getPage().getByRole(AriaRole.COLUMNHEADER);
     private final Locator rows = getPage().getByRole(AriaRole.ROW);
 
-    public BaseTableComponent(Page page, T owner) {
-        super(page, owner);
+    public TableComponent(Page page) {
+        super(page);
     }
 
     public Locator getTableHeader() {
