@@ -4,11 +4,10 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePageWithHeader;
-import xyz.npgw.test.page.component.ContentBlock;
+import xyz.npgw.test.page.component.TransactionsTableComponent;
 
-public class TransactionsPage extends BasePageWithHeader {
+public class TransactionsPage extends BasePageWithHeader<TransactionsPage> {
 
-    private final ContentBlock table;
     private final Locator currencyColumnHeader = columnHeader("Currency");
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
@@ -25,9 +24,17 @@ public class TransactionsPage extends BasePageWithHeader {
     private final Locator settingsButton = locator("svg[data-icon='gear']");
     private final Locator downloadButton = locator("svg[data-icon='download']");
 
+    private TransactionsTableComponent<TransactionsPage> transactionsTableComponent;
+
     public TransactionsPage(Page page) {
         super(page);
-        table = new ContentBlock(page);
+    }
+
+    public TransactionsTableComponent<TransactionsPage> getTransactionsTable() {
+        if (transactionsTableComponent == null) {
+            transactionsTableComponent = new TransactionsTableComponent<>(getPage(), this);
+        }
+        return transactionsTableComponent;
     }
 
     @Step("Click Currency Selector")

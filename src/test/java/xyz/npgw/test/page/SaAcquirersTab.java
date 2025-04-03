@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePageWithHeader;
 
-public class SaAcquirersTab extends BasePageWithHeader {
+public class SaAcquirersTab extends BasePageWithHeader<SaAcquirersTab> {
 
     private final Locator addAcquirerButton  = locator("svg[data-icon='circle-plus']");
     private final Locator resetFilterButton  = locator("svg[data-icon='xmark']");

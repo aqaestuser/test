@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -140,5 +141,17 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Download button is visible");
         assertThat(transactionsPage.getDownloadButton()).isVisible();
+    }
+
+    @Test
+    public void testTransactionsTableHeader() {
+        Locator transactionsTableHeader = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickApplyDataButton()
+                .getTransactionsTable()
+                .getTableHeader();
+
+        assertThat(transactionsTableHeader).hasText("");
     }
 }

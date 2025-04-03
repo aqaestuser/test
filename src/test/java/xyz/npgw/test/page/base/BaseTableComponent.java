@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.component;
+package xyz.npgw.test.page.base;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -6,19 +6,24 @@ import com.microsoft.playwright.options.AriaRole;
 
 import java.util.NoSuchElementException;
 
-public class ContentBlock extends Element {
+public abstract class BaseTableComponent<T extends BasePage<T>> extends BaseComponent<T> {
+
     private final Locator header = getPage().getByRole(AriaRole.COLUMNHEADER);
     private final Locator rows = getPage().getByRole(AriaRole.ROW);
 
-    public ContentBlock(Page page) {
-        super(page, "table[aria-label='transactions table']");
+    public BaseTableComponent(Page page, T owner) {
+        super(page, owner);
     }
 
-    Locator getRowsWithoutHeader() {
-        return getPage().getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(header));
+    public Locator getTableHeader() {
+        return header;
     }
 
-    Locator getColumnBySelector(String selector) {
+    public Locator getRowsWithoutHeader() {
+        return rows.filter(new Locator.FilterOptions().setHasNot(header));
+    }
+
+    public Locator getColumnBySelector(String selector) {
         int index = -1;
         for (int i = 0; i < header.count(); i++) {
             if (header.nth(i).innerText().equals(selector)) {

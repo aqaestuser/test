@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import xyz.npgw.test.page.base.BasePage;
 
-public class AddCompanyDialog extends BasePage {
+public class AddCompanyDialog extends BasePage<AddCompanyDialog> {
 
     private final Locator addCompanyDialogHeader = getPage().locator("section header");
 

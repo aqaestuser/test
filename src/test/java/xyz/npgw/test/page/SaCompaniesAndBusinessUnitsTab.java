@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePageWithHeader;
 
-public class SaCompaniesAndBusinessUnitsTab extends BasePageWithHeader {
+public class SaCompaniesAndBusinessUnitsTab extends BasePageWithHeader<SaCompaniesAndBusinessUnitsTab> {
 
     private final Locator addCompanyButton = locator("svg[data-icon='circle-plus']").first();
 

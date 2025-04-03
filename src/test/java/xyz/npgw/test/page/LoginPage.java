@@ -8,7 +8,7 @@ import xyz.npgw.test.page.base.BasePage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public final class LoginPage extends BasePage {
+public final class LoginPage extends BasePage<LoginPage> {
 
     private final Locator emailField = placeholder("Enter your email");
     private final Locator passwordField = placeholder("Enter your password");

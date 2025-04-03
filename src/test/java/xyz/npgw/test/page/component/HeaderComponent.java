@@ -8,11 +8,13 @@ import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.SystemAdministrationPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.base.BaseComponent;
+import xyz.npgw.test.page.base.BasePage;
 
-public class Header extends Element {
+public class HeaderComponent<T extends BasePage<T>> extends BaseComponent<T> {
 
-    public Header(Page page) {
-        super(page, "header");
+    public HeaderComponent(Page page, T owner) {
+        super(page, owner);
     }
 
     @Step("Click on 'Dashboard' menu in Header")
@@ -47,6 +49,20 @@ public class Header extends Element {
     @Step("Press 'Log out' button")
     public LoginPage clickLogOutButton() {
         button("Log out").click();
+
+        return new LoginPage(getPage());
+    }
+
+    @Step("Click user profile icon")
+    public HeaderComponent<T> clickUserProfileButton() {
+        getPage().locator("ul button span").click();
+
+        return this;
+    }
+
+    @Step("Press user profile 'Log out' button")
+    public LoginPage clickUserProfileLogOutButton() {
+        button("Log Out").click();
 
         return new LoginPage(getPage());
     }
