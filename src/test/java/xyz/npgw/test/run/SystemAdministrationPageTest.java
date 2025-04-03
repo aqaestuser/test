@@ -23,6 +23,7 @@ public class SystemAdministrationPageTest extends BaseTest {
             + "on 'System administration' link on the header")
     public void testNavigateToSystemAdministrationPage() {
         SystemAdministrationPage systemAdministrationPage = new DashboardPage(getPage())
+                .getHeader()
                 .clickSystemAdministrationLink();
 
         Allure.step("Verify: System administration Page URL");

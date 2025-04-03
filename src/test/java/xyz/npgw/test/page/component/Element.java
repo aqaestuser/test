@@ -4,7 +4,8 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 
-public class Element {
+public abstract class Element {
+
     private final Page page;
     protected final String selector;
 

@@ -22,6 +22,7 @@ public class SaAcquirersTabTest extends BaseTest {
     @Description("Verify: The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
         SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
+                .getHeader()
                 .clickSystemAdministrationLink()
                 .clickAcquirersTabButton();
 
@@ -48,6 +49,7 @@ public class SaAcquirersTabTest extends BaseTest {
     @Description("Verify: The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
         SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
+                .getHeader()
                 .clickSystemAdministrationLink()
                 .clickAcquirersTabButton();
 
@@ -69,6 +71,7 @@ public class SaAcquirersTabTest extends BaseTest {
     @Description("Verify: Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
     public void testSelectAcquirerDropdownFunctionality() {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
+                .getHeader()
                 .clickSystemAdministrationLink()
                 .clickAcquirersTabButton()
                 .clickSelectAcquirerPlaceholder()

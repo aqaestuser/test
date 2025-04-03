@@ -38,6 +38,7 @@ public class DashboardPageTest extends BaseTest {
     public void testNavigateToLoginPageAfterLogout() {
 
         LoginPage loginPage = new DashboardPage(getPage())
+                .getHeader()
                 .clickLogOutButton();
 
         Allure.step("Verify: Login Page URL");

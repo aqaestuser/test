@@ -22,6 +22,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("User navigate to 'Reports page' after clicking on 'Reports' link on the header")
     public void testNavigateToReportsPage() {
         ReportsPage reportsPage = new DashboardPage(getPage())
+                .getHeader()
                 .clickReportsLink();
 
         Allure.step("Verify: Reports Page URL");
