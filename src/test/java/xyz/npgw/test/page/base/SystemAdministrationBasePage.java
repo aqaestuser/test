@@ -15,10 +15,6 @@ public abstract class SystemAdministrationBasePage extends BasePage {
         return new HeaderComponent(getPage());
     }
 
-    public TableComponent getTable() {
-        return new TableComponent(getPage());
-    }
-
     public SystemAdministrationMenuComponent getSystemAdministrationMenuComponent() {
         return new SystemAdministrationMenuComponent(getPage());
     }

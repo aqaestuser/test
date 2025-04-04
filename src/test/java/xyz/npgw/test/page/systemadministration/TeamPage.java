@@ -3,9 +3,9 @@ package xyz.npgw.test.page.systemadministration;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.SystemAdministrationBasePage;
+import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
 
-public class TeamPage extends SystemAdministrationBasePage {
+public class TeamPage extends SystemAdministrationWithTableBasePage {
 
     private final Locator companiesAndBusinessUnitsTabButton = tab("Companies and business units");
 
