@@ -4,6 +4,7 @@ import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Tracing;
+import xyz.npgw.test.testdata.Constants;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

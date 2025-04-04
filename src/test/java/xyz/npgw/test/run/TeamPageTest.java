@@ -6,14 +6,14 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.SystemAdministrationPage;
+import xyz.npgw.test.page.systemadministration.TeamPage;
+import xyz.npgw.test.testdata.Constants;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class SystemAdministrationPageTest extends BaseTest {
+public class TeamPageTest extends BaseTest {
 
     @Test
     @TmsLink("154")
@@ -22,7 +22,7 @@ public class SystemAdministrationPageTest extends BaseTest {
     @Description("User navigate to 'System administration page' after clicking "
             + "on 'System administration' link on the header")
     public void testNavigateToSystemAdministrationPage() {
-        SystemAdministrationPage systemAdministrationPage = new DashboardPage(getPage())
+        TeamPage systemAdministrationPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink();
 

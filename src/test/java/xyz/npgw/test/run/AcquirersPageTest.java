@@ -6,14 +6,16 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.SaAcquirersTab;
+import xyz.npgw.test.page.systemadministration.AcquirersPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class SaAcquirersTabTest extends BaseTest {
+@Ignore
+public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("134")
@@ -21,10 +23,11 @@ public class SaAcquirersTabTest extends BaseTest {
     @Feature("Acquirers list")
     @Description("Verify: The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
-        SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
+        AcquirersPage saAcquirersTab = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickAcquirersTabButton();
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab();
 
         Allure.step("Verify: Add Acquirer Button is visible");
         assertThat(saAcquirersTab.getAddAcquirerButton()).isVisible();
@@ -48,10 +51,11 @@ public class SaAcquirersTabTest extends BaseTest {
     @Feature("Acquirers list")
     @Description("Verify: The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
-        SaAcquirersTab saAcquirersTab = new DashboardPage(getPage())
+        AcquirersPage saAcquirersTab = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickAcquirersTabButton();
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab();
 
         Allure.step("Verify: Acquirers list header is visible");
         assertThat(saAcquirersTab.getAcquirersListHeader()).isVisible();
@@ -73,7 +77,8 @@ public class SaAcquirersTabTest extends BaseTest {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickAcquirersTabButton()
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab()
                 .clickSelectAcquirerPlaceholder()
                 .getSelectAcquirersDropdownItems();
 

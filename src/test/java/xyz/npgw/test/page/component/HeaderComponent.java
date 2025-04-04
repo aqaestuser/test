@@ -3,23 +3,16 @@ package xyz.npgw.test.page.component;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
-import xyz.npgw.test.page.SystemAdministrationPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.base.BaseComponent;
+import xyz.npgw.test.page.systemadministration.TeamPage;
 
-public class Header extends Element {
+public class HeaderComponent extends BaseComponent {
 
-    public Header(Page page) {
-        super(page, "header");
-    }
-
-    @Step("Click on 'Dashboard' menu in Header")
-    public DashboardPage clickDashboardLink() {
-        link("Dashboard").click();
-
-        return new DashboardPage(getPage());
+    public HeaderComponent(Page page) {
+        super(page);
     }
 
     @Step("Click on 'Transactions' menu in Header")
@@ -37,11 +30,11 @@ public class Header extends Element {
     }
 
     @Step("Click on 'System administration' menu in Header")
-    public SystemAdministrationPage clickSystemAdministrationLink() {
+    public TeamPage clickSystemAdministrationLink() {
         link("System administration").click();
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
-        return new SystemAdministrationPage(getPage());
+        return new TeamPage(getPage());
     }
 
     @Step("Press 'Log out' button")

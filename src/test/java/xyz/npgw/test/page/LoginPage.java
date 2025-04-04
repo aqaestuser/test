@@ -28,15 +28,6 @@ public final class LoginPage extends BasePage {
         return loginFormTitle;
     }
 
-    @Step("Enter the user's email and password")
-    public DashboardPage login(String user, String pwd) {
-        return new LoginPage(getPage())
-                .fillEmailField(user)
-                .fillPasswordField(pwd)
-                .checkRememberMeCheckbox()
-                .clickLoginButton();
-    }
-
     @Step("Enter the user's email in the 'Email' field")
     public LoginPage fillEmailField(String userEmail) {
         emailField.fill(userEmail);
@@ -68,13 +59,6 @@ public final class LoginPage extends BasePage {
     @Step("Uncheck 'Remember me' checkbox")
     public LoginPage uncheckRememberMeCheckbox() {
         rememberMeCheckbox.setChecked(false);
-
-        return this;
-    }
-
-    @Step("Navigate to '{url}' endpoint")
-    public LoginPage navigate(String url) {
-        getPage().navigate(url);
 
         return this;
     }

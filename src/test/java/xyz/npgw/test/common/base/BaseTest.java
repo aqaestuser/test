@@ -19,11 +19,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import xyz.npgw.test.common.BrowserFactory;
-import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.PlaywrightOptions;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.ProjectUtils;
 import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.testdata.Constants;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -154,10 +154,6 @@ public abstract class BaseTest {
 
     protected Page getPage() {
         return page;
-    }
-
-    protected APIRequestContext getRequest() {
-        return request;
     }
 
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {

@@ -1,4 +1,6 @@
-package xyz.npgw.test.common;
+package xyz.npgw.test.testdata;
+
+import xyz.npgw.test.common.ProjectProperties;
 
 public class Constants {
 
@@ -7,7 +9,6 @@ public class Constants {
 
     public static final String BASE_URL = ProjectProperties.getBaseUrl();
     public static final String LOGIN_PAGE_URL = BASE_URL + "/";
-    public static final String LOGIN_PAGE_URL_AFTER_TOKEN_EXPIRATION = BASE_URL + "/login";
     public static final String DASHBOARD_PAGE_URL = BASE_URL + "/dashboard";
     public static final String TRANSACTIONS_PAGE_URL = BASE_URL + "/transactions";
     public static final String REPORTS_PAGE_URL = BASE_URL + "/reports";

@@ -7,10 +7,10 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.testdata.Constants;
 import xyz.npgw.test.testdata.TestDataProvider;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;

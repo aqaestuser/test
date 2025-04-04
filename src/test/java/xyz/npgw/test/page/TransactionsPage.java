@@ -3,13 +3,10 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.BasePageWithHeader;
-import xyz.npgw.test.page.component.ContentBlock;
+import xyz.npgw.test.page.base.BasePageWithHeaderAndTable;
 
-public class TransactionsPage extends BasePageWithHeader {
+public class TransactionsPage extends BasePageWithHeaderAndTable {
 
-    private final ContentBlock table;
-    private final Locator currencyColumnHeader = columnHeader("Currency");
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
     private final Locator nextPageButton = button("next page button");
@@ -27,7 +24,6 @@ public class TransactionsPage extends BasePageWithHeader {
 
     public TransactionsPage(Page page) {
         super(page);
-        table = new ContentBlock(page);
     }
 
     @Step("Click Currency Selector")
@@ -49,10 +45,6 @@ public class TransactionsPage extends BasePageWithHeader {
         applyDataButton.click();
 
         return this;
-    }
-
-    public Locator getCurrencyColumnHeader() {
-        return currencyColumnHeader;
     }
 
     public boolean getTableRow(String value) {
