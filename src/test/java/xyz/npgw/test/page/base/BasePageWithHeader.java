@@ -9,7 +9,7 @@ public abstract class BasePageWithHeader extends BasePage {
         super(page);
     }
 
-    public HeaderComponent getHeader(){
+    public HeaderComponent getHeader() {
         return new HeaderComponent(getPage());
     }
 }

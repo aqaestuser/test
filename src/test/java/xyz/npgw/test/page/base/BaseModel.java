@@ -40,10 +40,6 @@ public abstract class BaseModel {
         return getPage().locator(selector);
     }
 
-    protected Locator columnHeader(String name) {
-        return getPage().getByRole(AriaRole.COLUMNHEADER, new Page.GetByRoleOptions().setName(name));
-    }
-
     protected Locator dialog() {
         return getPage().getByRole(AriaRole.DIALOG);
     }

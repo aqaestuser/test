@@ -8,10 +8,10 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import xyz.npgw.test.testdata.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.testdata.Constants;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertTrue;
@@ -144,6 +144,10 @@ public class TransactionsPageTest extends BaseTest {
     }
 
     @Test
+    @TmsLink("193")
+    @Epic("Transactions")
+    @Feature("Ttansactions table header")
+    @Description("Transactions table headers presence, spelling and order")
     public void testTransactionsTableHeader() {
         Locator transactionsTableHeader = new DashboardPage(getPage())
                 .getHeader()
@@ -152,6 +156,16 @@ public class TransactionsPageTest extends BaseTest {
                 .getTable()
                 .getTableHeader();
 
-        assertThat(transactionsTableHeader).hasText(new String[] {"Creation Date", "Merchant ID", "NPGW Reference", "Merchant Reference", "Amount", "Currency", "Payment Method", "Status"});
+        Allure.step("Verify: table headers are visible and in right default order");
+        assertThat(transactionsTableHeader).hasText(
+                new String[] {
+                        "Creation Date",
+                        "Merchant ID",
+                        "NPGW Reference",
+                        "Merchant Reference",
+                        "Amount",
+                        "Currency",
+                        "Payment Method",
+                        "Status"});
     }
 }

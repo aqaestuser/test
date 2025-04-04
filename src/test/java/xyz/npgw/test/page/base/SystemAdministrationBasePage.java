@@ -11,11 +11,11 @@ public abstract class SystemAdministrationBasePage extends BasePage {
         super(page);
     }
 
-    public HeaderComponent getHeader(){
+    public HeaderComponent getHeader() {
         return new HeaderComponent(getPage());
     }
 
-    public TableComponent getTable(){
+    public TableComponent getTable() {
         return new TableComponent(getPage());
     }
 

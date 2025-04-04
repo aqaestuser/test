@@ -3,7 +3,9 @@ package xyz.npgw.test.page.component;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.*;
+import xyz.npgw.test.page.LoginPage;
+import xyz.npgw.test.page.ReportsPage;
+import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.systemadministration.TeamPage;
 
