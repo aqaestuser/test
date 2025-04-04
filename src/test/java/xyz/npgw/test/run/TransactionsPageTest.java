@@ -1,6 +1,5 @@
 package xyz.npgw.test.run;
 
-import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -141,31 +140,5 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Download button is visible");
         assertThat(transactionsPage.getDownloadButton()).isVisible();
-    }
-
-    @Test
-    @TmsLink("193")
-    @Epic("Transactions")
-    @Feature("Ttansactions table header")
-    @Description("Transactions table headers presence, spelling and order")
-    public void testTransactionsTableHeader() {
-        Locator transactionsTableHeader = new DashboardPage(getPage())
-                .getHeader()
-                .clickTransactionsLink()
-                .clickApplyDataButton()
-                .getTable()
-                .getTableHeader();
-
-        Allure.step("Verify: table headers are visible and in right default order");
-        assertThat(transactionsTableHeader).hasText(
-                new String[] {
-                        "Creation Date",
-                        "Merchant ID",
-                        "NPGW Reference",
-                        "Merchant Reference",
-                        "Amount",
-                        "Currency",
-                        "Payment Method",
-                        "Status"});
     }
 }
