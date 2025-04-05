@@ -5,7 +5,7 @@ import xyz.npgw.test.page.component.HeaderComponent;
 import xyz.npgw.test.page.component.SystemAdministrationMenuComponent;
 import xyz.npgw.test.page.component.TableComponent;
 
-public abstract class SystemAdministrationWithTableBasePage extends BasePage{
+public abstract class SystemAdministrationWithTableBasePage extends BasePage {
 
     public SystemAdministrationWithTableBasePage(Page page) {
         super(page);

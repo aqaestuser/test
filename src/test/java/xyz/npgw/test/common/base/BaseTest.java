@@ -9,8 +9,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -32,11 +31,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+@Log4j2
 public abstract class BaseTest {
 
-    protected static final Logger LOGGER = LogManager.getLogger(BaseTest.class.getName());
-
     private static final String ARTEFACT_DIR = "target/artefact";
+
     private Playwright playwright;
     private Browser browser;
     private String browserType;
@@ -55,10 +54,10 @@ public abstract class BaseTest {
             if (playwright != null) {
                 playwright.close();
             }
-            LOGGER.error("Unsupported browser: {}", browserType);
+            log.error("Unsupported browser: {}", browserType);
             System.exit(1);
         } catch (RuntimeException e) {
-            LOGGER.error("Playwright.create() failed: {}", e.getMessage());
+            log.error("Playwright.create() failed: {}", e.getMessage());
             System.exit(2);
         }
     }
@@ -76,11 +75,11 @@ public abstract class BaseTest {
                 RequestOptions.create().setData(
                         Map.of("email", Constants.USER_EMAIL, "password", Constants.USER_PASSWORD)));
         if (tokenResponse.ok()) {
-            LOGGER.debug(tokenResponse.text());
+            log.debug(tokenResponse.text());
             String idToken = new Gson().fromJson(tokenResponse.text(), TokenResponse.class).token().idToken;
             request = playwright.request().newContext(PlaywrightOptions.apiContextOptions(idToken));
         } else {
-            LOGGER.error("Retrieve API idToken failed: {}", tokenResponse.statusText());
+            log.error("Retrieve API idToken failed: {}", tokenResponse.statusText());
             System.exit(5);
         }
 
@@ -91,7 +90,7 @@ public abstract class BaseTest {
             try {
                 userRole = UserRole.valueOf((String) args[0]);
             } catch (IllegalArgumentException e) {
-                LOGGER.info("Unknown UserRole, using 'SUPER' as default. {}", e.getMessage());
+                log.debug("Unknown UserRole, using 'SUPER' as default. {}", e.getMessage());
             }
         }
         if (userRole != UserRole.GUEST) {
@@ -128,7 +127,7 @@ public abstract class BaseTest {
                     Allure.getLifecycle().addAttachment(
                             "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
                 } catch (IOException e) {
-                    LOGGER.error("Add video to allure failed: {}", e.getMessage());
+                    log.error("Add video to allure failed: {}", e.getMessage());
                 }
             }
             if (ProjectProperties.isTracingMode()) {
@@ -136,7 +135,7 @@ public abstract class BaseTest {
                     Allure.getLifecycle().addAttachment(
                             "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
                 } catch (IOException e) {
-                    LOGGER.error("Add traces to allure failed: {}", e.getMessage());
+                    log.error("Add traces to allure failed: {}", e.getMessage());
                 }
             }
         }

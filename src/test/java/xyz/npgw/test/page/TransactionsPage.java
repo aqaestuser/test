@@ -3,12 +3,16 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
+import lombok.AccessLevel;
+import lombok.Getter;
 import xyz.npgw.test.page.base.BasePageWithHeaderAndTable;
 
+@Getter
 public class TransactionsPage extends BasePageWithHeaderAndTable {
 
     private final Locator rowsPerPageButton = button("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
+    @Getter(AccessLevel.NONE)
     private final Locator nextPageButton = button("next page button");
     private final Locator paginationItemTwoActiveButton = button("pagination item 2 active");
     private final Locator dateRangePicker = group("DateRange");
@@ -56,10 +60,6 @@ public class TransactionsPage extends BasePageWithHeaderAndTable {
         return true;
     }
 
-    public Locator getRowsPerPageButton() {
-        return rowsPerPageButton;
-    }
-
     @Step("Click Button Rows Per Page")
     public TransactionsPage clickRowsPerPageButton() {
         rowsPerPageButton.click();
@@ -67,58 +67,10 @@ public class TransactionsPage extends BasePageWithHeaderAndTable {
         return this;
     }
 
-    public Locator getRowsPerPageOptions() {
-        return rowsPerPageOptions;
-    }
-
     @Step("Click next Page Button")
     public TransactionsPage clickNextPageButton() {
         nextPageButton.click();
 
         return this;
-    }
-
-    public Locator getPaginationItemTwoActiveButton() {
-        return paginationItemTwoActiveButton;
-    }
-
-    public Locator getDateRangePicker() {
-        return dateRangePicker;
-    }
-
-    public Locator getBusinessUnitSelector() {
-        return businessUnitSelector;
-    }
-
-    public Locator getCurrencySelector() {
-        return currencySelector;
-    }
-
-    public Locator getPaymentMethodSelector() {
-        return paymentMethodSelector;
-    }
-
-    public Locator getStatusSelector() {
-        return statusSelector;
-    }
-
-    public Locator getAmountButton() {
-        return amountButton;
-    }
-
-    public Locator getResetFilterButton() {
-        return resetFilterButton;
-    }
-
-    public Locator getApplyDataButton() {
-        return applyDataButton;
-    }
-
-    public Locator getSettingsButton() {
-        return settingsButton;
-    }
-
-    public Locator getDownloadButton() {
-        return downloadButton;
     }
 }

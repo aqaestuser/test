@@ -1,16 +1,14 @@
 package xyz.npgw.test.common;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
+@Log4j2
 public class ProjectProperties {
-
-    private static final Logger LOGGER = LogManager.getLogger(ProjectProperties.class.getName());
 
     private static final String ENV_ACCESS_OPTIONS = "ACCESS_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
@@ -30,7 +28,7 @@ public class ProjectProperties {
     private static void loadPropertiesFromEnv(String envKey) {
         String envValue = System.getenv(envKey);
         if (envValue == null || envValue.isEmpty()) {
-            LOGGER.error("The environment key {} not found.", envKey);
+            log.error("The environment key {} not found.", envKey);
             System.exit(3);
         }
 
@@ -44,8 +42,8 @@ public class ProjectProperties {
         try (InputStream inputStream = ProjectProperties.class.getClassLoader().getResourceAsStream(fileName)) {
             properties.load(inputStream);
         } catch (NullPointerException | IOException e) {
-            LOGGER.error("The file {} not found.", fileName);
-            LOGGER.error("You need to create it from {}.TEMPLATE file.", fileName);
+            log.error("The file {} not found.", fileName);
+            log.error("You need to create it from {}.TEMPLATE file.", fileName);
             System.exit(3);
         }
     }
@@ -53,7 +51,7 @@ public class ProjectProperties {
     public static String getPropertyValue(String propertyName) {
         if (!properties.containsKey(propertyName) || properties.getProperty(propertyName) == null
                 || properties.getProperty(propertyName).trim().isEmpty()) {
-            LOGGER.error("Property '{}' does not exist or it's value is invalid.", propertyName);
+            log.error("Property '{}' does not exist or it's value is invalid.", propertyName);
         }
         return properties.getProperty(propertyName).trim();
     }
@@ -63,8 +61,8 @@ public class ProjectProperties {
                 || getPropertyValue(propertyName).equalsIgnoreCase("false")) {
             return Boolean.parseBoolean(getPropertyValue(propertyName));
         } else {
-            LOGGER.error("Property '{}' doesn't have [true, false] value.", propertyName);
-            LOGGER.error("The default value 'true' for '{}' hase been set.", propertyName);
+            log.error("Property '{}' doesn't have [true, false] value.", propertyName);
+            log.error("The default value 'true' for '{}' has been set.", propertyName);
             return true;
         }
     }
