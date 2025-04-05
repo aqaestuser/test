@@ -8,7 +8,7 @@ import xyz.npgw.test.page.base.BasePageWithHeader;
 public final class DashboardPage extends BasePageWithHeader {
 
     @Getter
-    private final Locator dashboardButton = labelExact("Dashboard");
+    private final Locator dashboardButton = textExact("Dashboard");
 
     public DashboardPage(Page page) {
         super(page);

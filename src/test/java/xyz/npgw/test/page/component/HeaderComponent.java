@@ -15,7 +15,7 @@ import xyz.npgw.test.page.systemadministration.TeamPage;
 public class HeaderComponent extends BaseComponent {
 
     @Getter
-    private final Locator logo = labelExact("NPGW");
+    private final Locator logo = textExact("NPGW");
 
     public HeaderComponent(Page page) {
         super(page);
