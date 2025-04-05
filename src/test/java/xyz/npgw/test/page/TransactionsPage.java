@@ -25,7 +25,7 @@ public class TransactionsPage extends BasePageWithHeaderAndTable {
     private final Locator applyDataButton = locator("svg[data-icon='filter']");
     private final Locator settingsButton = locator("svg[data-icon='gear']");
     private final Locator downloadButton = locator("svg[data-icon='download']");
-    private final Locator transactionsButton = locator("a[href='/transactions']");
+    private final Locator transactionsButton = labelExact("Transactions");
 
     public TransactionsPage(Page page) {
         super(page);

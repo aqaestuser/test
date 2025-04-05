@@ -1,6 +1,11 @@
 package xyz.npgw.test.run;
 
-import io.qameta.allure.*;
+
+import io.qameta.allure.Allure;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
@@ -16,12 +21,12 @@ public class HeaderTest extends BaseTest {
     @TmsLink("209")
     @Epic("Header")
     @Feature("Logo")
-    @Description("Check that the header contains Logo 'NPGW' ")
-    public void testLogoText() {
+    @Description("Check that Logo in  header contains text 'NPGW' ")
+    public void testLogoContainsNPGW() {
         HeaderComponent logo = new HeaderComponent(getPage());
 
         Allure.step("Verify: Logo contains text 'NPGW'");
-        assertThat(logo.getPage()).hasTitle(Constants.HEADER_TITLE);
+        assertThat(logo.getLogo()).hasText(Constants.LOGO_TEXT);
     }
 
     @Test
@@ -30,9 +35,7 @@ public class HeaderTest extends BaseTest {
     @Feature("Menu item Dashboard")
     @Description("Check that the Dashboard Button is visible")
     public void testDashboardButton() {
-        DashboardPage dashboardButton = new DashboardPage(getPage())
-                .getHeader()
-                .clickDashboardLink();
+        DashboardPage dashboardButton = new DashboardPage(getPage());
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardButton.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
