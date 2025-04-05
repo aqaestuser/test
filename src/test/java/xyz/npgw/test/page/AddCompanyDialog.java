@@ -57,4 +57,8 @@ public class AddCompanyDialog extends BasePage {
 
         return allFieldPlaceholders.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
+
+    public Locator getCreateButton() {
+        return createButton;
+    }
 }

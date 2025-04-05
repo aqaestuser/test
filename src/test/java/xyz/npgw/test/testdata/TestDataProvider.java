@@ -23,4 +23,13 @@ public class TestDataProvider {
                         + "Aenean commodo ligula eget dolor. Aenean ma"}
         };
     }
+
+    @DataProvider
+    public static Object[][] getEmptyRequiredFields() {
+        return new Object[][]{
+                {"", ""},
+                {"Company name", ""},
+                {"", "Company type"}
+        };
+    }
 }

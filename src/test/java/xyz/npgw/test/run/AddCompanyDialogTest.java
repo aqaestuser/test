@@ -70,7 +70,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @TmsLink("191")
     @Epic("Companies and business units")
     @Feature("Company Name Length Validation")
-    @Description("Verify that error message is shown for company name is shorter than 4 or longer than 100 characters.")
+    @Description("Error message is shown for company name is shorter than 4 or longer than 100 characters.")
     public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
         AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
                 .getHeader()
@@ -81,8 +81,26 @@ public class AddCompanyDialogTest extends BaseTest {
                 .fillCompanyTypeField("Company type")
                 .clickCreateButtonAndTriggerError();
 
-        Allure.step("error message for invalid company name: '{name}' is displayed");
+        Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
         assertThat(addCompanyPage.getErrorMessage()).containsText(
                 "Invalid companyName: '" + name + "'. It must contain between 4 and 100 characters");
+    }
+
+    @Test(dataProvider = "getEmptyRequiredFields", dataProviderClass = TestDataProvider.class)
+    @TmsLink("206")
+    @Epic("Companies and business units")
+    @Feature("Validation of Required Fields")
+    @Description("'Create' button is disabled when required fields are not filled.")
+    public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty(String name, String type) {
+        AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(name)
+                .fillCompanyTypeField(type);
+
+        Allure.step("Verify: 'Create' button is disabled when required fields are not filled.");
+        assertThat(addCompanyPage.getCreateButton()).isDisabled();
     }
 }
