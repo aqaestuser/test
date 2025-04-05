@@ -9,6 +9,7 @@ import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
 public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTableBasePage {
 
     private final Locator addCompanyButton = locator("svg[data-icon='circle-plus']").first();
+    private final Locator addCompanyDialog = dialog();
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
@@ -20,4 +21,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
         return new AddCompanyDialog(getPage());
     }
+
+    public Locator getAddCompanyDialog() {
+        return addCompanyDialog;
+    }
+
 }

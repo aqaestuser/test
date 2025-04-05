@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.testdata.TestDataProvider;
 
 import java.util.List;
@@ -92,7 +93,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Validation of Required Fields")
     @Description("'Create' button is disabled when required fields are not filled.")
     public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty(String name, String type) {
-        AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
@@ -101,6 +102,22 @@ public class AddCompanyDialogTest extends BaseTest {
                 .fillCompanyTypeField(type);
 
         Allure.step("Verify: 'Create' button is disabled when required fields are not filled.");
-        assertThat(addCompanyPage.getCreateButton()).isDisabled();
+        assertThat(addCompanyDialog.getCreateButton()).isDisabled();
+    }
+
+    @Test
+    @TmsLink("184")
+    @Feature("Close Button Functionality")
+    @Description("Verify that clicking the Close button successfully closes the 'Add Company' dialog.")
+    public void testVerifyCloseAddCompanyDialogWhenCloseButtonIsClicked() {
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .clickCloseButton();
+
+        Allure.step("Verify: the 'Add Company' dialog is no longer visible");
+        assertThat(companiesAndBusinessUnitsPage.getAddCompanyDialog()).isHidden();
     }
 }

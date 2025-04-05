@@ -5,6 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class AddCompanyDialog extends BasePage {
     private final Locator createButton = button("Create");
     private final Locator errorMessage = locator("[role='alert']");
     private final Locator allFieldPlaceholders = locator("[data-slot='input']:not([placeholder='Search...'])");
+    private final Locator closeButton = textExact("Close");
 
     public AddCompanyDialog(Page page) {
         super(page);
@@ -60,5 +62,12 @@ public class AddCompanyDialog extends BasePage {
 
     public Locator getCreateButton() {
         return createButton;
+    }
+
+    @Step("Click 'Close' button")
+    public CompaniesAndBusinessUnitsPage clickCloseButton() {
+        closeButton.click();
+
+        return new CompaniesAndBusinessUnitsPage(getPage());
     }
 }
