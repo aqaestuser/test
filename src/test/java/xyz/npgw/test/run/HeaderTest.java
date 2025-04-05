@@ -22,7 +22,7 @@ public class HeaderTest extends BaseTest {
     @Epic("Header")
     @Feature("Logo")
     @Description("Check that Logo in header contains text 'NPGW'")
-    public void testLogoContainsNPGW() {
+    public void testLogoContainsText() {
         HeaderComponent logo = new HeaderComponent(getPage());
 
         Allure.step("Verify: Logo contains text 'NPGW'");
