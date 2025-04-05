@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.testdata.TestDataProvider;
 
 import java.util.List;
 
@@ -63,5 +64,25 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addCompanyPage.getAllFieldPlaceholders(), expectedPlaceholders);
+    }
+
+    @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
+    @TmsLink("191")
+    @Epic("Companies and business units")
+    @Feature("Company Name Length Validation")
+    @Description("Verify that error message is shown for company name is shorter than 4 or longer than 100 characters.")
+    public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
+        AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(name)
+                .fillCompanyTypeField("Company type")
+                .clickCreateButtonAndTriggerError();
+
+        Allure.step("error message for invalid company name: '{name}' is displayed");
+        assertThat(addCompanyPage.getErrorMessage()).containsText(
+                "Invalid companyName: '" + name + "'. It must contain between 4 and 100 characters");
     }
 }

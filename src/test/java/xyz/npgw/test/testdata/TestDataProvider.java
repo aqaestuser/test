@@ -13,4 +13,14 @@ public class TestDataProvider {
                 {"GUEST", "/system"},
         };
     }
+
+    @DataProvider
+    public static Object[][] getInvalidCompanyNameLengths() {
+        return new Object[][]{
+                {"C"},
+                {"Com"},
+                {"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. "
+                        + "Aenean commodo ligula eget dolor. Aenean ma"}
+        };
+    }
 }
