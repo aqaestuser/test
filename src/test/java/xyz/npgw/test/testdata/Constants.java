@@ -19,4 +19,6 @@ public class Constants {
     public static final String TRANSACTIONS_URL_TITLE = "NPGW";
     public static final String REPORTS_URL_TITLE = "NPGW";
     public static final String SA_URL_TITLE = "NPGW";
+    public static final String HEADER_TITLE ="NPGW";
+
 }

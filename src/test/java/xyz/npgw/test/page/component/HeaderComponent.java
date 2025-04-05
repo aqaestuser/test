@@ -3,6 +3,7 @@ package xyz.npgw.test.page.component;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
+import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.TransactionsPage;
@@ -43,4 +44,12 @@ public class HeaderComponent extends BaseComponent {
 
         return new LoginPage(getPage());
     }
+
+    @Step("Press 'Dashboard' button")
+    public DashboardPage clickDashboardLink() {
+        link("Dashboard").click();
+
+        return new DashboardPage(getPage());
+    }
+
 }
