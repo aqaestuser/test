@@ -21,7 +21,7 @@ public class HeaderTest extends BaseTest {
     @TmsLink("209")
     @Epic("Header")
     @Feature("Logo")
-    @Description("Check that Logo in  header contains text 'NPGW' ")
+    @Description("Check that Logo in header contains text 'NPGW' ")
     public void testLogoContainsNPGW() {
         HeaderComponent logo = new HeaderComponent(getPage());
 
