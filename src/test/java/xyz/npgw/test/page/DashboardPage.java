@@ -13,6 +13,4 @@ public final class DashboardPage extends BasePageWithHeader {
     public DashboardPage(Page page) {
         super(page);
     }
-
-
 }
