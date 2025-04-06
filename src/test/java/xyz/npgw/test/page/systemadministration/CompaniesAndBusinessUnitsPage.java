@@ -31,9 +31,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     @Step("Select a company into 'Select company' filter field")
     public CompaniesAndBusinessUnitsPage selectCompany(String name) {
         companyDropdown.click();
-        companyDropdown.type(name);
+        companyDropdown.fill(name);
         companyDropdown.waitFor(new Locator.WaitForOptions()
-                .setTimeout(500));
+                .setTimeout(2500));
         companyDropdown.press("Enter");
 
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
