@@ -13,7 +13,7 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     private final Locator addCompanyButton = locator("svg[data-icon='circle-plus']").first();
     @Getter
     private final Locator addBusinessUnitButton = locator("svg[data-icon='circle-plus']").nth(1);
-    private final Locator companyDropdown = locator("[role='combobox']");
+    private final Locator companyDropdown = locator("[role='combobox'][aria-label='Select company']");
     @Getter
     private final Locator addCompanyDialog = dialog();
 
@@ -31,7 +31,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     @Step("Select a company into 'Select company' filter field")
     public CompaniesAndBusinessUnitsPage selectCompany(String name) {
         companyDropdown.click();
-        companyDropdown.fill(name);
+        companyDropdown.type(name);
+        companyDropdown.waitFor(new Locator.WaitForOptions()
+                .setTimeout(500));
         companyDropdown.press("Enter");
 
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
