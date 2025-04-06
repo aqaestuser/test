@@ -30,9 +30,9 @@ public final class ProjectUtils {
     private static final String VIEWPORT_WIDTH = PREFIX_PROP + "viewportWidth";
     private static final String VIEWPORT_HEIGHT = PREFIX_PROP + "viewportHeight";
     private static final String SLOW_MO_MODE = PREFIX_PROP + "slowMoMode";
-    private static final String IS_TRACING_MODE = PREFIX_PROP + "isTracingMode";
+    private static final String TRACING_MODE = PREFIX_PROP + "tracingMode";
 
-    private static final String IS_VIDEO_MODE = PREFIX_PROP + "isVideoMode";
+    private static final String VIDEO_MODE = PREFIX_PROP + "videoMode";
     private static final String VIDEO_WIDTH = PREFIX_PROP + "videoHeight";
     private static final String VIDEO_HEIGHT = PREFIX_PROP + "videoWidth";
 
@@ -130,11 +130,11 @@ public final class ProjectUtils {
     }
 
     public static boolean isTracingMode() {
-        return Boolean.parseBoolean(properties.getProperty(IS_TRACING_MODE, "true"));
+        return Boolean.parseBoolean(properties.getProperty(TRACING_MODE, "true"));
     }
 
     public static boolean isVideoMode() {
-        return Boolean.parseBoolean(properties.getProperty(IS_VIDEO_MODE, "true"));
+        return Boolean.parseBoolean(properties.getProperty(VIDEO_MODE, "true"));
     }
 
     public static boolean closeBrowserIfError() {

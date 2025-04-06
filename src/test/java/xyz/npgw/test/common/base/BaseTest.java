@@ -38,7 +38,7 @@ public abstract class BaseTest {
     @BeforeClass
     protected void beforeClass() {
         playwright = Playwright.create();
-//        apiRequestContext = ApiContextUtils.getApiRequestContext(playwright);
+        apiRequestContext = ApiContextUtils.getApiRequestContext(playwright);
         browser = BrowserFactory.getBrowser(playwright);
     }
 
