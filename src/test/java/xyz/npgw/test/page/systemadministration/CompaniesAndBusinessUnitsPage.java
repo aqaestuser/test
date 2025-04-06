@@ -11,6 +11,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
     private final Locator addCompanyButton = locator("svg[data-icon='circle-plus']").first();
     @Getter
+    private final Locator addBusinessUnitButton = locator("svg[data-icon='circle-plus']").nth(1);
+    private final Locator companyDropdown = locator("[role='combobox']");
+    @Getter
     private final Locator addCompanyDialog = dialog();
 
     public CompaniesAndBusinessUnitsPage(Page page) {
@@ -24,4 +27,11 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return new AddCompanyDialog(getPage());
     }
 
+    @Step("Select a company into 'Select company' filter field")
+    public CompaniesAndBusinessUnitsPage selectCompany(String name) {
+        companyDropdown.click();
+        companyDropdown.fill(name);
+        companyDropdown.press("Enter");
+        return this;
+    }
 }
