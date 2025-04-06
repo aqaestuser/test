@@ -39,3 +39,5 @@ build/
 access.properties
 browser.properties
 /.allure/
+*/.env
+*.dockerfile

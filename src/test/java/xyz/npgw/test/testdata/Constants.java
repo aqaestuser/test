@@ -1,13 +1,12 @@
 package xyz.npgw.test.testdata;
 
-import xyz.npgw.test.common.ProjectProperties;
+
+import xyz.npgw.test.common.ProjectUtils;
 
 public class Constants {
 
-    public static final String USER_EMAIL = ProjectProperties.getUserEmail();
-    public static final String USER_PASSWORD = ProjectProperties.getUserPassword();
+    private static final String BASE_URL = ProjectUtils.getBaseUrl();
 
-    public static final String BASE_URL = ProjectProperties.getBaseUrl();
     public static final String LOGIN_PAGE_URL = BASE_URL + "/";
     public static final String DASHBOARD_PAGE_URL = BASE_URL + "/dashboard";
     public static final String TRANSACTIONS_PAGE_URL = BASE_URL + "/transactions";
