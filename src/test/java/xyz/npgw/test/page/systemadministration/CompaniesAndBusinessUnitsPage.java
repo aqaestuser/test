@@ -2,6 +2,7 @@ package xyz.npgw.test.page.systemadministration;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.AddCompanyDialog;
@@ -32,6 +33,11 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         companyDropdown.click();
         companyDropdown.fill(name);
         companyDropdown.press("Enter");
+
+        addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.ATTACHED));
+        getPage().waitForCondition(addBusinessUnitButton::isEnabled);
+
         return this;
     }
 }
