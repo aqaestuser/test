@@ -57,14 +57,14 @@ public class AddCompanyDialogTest extends BaseTest {
                 "Enter fax"
         );
 
-        AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addCompanyPage.getAllFieldPlaceholders(), expectedPlaceholders);
+        assertEquals(addCompanyDialog.getAllFieldPlaceholders(), expectedPlaceholders);
     }
 
     @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
@@ -73,7 +73,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Company Name Length Validation")
     @Description("Error message is shown for company name is shorter than 4 or longer than 100 characters.")
     public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
-        AddCompanyDialog addCompanyPage = new DashboardPage(getPage())
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
@@ -83,8 +83,8 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
-        assertThat(addCompanyPage.getErrorMessage()).containsText(
-                "Invalid companyName: '" + name + "'. It must contain between 4 and 100 characters");
+        assertThat(addCompanyDialog.getErrorMessage()).containsText(
+                "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
 
     @Test(dataProvider = "getEmptyRequiredFields", dataProviderClass = TestDataProvider.class)
@@ -119,5 +119,27 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: the 'Add Company' dialog is no longer visible");
         assertThat(companiesAndBusinessUnitsPage.getAddCompanyDialog()).isHidden();
+    }
+
+    @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters", dataProviderClass = TestDataProvider.class)
+    @TmsLink("215")
+    @Epic("Companies and business units")
+    @Feature("Company Name Validation")
+    @Description("Error is displayed when trying to create a company with special characters in the name.")
+    public void testErrorIsDisplayedWhenCreatingCompanyWithSpecialCharacters(String character) {
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField("Company" + character)
+                .fillCompanyTypeField("Company type")
+                .clickCreateButtonAndTriggerError();
+
+        Allure.step("Verify: error message is displayed about invalid characters in the company name");
+        assertThat(addCompanyDialog.getErrorMessage()).containsText(
+                ("Invalid companyName: 'Company%s'. "
+                        + "It may only contain letters, digits, ampersands, hyphens, commas, periods, and spaces")
+                        .formatted(character));
     }
 }
