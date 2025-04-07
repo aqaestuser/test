@@ -22,7 +22,6 @@ import xyz.npgw.test.common.PlaywrightOptions;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.ProjectUtils;
 import xyz.npgw.test.common.UserRole;
-import xyz.npgw.test.testdata.Constants;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -71,9 +70,10 @@ public abstract class BaseTest {
         }
 
         APIResponse tokenResponse = playwright.request().newContext().post(
-                Constants.BASE_URL + "/portal-v1/user/token",
+                ProjectProperties.getBaseUrl() + "/portal-v1/user/token",
                 RequestOptions.create().setData(
-                        Map.of("email", Constants.USER_EMAIL, "password", Constants.USER_PASSWORD)));
+                        Map.of("email", ProjectProperties.getUserEmail(),
+                                "password", ProjectProperties.getUserPassword())));
         if (tokenResponse.ok()) {
             log.debug(tokenResponse.text());
             String idToken = new Gson().fromJson(tokenResponse.text(), TokenResponse.class).token().idToken;
