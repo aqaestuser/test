@@ -30,11 +30,15 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
     @Step("Select a company into 'Select company' filter field")
     public CompaniesAndBusinessUnitsPage selectCompany(String name) {
+        Locator alert = getPage().locator("[role='alert']");
+        alert.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        alert.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+
         companyDropdown.click();
         companyDropdown.fill(name);
-        companyDropdown.waitFor(new Locator.WaitForOptions()
-                .setTimeout(2500));
-        companyDropdown.press("Enter");
+        Locator firstOption = getPage().locator("li[role='option']:has-text('%s')".formatted(name)).first();
+        firstOption.scrollIntoViewIfNeeded();
+        firstOption.click();
 
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.ATTACHED));
