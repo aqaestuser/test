@@ -5,20 +5,31 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Test;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 
 public class AddCompanyDialogTest extends BaseTest {
+
+    private static final String COMPANY_NAME = "CompanyName";
+
+    private void deleteCompany(String name) {
+        getRequest().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
+                + URLEncoder.encode(name, StandardCharsets.UTF_8));
+    }
 
     @Test
     @TmsLink("160")
@@ -84,7 +95,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
-        assertThat(addCompanyDialog.getErrorMessage()).containsText(
+        assertThat(addCompanyDialog.getAlertMessage()).containsText(
                 "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
 
@@ -138,10 +149,48 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message is displayed about invalid characters in the company name");
-        assertThat(addCompanyDialog.getErrorMessage()).containsText(
+        assertThat(addCompanyDialog.getAlertMessage()).containsText(
                 ("Invalid companyName: 'Company%s'. "
                         + "It may only contain letters, digits, ampersands, hyphens, commas, periods, and spaces")
                         .formatted(character));
+    }
+
+    @Test
+    @TmsLink("223")
+    @Feature("Company Creation")
+    @Description("Company can be added by filling out required fields")
+    public void testAddCompanyByFillRequiredFields() {
+        deleteCompany(COMPANY_NAME);
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(COMPANY_NAME)
+                .fillCompanyTypeField("Company type")
+                .clickCreateButton();
+
+        Allure.step("Verify: company creation success message is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).containsText(
+                "Company was created successfully");
+    }
+
+    @Test(dependsOnMethods = "testAddCompanyByFillRequiredFields")
+    @TmsLink("224")
+    @Feature("Company Verification")
+    @Description("Added company appears in the 'Select company' dropdown list")
+    public void testVerifyCompanyPresenceInDropdown() {
+        boolean isCompanyListedInDropdown = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickSelectCompanyDropdown()
+                .isCompanyInDropdown(COMPANY_NAME);
+
+        Allure.step("Verify: company is present in the 'Select company' dropdown list");
+        Assert.assertTrue(isCompanyListedInDropdown,
+                "Expected company to be present in the dropdown, but it was not found.");
     }
 
     @Test(expectedExceptions = AssertionFailedError.class)
@@ -150,7 +199,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add Company")
     @Description("Company creation with Cyrillic symbols")
     public void testAddCompanyWithCyrillicSymbols() {
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
@@ -171,7 +220,8 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(addCompanyDialog.getAlertMessage()).hasText("SUCCESSCompany was created successfully");
+        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
+                "SUCCESSCompany was created successfully");
     }
 
     @Test
@@ -180,12 +230,15 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add Company")
     @Description("Company creation with Latin symbols")
     public void testAddCompanyWithAllFilledFields() {
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+        final String companyName = "Google";
+        deleteCompany(companyName);
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
-                .fillCompanyNameField("Google2")
+                .fillCompanyNameField(companyName)
                 .fillCompanyTypeField("LLC")
                 .fillCompanyDescriptionField("Description of company business model")
                 .fillCompanyWebsiteField("google.com")
@@ -201,6 +254,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(addCompanyDialog.getAlertMessage()).hasText("SUCCESSCompany was created successfully");
+        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
+                "SUCCESSCompany was created successfully");
     }
 }
