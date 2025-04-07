@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
@@ -141,5 +142,65 @@ public class AddCompanyDialogTest extends BaseTest {
                 ("Invalid companyName: 'Company%s'. "
                         + "It may only contain letters, digits, ampersands, hyphens, commas, periods, and spaces")
                         .formatted(character));
+    }
+
+    @Test(expectedExceptions = AssertionFailedError.class)
+    @TmsLink("227")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
+    @Description("Company creation with Cyrillic symbols")
+    public void testAddCompanyWithCyrillicSymbols() {
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField("Амазон")
+                .fillCompanyTypeField("ООО")
+                .fillCompanyDescriptionField("Описание деятельности компании Амазон")
+                .fillCompanyWebsiteField("амазон.рф")
+                .fillCompanyPrimaryContactField("Даниил Иванов")
+                .fillCompanyEmailField("amazon@gmail.com")
+                .fillCompanyCountryField("Россия")
+                .fillCompanyStateField("Московская")
+                .fillCompanyZipField("876905")
+                .fillCompanyCityField("Москва")
+                .fillCompanyPhoneField("8(495) 223-56-11")
+                .fillCompanyMobileField("+7 (951) 789-78-76")
+                .fillCompanyFaxField("84952235611")
+                .clickCreateButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(addCompanyDialog.getAlertMessage()).hasText("SUCCESSCompany was created successfully");
+    }
+
+    @Test
+    @TmsLink("228")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
+    @Description("Company creation with Latin symbols")
+    public void testAddCompanyWithAllFilledFields() {
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField("Google2")
+                .fillCompanyTypeField("LLC")
+                .fillCompanyDescriptionField("Description of company business model")
+                .fillCompanyWebsiteField("google.com")
+                .fillCompanyPrimaryContactField("John Doe")
+                .fillCompanyEmailField("google@gmail.com")
+                .fillCompanyCountryField("France")
+                .fillCompanyStateField("Provence")
+                .fillCompanyZipField("75001")
+                .fillCompanyCityField("Paris")
+                .fillCompanyPhoneField("+33 1 22-83-56-11")
+                .fillCompanyMobileField("+33 7 22-83-56-11")
+                .fillCompanyFaxField("84952235611")
+                .clickCreateButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(addCompanyDialog.getAlertMessage()).hasText("SUCCESSCompany was created successfully");
     }
 }
