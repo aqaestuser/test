@@ -23,11 +23,11 @@ public class HeaderTest extends BaseTest {
     @Feature("Logo")
     @Description("Check that Logo in header contains text 'NPGW' and image")
     public void testLogoContainsTextAndImage() {
-
         HeaderComponent header = new DashboardPage(getPage()).getHeader();
 
         Allure.step("Verify: Logo contains text 'NPGW'");
         assertThat(header.getLogo()).hasText(Constants.LOGO_TEXT);
+
         Allure.step("Verify: Logo contains image");
         Assert.assertTrue(header.getImg().isVisible(), "Image inside logo should be visible");
         Assert.assertNotNull(header.getImg().getAttribute("src"), "Image should have a 'src' attribute");
