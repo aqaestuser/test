@@ -25,6 +25,7 @@ import static org.testng.Assert.assertEquals;
 public class AddCompanyDialogTest extends BaseTest {
 
     private static final String COMPANY_NAME = "CompanyName";
+    private static final String COMPANY_TYPE = "CompanyType";
 
     private void deleteCompany(String name) {
         getRequest().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
@@ -91,7 +92,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name)
-                .fillCompanyTypeField("Company type")
+                .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
@@ -145,7 +146,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Company" + character)
-                .fillCompanyTypeField("Company type")
+                .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message is displayed about invalid characters in the company name");
@@ -168,7 +169,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME)
-                .fillCompanyTypeField("Company type")
+                .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButton();
 
         Allure.step("Verify: company creation success message is displayed");
@@ -191,6 +192,26 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: company is present in the 'Select company' dropdown list");
         Assert.assertTrue(isCompanyListedInDropdown,
                 "Expected company to be present in the dropdown, but it was not found.");
+    }
+
+    @Test(dependsOnMethods = "testVerifyCompanyPresenceInDropdown")
+    @TmsLink("232")
+    @Epic("Companies and business units")
+    @Feature("Company Creation")
+    @Description("Error is displayed when trying to create a company with an already existing name")
+    public void testAddCompanyWithSameName() {
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(COMPANY_NAME)
+                .fillCompanyTypeField(COMPANY_TYPE)
+                .clickCreateButtonAndTriggerError();
+
+        Allure.step("Verify: error message is displayed for duplicate company name");
+        assertThat(addCompanyDialog.getAlertMessage()).containsText(
+                "Company with name {%s} already exists.".formatted(COMPANY_NAME));
     }
 
     @Test(expectedExceptions = AssertionFailedError.class)
