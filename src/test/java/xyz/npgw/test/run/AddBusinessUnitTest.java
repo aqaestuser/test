@@ -72,4 +72,28 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.getName());
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
+
+    @Test
+    @TmsLink("241")
+    @Epic("Companies and business units")
+    @Feature("'Close' button verification")
+    @Description("Verify that a new Merchant wasn't added once click 'Close' button")
+    public void testCloseButtonAndDiscardChanges() {
+        CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(company.getName())
+                .fillCompanyTypeField(company.getType())
+                .clickCreateButton()
+                .selectCompany(company.getName())
+                .clickAddCompanyButton()
+                .clickCloseButton();
+
+        Allure.step("The table is empty and 'No rows to display.' is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitEmptyList()).hasText("No rows to display.");
+    }
 }

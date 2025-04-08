@@ -16,6 +16,8 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     private final Locator addBusinessUnitButton = testId("ButtonAddMerchant");
     private final Locator companyDropdown = labelExact("Select company");
     @Getter
+    private final Locator businessUnitEmptyList = locator("[role='gridcell']");
+    @Getter
     private final Locator addCompanyDialog = dialog();
 
     public CompaniesAndBusinessUnitsPage(Page page) {
