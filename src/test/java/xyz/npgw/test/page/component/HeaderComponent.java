@@ -12,10 +12,13 @@ import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.systemadministration.TeamPage;
 
+@Getter
 public class HeaderComponent extends BaseComponent {
 
-    @Getter
-    private final Locator logo = textExact("NPGW");
+    private final Locator logo = link().filter(new Locator.FilterOptions().setHas(altText("logo")));
+    private final Locator img = getLogo().locator("img");
+    private final Locator transactionsButton = textExact("Transactions");
+    private final Locator dashboardButton = textExact("Dashboard");
 
     public HeaderComponent(Page page) {
         super(page);
@@ -23,21 +26,21 @@ public class HeaderComponent extends BaseComponent {
 
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
-        link("Transactions").click();
+        linkByName("Transactions").click();
 
         return new TransactionsPage(getPage());
     }
 
     @Step("Click on 'Reports' menu in Header")
     public ReportsPage clickReportsLink() {
-        link("Reports").click();
+        linkByName("Reports").click();
 
         return new ReportsPage(getPage());
     }
 
     @Step("Click on 'System administration' menu in Header")
     public TeamPage clickSystemAdministrationLink() {
-        link("System administration").click();
+        linkByName("System administration").click();
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
         return new TeamPage(getPage());
@@ -50,9 +53,8 @@ public class HeaderComponent extends BaseComponent {
         return new LoginPage(getPage());
     }
 
-    @Step("Click on 'Dashboard' menu in Header")
-    public DashboardPage clickDashboardLink() {
-        link("Dashboard").click();
+    public DashboardPage clickLogoButton() {
+        logo.click();
 
         return new DashboardPage(getPage());
     }
