@@ -4,7 +4,6 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import org.testng.ITestResult;
 import org.testng.annotations.Test;
-import xyz.npgw.test.testdata.Constants;
 
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -33,8 +32,8 @@ public class ProjectUtils {
     public static void loginAsRole(Page page, UserRole userRole) {
         String emailPrefix = (userRole == UserRole.SUPER) ? "" : userRole.name().toLowerCase();
         page.navigate("/");
-        page.getByPlaceholder("Enter your email").fill(emailPrefix + Constants.USER_EMAIL);
-        page.getByPlaceholder("Enter your password").fill(Constants.USER_PASSWORD);
+        page.getByPlaceholder("Enter your email").fill(emailPrefix + ProjectProperties.getUserEmail());
+        page.getByPlaceholder("Enter your password").fill(ProjectProperties.getUserPassword());
         page.getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName("Remember me")).setChecked(false);
         page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Login")).click();
         assertThat(page).hasURL("/dashboard");

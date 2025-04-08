@@ -67,4 +67,8 @@ public abstract class BaseModel {
     protected Locator altText(String text) {
         return getPage().getByAltText(text);
     }
+
+    protected Locator option(Locator locator) {
+        return locator.getByRole(AriaRole.OPTION);
+    }
 }

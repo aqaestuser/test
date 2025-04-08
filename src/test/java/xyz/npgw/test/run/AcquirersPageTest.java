@@ -14,7 +14,6 @@ import xyz.npgw.test.page.systemadministration.AcquirersPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-@Ignore
 public class AcquirersPageTest extends BaseTest {
 
     @Test
@@ -23,26 +22,26 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Acquirers list")
     @Description("Verify: The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
-        AcquirersPage saAcquirersTab = new DashboardPage(getPage())
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .getSystemAdministrationMenuComponent()
                 .clickAcquirersTab();
 
         Allure.step("Verify: Add Acquirer Button is visible");
-        assertThat(saAcquirersTab.getAddAcquirerButton()).isVisible();
+        assertThat(acquirersPage.getAddAcquirerButton()).isVisible();
 
         Allure.step("Verify: Select Acquirer label is visible");
-        assertThat(saAcquirersTab.getSelectAcquirerLabel()).isVisible();
+        assertThat(acquirersPage.getSelectAcquirerLabel()).isVisible();
 
         Allure.step("Verify: Status label is visible");
-        assertThat(saAcquirersTab.getStatusLabel()).isVisible();
+        assertThat(acquirersPage.getStatusLabel()).isVisible();
 
         Allure.step("Verify: Reset Filter Button is visible");
-        assertThat(saAcquirersTab.getResetFilterButton()).isVisible();
+        assertThat(acquirersPage.getResetFilterButton()).isVisible();
 
         Allure.step("Verify: Apply Filter Button is visible");
-        assertThat(saAcquirersTab.getApplyFilterButton()).isVisible();
+        assertThat(acquirersPage.getApplyFilterButton()).isVisible();
     }
 
     @Test
