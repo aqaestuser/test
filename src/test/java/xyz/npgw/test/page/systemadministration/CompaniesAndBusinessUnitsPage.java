@@ -5,6 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.AddBusinessUnitDialog;
 import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
 
@@ -12,13 +13,17 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
     private final Locator addCompanyButton = locator("svg[data-icon='circle-plus']").first();
     @Getter
-    private final Locator addBusinessUnitButton = locator("svg[data-icon='circle-plus']").nth(1);
-    private final Locator companyDropdown = locator("[role='combobox'][aria-label='Select company']");
+    private final Locator addBusinessUnitButton = testId("ButtonAddMerchant");
+    private final Locator companyDropdown = labelExact("Select company");
     @Getter
     private final Locator addCompanyDialog = dialog();
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
+    }
+
+    protected Locator testId(String text) {
+        return getPage().getByTestId(text);
     }
 
     @Step("Click 'Add company' button")
@@ -45,5 +50,15 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         getPage().waitForCondition(addBusinessUnitButton::isEnabled);
 
         return this;
+    }
+
+    public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
+        addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
+                .setState(WaitForSelectorState.ATTACHED));
+        getPage().waitForCondition(addBusinessUnitButton::isEnabled);
+
+        addBusinessUnitButton.click();
+
+        return new AddBusinessUnitDialog(getPage());
     }
 }

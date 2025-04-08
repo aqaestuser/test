@@ -1,0 +1,16 @@
+package xyz.npgw.test.page;
+
+import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
+import lombok.Getter;
+import xyz.npgw.test.page.base.BasePage;
+
+public class AddBusinessUnitDialog extends BasePage {
+
+    @Getter
+    private final Locator companyNameField = locator("input[aria-label='Company name']");
+
+    public AddBusinessUnitDialog(Page page) {
+        super(page);
+    }
+}
