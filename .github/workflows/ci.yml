@@ -43,11 +43,11 @@ jobs:
           APP_OPTIONS: |-
             baseURL=${{ secrets.BASE_URL }};
             SUPER.email=${{ secrets.USER_EMAIL }};
-            SUPER.password=${{ secrets.USER_PASSWORD }}
+            SUPER.password=${{ secrets.USER_PASSWORD }};
             ADMIN.email=${{ secrets.USER_EMAIL }};
-            ADMIN.password=${{ secrets.USER_PASSWORD }}
+            ADMIN.password=${{ secrets.USER_PASSWORD }};
             USER.email=${{ secrets.USER_EMAIL }};
-            USER.password=${{ secrets.USER_PASSWORD }}
+            USER.password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             headlessMode=true;
             tracingMode=true;

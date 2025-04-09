@@ -41,7 +41,7 @@ public final class ProjectProperties {
         if (System.getenv(CI_RUN) != null) {
             if (System.getenv(ENV_APP_OPTIONS) != null) {
                 for (String option : System.getenv(ENV_APP_OPTIONS).split(";")) {
-                    String[] optionArr = option.split("=");
+                    String[] optionArr = option.trim().split("=");
                     properties.setProperty(PREFIX_PROP + optionArr[0], optionArr[1]);
                 }
             }
