@@ -7,11 +7,11 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.component.HeaderComponent;
-import xyz.npgw.test.testdata.Constants;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -23,14 +23,14 @@ public class HeaderTest extends BaseTest {
     @Feature("Logo")
     @Description("Check that Logo in header contains text 'NPGW' and image")
     public void testLogoContainsTextAndImage() {
-        HeaderComponent header = new DashboardPage(getPage()).getHeader();
+        HeaderComponent headerComponent = new DashboardPage(getPage()).getHeader();
 
         Allure.step("Verify: Logo contains text 'NPGW'");
-        assertThat(header.getLogo()).hasText(Constants.LOGO_TEXT);
+        assertThat(headerComponent.getLogo()).hasText(Constants.LOGO_TEXT);
 
         Allure.step("Verify: Logo contains image");
-        Assert.assertTrue(header.getImg().isVisible(), "Image inside logo should be visible");
-        Assert.assertNotNull(header.getImg().getAttribute("src"), "Image should have a 'src' attribute");
+        Assert.assertTrue(headerComponent.getImg().isVisible(), "Image inside logo should be visible");
+        Assert.assertNotNull(headerComponent.getImg().getAttribute("src"), "Image should have a 'src' attribute");
     }
 
     @Test
