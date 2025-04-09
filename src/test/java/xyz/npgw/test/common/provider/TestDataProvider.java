@@ -40,4 +40,12 @@ public class TestDataProvider {
                 {"\""}, {"/"}, {"\\"}, {":"}, {";"}, {"<"}, {">"}, {"="}, {"("}
         };
     }
+
+    @DataProvider
+    public static Object[][] getAcquirersStatus() {
+        return new Object[][]{
+                {"Active"},
+                {"Inactive"},
+        };
+    }
 }

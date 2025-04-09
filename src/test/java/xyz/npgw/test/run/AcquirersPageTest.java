@@ -8,6 +8,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.systemadministration.AcquirersPage;
 
@@ -19,7 +20,7 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("134")
     @Epic("SA/Acquirers")
     @Feature("Acquirers list")
-    @Description("Verify: The visibility of elements in the 'Acquirers List' control panel")
+    @Description("The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
@@ -47,7 +48,7 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("157")
     @Epic("SA/Acquirers")
     @Feature("Acquirers list")
-    @Description("Verify: The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
+    @Description("The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
@@ -70,7 +71,7 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("168")
     @Epic("SA/Acquirers")
     @Feature("Select acquirer")
-    @Description("Verify: Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
+    @Description("Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
     public void testSelectAcquirerDropdownFunctionality() {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
                 .getHeader()
@@ -89,7 +90,7 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("187")
     @Epic("SA/Acquirers")
     @Feature("Status")
-    @Description("Verify: The 'Status' dropdown toggles and contains options All, Active, Inactive.")
+    @Description("The 'Status' dropdown toggles and contains options All, Active, Inactive.")
     public void testOpenStatusDropdown() {
         Locator actualOptions = new DashboardPage(getPage())
                 .getHeader()
@@ -99,6 +100,28 @@ public class AcquirersPageTest extends BaseTest {
                 .clickAcquirerStatusPlaceholder()
                 .getAcquirerStatusOptions();
 
-        assertThat(actualOptions).hasText(new String[] {"All", "Active", "Inactive"});
+        Allure.step("Verify: The 'Status' dropdown toggles and contains options All, Active, Inactive.");
+        assertThat(actualOptions).hasText(new String[]{"All", "Active", "Inactive"});
+    }
+
+    @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
+    @TmsLink("243")
+    @Epic("SA/Acquirers")
+    @Feature("Status")
+    @Description("Filter acquirers by status.")
+    public void testFilterAcquirersByStatus(String status) {
+        Locator acquirersList = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab()
+                .clickAcquirerStatusPlaceholder()
+                .selectAcquirerStatus(status)
+                .getAcquirersList();
+
+        Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
+        for (Locator acquirer : acquirersList.all()) {
+            assertThat(acquirer).containsText(status);
+        }
     }
 }
