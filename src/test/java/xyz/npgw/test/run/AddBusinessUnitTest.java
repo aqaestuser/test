@@ -28,10 +28,12 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.getName())
                 .fillCompanyTypeField(company.getType())
                 .clickCreateButton()
-                .selectCompany(company.getName());
+                .waitUntilAlertIsGone()
+                .selectCompanyInTheFilter(company.getName());
 
-        Allure.step("'Add business unit' button is enabled now");
+        Allure.step("'Add business unit' button is enabled and 'Edit company' button is presented");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
+        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isVisible();
     }
 
     @Test
@@ -65,7 +67,8 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.getName())
                 .fillCompanyTypeField(company.getType())
                 .clickCreateButton()
-                .selectCompany(company.getName())
+                .waitUntilAlertIsGone()
+                .selectCompanyInTheFilter(company.getName())
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify that Company name field is read-only and prefilled created company");
@@ -89,9 +92,10 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.getName())
                 .fillCompanyTypeField(company.getType())
                 .clickCreateButton()
-                .selectCompany(company.getName())
-                .clickAddCompanyButton()
-                .clickCloseButton();
+                .waitUntilAlertIsGone()
+                .selectCompanyInTheFilter(company.getName())
+                .clickOnAddBusinessUnitButton()
+                .clickOnCloseButton();
 
         Allure.step("The table is empty and 'No rows to display.' is displayed");
         assertThat(companiesAndBusinessUnitsPage.getBusinessUnitEmptyList()).hasText("No rows to display.");
