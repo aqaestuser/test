@@ -19,7 +19,6 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.ApiContextUtils;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.ProjectUtils;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.AboutBlankPage;
 
@@ -52,17 +51,17 @@ public abstract class BaseTest {
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
         Browser.NewContextOptions options = new Browser
                 .NewContextOptions()
-                .setViewportSize(ProjectUtils.getViewportWidth(), ProjectUtils.getViewportHeight())
-                .setBaseURL(ProjectUtils.getBaseUrl());
+                .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
+                .setBaseURL(ProjectProperties.getBaseUrl());
 
-        if (ProjectUtils.isVideoMode()) {
-            options.setRecordVideoDir(Paths.get(ProjectUtils.getArtefactDir()))
-                    .setRecordVideoSize(ProjectUtils.getVideoWidth(), ProjectUtils.getVideoHeight());
+        if (ProjectProperties.isVideoMode()) {
+            options.setRecordVideoDir(Paths.get(ProjectProperties.getArtefactDir()))
+                    .setRecordVideoSize(ProjectProperties.getVideoWidth(), ProjectProperties.getVideoHeight());
         }
 
         context = browser.newContext(options);
 
-        if (ProjectUtils.isTracingMode()) {
+        if (ProjectProperties.isTracingMode()) {
             context.tracing().start(new Tracing
                     .StartOptions()
                     .setScreenshots(true)
@@ -109,7 +108,7 @@ public abstract class BaseTest {
             if (ProjectProperties.isVideoMode() && page.video() != null) {
                 if (!testResult.isSuccess()) {
                     page.video().saveAs(videoFilePath);
-                    addVideoToAllure(testResult, videoFilePath);
+                    addVideoToAllure(videoFilePath);
                 }
                 page.video().delete();
             }
@@ -123,7 +122,7 @@ public abstract class BaseTest {
                     context.tracing().stop();
                 } else {
                     context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
-                    addTracesToAllure(testResult, traceFilePath);
+                    addTracesToAllure(traceFilePath);
                 }
             }
             context.close();
@@ -151,7 +150,7 @@ public abstract class BaseTest {
         return testName + new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
     }
 
-    private void addVideoToAllure(ITestResult testResult, Path path) {
+    private void addVideoToAllure(Path path) {
         try {
             Allure.getLifecycle()
                     .addAttachment("video", "video/webm", "webm", Files.readAllBytes(path));
@@ -160,7 +159,7 @@ public abstract class BaseTest {
         }
     }
 
-    private void addTracesToAllure(ITestResult testResult, Path path) {
+    private void addTracesToAllure(Path path) {
         try {
             Allure.getLifecycle()
                     .addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(path));
