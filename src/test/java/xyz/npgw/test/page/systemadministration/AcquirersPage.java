@@ -15,11 +15,9 @@ public class AcquirersPage extends SystemAdministrationBasePage {
     @Getter
     private final Locator applyFilterButton = locator("svg[data-icon='filter']");
 
-
     @Getter
     private final Locator acquirersListHeader = textExact("Acquirers list");
     private final Locator acquirersList = locator("div[data-slot='base'] li");
-
 
     @Getter
     private final Locator selectAcquirerLabel = labelExact("Select acquirer");
