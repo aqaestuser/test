@@ -28,7 +28,7 @@ public class AddCompanyDialogTest extends BaseTest {
     private static final String COMPANY_TYPE = "CompanyType";
 
     private void deleteCompany(String name) {
-        getRequest().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
+        getApiRequestContext().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
                 + URLEncoder.encode(name, StandardCharsets.UTF_8));
     }
 
