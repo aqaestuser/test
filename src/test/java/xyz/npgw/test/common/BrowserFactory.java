@@ -29,18 +29,18 @@ public enum BrowserFactory {
 
     public static Browser getBrowser(Playwright playwright) {
         try {
-            return BrowserFactory.valueOf(ProjectUtils.getBrowserType()).createInstance(playwright);
+            return BrowserFactory.valueOf(ProjectProperties.getBrowserType()).createInstance(playwright);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Unsupported browser: %s".formatted(ProjectUtils.getBrowserType()));
+            throw new IllegalArgumentException("Unsupported browser: %s".formatted(ProjectProperties.getBrowserType()));
         }
     }
 
     private static BrowserType.LaunchOptions getBrowserOptions() {
         return new BrowserType
                 .LaunchOptions()
-                .setHeadless(ProjectUtils.isHeadlessMode())
-                .setSlowMo(ProjectUtils.getSlowMoMode());
+                .setHeadless(ProjectProperties.isHeadlessMode())
+                .setSlowMo(ProjectProperties.getSlowMoMode());
     }
 
-    abstract Browser createInstance(Playwright playwright);
+    public abstract Browser createInstance(Playwright playwright);
 }

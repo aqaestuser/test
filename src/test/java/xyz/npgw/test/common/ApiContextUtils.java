@@ -17,24 +17,23 @@ public class ApiContextUtils {
         APIResponse tokenResponse = playwright
                 .request()
                 .newContext()
-                .post(ProjectUtils.getBaseUrl() + "/portal-v1/user/token",
+                .post(ProjectProperties.getBaseUrl() + "/portal-v1/user/token",
                         RequestOptions.create().setData(Map.of(
-                                "email", ProjectUtils.getSuperEmail(),
-                                "password", ProjectUtils.getSuperPassword())));
+                                "email", ProjectProperties.getSuperEmail(),
+                                "password", ProjectProperties.getSuperPassword())));
 
         if (tokenResponse.ok()) {
-            log.debug(tokenResponse.text());
             return playwright
                     .request()
                     .newContext(new APIRequest
                             .NewContextOptions()
-                            .setBaseURL(ProjectUtils.getBaseUrl())
+                            .setBaseURL(ProjectProperties.getBaseUrl())
                             .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(new Gson()
                                     .fromJson(tokenResponse.text(), TokenResponse.class)
                                     .token()
                                     .idToken))));
         } else {
-            String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.statusText());
+            String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.text());
             log.error(message);
             throw new RuntimeException(message);
         }

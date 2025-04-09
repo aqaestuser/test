@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.common.ProjectUtils;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.base.BasePage;
 
@@ -62,19 +62,19 @@ public final class LoginPage extends BasePage {
     }
 
     @Step("Login to the site as '{userRole}'")
-    public DashboardPage loginAsUser(UserRole userRole) {
+    public DashboardPage loginAs(UserRole userRole) {
         switch (userRole) {
             case SUPER -> {
-                fillEmailField(ProjectUtils.getSuperEmail());
-                fillPasswordField(ProjectUtils.getSuperPassword());
+                fillEmailField(ProjectProperties.getSuperEmail());
+                fillPasswordField(ProjectProperties.getSuperPassword());
             }
             case ADMIN -> {
-                fillEmailField(ProjectUtils.getAdminEmail());
-                fillPasswordField(ProjectUtils.getAdminPassword());
+                fillEmailField(ProjectProperties.getAdminEmail());
+                fillPasswordField(ProjectProperties.getAdminPassword());
             }
             case USER -> {
-                fillEmailField(ProjectUtils.getUserEmail());
-                fillPasswordField(ProjectUtils.getUserPassword());
+                fillEmailField(ProjectProperties.getUserEmail());
+                fillPasswordField(ProjectProperties.getUserPassword());
             }
             default -> throw new IllegalArgumentException("Login as %s not supported".formatted(userRole));
         }

@@ -1,20 +1,13 @@
 package xyz.npgw.test.common;
 
-import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.testng.ITestResult;
-import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
 @Log4j2
@@ -42,6 +35,9 @@ public final class ProjectUtils {
     private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
 
     private static final Properties properties;
+    @Getter(AccessLevel.PRIVATE)
+    private static String testName;
+
     static {
         properties = new Properties();
         if (isServerRun()) {
@@ -61,9 +57,6 @@ public final class ProjectUtils {
             }
         }
     }
-
-    @Getter(AccessLevel.PRIVATE)
-    private static String testName;
 
     private ProjectUtils() {
         throw new UnsupportedOperationException();
@@ -143,45 +136,5 @@ public final class ProjectUtils {
 
     public static String getArtefactDir() {
         return properties.getProperty(ARTEFACT_DIR, "target/artefact");
-    }
-
-    public static void saveVideo() {
-        try {
-            Allure.getLifecycle().addAttachment(
-                    "video",
-                    "video/webm",
-                    "webm",
-                    Files.readAllBytes(getVideoFilePath()));
-        } catch (IOException e) {
-            log.error("Add video to allure failed: {}", e.getMessage());
-        }
-    }
-
-    public static void saveTraces() {
-        try {
-            Allure.getLifecycle().addAttachment(
-                    "tracing",
-                    "archive/zip",
-                    "zip",
-                    Files.readAllBytes(getTraceFilePath()));
-        } catch (IOException e) {
-            log.error("Add traces to allure failed: {}", e.getMessage());
-        }
-    }
-
-    public static Path getVideoFilePath() {
-        return  Paths.get(getArtefactDir(), getBrowserType(), getTestName() + ".webm");
-    }
-
-    public static Path getTraceFilePath() {
-        return Paths.get(getArtefactDir(), getBrowserType(), getTestName() + ".zip");
-    }
-
-    public static void setTestName(Method method, ITestResult testResult) {
-        String testMethodName = method.getDeclaringClass().getSimpleName() + "/" + method.getName();
-        if (!method.getAnnotation(Test.class).dataProvider().isEmpty()) {
-            testMethodName = "%s(%d)".formatted(testMethodName, testResult.getMethod().getCurrentInvocationCount());
-        }
-        testName = testMethodName + new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
     }
 }
