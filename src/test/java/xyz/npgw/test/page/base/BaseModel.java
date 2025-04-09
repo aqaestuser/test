@@ -60,8 +60,12 @@ public abstract class BaseModel {
         return getPage().getByRole(AriaRole.GROUP, new Page.GetByRoleOptions().setName(text));
     }
 
-    protected Locator link(String text) {
-        return getPage().getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
+    protected Locator link() {
+        return getPage().getByRole(AriaRole.LINK);
+    }
+
+    protected Locator altText(String text) {
+        return getPage().getByAltText(text);
     }
 
     protected Locator option(Locator locator) {
