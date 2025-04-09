@@ -9,7 +9,7 @@ public class CreatorCompanyWithRandomName {
     private final String name;
     private final String type;
 
-    private static final Faker faker = new Faker();
+    private static final Faker FAKER = new Faker();
 
     public CreatorCompanyWithRandomName(String name, String type) {
         this.name = name;
@@ -18,8 +18,8 @@ public class CreatorCompanyWithRandomName {
 
     public static CreatorCompanyWithRandomName random() {
         return new CreatorCompanyWithRandomName(
-                faker.company().name() + " " + faker.number().digits(5),
-                faker.company().industry()
+                FAKER.company().name() + " " + FAKER.number().digits(5),
+                FAKER.company().industry()
         );
     }
 }

@@ -14,9 +14,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     @Getter
-    private final Locator addBusinessUnitButton = testId("ButtonAddMerchant");
+    private final Locator addBusinessUnitButton = getPage().getByTestId("ButtonAddMerchant");
     @Getter
-    private final Locator editCompanyButton = testId("EditCompanyButton");
+    private final Locator editCompanyButton = getPage().getByTestId("EditCompanyButton");
     private final Locator companyDropdown = labelExact("Select company");
     @Getter
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
@@ -30,10 +30,6 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
-    }
-
-    protected Locator testId(String text) {
-        return getPage().getByTestId(text);
     }
 
     protected Locator alert(String text) {
@@ -63,21 +59,21 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return this;
     }
 
-    public Locator getAlertMessage () {
+    public Locator getAlertMessage() {
         alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
         return alertMessage;
     }
 
     @Step("Click 'Select company' dropdown")
-    public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown () {
+    public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown() {
         getPage().waitForTimeout(1000);
         selectCompanyDropdown.click();
 
         return this;
     }
 
-    public AddBusinessUnitDialog clickOnAddBusinessUnitButton () {
+    public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.ATTACHED));
         getPage().waitForCondition(addBusinessUnitButton::isEnabled);
