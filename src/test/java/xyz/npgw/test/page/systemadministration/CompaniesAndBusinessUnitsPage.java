@@ -60,21 +60,24 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         companyDropdown.fill(name);
         getPage().locator("li[role='option']:has-text('%s')".formatted(name)).first().click();
 
-    public Locator getAlertMessage() {
+        return this;
+    }
+
+    public Locator getAlertMessage () {
         alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
         return alertMessage;
     }
 
     @Step("Click 'Select company' dropdown")
-    public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown() {
+    public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown () {
         getPage().waitForTimeout(1000);
         selectCompanyDropdown.click();
 
         return this;
     }
 
-    public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
+    public AddBusinessUnitDialog clickOnAddBusinessUnitButton () {
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.ATTACHED));
         getPage().waitForCondition(addBusinessUnitButton::isEnabled);
@@ -82,8 +85,9 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         addBusinessUnitButton.click();
 
         return new AddBusinessUnitDialog(getPage());
+    }
 
-    public boolean isCompanyInDropdown(String companyName) {
+    public boolean isCompanyInDropdown (String companyName){
         String lastSeenText = "";
 
         while (true) {
@@ -110,3 +114,6 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return false;
     }
 }
+
+
+
