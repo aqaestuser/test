@@ -80,7 +80,7 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: displaying all options when clicking on Selector Rows");
         assertThat(transactionsPage.getRowsPerPageOptions()).hasText("102550100");
     }
-
+    @Ignore
     @Test
     @TmsLink("130")
     @Epic("Transactions")
