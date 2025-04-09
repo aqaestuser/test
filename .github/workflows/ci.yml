@@ -51,7 +51,7 @@ jobs:
             browserType=chromium;
             headlessMode=true;
             tracingMode=true;
-            videoMode=true
+            videoMode=true;
             viewportWidth=1920;
             viewportHeight=1080;
           CI_RUN: true
