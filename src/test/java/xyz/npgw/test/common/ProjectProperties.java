@@ -4,133 +4,131 @@ import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 @Log4j2
-public class ProjectProperties {
-
-    private static final String ENV_ACCESS_OPTIONS = "ACCESS_OPTIONS";
-    private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
+public final class ProjectProperties {
 
     private static final String PREFIX_PROP = "local.";
+    private static final String EMAIL = ".email";
+    private static final String PASSWORD = ".password";
+
+    private static final String CI_RUN = "CI_RUN";
+
+    private static final String BASE_URL = PREFIX_PROP + "baseURL";
+    private static final String BROWSER_TYPE = PREFIX_PROP + "browserType";
+    private static final String HEADLESS_MODE = PREFIX_PROP + "headlessMode";
+    private static final String SLOW_MO_MODE = PREFIX_PROP + "slowMoMode";
+    private static final String VIEWPORT_WIDTH = PREFIX_PROP + "viewportWidth";
+    private static final String VIEWPORT_HEIGHT = PREFIX_PROP + "viewportHeight";
+    private static final String TRACING_MODE = PREFIX_PROP + "tracingMode";
+
+    private static final String VIDEO_MODE = PREFIX_PROP + "videoMode";
+    private static final String VIDEO_WIDTH = PREFIX_PROP + "videoHeight";
+    private static final String VIDEO_HEIGHT = PREFIX_PROP + "videoWidth";
+
+    private static final String CLOSE_BROWSER_IF_ERROR = PREFIX_PROP + "closeBrowserIfError";
     private static final String ARTEFACT_DIR = PREFIX_PROP + "artefactDir";
 
+    private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
+
     private static final Properties properties;
+
     static {
         properties = new Properties();
-        if (isServerRun()) {
-            loadPropertiesFromEnv(ENV_ACCESS_OPTIONS);
-            loadPropertiesFromEnv(ENV_BROWSER_OPTIONS);
+        if (System.getenv(CI_RUN) != null) {
+            if (System.getenv(ENV_APP_OPTIONS) != null) {
+                for (String option : System.getenv(ENV_APP_OPTIONS).split(";")) {
+                    String[] optionArr = option.trim().split("=");
+                    properties.setProperty(PREFIX_PROP + optionArr[0], optionArr[1]);
+                }
+            }
         } else {
-            loadPropertiesFromFile("access.properties");
-            loadPropertiesFromFile("browser.properties");
+            try (InputStream inputStream = Files.newInputStream(Paths.get("./config/.env"))) {
+                properties.load(inputStream);
+            } catch (IOException e) {
+                log.error("The '.env' file not found in ./config/ directory.");
+                log.error("You need to create it from ./config/.env.TEMPLATE file.");
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    private static void loadPropertiesFromEnv(String envKey) {
-        String envValue = System.getenv(envKey);
-        if (envValue == null || envValue.isEmpty()) {
-            log.error("The environment key {} not found.", envKey);
-            System.exit(3);
-        }
-
-        Arrays.stream(envValue.split(";"))
-                .map(option -> option.split("=", 2))
-                .filter(pair -> pair.length == 2 && !pair[0].isBlank())
-                .forEach(pair -> properties.setProperty(pair[0].trim(), pair[1].trim()));
-    }
-
-    private static void loadPropertiesFromFile(String fileName) {
-        try (InputStream inputStream = ProjectProperties.class.getClassLoader().getResourceAsStream(fileName)) {
-            properties.load(inputStream);
-        } catch (NullPointerException | IOException e) {
-            log.error("The file {} not found.", fileName);
-            log.error("You need to create it from {}.TEMPLATE file.", fileName);
-            System.exit(3);
-        }
-    }
-
-    public static String getPropertyValue(String propertyName) {
-        if (!properties.containsKey(propertyName) || properties.getProperty(propertyName) == null
-                || properties.getProperty(propertyName).trim().isEmpty()) {
-            log.error("Property '{}' does not exist or it's value is invalid.", propertyName);
-        }
-        return properties.getProperty(propertyName).trim();
-    }
-
-    public static boolean getPropertyValueAsBoolean(String propertyName) {
-        if (getPropertyValue(propertyName).equalsIgnoreCase("true")
-                || getPropertyValue(propertyName).equalsIgnoreCase("false")) {
-            return Boolean.parseBoolean(getPropertyValue(propertyName));
-        } else {
-            log.error("Property '{}' doesn't have [true, false] value.", propertyName);
-            log.error("The default value 'true' for '{}' has been set.", propertyName);
-            return true;
-        }
-    }
-
-    static boolean isServerRun() {
-        return System.getenv("CI_RUN") != null;
-    }
-
-    static boolean isHeadlessMode() {
-        return getPropertyValueAsBoolean("headlessMode");
-    }
-
-    static Double getSlowMoMode() {
-        return Double.valueOf(getPropertyValue("slowMoMode"));
-    }
-
-    static int getViewportWidth() {
-        return Integer.parseInt(getPropertyValue("viewportWidth"));
-    }
-
-    static int getViewportHeight() {
-        return Integer.parseInt(getPropertyValue("viewportHeight"));
-    }
-
-    public static boolean isTracingMode() {
-        return getPropertyValueAsBoolean("tracingMode");
-    }
-
-    public static boolean isVideoMode() {
-        return getPropertyValueAsBoolean("videoMode");
+    private ProjectProperties() {
+        throw new UnsupportedOperationException();
     }
 
     public static String getBaseUrl() {
-        return getPropertyValue("baseURL");
-    }
-
-    public static String getSuperEmail() {
-        return getPropertyValue("userEmail");
-    }
-
-    public static String getSuperPassword() {
-        return getPropertyValue("userPassword");
+        return properties.getProperty(BASE_URL, "");
     }
 
     public static String getBrowserType() {
-        return "Chromium".toUpperCase();
+        return properties.getProperty(BROWSER_TYPE.toUpperCase(), "CHROMIUM");
     }
 
-    public static String getAdminEmail() {
-        return "admin" + getSuperEmail();
+    public static boolean isHeadlessMode() {
+        return Boolean.parseBoolean(properties.getProperty(HEADLESS_MODE, "true"));
     }
 
-    public static String getAdminPassword() {
-        return getSuperPassword();
+    public static Double getSlowMoMode() {
+        return Double.valueOf(properties.getProperty(SLOW_MO_MODE, "0"));
     }
 
-    public static String getUserEmail() {
-        return "user" + getSuperEmail();
+    public static int getViewportWidth() {
+        return Integer.parseInt(properties.getProperty(VIEWPORT_WIDTH, "1920"));
     }
 
-    public static String getUserPassword() {
-        return getSuperPassword();
+    public static int getViewportHeight() {
+        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "1080"));
+    }
+
+    public static boolean isTracingMode() {
+        return Boolean.parseBoolean(properties.getProperty(TRACING_MODE, "true"));
+    }
+
+    public static boolean isVideoMode() {
+        return Boolean.parseBoolean(properties.getProperty(VIDEO_MODE, "true"));
+    }
+
+    public static int getVideoWidth() {
+        return Integer.parseInt(properties.getProperty(VIDEO_WIDTH, "1280"));
+    }
+
+    public static int getVideoHeight() {
+        return Integer.parseInt(properties.getProperty(VIDEO_HEIGHT, "720"));
+    }
+
+    public static boolean closeBrowserIfError() {
+        return Boolean.parseBoolean(properties.getProperty(CLOSE_BROWSER_IF_ERROR, "true"));
     }
 
     public static String getArtefactDir() {
         return properties.getProperty(ARTEFACT_DIR, "target/artefact");
+    }
+
+    public static String getSuperEmail() {
+        return properties.getProperty(PREFIX_PROP + UserRole.SUPER + EMAIL, "");
+    }
+
+    public static String getSuperPassword() {
+        return properties.getProperty(PREFIX_PROP + UserRole.SUPER + PASSWORD, "");
+    }
+
+    public static String getAdminEmail() {
+        return properties.getProperty(PREFIX_PROP + UserRole.ADMIN + EMAIL, "");
+    }
+
+    public static String getAdminPassword() {
+        return properties.getProperty(PREFIX_PROP + UserRole.ADMIN + PASSWORD, "");
+    }
+
+    public static String getUserEmail() {
+        return properties.getProperty(PREFIX_PROP + UserRole.USER + EMAIL, "");
+    }
+
+    public static String getUserPassword() {
+        return properties.getProperty(PREFIX_PROP + UserRole.USER + PASSWORD, "");
     }
 }

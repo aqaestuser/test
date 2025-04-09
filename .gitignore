@@ -40,3 +40,5 @@ access.properties
 browser.properties
 /.allure/
 *.puml
+*/.env
+*.dockerfile

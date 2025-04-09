@@ -5,6 +5,7 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Tracing;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +18,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ApiContextUtils;
 import xyz.npgw.test.common.BrowserFactory;
-import xyz.npgw.test.common.PlaywrightOptions;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -49,10 +49,24 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
-        context = browser.newContext(PlaywrightOptions.contextOptions());
+        Browser.NewContextOptions options = new Browser
+                .NewContextOptions()
+                .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
+                .setBaseURL(ProjectProperties.getBaseUrl());
+
+        if (ProjectProperties.isVideoMode()) {
+            options.setRecordVideoDir(Paths.get(ProjectProperties.getArtefactDir()))
+                    .setRecordVideoSize(ProjectProperties.getVideoWidth(), ProjectProperties.getVideoHeight());
+        }
+
+        context = browser.newContext(options);
 
         if (ProjectProperties.isTracingMode()) {
-            context.tracing().start(PlaywrightOptions.tracingStartOptions());
+            context.tracing().start(new Tracing
+                    .StartOptions()
+                    .setScreenshots(true)
+                    .setSnapshots(true)
+                    .setSources(true));
         }
 
         if (apiRequestContext == null) {
@@ -80,6 +94,10 @@ public abstract class BaseTest {
     protected void afterMethod(Method method, ITestResult testResult) {
         String testName = getTestName(method, testResult);
 
+        if (!testResult.isSuccess() && !ProjectProperties.closeBrowserIfError()) {
+            page.pause();
+        }
+
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
         log.info("{} {} in {} s", testName, testResult.isSuccess(), testDuration);
 
@@ -87,11 +105,10 @@ public abstract class BaseTest {
                 .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".webm");
         if (page != null) {
             page.close();
-
             if (ProjectProperties.isVideoMode() && page.video() != null) {
                 if (!testResult.isSuccess()) {
                     page.video().saveAs(videoFilePath);
-                    addVideoToAllure(testResult, videoFilePath);
+                    addVideoToAllure(videoFilePath);
                 }
                 page.video().delete();
             }
@@ -104,8 +121,8 @@ public abstract class BaseTest {
                 if (testResult.isSuccess()) {
                     context.tracing().stop();
                 } else {
-                    context.tracing().stop(PlaywrightOptions.tracingStopOptions(traceFilePath));
-                    addTracesToAllure(testResult, traceFilePath);
+                    context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
+                    addTracesToAllure(traceFilePath);
                 }
             }
             context.close();
@@ -133,7 +150,7 @@ public abstract class BaseTest {
         return testName + new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
     }
 
-    private void addVideoToAllure(ITestResult testResult, Path path) {
+    private void addVideoToAllure(Path path) {
         try {
             Allure.getLifecycle()
                     .addAttachment("video", "video/webm", "webm", Files.readAllBytes(path));
@@ -142,7 +159,7 @@ public abstract class BaseTest {
         }
     }
 
-    private void addTracesToAllure(ITestResult testResult, Path path) {
+    private void addTracesToAllure(Path path) {
         try {
             Allure.getLifecycle()
                     .addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(path));
