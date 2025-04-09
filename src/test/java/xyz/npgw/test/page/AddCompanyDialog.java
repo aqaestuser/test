@@ -154,7 +154,7 @@ public class AddCompanyDialog extends BasePage {
         return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
-    @Step("Click on the 'Create' button and return to CompaniesAndBusinessUnitsPage")
+    @Step("Click on the 'Create' button to CompaniesAndBusinessUnitsPage")
     public CompaniesAndBusinessUnitsPage clickCreateButton() {
         createButton.click();
 

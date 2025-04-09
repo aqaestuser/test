@@ -87,7 +87,7 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return new AddBusinessUnitDialog(getPage());
     }
 
-    public boolean isCompanyInDropdown (String companyName){
+    public boolean isCompanyInDropdown(String companyName) {
         String lastSeenText = "";
 
         while (true) {
@@ -114,6 +114,3 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return false;
     }
 }
-
-
-
