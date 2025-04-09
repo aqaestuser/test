@@ -63,4 +63,8 @@ public abstract class BaseModel {
     protected Locator link(String text) {
         return getPage().getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
     }
+
+    protected Locator option(Locator locator) {
+        return locator.getByRole(AriaRole.OPTION);
+    }
 }

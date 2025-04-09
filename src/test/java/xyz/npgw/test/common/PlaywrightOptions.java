@@ -4,7 +4,6 @@ import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Tracing;
-import xyz.npgw.test.testdata.Constants;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -45,7 +44,7 @@ public class PlaywrightOptions {
 
     public static APIRequest.NewContextOptions apiContextOptions(String idToken) {
         return new APIRequest.NewContextOptions()
-                .setBaseURL(Constants.BASE_URL)
+                .setBaseURL(ProjectProperties.getBaseUrl())
                 .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(idToken)));
     }
 

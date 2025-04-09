@@ -13,6 +13,9 @@ public class ProjectProperties {
     private static final String ENV_ACCESS_OPTIONS = "ACCESS_OPTIONS";
     private static final String ENV_BROWSER_OPTIONS = "BROWSER_OPTIONS";
 
+    private static final String PREFIX_PROP = "local.";
+    private static final String ARTEFACT_DIR = PREFIX_PROP + "artefactDir";
+
     private static final Properties properties;
     static {
         properties = new Properties();
@@ -99,11 +102,35 @@ public class ProjectProperties {
         return getPropertyValue("baseURL");
     }
 
-    public static String getUserEmail() {
+    public static String getSuperEmail() {
         return getPropertyValue("userEmail");
     }
 
-    public static String getUserPassword() {
+    public static String getSuperPassword() {
         return getPropertyValue("userPassword");
+    }
+
+    public static String getBrowserType() {
+        return "Chromium".toUpperCase();
+    }
+
+    public static String getAdminEmail() {
+        return "admin" + getSuperEmail();
+    }
+
+    public static String getAdminPassword() {
+        return getSuperPassword();
+    }
+
+    public static String getUserEmail() {
+        return "user" + getSuperEmail();
+    }
+
+    public static String getUserPassword() {
+        return getSuperPassword();
+    }
+
+    public static String getArtefactDir() {
+        return properties.getProperty(ARTEFACT_DIR, "target/artefact");
     }
 }

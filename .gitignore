@@ -39,3 +39,4 @@ build/
 access.properties
 browser.properties
 /.allure/
+*.puml

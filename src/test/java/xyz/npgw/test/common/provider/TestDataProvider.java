@@ -1,4 +1,4 @@
-package xyz.npgw.test.testdata;
+package xyz.npgw.test.common.provider;
 
 import org.testng.annotations.DataProvider;
 
@@ -30,6 +30,14 @@ public class TestDataProvider {
                 {"", ""},
                 {"Company name", ""},
                 {"", "Company type"}
+        };
+    }
+
+    @DataProvider
+    public static Object[][] getCompanyNameInvalidSpecialCharacters() {
+        return new Object[][]{
+                {"@"}, {"#"}, {"$"}, {"%"}, {"*"}, {"!"}, {"?"}, {"'"}, {")"},
+                {"\""}, {"/"}, {"\\"}, {":"}, {";"}, {"<"}, {">"}, {"="}, {"("}
         };
     }
 }

@@ -5,8 +5,11 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.base.BasePage;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage {
@@ -56,5 +59,29 @@ public final class LoginPage extends BasePage {
         rememberMeCheckbox.setChecked(false);
 
         return this;
+    }
+
+    @Step("Login to the site as '{userRole}'")
+    public DashboardPage loginAs(UserRole userRole) {
+        switch (userRole) {
+            case SUPER -> {
+                fillEmailField(ProjectProperties.getSuperEmail());
+                fillPasswordField(ProjectProperties.getSuperPassword());
+            }
+            case ADMIN -> {
+                fillEmailField(ProjectProperties.getAdminEmail());
+                fillPasswordField(ProjectProperties.getAdminPassword());
+            }
+            case USER -> {
+                fillEmailField(ProjectProperties.getUserEmail());
+                fillPasswordField(ProjectProperties.getUserPassword());
+            }
+            default -> throw new IllegalArgumentException("Login as %s not supported".formatted(userRole));
+        }
+        uncheckRememberMeCheckbox();
+        clickLoginButton();
+        assertThat(getPage()).hasURL("/dashboard");
+
+        return new DashboardPage(getPage());
     }
 }
