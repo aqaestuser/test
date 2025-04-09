@@ -16,9 +16,7 @@ import xyz.npgw.test.page.systemadministration.TeamPage;
 public class HeaderComponent extends BaseComponent {
 
     private final Locator logo = link().filter(new Locator.FilterOptions().setHas(altText("logo")));
-    private final Locator img = getLogo().locator("img");
-    private final Locator transactionsButton = textExact("Transactions");
-    private final Locator dashboardButton = textExact("Dashboard");
+    private final Locator img = altText("logo");
 
     public HeaderComponent(Page page) {
         super(page);
