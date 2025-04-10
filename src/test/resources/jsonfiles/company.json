@@ -1,0 +1,17 @@
+{
+  "companyName": "CompanyNameTest",
+  "companyType": "Company Type Test",
+  "description": "Description Test",
+  "website": "https://www.test/com",
+  "primaryContact": "James Smith",
+  "companyEmail": "test@yahoo.com",
+  "country": "USA",
+  "state": "PA",
+  "zip": "19876",
+  "city": "Warwick",
+  "phone": "2151111111",
+  "mobile": "2152222222",
+  "fax": "222333444",
+  "apiActive": "true",
+  "portalActive": "true"
+}

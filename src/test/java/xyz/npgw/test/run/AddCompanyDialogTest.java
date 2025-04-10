@@ -6,15 +6,17 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.dto.Company;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.utils.CompanyUtils;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -182,16 +184,15 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Company Verification")
     @Description("Added company appears in the 'Select company' dropdown list")
     public void testVerifyCompanyPresenceInDropdown() {
-        boolean isCompanyListedInDropdown = new DashboardPage(getPage())
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickSelectCompanyDropdown()
-                .isCompanyInDropdown(COMPANY_NAME);
+                .clickCompanyInDropdown(COMPANY_NAME);
 
-        Allure.step("Verify: company is present in the 'Select company' dropdown list");
-        Assert.assertTrue(isCompanyListedInDropdown,
-                "Expected company to be present in the dropdown, but it was not found.");
+        Allure.step("Verify: company is present in the 'Select company' field");
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompanyInput()).hasValue(COMPANY_NAME);
     }
 
     @Test(dependsOnMethods = "testVerifyCompanyPresenceInDropdown")
@@ -277,5 +278,106 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
                 "SUCCESSCompany was created successfully");
+    }
+
+    @Test
+    @TmsLink("246")
+    @Epic("Companies and business units")
+    @Feature("Adding Company E2E test")
+    @Description("Validates successful company creation and correct field persistence.")
+    public void testAddCompanyEndToEndTest() throws IOException {
+        Company company = CompanyUtils.readCompanyInformationFromJson("jsonfiles/company.json");
+
+        deleteCompany(company.getCompanyName());
+
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton();
+
+        Allure.step("Verify: 'Add company' dialog is displayed");
+        assertThat(addCompanyDialog.getAddCompanyDialogHeader()).hasText("Add company");
+
+        Allure.step("Verify: 'Create' button is disabled before filling required fields");
+        assertThat(addCompanyDialog.getCreateButton()).isDisabled();
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
+                .fillCompanyNameField(company.getCompanyName())
+                .fillCompanyTypeField(company.getCompanyType())
+                .fillCompanyDescriptionField(company.getDescription())
+                .fillCompanyWebsiteField(company.getWebsite())
+                .fillCompanyPrimaryContactField(company.getPrimaryContact())
+                .fillCompanyEmailField(company.getCompanyEmail())
+                .fillCompanyCountryField(company.getCountry())
+                .fillCompanyStateField(company.getState())
+                .fillCompanyZipField(company.getZip())
+                .fillCompanyCityField(company.getCity())
+                .fillCompanyPhoneField(company.getPhone())
+                .fillCompanyMobileField(company.getMobile())
+                .fillCompanyFaxField(company.getFax())
+                .setApiActiveCheckbox(company.isApiActive())
+                .setPortalActiveCheckbox(company.isPortalActive())
+                .clickCreateButton();
+
+        Allure.step("Verify: success message is displayed after company creation");
+        assertThat(companiesAndBusinessUnitsPage.getAlertMessage())
+                .hasText("SUCCESSCompany was created successfully");
+
+        companiesAndBusinessUnitsPage
+                .clickSelectCompanyDropdown()
+                .clickCompanyInDropdown(company.getCompanyName());
+
+        Allure.step("Verify: selected company is shown in the input field");
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompanyInput())
+                .hasValue(company.getCompanyName());
+
+        Allure.step("Verify: description field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getDescriptionFromCompanyInfoSection())
+                .hasValue(company.getDescription());
+
+        Allure.step("Verify: website field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getWebsiteFromCompanyInfoSection())
+                .hasValue(company.getWebsite());
+
+        Allure.step("Verify: primary contact field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getPrimaryContactFromCompanyInfoSection())
+                .hasValue(company.getPrimaryContact());
+
+        Allure.step("Verify: email field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getEmailFromCompanyInfoSection())
+                .hasValue(company.getCompanyEmail());
+
+        Allure.step("Verify: phone field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getPhoneFromCompanyInfoSection())
+                .hasValue(company.getPhone());
+
+        Allure.step("Verify: mobile field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getMobileFromCompanyInfoSection())
+                .hasValue(company.getMobile());
+
+        Allure.step("Verify: fax field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getFaxFromCompanyInfoSection())
+                .hasValue(company.getFax());
+
+        Allure.step("Verify: country field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getCountryFromCompanyInfoSection())
+                .hasValue(company.getCountry());
+
+        Allure.step("Verify: ZIP code field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getZipFromCompanyInfoSection())
+                .hasValue(company.getZip());
+
+        Allure.step("Verify: city field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getCityFromCompanyInfoSection())
+                .hasValue(company.getCity());
+
+        Allure.step("Verify: 'API active' checkbox is checked");
+        assertThat(companiesAndBusinessUnitsPage.getApiActiveCheckboxFromCompanyInfoSection())
+                .isChecked();
+
+        Allure.step("Verify: 'Portal active' checkbox is checked");
+        assertThat(companiesAndBusinessUnitsPage.getPortalActiveCheckboxFromCompanyInfoSection())
+                .isChecked();
     }
 }
