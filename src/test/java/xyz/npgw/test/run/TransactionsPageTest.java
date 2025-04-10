@@ -12,7 +12,10 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 
+import java.util.List;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class TransactionsPageTest extends BaseTest {
@@ -130,9 +133,6 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Reset filter button is visible");
         assertThat(transactionsPage.getResetFilterButton()).isVisible();
 
-        Allure.step("Verify: Reset filter button is visible");
-        assertThat(transactionsPage.getResetFilterButton()).isVisible();
-
         Allure.step("Verify: Apply data button is visible");
         assertThat(transactionsPage.getApplyDataButton()).isVisible();
 
@@ -141,5 +141,31 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Download button is visible");
         assertThat(transactionsPage.getDownloadButton()).isVisible();
+    }
+
+    @Test
+    @TmsLink("229")
+    @Epic("Transactions")
+    @Feature("Status")
+    @Description("Verify that user can see selector Status Options")
+    public void testTheVisibilityOfTheStatusSelectorOptions() {
+
+        List<String> options = List.of("ALL",
+                "INITIATED",
+                "PENDING",
+                "SUCCESS",
+                "FAILED",
+                "CANCELLED",
+                "EXPIRED");
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickStatusSelector();
+
+        Allure.step("Verify: Selector Status Options are visible");
+        assertEquals(transactionsPage.getStatusSelectorOptions(), options);
+        Allure.step("Verify: Default selected option in status selector is 'ALL'");
+        assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
 }

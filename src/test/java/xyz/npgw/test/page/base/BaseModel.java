@@ -3,17 +3,15 @@ package xyz.npgw.test.page.base;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import lombok.Getter;
 
 public abstract class BaseModel {
 
+    @Getter
     private final Page page;
 
     public BaseModel(Page page) {
         this.page = page;
-    }
-
-    public Page getPage() {
-        return page;
     }
 
     protected Locator placeholder(String text) {
@@ -32,7 +30,7 @@ public abstract class BaseModel {
         return getPage().getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName(text));
     }
 
-    protected Locator optionByExactName(String text) {
+    protected Locator optionLabelByExactText(String text) {
         return getPage().getByLabel(text, new Page.GetByLabelOptions().setExact(true)).getByText(text);
     }
 
@@ -70,5 +68,21 @@ public abstract class BaseModel {
 
     protected Locator option(Locator locator) {
         return locator.getByRole(AriaRole.OPTION);
+    }
+
+    protected Locator getByTestId(String testId) {
+        return getPage().getByTestId(testId);
+    }
+
+    protected Locator optionByName(String name) {
+        return getPage().getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName(name));
+    }
+
+    protected Locator listboxByRole() {
+        return getPage().getByRole(AriaRole.LISTBOX);
+    }
+
+    protected Locator optionByRole() {
+        return getPage().getByRole(AriaRole.OPTION);
     }
 }
