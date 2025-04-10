@@ -12,6 +12,8 @@ public class AcquirersPage extends SystemAdministrationBasePage {
     @Getter
     private final Locator addAcquirerButton = locator("svg[data-icon='circle-plus']");
     @Getter
+    private final Locator addAcquirerDialog = dialog();
+    @Getter
     private final Locator resetFilterButton = locator("svg[data-icon='xmark']");
     @Getter
     private final Locator applyFilterButton = locator("svg[data-icon='filter']");
@@ -72,5 +74,12 @@ public class AcquirersPage extends SystemAdministrationBasePage {
         dropdownAcquirerStatusList.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return this;
+    }
+
+    @Step("Click Add Acquirer")
+    public AddAcquirerDialog clickAddAcquirer() {
+        addAcquirerButton.click();
+
+        return new AddAcquirerDialog(getPage());
     }
 }
