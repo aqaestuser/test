@@ -40,16 +40,18 @@ jobs:
       - name: Run tests
         run: mvn test
         env:
-          ACCESS_OPTIONS: |-
+          APP_OPTIONS:
             baseURL=${{ secrets.BASE_URL }};
-            userEmail=${{ secrets.USER_EMAIL }};
-            userPassword=${{ secrets.USER_PASSWORD }}
-          BROWSER_OPTIONS: |-
+            SUPER.email=${{ secrets.USER_EMAIL }};
+            SUPER.password=${{ secrets.USER_PASSWORD }};
+            ADMIN.email=${{ secrets.COMPANY_ADMIN_EMAIL }};
+            ADMIN.password=${{ secrets.USER_PASSWORD }};
+            USER.email=${{ secrets.COMPANY_ANALYST_EMAIL }};
+            USER.password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             viewportWidth=1920;
             viewportHeight=1080;
             headlessMode=true;
-            slowMoMode=0;
             tracingMode=true;
             videoMode=true
           CI_RUN: true
