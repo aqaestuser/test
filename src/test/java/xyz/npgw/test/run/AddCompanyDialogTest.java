@@ -37,7 +37,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test
     @TmsLink("160")
     @Epic("Companies and business units")
-    @Feature("Title Verification")
+    @Feature("Add Company")
     @Description("Verify that the 'Add Company' window displays the correct title in the header.")
     public void testVerifyAddCompanyWindowTitle() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -53,7 +53,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test
     @TmsLink("189")
     @Epic("Companies and business units")
-    @Feature("Placeholders Verification")
+    @Feature("Add Company")
     @Description("Verify that the placeholder text for each field is correct.")
     public void testVerifyPlaceholders() {
         List<String> expectedPlaceholders = List.of(
@@ -85,7 +85,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
     @TmsLink("191")
     @Epic("Companies and business units")
-    @Feature("Company Name Length Validation")
+    @Feature("Add Company")
     @Description("Error message is shown for company name is shorter than 4 or longer than 100 characters.")
     public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -105,7 +105,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test(dataProvider = "getEmptyRequiredFields", dataProviderClass = TestDataProvider.class)
     @TmsLink("206")
     @Epic("Companies and business units")
-    @Feature("Validation of Required Fields")
+    @Feature("Add Company")
     @Description("'Create' button is disabled when required fields are not filled.")
     public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty(String name, String type) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -122,7 +122,8 @@ public class AddCompanyDialogTest extends BaseTest {
 
     @Test
     @TmsLink("184")
-    @Feature("Close Button Functionality")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
     @Description("Verify that clicking the Close button successfully closes the 'Add Company' dialog.")
     public void testVerifyCloseAddCompanyDialogWhenCloseButtonIsClicked() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
@@ -139,7 +140,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters", dataProviderClass = TestDataProvider.class)
     @TmsLink("215")
     @Epic("Companies and business units")
-    @Feature("Company Name Validation")
+    @Feature("Add Company")
     @Description("Error is displayed when trying to create a company with special characters in the name.")
     public void testErrorIsDisplayedWhenCreatingCompanyWithSpecialCharacters(String character) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -158,9 +159,36 @@ public class AddCompanyDialogTest extends BaseTest {
                         .formatted(character));
     }
 
+    @Test(dataProvider = "getInvalidCompanyNamesByLengthAndChar", dataProviderClass = TestDataProvider.class)
+    @TmsLink("261")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
+    @Description("Error message when trying to create a company with invalid length and special characters.")
+    public void testErrorForInvalidCompanyNameLengthAndCharacters(String name, String character) {
+        String fullName = name + character;
+
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(fullName)
+                .fillCompanyTypeField(COMPANY_TYPE)
+                .clickCreateButtonAndTriggerError();
+        System.out.println(addCompanyDialog.getAlertMessage().allInnerTexts());
+
+        Allure.step("Verify: error message for invalid length and character in company name");
+        assertThat(addCompanyDialog.getAlertMessage()).containsText(
+                ("Invalid companyName: '%s'. It must contain between 4 and 100 characters "
+                        + "Invalid companyName: '%s'. It may only contain letters, digits, ampersands, "
+                        + "hyphens, commas, periods, and spaces").formatted(fullName, fullName)
+        );
+    }
+
     @Test
     @TmsLink("223")
-    @Feature("Company Creation")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
     @Description("Company can be added by filling out required fields")
     public void testAddCompanyByFillRequiredFields() {
         deleteCompany(COMPANY_NAME);
@@ -181,7 +209,8 @@ public class AddCompanyDialogTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddCompanyByFillRequiredFields")
     @TmsLink("224")
-    @Feature("Company Verification")
+    @Epic("Companies and business units")
+    @Feature("Add Company")
     @Description("Added company appears in the 'Select company' dropdown list")
     public void testVerifyCompanyPresenceInDropdown() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
@@ -198,7 +227,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test(dependsOnMethods = "testVerifyCompanyPresenceInDropdown")
     @TmsLink("232")
     @Epic("Companies and business units")
-    @Feature("Company Creation")
+    @Feature("Add Company")
     @Description("Error is displayed when trying to create a company with an already existing name")
     public void testAddCompanyWithSameName() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -283,8 +312,8 @@ public class AddCompanyDialogTest extends BaseTest {
     @Test
     @TmsLink("246")
     @Epic("Companies and business units")
-    @Feature("Adding Company E2E test")
-    @Description("Validates successful company creation and correct field persistence.")
+    @Feature("Add Company")
+    @Description("Validates successful company creation and correct field persistence (e2e).")
     public void testAddCompanyEndToEndTest() throws IOException {
         Company company = CompanyUtils.readCompanyInformationFromJson("jsonfiles/company.json");
 
@@ -363,6 +392,10 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: country field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCountryFromCompanyInfoSection())
                 .hasValue(company.getCountry());
+
+        Allure.step("Verify: state field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getStateFromCompanyInfoSection())
+                .hasValue(company.getState());
 
         Allure.step("Verify: ZIP code field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getZipFromCompanyInfoSection())

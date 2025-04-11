@@ -42,6 +42,15 @@ public class TestDataProvider {
     }
 
     @DataProvider
+    public static Object[][] getInvalidCompanyNamesByLengthAndChar() {
+        return new Object[][]{
+                {"C", "@"},
+                {"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. "
+                        + "Aenean commodo ligula eget dolor. Aenean ma", "!"}
+        };
+    }
+
+    @DataProvider
     public static Object[][] getAcquirersStatus() {
         return new Object[][]{
                 {"Active"},

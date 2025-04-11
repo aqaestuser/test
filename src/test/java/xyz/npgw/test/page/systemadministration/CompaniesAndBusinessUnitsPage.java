@@ -46,6 +46,8 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     @Getter
     private final Locator countryFromCompanyInfoSection = labelExact("Country");
     @Getter
+    private final Locator stateFromCompanyInfoSection = labelExact("State");
+    @Getter
     private final Locator zipFromCompanyInfoSection = labelExact("ZIP");
     @Getter
     private final Locator cityFromCompanyInfoSection = labelExact("City");
