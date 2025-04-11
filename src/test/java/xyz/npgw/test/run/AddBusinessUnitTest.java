@@ -19,7 +19,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("213")
     @Epic("Companies and business units")
-    @Feature("Adding button state verification")
+    @Feature("Add merchant")
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
         CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
@@ -35,15 +35,16 @@ public class AddBusinessUnitTest extends BaseTest {
                 .waitUntilAlertIsGone()
                 .selectCompanyInTheFilter(company.getName());
 
-        Allure.step("'Add business unit' button is enabled and 'Edit company' button is presented");
+        Allure.step("'Add business unit' button is available");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
-        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isVisible();
+        Allure.step("'Edit selected company' button is available");
+        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isEnabled();
     }
 
     @Test
     @TmsLink("214")
     @Epic("Companies and business units")
-    @Feature("Adding button state verification")
+    @Feature("Add merchant")
     @Description("Verify 'Add business unit' button is disabled if 'Select company' filter's field is cleaned")
     public void testVerifyAddBusinessUnitButtonDefaultState() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
@@ -58,7 +59,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("238")
     @Epic("Companies and business units")
-    @Feature("'Company name' field verification")
+    @Feature("Add merchant")
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
         CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
@@ -83,7 +84,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("241")
     @Epic("Companies and business units")
-    @Feature("'Close' button verification")
+    @Feature("Add merchant")
     @Description("Verify that a new Merchant wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
         CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();

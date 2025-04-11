@@ -17,6 +17,7 @@ public class CreatorCompanyWithRandomName {
     }
 
     public static CreatorCompanyWithRandomName random() {
+
         return new CreatorCompanyWithRandomName(
                 FAKER.company().name() + " " + FAKER.number().digits(5),
                 FAKER.company().industry()

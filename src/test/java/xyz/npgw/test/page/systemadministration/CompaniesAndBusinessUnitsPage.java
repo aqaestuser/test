@@ -102,6 +102,7 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return this;
     }
 
+    @Step("Click 'Add business unit' button (+)")
     public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
         addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
                 .setState(WaitForSelectorState.ATTACHED));

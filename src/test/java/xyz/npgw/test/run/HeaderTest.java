@@ -36,9 +36,9 @@ public class HeaderTest extends BaseTest {
     @Test
     @TmsLink("211")
     @Epic("Header")
-    @Feature("Menu item Transactions")
+    @Feature("Transactions menu item")
     @Description("Check after clicking on Transactions user redirected to Transactions page")
-    public void testTransactionsPage() {
+    public void testTransactionsLink() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickTransactionsLink();
