@@ -151,4 +151,37 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify placeholders match expected values for all fields");
         assertEquals(actualPlaceholders, expectedPlaceholders);
     }
+
+    @Test
+    @TmsLink("268")
+    @Epic("SA/Acquirers")
+    @Feature("Status")
+    @Description("Verify that re-selecting an already selected status keeps the selection unchanged.")
+    public void testRetainStatusWhenReSelectingSameOption() {
+
+        List<String> expectedOptions = List.of("All", "Active", "Inactive");
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab();
+
+        for (String status : expectedOptions) {
+            Locator actualStatus = acquirersPage
+                    .clickAcquirerStatusPlaceholder()
+                    .selectAcquirerStatus(status)
+                    .getAcquirerStatusPlaceholder();
+
+            Allure.step("Verify placeholder matches expected value: " + status);
+            assertThat(actualStatus).hasText(status);
+
+            acquirersPage.clickAcquirerStatusPlaceholder()
+                    .selectAcquirerStatus(status)
+                    .getAcquirerStatusPlaceholder();
+
+            Allure.step("Verify again placeholder matches expected value: " + status);
+            assertThat(actualStatus).hasText(status);
+        }
+    }
 }

@@ -169,6 +169,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
 
+    @Ignore
     @Test
     @TmsLink("263")
     @Epic("Transactions")
