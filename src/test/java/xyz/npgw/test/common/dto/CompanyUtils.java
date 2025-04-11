@@ -1,7 +1,6 @@
-package xyz.npgw.test.utils;
+package xyz.npgw.test.common.dto;
 
 import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
-import xyz.npgw.test.common.dto.Company;
 
 import java.io.IOException;
 import java.io.InputStream;

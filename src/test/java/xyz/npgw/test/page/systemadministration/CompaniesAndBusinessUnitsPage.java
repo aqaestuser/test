@@ -6,17 +6,19 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import org.testng.Assert;
 import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
 import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.AddCompanyDialog;
+import xyz.npgw.test.page.dialog.EditCompanyDialog;
 
 public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTableBasePage {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     @Getter
-    private final Locator addBusinessUnitButton = getPage().getByTestId("ButtonAddMerchant");
+    private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     @Getter
-    private final Locator editCompanyButton = getPage().getByTestId("EditCompanyButton");
+    private final Locator editCompanyButton = getByTestId("EditCompanyButton");
     private final Locator companyDropdown = labelExact("Select company");
     @Getter
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
@@ -55,7 +57,6 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
     private final Locator apiActiveCheckboxFromCompanyInfoSection = labelExact("API active");
     @Getter
     private final Locator portalActiveCheckboxFromCompanyInfoSection = labelExact("Portal active");
-
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
@@ -113,6 +114,7 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
         return new AddBusinessUnitDialog(getPage());
     }
 
+    @Step("Click '{companyName}' company in dropdown")
     public CompaniesAndBusinessUnitsPage clickCompanyInDropdown(String companyName) {
         String lastSeenText = "";
 
@@ -138,6 +140,18 @@ public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTable
             lastDropdownOption.scrollIntoViewIfNeeded();
         }
 
-        throw new RuntimeException("Company '" + companyName + "' not found in dropdown.");
+        Assert.fail("Company '" + companyName + "' not found in dropdown.");
+
+        return this;
+    }
+
+    @Step("Click 'Edit company' button")
+    public EditCompanyDialog clickEditCompanyButton() {
+        //getPage().waitForLoadState(LoadState.NETWORKIDLE);
+        getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+        editCompanyButton.click();
+
+        return new EditCompanyDialog(getPage());
     }
 }

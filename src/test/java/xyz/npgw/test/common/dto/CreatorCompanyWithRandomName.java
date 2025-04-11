@@ -1,4 +1,4 @@
-package xyz.npgw.test.testdata;
+package xyz.npgw.test.common.dto;
 
 import lombok.Getter;
 import net.datafaker.Faker;

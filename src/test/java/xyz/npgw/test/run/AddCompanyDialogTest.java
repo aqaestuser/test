@@ -10,11 +10,11 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.dto.Company;
+import xyz.npgw.test.common.dto.CompanyUtils;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.AddCompanyDialog;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
-import xyz.npgw.test.utils.CompanyUtils;
 
 import java.io.IOException;
 import java.net.URLEncoder;

@@ -30,5 +30,4 @@ public class EditAcquirersDialog extends BaseDialog {
     public void clickCloseButton() {
         getCloseButton().click();
     }
-
 }
