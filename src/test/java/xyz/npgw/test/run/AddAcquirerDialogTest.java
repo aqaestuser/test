@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -7,6 +8,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.systemadministration.AcquirersPage;
 import xyz.npgw.test.page.systemadministration.AddAcquirerDialog;
@@ -68,5 +70,25 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
         assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
+    }
+
+    @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
+    @TmsLink("255")
+    @Epic("SA/Acquirers")
+    @Feature("Add acquirer")
+    @Description("Verifies that the status radio buttons ('Active' and 'Inactive') toggle correctly.")
+    public void testToggleStatusRadioButtonsCorrectly(String status) {
+
+        Locator statusRadiobutton = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemAdministrationMenuComponent()
+                .clickAcquirersTab()
+                .clickAddAcquirer()
+                .clickStatusRadiobutton(status)
+                .getStatusRadiobutton(status);
+
+        Allure.step(String.format("Verify: The radiobutton %s clicked.", status));
+        assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 }
