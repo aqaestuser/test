@@ -18,8 +18,8 @@ public abstract class BaseModel {
         return getPage().getByPlaceholder(text);
     }
 
-    protected Locator button(String text) {
-        return getPage().getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName(text));
+    protected Locator buttonByName(String name) {
+        return getPage().getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName(name));
     }
 
     protected Locator checkbox(String text) {

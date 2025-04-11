@@ -168,4 +168,37 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Default selected option in status selector is 'ALL'");
         assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
+
+    @Test
+    @TmsLink("263")
+    @Epic("Transactions")
+    @Feature("Amount")
+    @Description("Choose amount popup functionality")
+    public void testChooseAmountPopUp() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickAmountButton()
+                .fillAmountFromField("10")
+                .fillAmountFromField("20")
+                .clickAmountClearButton()
+                .fillAmountFromField("100")
+                .clickAmountFromIncreaseArrow()
+                .clickAmountFromIncreaseArrow()
+                .clickAmountFromDecreaseArrow()
+                .clickClearAmountToButton()
+                .fillAmountToField("5000")
+                .clickAmountToIncreaseArrow()
+                .clickAmountToDecreaseArrow()
+                .clickAmountToDecreaseArrow()
+                .clickAmountApplyButton();
+
+        Allure.step("Verify: Applied amount is visible");
+        assertThat(transactionsPage.getAmountApplied()).isVisible();
+
+        transactionsPage.clickAmountAppliedClearButton();
+
+        Allure.step("Verify: Amount button is visible after reset");
+        assertThat(transactionsPage.getAmountButton()).isVisible();
+    }
 }
