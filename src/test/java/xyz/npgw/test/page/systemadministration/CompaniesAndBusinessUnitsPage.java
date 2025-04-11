@@ -6,9 +6,9 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.AddBusinessUnitDialog;
-import xyz.npgw.test.page.AddCompanyDialog;
 import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
+import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
+import xyz.npgw.test.page.dialog.AddCompanyDialog;
 
 public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTableBasePage {
 

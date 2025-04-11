@@ -7,8 +7,8 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.page.AddBusinessUnitDialog;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.testdata.CreatorCompanyWithRandomName;
 

@@ -1,9 +1,8 @@
-package xyz.npgw.test.page;
+package xyz.npgw.test.page.dialog;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import lombok.Getter;
-import xyz.npgw.test.page.base.BaseDialog;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 
 public class AddBusinessUnitDialog extends BaseDialog {

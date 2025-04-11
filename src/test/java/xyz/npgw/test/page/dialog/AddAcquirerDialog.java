@@ -1,15 +1,15 @@
-package xyz.npgw.test.page.systemadministration;
+package xyz.npgw.test.page.dialog;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.systemadministration.AcquirersPage;
 
 import java.util.List;
 
-public class AddAcquirerDialog extends BasePage {
+public class AddAcquirerDialog extends BaseDialog {
 
     @Getter
     private final Locator addAcquirerDialogHeader = locator("section header");
@@ -22,8 +22,6 @@ public class AddAcquirerDialog extends BasePage {
     private final Locator selectCountryPlaceholder = labelExact("Select country");
     @Getter
     private final Locator selectTimezone = textExact("Select timezone");
-    @Getter
-    private final Locator closeButton = textExact("Close");
 
     public AddAcquirerDialog(Page page) {
         super(page);
@@ -37,7 +35,7 @@ public class AddAcquirerDialog extends BasePage {
 
     @Step("Click 'Close' button")
     public AcquirersPage clickCloseButton() {
-        closeButton.click();
+        getCloseButton().click();
 
         return new AcquirersPage(getPage());
     }

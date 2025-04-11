@@ -1,16 +1,15 @@
-package xyz.npgw.test.page;
+package xyz.npgw.test.page.dialog;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
 
 import java.util.List;
 
-public class AddCompanyDialog extends BasePage {
+public class AddCompanyDialog extends BaseDialog {
 
     @Getter
     private final Locator addCompanyDialogHeader = locator("section header");
@@ -20,7 +19,6 @@ public class AddCompanyDialog extends BasePage {
     private final Locator createButton = buttonByName("Create");
     private final Locator alertMessage = locator("[role='alert']");
     private final Locator allFieldPlaceholders = locator("[data-slot='input']:not([placeholder='Search...'])");
-    private final Locator closeButton = textExact("Close");
     private final Locator companyDescriptionField = placeholder("Enter company description");
     private final Locator companyWebsiteField = placeholder("Enter company website");
     private final Locator companyPrimaryContactField = placeholder("Enter company primary contact");
@@ -151,7 +149,7 @@ public class AddCompanyDialog extends BasePage {
 
     @Step("Click 'Close' button")
     public CompaniesAndBusinessUnitsPage clickCloseButton() {
-        closeButton.click();
+        getCloseButton().click();
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }
