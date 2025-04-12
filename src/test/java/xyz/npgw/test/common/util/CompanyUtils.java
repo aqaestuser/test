@@ -1,4 +1,4 @@
-package xyz.npgw.test.common.dto;
+package xyz.npgw.test.common.util;
 
 import io.qameta.allure.internal.shadowed.jackson.databind.ObjectMapper;
 

@@ -1,4 +1,4 @@
-package xyz.npgw.test.common.dto;
+package xyz.npgw.test.common.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

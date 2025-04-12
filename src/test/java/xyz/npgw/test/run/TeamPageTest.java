@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.systemadministration.TeamPage;
+import xyz.npgw.test.page.system.TeamPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 

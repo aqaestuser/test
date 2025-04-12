@@ -3,7 +3,7 @@ package xyz.npgw.test.page.dialog;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.systemadministration.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 public class EditCompanyDialog extends BaseDialog {
 

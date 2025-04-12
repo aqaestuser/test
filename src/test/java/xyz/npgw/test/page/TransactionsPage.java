@@ -5,12 +5,12 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
-import xyz.npgw.test.page.base.BasePageWithHeaderAndTable;
+import xyz.npgw.test.page.base.BaseWithHeaderAndTablePage;
 
 import java.util.List;
 
 @Getter
-public class TransactionsPage extends BasePageWithHeaderAndTable {
+public class TransactionsPage extends BaseWithHeaderAndTablePage {
 
     private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();

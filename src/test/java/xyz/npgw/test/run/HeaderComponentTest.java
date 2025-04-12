@@ -9,13 +9,13 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.component.HeaderComponent;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
-import xyz.npgw.test.page.component.HeaderComponent;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class HeaderTest extends BaseTest {
+public class HeaderComponentTest extends BaseTest {
 
     @Test
     @TmsLink("209")
@@ -52,7 +52,7 @@ public class HeaderTest extends BaseTest {
     @Epic("Header")
     @Feature("Logo")
     @Description("Check that click on Logo return user to the dashboard page from other pages")
-    public void testReturtDashbordPageClickLogo() {
+    public void testClickLogoReturnToDashboardPage() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickTransactionsLink()

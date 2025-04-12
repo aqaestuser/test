@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.component;
+package xyz.npgw.test.component;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -9,8 +9,7 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.TransactionsPage;
-import xyz.npgw.test.page.base.BaseComponent;
-import xyz.npgw.test.page.systemadministration.TeamPage;
+import xyz.npgw.test.page.system.TeamPage;
 
 @Getter
 public class HeaderComponent extends BaseComponent {

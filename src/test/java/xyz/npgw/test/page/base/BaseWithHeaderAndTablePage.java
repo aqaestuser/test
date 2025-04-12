@@ -1,12 +1,12 @@
 package xyz.npgw.test.page.base;
 
 import com.microsoft.playwright.Page;
-import xyz.npgw.test.page.component.HeaderComponent;
-import xyz.npgw.test.page.component.TableComponent;
+import xyz.npgw.test.component.HeaderComponent;
+import xyz.npgw.test.component.TableComponent;
 
-public abstract class BasePageWithHeaderAndTable extends BasePage {
+public abstract class BaseWithHeaderAndTablePage extends BasePage {
 
-    public BasePageWithHeaderAndTable(Page page) {
+    public BaseWithHeaderAndTablePage(Page page) {
         super(page);
     }
 

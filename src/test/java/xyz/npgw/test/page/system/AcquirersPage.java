@@ -1,16 +1,15 @@
-package xyz.npgw.test.page.systemadministration;
+package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.base.SystemAdministrationBasePage;
 import xyz.npgw.test.page.dialog.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.dialog.EditAcquirersDialog;
 
-public class AcquirersPage extends SystemAdministrationBasePage {
+public class AcquirersPage extends SystemBasePage {
 
     @Getter
     private final Locator addAcquirerButton = locator("svg[data-icon='circle-plus']");

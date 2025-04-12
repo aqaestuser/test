@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.systemadministration;
+package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -7,12 +7,11 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
-import xyz.npgw.test.page.base.SystemAdministrationWithTableBasePage;
 import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.EditCompanyDialog;
 
-public class CompaniesAndBusinessUnitsPage extends SystemAdministrationWithTableBasePage {
+public class CompaniesAndBusinessUnitsPage extends SystemWithTableBasePage {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     @Getter
