@@ -31,6 +31,7 @@ public final class ProjectProperties {
 
     private static final String CLOSE_BROWSER_IF_ERROR = PREFIX_PROP + "closeBrowserIfError";
     private static final String ARTEFACT_DIR = PREFIX_PROP + "artefactDir";
+    private static final String DEFAULT_TIMEOUT = PREFIX_PROP + "defaultTimeout";
 
     private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
 
@@ -106,6 +107,10 @@ public final class ProjectProperties {
 
     public static String getArtefactDir() {
         return properties.getProperty(ARTEFACT_DIR, "target/artefact");
+    }
+
+    public static double getDefaultTimeout() {
+        return Double.parseDouble(properties.getProperty(DEFAULT_TIMEOUT, "5000"));
     }
 
     public static String getSuperEmail() {
