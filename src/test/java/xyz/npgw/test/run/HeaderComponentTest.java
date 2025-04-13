@@ -26,7 +26,7 @@ public class HeaderComponentTest extends BaseTest {
         HeaderComponent headerComponent = new DashboardPage(getPage()).getHeader();
 
         Allure.step("Verify: Logo contains text 'NPGW'");
-        assertThat(headerComponent.getLogo()).hasText(Constants.LOGO_TEXT);
+        assertThat(headerComponent.getLogo()).hasText("NPGW");
 
         Allure.step("Verify: Logo contains image");
         Assert.assertTrue(headerComponent.getImg().isVisible(), "Image inside logo should be visible");

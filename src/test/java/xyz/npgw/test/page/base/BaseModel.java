@@ -5,9 +5,9 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import lombok.Getter;
 
+@Getter
 public abstract class BaseModel {
 
-    @Getter
     private final Page page;
 
     public BaseModel(Page page) {

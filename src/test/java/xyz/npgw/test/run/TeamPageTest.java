@@ -27,9 +27,9 @@ public class TeamPageTest extends BaseTest {
                 .clickSystemAdministrationLink();
 
         Allure.step("Verify: System administration Page URL");
-        assertThat(systemAdministrationPage.getPage()).hasURL(Constants.SA_PAGE_URL);
+        assertThat(systemAdministrationPage.getPage()).hasURL(Constants.SYSTEM_PAGE_URL);
 
         Allure.step("Verify: System administration Page Title");
-        assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SA_URL_TITLE);
+        assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 }

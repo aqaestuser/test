@@ -4,16 +4,16 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 
-public class EditAcquirersDialog extends BaseDialog {
+public class EditAcquirerDialog extends AcquirerDialog {
 
     private final Locator selectCountryLabel = dialog().getByLabel("Select country");
 
-    public EditAcquirersDialog(Page page) {
+    public EditAcquirerDialog(Page page) {
         super(page);
     }
 
     @Step("Click 'Select Country' dropDownList")
-    public EditAcquirersDialog clickSelectCountry(String name) {
+    public EditAcquirerDialog clickSelectCountry(String name) {
         selectCountryLabel.locator("..")
                 .locator("svg[role=presentation]")
                 .last()

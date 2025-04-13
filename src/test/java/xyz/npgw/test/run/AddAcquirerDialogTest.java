@@ -41,7 +41,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab();
 
         AddAcquirerDialog addAcquirerDialog = acquirersPage.clickAddAcquirer();
@@ -82,7 +82,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         Locator statusRadiobutton = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer()
                 .clickStatusRadiobutton(status)

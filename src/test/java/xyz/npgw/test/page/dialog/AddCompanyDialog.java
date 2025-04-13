@@ -9,7 +9,7 @@ import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import java.util.List;
 
-public class AddCompanyDialog extends BaseDialog {
+public class AddCompanyDialog extends CompanyDialog {
 
     @Getter
     private final Locator addCompanyDialogHeader = locator("section header");

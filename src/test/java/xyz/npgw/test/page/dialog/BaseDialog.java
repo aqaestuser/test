@@ -10,7 +10,7 @@ import xyz.npgw.test.page.base.BaseModel;
 
 import java.util.List;
 
-public class BaseDialog extends BaseModel {
+public abstract class BaseDialog extends BaseModel {
 
     @Getter
     private final Locator banner = dialog().getByRole(AriaRole.BANNER);

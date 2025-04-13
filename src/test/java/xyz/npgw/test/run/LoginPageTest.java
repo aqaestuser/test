@@ -23,7 +23,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Navigation")
     @Description("User navigate to 'Login page'")
-    public void testNavigateToLoginPage(@Optional("GUEST") String userRole) {
+    public void testNavigateToLoginPage(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/");
 
@@ -39,7 +39,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Remember me")
     @Description("User email is remembered after first successful login with checked 'Remember me'")
-    public void testRememberMeCheckedSavesUserEmail(@Optional("GUEST") String userRole) {
+    public void testRememberMeCheckedSavesUserEmail(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .fillEmailField(ProjectProperties.getSuperEmail())
@@ -58,7 +58,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Remember me")
     @Description("User email is NOT remembered after first successful login with unchecked 'Remember me'")
-    public void testRememberMeUncheckedDontSaveUserEmail(@Optional("GUEST") String userRole) {
+    public void testRememberMeUncheckedDontSaveUserEmail(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/")
                 .fillEmailField(ProjectProperties.getSuperEmail())

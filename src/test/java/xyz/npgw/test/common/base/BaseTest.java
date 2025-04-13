@@ -83,7 +83,7 @@ public abstract class BaseTest {
                 log.debug("Unknown user role, using SUPER");
             }
         }
-        if (userRole == UserRole.GUEST) {
+        if (userRole == UserRole.UNAUTHORISED) {
             new AboutBlankPage(page).navigate("/");
         } else {
             new AboutBlankPage(page).navigate("/").loginAs(userRole);

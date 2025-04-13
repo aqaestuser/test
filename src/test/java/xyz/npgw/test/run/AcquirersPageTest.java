@@ -28,7 +28,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab();
 
         Allure.step("Verify: Add Acquirer Button is visible");
@@ -56,7 +56,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab();
 
         Allure.step("Verify: Acquirers list header is visible");
@@ -79,7 +79,7 @@ public class AcquirersPageTest extends BaseTest {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab()
                 .clickSelectAcquirerPlaceholder()
                 .getSelectAcquirersDropdownItems();
@@ -98,7 +98,7 @@ public class AcquirersPageTest extends BaseTest {
         Locator actualOptions = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAcquirerStatusPlaceholder()
                 .getAcquirerStatusOptions();
@@ -116,7 +116,7 @@ public class AcquirersPageTest extends BaseTest {
         Locator acquirersList = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAcquirerStatusPlaceholder()
                 .selectAcquirerStatus(status)
@@ -142,7 +142,7 @@ public class AcquirersPageTest extends BaseTest {
         List<String> actualPlaceholders = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab()
                 .clickEditButtonForAcquirer("acquirer1")
                 .clearInputFields()
@@ -164,7 +164,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemAdministrationMenuComponent()
+                .getSystemMenu()
                 .clickAcquirersTab();
 
         for (String status : expectedOptions) {

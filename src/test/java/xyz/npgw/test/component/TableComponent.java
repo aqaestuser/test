@@ -3,30 +3,28 @@ package xyz.npgw.test.component;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import lombok.Getter;
 
 import java.util.NoSuchElementException;
 
 public class TableComponent extends BaseComponent {
 
-    private final Locator header = getPage().getByRole(AriaRole.COLUMNHEADER);
+    @Getter
+    private final Locator tableHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
     private final Locator rows = getPage().getByRole(AriaRole.ROW);
 
     public TableComponent(Page page) {
         super(page);
     }
 
-    public Locator getTableHeader() {
-        return header;
-    }
-
     public Locator getRowsWithoutHeader() {
-        return rows.filter(new Locator.FilterOptions().setHasNot(header));
+        return rows.filter(new Locator.FilterOptions().setHasNot(tableHeader));
     }
 
     public Locator getColumnBySelector(String selector) {
         int index = -1;
-        for (int i = 0; i < header.count(); i++) {
-            if (header.nth(i).innerText().equals(selector)) {
+        for (int i = 0; i < tableHeader.count(); i++) {
+            if (tableHeader.nth(i).innerText().equals(selector)) {
                 index = i;
                 break;
             }
@@ -35,6 +33,6 @@ public class TableComponent extends BaseComponent {
             throw new NoSuchElementException("Column with selector '" + selector + "' not found.");
         }
 
-        return header.nth(index);
+        return tableHeader.nth(index);
     }
 }

@@ -9,7 +9,7 @@ import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.List;
 
-public class AddAcquirerDialog extends BaseDialog {
+public class AddAcquirerDialog extends AcquirerDialog {
 
     @Getter
     private final Locator addAcquirerDialogHeader = locator("section header");

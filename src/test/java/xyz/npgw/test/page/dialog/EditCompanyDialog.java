@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class EditCompanyDialog extends BaseDialog {
+public class EditCompanyDialog extends CompanyDialog {
 
     private final Locator companyNameField = placeholder("Enter company name");
     private final Locator companyTypeField = placeholder("Enter type");

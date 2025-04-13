@@ -7,9 +7,9 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.dialog.EditAcquirersDialog;
+import xyz.npgw.test.page.dialog.EditAcquirerDialog;
 
-public class AcquirersPage extends SystemBasePage {
+public class AcquirersPage extends BaseSystemPage {
 
     @Getter
     private final Locator addAcquirerButton = locator("svg[data-icon='circle-plus']");
@@ -90,6 +90,6 @@ public class AcquirersPage extends SystemBasePage {
     public BaseDialog clickEditButtonForAcquirer(String name) {
         optionByName(name).getByText("Edit").click();
 
-        return new EditAcquirersDialog(getPage());
+        return new EditAcquirerDialog(getPage());
     }
 }
