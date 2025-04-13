@@ -22,7 +22,7 @@ public class AddAcquirerDialogTest extends BaseTest {
 
     @Test()
     @TmsLink("249")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Add acquirer")
     @Description(
             "Verify that the 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
@@ -74,7 +74,7 @@ public class AddAcquirerDialogTest extends BaseTest {
 
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("255")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Add acquirer")
     @Description("Verifies that the status radio buttons ('Active' and 'Inactive') toggle correctly.")
     public void testToggleStatusRadioButtonsCorrectly(String status) {

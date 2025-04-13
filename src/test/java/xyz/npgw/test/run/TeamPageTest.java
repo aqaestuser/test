@@ -17,7 +17,7 @@ public class TeamPageTest extends BaseTest {
 
     @Test
     @TmsLink("154")
-    @Epic("SA/Team")
+    @Epic("System/Team")
     @Feature("Navigation")
     @Description("User navigate to 'System administration page' after clicking "
             + "on 'System administration' link on the header")

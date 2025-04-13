@@ -17,8 +17,8 @@ public class EditCompanyDialogTest extends BaseTest {
 
     @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("266")
-    @Epic("Companies and business units")
-    @Feature("Edit Company")
+    @Epic("System/Companies and business units")
+    @Feature("Edit company")
     @Description("Edit company info and save")
     public void testEditCompanyInfoAndSave() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())

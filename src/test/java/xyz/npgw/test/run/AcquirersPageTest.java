@@ -21,7 +21,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("134")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Acquirers list")
     @Description("The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
@@ -49,7 +49,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("157")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Acquirers list")
     @Description("The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
@@ -72,7 +72,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("168")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Select acquirer")
     @Description("Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
     public void testSelectAcquirerDropdownFunctionality() {
@@ -91,7 +91,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("187")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Status")
     @Description("The 'Status' dropdown toggles and contains options All, Active, Inactive.")
     public void testOpenStatusDropdown() {
@@ -109,7 +109,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("243")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Status")
     @Description("Filter acquirers by status.")
     public void testFilterAcquirersByStatus(String status) {
@@ -130,7 +130,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("239")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Edit acquirers")
     @Description("Verifies that all form field placeholders are set correctly")
     public void testVerifyPlaceholdersEditForm() {
@@ -154,7 +154,7 @@ public class AcquirersPageTest extends BaseTest {
 
     @Test
     @TmsLink("268")
-    @Epic("SA/Acquirers")
+    @Epic("System/Acquirers")
     @Feature("Status")
     @Description("Verify that re-selecting an already selected status keeps the selection unchanged.")
     public void testRetainStatusWhenReSelectingSameOption() {

@@ -72,8 +72,8 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("127")
     @Epic("Transactions")
-    @Feature("Selector Rows options")
-    @Description("Displaying options when clicking on Selector Rows")
+    @Feature("Selector rows options")
+    @Description("Displaying rows per page options when clicking on Selector Rows")
     public void testCountOptionsSelectorRows() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader()

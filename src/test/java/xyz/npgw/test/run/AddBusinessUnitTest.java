@@ -18,7 +18,7 @@ public class AddBusinessUnitTest extends BaseTest {
 
     @Test
     @TmsLink("213")
-    @Epic("Companies and business units")
+    @Epic("System/Companies and business units")
     @Feature("Add merchant")
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
@@ -43,7 +43,7 @@ public class AddBusinessUnitTest extends BaseTest {
 
     @Test
     @TmsLink("214")
-    @Epic("Companies and business units")
+    @Epic("System/Companies and business units")
     @Feature("Add merchant")
     @Description("Verify 'Add business unit' button is disabled if 'Select company' filter's field is cleaned")
     public void testVerifyAddBusinessUnitButtonDefaultState() {
@@ -58,7 +58,7 @@ public class AddBusinessUnitTest extends BaseTest {
 
     @Test
     @TmsLink("238")
-    @Epic("Companies and business units")
+    @Epic("System/Companies and business units")
     @Feature("Add merchant")
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
@@ -83,7 +83,7 @@ public class AddBusinessUnitTest extends BaseTest {
 
     @Test
     @TmsLink("241")
-    @Epic("Companies and business units")
+    @Epic("System/Companies and business units")
     @Feature("Add merchant")
     @Description("Verify that a new Merchant wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
