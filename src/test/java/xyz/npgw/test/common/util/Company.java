@@ -1,7 +1,8 @@
 package xyz.npgw.test.common.util;
 
-public record Company(
+import net.datafaker.Faker;
 
+public record Company(
         String companyName,
         String companyType,
         String description,
@@ -16,6 +17,17 @@ public record Company(
         String city,
         String phone,
         String mobile,
-        String fax
-){}
+        String fax) {
 
+    public Company(String companyName, String companyType) {
+        this(companyName, companyType,
+                "", "", "", "",
+                true, true,
+                "", "", "", "",
+                "", "", "");
+    }
+
+    public Company(Faker faker) {
+        this(faker.company().name(), faker.company().industry());
+    }
+}

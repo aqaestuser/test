@@ -39,8 +39,7 @@ public enum BrowserFactory {
         return new BrowserType
                 .LaunchOptions()
                 .setHeadless(ProjectProperties.isHeadlessMode())
-                .setSlowMo(ProjectProperties.getSlowMoMode())
-                .setTimeout(ProjectProperties.getDefaultTimeout());
+                .setSlowMo(ProjectProperties.getSlowMoMode());
     }
 
     public abstract Browser createInstance(Playwright playwright);

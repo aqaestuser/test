@@ -74,6 +74,7 @@ public abstract class BaseTest {
         }
 
         page = context.newPage();
+        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
         UserRole userRole = UserRole.SUPER;
         if (args.length != 0 && (args[0] instanceof String)) {

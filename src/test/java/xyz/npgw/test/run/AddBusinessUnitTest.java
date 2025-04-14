@@ -5,9 +5,10 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import net.datafaker.Faker;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.util.CreatorCompanyWithRandomName;
+import xyz.npgw.test.common.util.Company;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
@@ -22,18 +23,18 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add merchant")
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
-        CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
+        Company company = new Company(new Faker());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.getName())
-                .fillCompanyTypeField(company.getType())
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .selectCompanyInTheFilter(company.getName());
+                .selectCompanyInTheFilter(company.companyName());
 
         Allure.step("'Add business unit' button is available");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
@@ -62,22 +63,22 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add merchant")
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
-        CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
+        Company company = new Company(new Faker());
 
         AddBusinessUnitDialog addBusinessUnitDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.getName())
-                .fillCompanyTypeField(company.getType())
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .selectCompanyInTheFilter(company.getName())
+                .selectCompanyInTheFilter(company.companyName())
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify that Company name field is read-only and prefilled created company");
-        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.getName());
+        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.companyName());
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
@@ -87,18 +88,18 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add merchant")
     @Description("Verify that a new Merchant wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
-        CreatorCompanyWithRandomName company = CreatorCompanyWithRandomName.random();
+        Company company = new Company(new Faker());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTabButton()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.getName())
-                .fillCompanyTypeField(company.getType())
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .selectCompanyInTheFilter(company.getName())
+                .selectCompanyInTheFilter(company.companyName())
                 .clickOnAddBusinessUnitButton()
                 .clickOnCloseButton();
 
