@@ -9,7 +9,7 @@ import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import java.util.List;
 
-public class AddCompanyDialog extends CompanyDialog {
+public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
 
     @Getter
     private final Locator addCompanyDialogHeader = locator("section header");
@@ -20,97 +20,6 @@ public class AddCompanyDialog extends CompanyDialog {
 
     public AddCompanyDialog(Page page) {
         super(page);
-    }
-
-    @Step("Fill company name field with the name: {companyName}")
-    public AddCompanyDialog fillCompanyNameField(String companyName) {
-        companyNameField.fill(companyName);
-
-        return this;
-    }
-
-    @Step("Fill company type field with the type: {companyType}")
-    public AddCompanyDialog fillCompanyTypeField(String companyType) {
-        companyTypeField.fill(companyType);
-
-        return this;
-    }
-
-    @Step("Fill company description field")
-    public AddCompanyDialog fillCompanyDescriptionField(String companyDescription) {
-        companyDescriptionField.fill(companyDescription);
-
-        return this;
-    }
-
-    @Step("Fill company website field")
-    public AddCompanyDialog fillCompanyWebsiteField(String companyWebsite) {
-        companyWebsiteField.fill(companyWebsite);
-
-        return this;
-    }
-
-    @Step("Fill company primary contact field")
-    public AddCompanyDialog fillCompanyPrimaryContactField(String companyPrimaryContact) {
-        companyPrimaryContactField.fill(companyPrimaryContact);
-
-        return this;
-    }
-
-    @Step("Fill company email field")
-    public AddCompanyDialog fillCompanyEmailField(String companyEmail) {
-        companyEmailField.fill(companyEmail);
-
-        return this;
-    }
-
-    @Step("Fill company country field")
-    public AddCompanyDialog fillCompanyCountryField(String companyCountry) {
-        companyCountryField.fill(companyCountry);
-
-        return this;
-    }
-
-    @Step("Fill company state field")
-    public AddCompanyDialog fillCompanyStateField(String companyState) {
-        companyStateField.fill(companyState);
-
-        return this;
-    }
-
-    @Step("Fill company ZIP field")
-    public AddCompanyDialog fillCompanyZipField(String companyZip) {
-        companyZipField.fill(companyZip);
-
-        return this;
-    }
-
-    @Step("Fill company city field")
-    public AddCompanyDialog fillCompanyCityField(String companyCity) {
-        companyCityField.fill(companyCity);
-
-        return this;
-    }
-
-    @Step("Fill company phone field")
-    public AddCompanyDialog fillCompanyPhoneField(String companyPhone) {
-        companyPhoneField.fill(companyPhone);
-
-        return this;
-    }
-
-    @Step("Fill company mobile field")
-    public AddCompanyDialog fillCompanyMobileField(String companyMobile) {
-        companyMobileField.fill(companyMobile);
-
-        return this;
-    }
-
-    @Step("Fill company fax field")
-    public AddCompanyDialog fillCompanyFaxField(String companyFax) {
-        companyFaxField.fill(companyFax);
-
-        return this;
     }
 
     @Step("Click on the 'Create' button and trigger an error")
@@ -144,25 +53,5 @@ public class AddCompanyDialog extends CompanyDialog {
         createButton.click();
 
         return new CompaniesAndBusinessUnitsPage(getPage());
-    }
-
-    public AddCompanyDialog setApiActiveCheckbox(boolean isActive) {
-        if (isActive) {
-            apiActiveCheckbox.check();
-        } else {
-            apiActiveCheckbox.uncheck();
-        }
-
-        return this;
-    }
-
-    public AddCompanyDialog setPortalActiveCheckbox(boolean isActive) {
-        if (isActive) {
-            portalActiveCheckbox.check();
-        } else {
-            portalActiveCheckbox.uncheck();
-        }
-
-        return this;
     }
 }
