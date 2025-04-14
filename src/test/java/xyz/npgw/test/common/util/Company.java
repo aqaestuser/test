@@ -1,28 +1,21 @@
 package xyz.npgw.test.common.util;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+public record Company(
 
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Company {
+        String companyName,
+        String companyType,
+        String description,
+        String website,
+        String primaryContact,
+        String companyEmail,
+        boolean apiActive,
+        boolean portalActive,
+        String country,
+        String state,
+        String zip,
+        String city,
+        String phone,
+        String mobile,
+        String fax
+){}
 
-    private String companyName;
-    private String companyType;
-    private String description;
-    private String website;
-    private String primaryContact;
-    private String companyEmail;
-    private String country;
-    private String state;
-    private String zip;
-    private String city;
-    private String phone;
-    private String mobile;
-    private String fax;
-    private boolean apiActive;
-    private boolean portalActive;
-
-}

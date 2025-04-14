@@ -13,7 +13,9 @@ public class AddCompanyDialog extends CompanyDialog {
 
     @Getter
     private final Locator addCompanyDialogHeader = locator("section header");
+    @Getter
     private final Locator companyNameField = placeholder("Enter company name");
+    @Getter
     private final Locator companyTypeField = placeholder("Enter type");
     @Getter
     private final Locator createButton = buttonByName("Create");
