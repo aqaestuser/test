@@ -1,11 +1,15 @@
 package xyz.npgw.test.common.base;
 
+import com.google.gson.Gson;
+import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
+import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +20,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.ApiContextUtils;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
@@ -29,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 @Log4j2
 public abstract class BaseTest {
@@ -70,25 +74,13 @@ public abstract class BaseTest {
         }
 
         if (apiRequestContext == null) {
-            apiRequestContext = ApiContextUtils.getApiRequestContext(playwright);
+            initApiRequestContext();
         }
 
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
-        UserRole userRole = UserRole.SUPER;
-        if (args.length != 0 && (args[0] instanceof String)) {
-            try {
-                userRole = UserRole.valueOf((String) args[0]);
-            } catch (IllegalArgumentException e) {
-                log.debug("Unknown user role, using SUPER");
-            }
-        }
-        if (userRole == UserRole.UNAUTHORISED) {
-            new AboutBlankPage(page).navigate("/");
-        } else {
-            new AboutBlankPage(page).navigate("/").loginAs(userRole);
-        }
+        openSite(args);
     }
 
     @AfterMethod(alwaysRun = true)
@@ -167,5 +159,54 @@ public abstract class BaseTest {
         } catch (IOException e) {
             log.error("Add traces to allure failed: {}", e.getMessage());
         }
+    }
+
+    private void openSite(Object[] args) {
+        UserRole userRole = UserRole.SUPER;
+        if (args.length != 0 && (args[0] instanceof String)) {
+            try {
+                userRole = UserRole.valueOf((String) args[0]);
+            } catch (IllegalArgumentException e) {
+                if (args[0].equals("UNAUTHORISED")) {
+                    new AboutBlankPage(page).navigate("/");
+                    return;
+                } else {
+                    log.debug("Unknown user role, will use SUPER");
+                }
+            }
+        }
+        new AboutBlankPage(page).navigate("/").loginAs(userRole);
+    }
+
+    private void initApiRequestContext() {
+        APIResponse tokenResponse = playwright
+                .request()
+                .newContext()
+                .post(ProjectProperties.getBaseUrl() + "/portal-v1/user/token",
+                        RequestOptions.create().setData(Map.of(
+                                "email", ProjectProperties.getSuperEmail(),
+                                "password", ProjectProperties.getSuperPassword())));
+
+        if (tokenResponse.ok()) {
+            apiRequestContext = playwright
+                    .request()
+                    .newContext(new APIRequest
+                            .NewContextOptions()
+                            .setBaseURL(ProjectProperties.getBaseUrl())
+                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(new Gson()
+                                    .fromJson(tokenResponse.text(), TokenResponse.class)
+                                    .token()
+                                    .idToken))));
+        } else {
+            String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.text());
+            log.error(message);
+            throw new RuntimeException(message);
+        }
+    }
+
+    private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
+    }
+
+    private record TokenResponse(String userChallengeType, Token token) {
     }
 }
