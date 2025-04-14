@@ -7,19 +7,6 @@ import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 public class EditCompanyDialog extends CompanyDialog {
 
-    private final Locator companyNameField = placeholder("Enter company name");
-    private final Locator companyTypeField = placeholder("Enter type");
-    private final Locator companyDescriptionField = placeholder("Enter company description");
-    private final Locator companyWebsiteField = placeholder("Enter company website");
-    private final Locator companyPrimaryContactField = placeholder("Enter company primary contact");
-    private final Locator companyEmailField = placeholder("Enter company email");
-    private final Locator companyCountryField = placeholder("Enter country");
-    private final Locator companyStateField = placeholder("Enter state");
-    private final Locator companyZipField = placeholder("Enter ZIP");
-    private final Locator companyCityField = placeholder("Enter city");
-    private final Locator companyPhoneField = placeholder("Enter phone");
-    private final Locator companyMobileField = placeholder("Enter mobile");
-    private final Locator companyFaxField = placeholder("Enter fax");
     private final Locator saveChangesButton = buttonByName("Save changes");
 
     public EditCompanyDialog(Page page) {

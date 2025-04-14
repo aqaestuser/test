@@ -14,26 +14,9 @@ public class AddCompanyDialog extends CompanyDialog {
     @Getter
     private final Locator addCompanyDialogHeader = locator("section header");
     @Getter
-    private final Locator companyNameField = placeholder("Enter company name");
-    @Getter
-    private final Locator companyTypeField = placeholder("Enter type");
-    @Getter
     private final Locator createButton = buttonByName("Create");
     private final Locator alertMessage = locator("[role='alert']");
     private final Locator allFieldPlaceholders = locator("[data-slot='input']:not([placeholder='Search...'])");
-    private final Locator companyDescriptionField = placeholder("Enter company description");
-    private final Locator companyWebsiteField = placeholder("Enter company website");
-    private final Locator companyPrimaryContactField = placeholder("Enter company primary contact");
-    private final Locator companyEmailField = placeholder("Enter company email");
-    private final Locator companyCountryField = placeholder("Enter country");
-    private final Locator companyStateField = placeholder("Enter state");
-    private final Locator companyZipField = placeholder("Enter ZIP");
-    private final Locator companyCityField = placeholder("Enter city");
-    private final Locator companyPhoneField = placeholder("Enter phone");
-    private final Locator companyMobileField = placeholder("Enter mobile");
-    private final Locator companyFaxField = placeholder("Enter fax");
-    private final Locator apiActiveCheckbox = checkbox("API active");
-    private final Locator portalActiveCheckbox = checkbox("Portal active");
 
     public AddCompanyDialog(Page page) {
         super(page);
