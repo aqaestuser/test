@@ -169,18 +169,19 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu()
                 .clickAcquirersTab();
 
+        Locator actualStatus = acquirersPage.getAcquirerStatusValue();
+
         for (String status : expectedOptions) {
-            Locator actualStatus = acquirersPage
+            acquirersPage
                     .clickAcquirerStatusPlaceholder()
-                    .selectAcquirerStatus(status)
-                    .getAcquirerStatusPlaceholder();
+                    .selectAcquirerStatus(status);
 
             Allure.step("Verify placeholder matches expected value: " + status);
             assertThat(actualStatus).hasText(status);
 
-            acquirersPage.clickAcquirerStatusPlaceholder()
-                    .selectAcquirerStatus(status)
-                    .getAcquirerStatusPlaceholder();
+            acquirersPage
+                    .clickAcquirerStatusPlaceholder()
+                    .selectAcquirerStatus(status);
 
             Allure.step("Verify again placeholder matches expected value: " + status);
             assertThat(actualStatus).hasText(status);
