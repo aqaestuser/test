@@ -10,17 +10,14 @@ import xyz.npgw.test.page.base.BaseModel;
 
 import java.util.List;
 
+@Getter
 public abstract class BaseDialog extends BaseModel {
 
-    @Getter
+    private final Locator dialogHeader = locator("section header");
     private final Locator banner = dialog().getByRole(AriaRole.BANNER);
-    @Getter
     private final Locator closeButton = dialog().getByText("Close");
-    @Getter
     private final Locator closeIcon = dialog().getByLabel("Close");
-    @Getter
     private final Locator requiredFields = dialog().locator("[required]");
-    @Getter
     private final Locator allInputFields = dialog().getByRole(AriaRole.TEXTBOX);
     private final Locator fieldsWithPlaceholder = dialog()
             .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");

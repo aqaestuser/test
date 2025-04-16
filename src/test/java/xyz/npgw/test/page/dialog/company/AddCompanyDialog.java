@@ -12,8 +12,6 @@ import java.util.List;
 public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
 
     @Getter
-    private final Locator addCompanyDialogHeader = locator("section header");
-    @Getter
     private final Locator createButton = buttonByName("Create");
     private final Locator alertMessage = locator("[role='alert']");
     private final Locator allFieldPlaceholders = locator("[data-slot='input']:not([placeholder='Search...'])");

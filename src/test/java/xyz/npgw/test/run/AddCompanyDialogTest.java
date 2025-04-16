@@ -45,7 +45,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickAddCompanyButton();
 
         Allure.step("Verify: the header contains the expected title text");
-        assertThat(addCompanyDialog.getAddCompanyDialogHeader()).hasText("Add company");
+        assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
     }
 
     @Test
@@ -332,7 +332,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickAddCompanyButton();
 
         Allure.step("Verify: 'Add company' dialog is displayed");
-        assertThat(addCompanyDialog.getAddCompanyDialogHeader()).hasText("Add company");
+        assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
 
         Allure.step("Verify: 'Company name' field is marked as invalid");
         assertEquals(addCompanyDialog.getCompanyNameField().getAttribute("aria-invalid"), "true");

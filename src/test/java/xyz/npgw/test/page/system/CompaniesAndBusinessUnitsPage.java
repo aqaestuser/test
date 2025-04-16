@@ -7,7 +7,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
-import xyz.npgw.test.page.dialog.AddBusinessUnitDialog;
+import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 

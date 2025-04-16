@@ -6,12 +6,11 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.dialog.AddAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.List;
@@ -19,10 +18,10 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 
-@Ignore
+
 public class AddAcquirerDialogTest extends BaseTest {
 
-    @Test()
+    @Test
     @TmsLink("249")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")
@@ -49,7 +48,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         AddAcquirerDialog addAcquirerDialog = acquirersPage.clickAddAcquirer();
 
         Allure.step("Verify: the header contains the expected title text");
-        assertThat(addAcquirerDialog.getAddAcquirerDialogHeader()).hasText("Add acquirer");
+        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Add acquirer");
 
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addAcquirerDialog.getAllFieldPlaceholders(), expectedPlaceholders);
@@ -63,7 +62,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesUSDEUR");
 
         Allure.step("Verify: the 'Select Country' placeholder is visible");
-        assertThat(addAcquirerDialog.getSelectCountryPlaceholder()).isVisible();
+        assertThat(addAcquirerDialog.getSelectCountryLabel()).isVisible();
 
         Allure.step("Verify: the 'Select Zone' placeholder is visible");
         assertThat(addAcquirerDialog.getSelectTimezone()).isVisible();
