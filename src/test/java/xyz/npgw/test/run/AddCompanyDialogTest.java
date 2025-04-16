@@ -12,7 +12,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.Company;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.dialog.AddCompanyDialog;
+import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import java.net.URLEncoder;

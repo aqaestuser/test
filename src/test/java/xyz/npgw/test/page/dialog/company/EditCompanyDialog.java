@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.dialog;
+package xyz.npgw.test.page.dialog.company;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;

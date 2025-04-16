@@ -1,6 +1,6 @@
-package xyz.npgw.test.page.base.trait;
+package xyz.npgw.test.page.common;
 
-import xyz.npgw.test.component.HeaderComponent;
+import xyz.npgw.test.page.base.BaseTrait;
 
 public interface HeaderTrait extends BaseTrait {
 

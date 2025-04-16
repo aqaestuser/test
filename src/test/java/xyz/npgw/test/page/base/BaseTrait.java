@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.base.trait;
+package xyz.npgw.test.page.base;
 
 import com.microsoft.playwright.Page;
 

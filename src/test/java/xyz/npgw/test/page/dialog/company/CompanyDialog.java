@@ -1,9 +1,10 @@
-package xyz.npgw.test.page.dialog;
+package xyz.npgw.test.page.dialog.company;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.dialog.BaseDialog;
 
 public abstract class CompanyDialog<T extends CompanyDialog<T>> extends BaseDialog {
 

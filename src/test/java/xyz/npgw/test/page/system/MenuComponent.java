@@ -1,17 +1,16 @@
-package xyz.npgw.test.component;
+package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.system.AcquirersPage;
-import xyz.npgw.test.page.system.GatewayPage;
+import xyz.npgw.test.page.base.BaseComponent;
 
-public class SystemMenuComponent extends BaseComponent {
+public class MenuComponent extends BaseComponent {
 
     private final Locator acquirersTab = tab("Acquirers");
     private final Locator gatewayTab = tab("Gateway");
 
-    public SystemMenuComponent(Page page) {
+    public MenuComponent(Page page) {
         super(page);
     }
 

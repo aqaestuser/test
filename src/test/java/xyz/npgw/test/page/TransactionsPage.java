@@ -5,13 +5,13 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
-import xyz.npgw.test.page.base.BaseHeaderPage;
-import xyz.npgw.test.page.base.trait.TableTrait;
+import xyz.npgw.test.page.common.HeaderPage;
+import xyz.npgw.test.page.common.TableTrait;
 
 import java.util.List;
 
 @Getter
-public class TransactionsPage extends BaseHeaderPage implements TableTrait {
+public class TransactionsPage extends HeaderPage implements TableTrait {
 
     private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
