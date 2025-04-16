@@ -56,6 +56,10 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage {
     private final Locator apiActiveCheckboxFromCompanyInfoSection = labelExact("API active");
     @Getter
     private final Locator portalActiveCheckboxFromCompanyInfoSection = labelExact("Portal active");
+    @Getter
+    private final Locator businessUnitNameData = locator("[role='row'] span").first();
+    @Getter
+    private final Locator merchantIdData = locator("[role='row'] span").nth(1);
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);

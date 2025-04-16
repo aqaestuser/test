@@ -11,8 +11,10 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.Company;
+import xyz.npgw.test.common.util.Merchant;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
+import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import java.net.URLEncoder;
@@ -26,6 +28,15 @@ public class AddCompanyDialogTest extends BaseTest {
 
     private static final String COMPANY_NAME = "CompanyName";
     private static final String COMPANY_TYPE = "CompanyType";
+
+    Company company = new Company(
+            "CompanyNameTest", "Company Type Test",
+            "Description Test",
+            "https://www.test.com", "James Smith", "test@yahoo.com",
+            true, true,
+            "USA", "PA",
+            "19876", "Warwick",
+            "2151111111", "2152222222", "222333444");
 
     private void deleteCompany(String name) {
         getApiRequestContext().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
@@ -314,15 +325,6 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Validates successful company creation and correct field persistence (E2E test).")
     public void testAddCompanyEndToEndTest() {
-        Company company = new Company(
-                "CompanyNameTest", "Company Type Test",
-                "Description Test",
-                "https://www.test.com", "James Smith", "test@yahoo.com",
-                true, true,
-                "USA", "PA",
-                "19876", "Warwick",
-                "2151111111", "2152222222", "222333444");
-
         deleteCompany(company.companyName());
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
@@ -424,5 +426,62 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: city field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCityFromCompanyInfoSection())
                 .hasValue(company.city());
+    }
+
+    @Test(dependsOnMethods = "testAddCompanyEndToEndTest")
+    @TmsLink("290")
+    @Epic("System/Companies and business units")
+    @Feature("Add business unit")
+    @Description("Validates successful business unit addition to company (E2E test).")
+    public void testAddBusinessUnitEndToEndTest() {
+        Merchant merchant = new Merchant(
+                "MerchantNameTest",
+                false, true,
+                false
+        );
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTabButton();
+
+        Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
+
+        AddBusinessUnitDialog addBusinessUnitDialog = companiesAndBusinessUnitsPage
+                .clickSelectCompanyDropdown()
+                .clickCompanyInDropdown(company.companyName())
+                .clickOnAddBusinessUnitButton();
+
+        Allure.step("Verify: 'Add business unit' dialog is opened");
+        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader()).hasText("Add merchant");
+
+        Allure.step("Verify: Company name is pre-filled correctly");
+        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.companyName());
+
+        addBusinessUnitDialog.clickCreateButtonAndTriggerError();
+
+        Allure.step("Verify: Validation error is shown when merchant name is not filled");
+        assertThat(addBusinessUnitDialog.getAlertMessage()).containsText("Enter merchant name");
+
+        companiesAndBusinessUnitsPage = addBusinessUnitDialog
+                .fillMerchantNameField(merchant.merchantName())
+                .setUsdCheckbox(merchant.usd())
+                .setEurCheckbox(merchant.eur())
+                .selectStatus(merchant.active())
+                .clickCreateButton();
+
+        Allure.step("Verify: Success alert is shown after business unit is added");
+        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).containsText(
+                "Business unit was created successfully");
+
+        Allure.step("Verify: Selected company is preserved after creation");
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompanyInput()).hasValue(company.companyName());
+
+        Allure.step("Verify: New business unit name appears in the list");
+        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(merchant.merchantName());
+
+        Allure.step("Verify: Merchant ID is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
     }
 }
