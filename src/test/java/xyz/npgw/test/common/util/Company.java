@@ -30,4 +30,8 @@ public record Company(
     public Company(Faker faker) {
         this(faker.company().name(), faker.company().industry());
     }
+
+    public Company(String companyName) {
+        this(companyName, new Faker().company().industry());
+    }
 }
