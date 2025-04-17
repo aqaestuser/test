@@ -120,4 +120,19 @@ public class HeaderComponentTest extends BaseTest {
         Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
     }
+
+    @Test
+    @TmsLink("308")
+    @Epic("Header")
+    @Feature("Log Out")
+    @Description("Log out via button in the Header")
+    public void testLogOutViaButtonInHeader() {
+
+        LoginPage loginPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickLogOutButton();
+
+        Allure.step("Verify: Login Page URL");
+        assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
+    }
 }
