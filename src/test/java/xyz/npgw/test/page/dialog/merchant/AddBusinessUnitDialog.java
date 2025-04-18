@@ -7,11 +7,10 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class AddBusinessUnitDialog extends BaseDialog {
+public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage> {
 
     @Getter
     private final Locator companyNameField = locator("input[aria-label='Company name']");
-    private final Locator closeButton = textExact("Close");
     private final Locator addMerchantDialog = dialog();
     private final Locator createButton = buttonByName("Create");
     private final Locator merchantNameField = placeholder("Enter merchant name");
@@ -30,8 +29,8 @@ public class AddBusinessUnitDialog extends BaseDialog {
         super(page);
     }
 
-    public CompaniesAndBusinessUnitsPage clickOnCloseButton() {
-        closeButton.click();
+    @Override
+    protected CompaniesAndBusinessUnitsPage getReturnPage() {
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }

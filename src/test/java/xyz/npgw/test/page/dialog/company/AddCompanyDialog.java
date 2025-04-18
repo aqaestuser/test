@@ -39,13 +39,6 @@ public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
         return allFieldPlaceholders.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
-    @Step("Click 'Close' button")
-    public CompaniesAndBusinessUnitsPage clickCloseButton() {
-        getCloseButton().click();
-
-        return new CompaniesAndBusinessUnitsPage(getPage());
-    }
-
     @Step("Click on the 'Create' button")
     public CompaniesAndBusinessUnitsPage clickCreateButton() {
         createButton.click();

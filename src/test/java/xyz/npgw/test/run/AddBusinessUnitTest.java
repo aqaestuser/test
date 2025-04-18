@@ -101,7 +101,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .waitUntilAlertIsGone()
                 .selectCompanyInTheFilter(company.companyName())
                 .clickOnAddBusinessUnitButton()
-                .clickOnCloseButton();
+                .clickCloseButton();
 
         Allure.step("The table is empty and 'No rows to display.' is displayed");
         assertThat(companiesAndBusinessUnitsPage.getBusinessUnitEmptyList()).hasText("No rows to display.");

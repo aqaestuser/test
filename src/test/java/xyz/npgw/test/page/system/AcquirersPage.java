@@ -5,8 +5,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.BaseDialog;
+import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerDialog;
 
 public class AcquirersPage extends BaseSystemPage {

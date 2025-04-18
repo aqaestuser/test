@@ -7,11 +7,12 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseModel;
+import xyz.npgw.test.page.system.BaseSystemPage;
 
 import java.util.List;
 
 @Getter
-public abstract class BaseDialog extends BaseModel {
+public abstract class BaseDialog<ReturnPageT extends BaseSystemPage> extends BaseModel {
 
     private final Locator dialogHeader = locator("section header");
     private final Locator banner = dialog().getByRole(AriaRole.BANNER);
@@ -50,5 +51,14 @@ public abstract class BaseDialog extends BaseModel {
             banner.click();
         });
         return this;
+    }
+
+    protected abstract ReturnPageT getReturnPage();
+
+    @Step("Click on the 'Close' button to close form")
+    public ReturnPageT clickCloseButton() {
+        closeButton.click();
+
+        return getReturnPage();
     }
 }
