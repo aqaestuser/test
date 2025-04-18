@@ -3,37 +3,39 @@ package xyz.npgw.test.page.common;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+@Getter
 public class TableComponent extends BaseComponent {
 
-    @Getter
     private final Locator tableHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
-    private final Locator rows = getPage().getByRole(AriaRole.ROW);
+    private final Locator tableRows = getPage().getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableHeader));
 
     public TableComponent(Page page) {
         super(page);
     }
 
-    public Locator getRowsWithoutHeader() {
-        return rows.filter(new Locator.FilterOptions().setHasNot(tableHeader));
-    }
-
-    public Locator getColumnBySelector(String selector) {
-        int index = -1;
+    private int getColumnHeaderIndexByName(String columnHeaderName) {
         for (int i = 0; i < tableHeader.count(); i++) {
-            if (tableHeader.nth(i).innerText().equals(selector)) {
-                index = i;
-                break;
+            if (tableHeader.nth(i).innerText().equals(columnHeaderName)) {
+                return i;
             }
         }
-        if (index == -1) {
-            throw new NoSuchElementException("Column with selector '" + selector + "' not found.");
-        }
+        throw new NoSuchElementException("Column with selector '" + columnHeaderName + "' not found.");
+    }
 
-        return tableHeader.nth(index);
+    @Step("Get list of values in column '{columnHeaderName}'")
+    public List<String> getColumnValues(String columnHeaderName) {
+        int columnIndex = getColumnHeaderIndexByName(columnHeaderName) - 1;
+
+        return tableRows.all().stream()
+                .map(row -> row.getByRole(AriaRole.GRIDCELL).nth(columnIndex).textContent())
+                .collect(Collectors.toList());
     }
 }

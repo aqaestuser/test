@@ -2,9 +2,12 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
+import xyz.npgw.test.common.Constants;
+import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.common.HeaderPage;
 import xyz.npgw.test.page.common.TableTrait;
 
@@ -102,16 +105,22 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     @Step("Fill 'From' amount value")
     public TransactionsPage fillAmountFromField(String value) {
-        amountFromInputField.fill(value);
+        amountFromInputField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED));
+        amountFromInputField.click();
+        amountFromInputField.clear();
+        amountFromInputField.pressSequentially(value, new Locator.PressSequentiallyOptions().setDelay(200));
+        amountFromField.press("Enter", new Locator.PressOptions().setDelay(10));
 
         return this;
     }
 
-
     @Step("Fill 'To' amount value")
     public TransactionsPage fillAmountToField(String value) {
+        amountToInputField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED));
+        amountToInputField.click();
         amountToInputField.clear();
-        amountToInputField.fill(value);
+        amountToInputField.pressSequentially(value, new Locator.PressSequentiallyOptions().setDelay(200));
+        amountToField.press("Enter", new Locator.PressOptions().setDelay(10));
 
         return this;
     }
@@ -129,7 +138,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
         return this;
     }
-
 
     @Step("Click 'From' amount increase arrow ")
     public TransactionsPage clickAmountFromIncreaseArrow() {
@@ -161,7 +169,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     @Step("Click 'Apply' amount button")
     public TransactionsPage clickAmountApplyButton() {
-        amountApplyButton.click();
+        ResponseUtils.clickAndWaitForResponse(getPage(), amountApplyButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
 
         return this;
     }
