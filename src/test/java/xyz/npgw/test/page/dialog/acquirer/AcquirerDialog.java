@@ -11,6 +11,7 @@ import xyz.npgw.test.page.system.AcquirersPage;
 import java.util.List;
 
 @Getter
+@SuppressWarnings("unchecked")
 public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<CurrentDialogT>>
         extends BaseDialog<AcquirersPage> {
 

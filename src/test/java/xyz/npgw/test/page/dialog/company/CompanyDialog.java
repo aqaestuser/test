@@ -7,6 +7,7 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
+@SuppressWarnings("unchecked")
 public abstract class CompanyDialog<T extends CompanyDialog<T>> extends BaseDialog<CompaniesAndBusinessUnitsPage> {
 
     @Getter
