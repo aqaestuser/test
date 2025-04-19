@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import org.testng.Assert;
 import xyz.npgw.test.page.common.TableTrait;
-import xyz.npgw.test.page.dialog.AddUserDialog;
+import xyz.npgw.test.page.dialog.user.AddUserDialog;
 
 @Log4j2
 public class TeamPage extends BaseSystemPage implements TableTrait {

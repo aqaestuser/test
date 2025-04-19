@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.dialog;
+package xyz.npgw.test.page.dialog.user;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -7,12 +7,13 @@ import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 @Log4j2
-public class AddUserDialog extends BaseDialog<TeamPage> {
+public class AddUserDialog extends BaseDialog<TeamPage, AddUserDialog> {
 
     public AddUserDialog(Page page) {
         super(page);

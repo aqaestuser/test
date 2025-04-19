@@ -8,7 +8,8 @@ import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 @SuppressWarnings("unchecked")
-public abstract class CompanyDialog<T extends CompanyDialog<T>> extends BaseDialog<CompaniesAndBusinessUnitsPage> {
+public abstract class CompanyDialog<CurrentDialogT extends CompanyDialog<CurrentDialogT>>
+        extends BaseDialog<CompaniesAndBusinessUnitsPage, CurrentDialogT> {
 
     @Getter
     private final Locator companyNameField = placeholder("Enter company name");
@@ -39,115 +40,115 @@ public abstract class CompanyDialog<T extends CompanyDialog<T>> extends BaseDial
     }
 
     @Step("Fill company name field")
-    public T fillCompanyNameField(String companyName) {
+    public CurrentDialogT fillCompanyNameField(String companyName) {
         companyNameField.fill(companyName);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company type field")
-    public T fillCompanyTypeField(String companyType) {
+    public CurrentDialogT fillCompanyTypeField(String companyType) {
         companyTypeField.fill(companyType);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company description field")
-    public T fillCompanyDescriptionField(String companyDescription) {
+    public CurrentDialogT fillCompanyDescriptionField(String companyDescription) {
         companyDescriptionField.fill(companyDescription);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company website field")
-    public T fillCompanyWebsiteField(String companyWebsite) {
+    public CurrentDialogT fillCompanyWebsiteField(String companyWebsite) {
         companyWebsiteField.fill(companyWebsite);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company primary contact field")
-    public T fillCompanyPrimaryContactField(String companyPrimaryContact) {
+    public CurrentDialogT fillCompanyPrimaryContactField(String companyPrimaryContact) {
         companyPrimaryContactField.fill(companyPrimaryContact);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company email field")
-    public T fillCompanyEmailField(String companyEmail) {
+    public CurrentDialogT fillCompanyEmailField(String companyEmail) {
         companyEmailField.fill(companyEmail);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company country field")
-    public T fillCompanyCountryField(String companyCountry) {
+    public CurrentDialogT fillCompanyCountryField(String companyCountry) {
         companyCountryField.fill(companyCountry);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company state field")
-    public T fillCompanyStateField(String companyState) {
+    public CurrentDialogT fillCompanyStateField(String companyState) {
         companyStateField.fill(companyState);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company ZIP field")
-    public T fillCompanyZipField(String companyZip) {
+    public CurrentDialogT fillCompanyZipField(String companyZip) {
         companyZipField.fill(companyZip);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company city field")
-    public T fillCompanyCityField(String companyCity) {
+    public CurrentDialogT fillCompanyCityField(String companyCity) {
         companyCityField.fill(companyCity);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company phone field")
-    public T fillCompanyPhoneField(String companyPhone) {
+    public CurrentDialogT fillCompanyPhoneField(String companyPhone) {
         companyPhoneField.fill(companyPhone);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company mobile field")
-    public T fillCompanyMobileField(String companyMobile) {
+    public CurrentDialogT fillCompanyMobileField(String companyMobile) {
         companyMobileField.fill(companyMobile);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Fill company fax field")
-    public T fillCompanyFaxField(String companyFax) {
+    public CurrentDialogT fillCompanyFaxField(String companyFax) {
         companyFaxField.fill(companyFax);
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Set 'API active' checkbox checked state {isActive}")
-    public T setApiActiveCheckbox(boolean isActive) {
+    public CurrentDialogT setApiActiveCheckbox(boolean isActive) {
         if (isActive) {
             apiActiveCheckbox.check();
         } else {
             apiActiveCheckbox.uncheck();
         }
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 
     @Step("Set 'Portal active' checkbox checked state {isActive}")
-    public T setPortalActiveCheckbox(boolean isActive) {
+    public CurrentDialogT setPortalActiveCheckbox(boolean isActive) {
         if (isActive) {
             portalActiveCheckbox.check();
         } else {
             portalActiveCheckbox.uncheck();
         }
 
-        return (T) this;
+        return (CurrentDialogT) this;
     }
 }

@@ -7,7 +7,7 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage> {
+public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage, AddBusinessUnitDialog> {
 
     @Getter
     private final Locator companyNameField = locator("input[aria-label='Company name']");
@@ -19,11 +19,8 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
     private final Locator activeRadioInput = locator("[type='radio'][value='ACTIVE']");
     private final Locator inactiveRadioInput = locator("[type='radio'][value='INACTIVE']");
 
-
     @Getter
     private final Locator getAddMerchantDialogHeader = addMerchantDialog.locator("header");
-    @Getter
-    private final Locator alertMessage = locator("[role='alert']");
 
     public AddBusinessUnitDialog(Page page) {
         super(page);

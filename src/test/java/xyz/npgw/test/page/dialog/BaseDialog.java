@@ -12,7 +12,8 @@ import xyz.npgw.test.page.system.BaseSystemPage;
 import java.util.List;
 
 @Getter
-public abstract class BaseDialog<ReturnPageT extends BaseSystemPage> extends BaseModel {
+public abstract class BaseDialog<ReturnPageT extends BaseSystemPage, CurrentDialogT extends BaseDialog>
+        extends BaseModel {
 
     private final Locator dialogHeader = locator("section header");
     private final Locator banner = dialog().getByRole(AriaRole.BANNER);
@@ -22,6 +23,8 @@ public abstract class BaseDialog<ReturnPageT extends BaseSystemPage> extends Bas
     private final Locator allInputFields = dialog().getByRole(AriaRole.TEXTBOX);
     private final Locator fieldsWithPlaceholder = dialog()
             .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");
+    private final Locator allPlaceholdersWithoutSearch = locator("[data-slot='input']:not([placeholder='Search...'])");
+    private final Locator alertMessage = locator("[role='alert']");
 
     public BaseDialog(Page page) {
         super(page);
@@ -36,21 +39,22 @@ public abstract class BaseDialog<ReturnPageT extends BaseSystemPage> extends Bas
         }).toList();
     }
 
-    public List<String> getPlaceholdersFromInputFields() {
-        allInputFields.last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+    public List<String> getAllFieldPlaceholders() {
+        allPlaceholdersWithoutSearch
+                .first().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
-        return allInputFields.all().stream().map(locator -> locator.getAttribute("placeholder")).toList();
+        return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
     @Step("Clear all form input fields")
-    public BaseDialog clearInputFields() {
+    public CurrentDialogT clearInputFields() {
         allInputFields.last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
         allInputFields.all().forEach(locator -> {
             locator.clear();
             banner.click();
         });
-        return this;
+        return (CurrentDialogT) this;
     }
 
     protected abstract ReturnPageT getReturnPage();
@@ -61,4 +65,12 @@ public abstract class BaseDialog<ReturnPageT extends BaseSystemPage> extends Bas
 
         return getReturnPage();
     }
+
+    @Step("Click on the 'Close' icon to close form")
+    public ReturnPageT clickCloseIcon() {
+        closeIcon.click();
+
+        return getReturnPage();
+    }
+
 }

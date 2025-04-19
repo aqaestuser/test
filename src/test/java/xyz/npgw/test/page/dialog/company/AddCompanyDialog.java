@@ -2,19 +2,14 @@ package xyz.npgw.test.page.dialog.company;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-import java.util.List;
-
+@Getter
 public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
 
-    @Getter
     private final Locator createButton = buttonByName("Create");
-    private final Locator alertMessage = locator("[role='alert']");
-    private final Locator allFieldPlaceholders = locator("[data-slot='input']:not([placeholder='Search...'])");
 
     public AddCompanyDialog(Page page) {
         super(page);
@@ -25,18 +20,6 @@ public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
         createButton.click();
 
         return this;
-    }
-
-    public Locator getAlertMessage() {
-        alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        return alertMessage;
-    }
-
-    public List<String> getAllFieldPlaceholders() {
-        allFieldPlaceholders.first().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        return allFieldPlaceholders.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
     @Step("Click on the 'Create' button")
