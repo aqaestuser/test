@@ -2,7 +2,6 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -61,7 +60,9 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     @Step("Click Options Currency {value}")
     public TransactionsPage clickCurrency(String value) {
-        labelExact(value).click();
+        optionByName(value).waitFor();
+        ResponseUtils.clickAndWaitForResponse(getPage(), optionByName(value), Constants.TRANSACTION_HISTORY_ENDPOINT);
+        getPage().waitForTimeout(500);
 
         return this;
     }
@@ -71,15 +72,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         applyDataButton.click();
 
         return this;
-    }
-
-    public boolean getTableRow(String value) {
-        for (Locator item : getPage().locator("tbody tr").all()) {
-            if (!item.locator("td").nth(5).textContent().equals(value)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Step("Click Button Rows Per Page")
@@ -105,22 +97,20 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     @Step("Fill 'From' amount value")
     public TransactionsPage fillAmountFromField(String value) {
-        amountFromInputField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED));
         amountFromInputField.click();
         amountFromInputField.clear();
-        amountFromInputField.pressSequentially(value, new Locator.PressSequentiallyOptions().setDelay(200));
-        amountFromField.press("Enter", new Locator.PressOptions().setDelay(10));
+        amountFromInputField.fill(value);
+        amountFromField.press("Enter");
 
         return this;
     }
 
     @Step("Fill 'To' amount value")
     public TransactionsPage fillAmountToField(String value) {
-        amountToInputField.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED));
         amountToInputField.click();
         amountToInputField.clear();
-        amountToInputField.pressSequentially(value, new Locator.PressSequentiallyOptions().setDelay(200));
-        amountToField.press("Enter", new Locator.PressOptions().setDelay(10));
+        amountToInputField.fill(value);
+        amountToField.press("Enter");
 
         return this;
     }
@@ -170,6 +160,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     @Step("Click 'Apply' amount button")
     public TransactionsPage clickAmountApplyButton() {
         ResponseUtils.clickAndWaitForResponse(getPage(), amountApplyButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        getPage().waitForTimeout(500);
 
         return this;
     }

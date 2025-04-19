@@ -75,4 +75,12 @@ public class TestDataProvider {
                         "user@test.com", ProjectProperties.getUserPassword())}
         };
     }
+
+    @DataProvider
+    public static Object[][] getCurrency() {
+        return new Object[][]{
+                {"EUR"},
+                {"USD"},
+        };
+    }
 }

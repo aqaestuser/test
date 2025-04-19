@@ -37,6 +37,7 @@ public class HeaderComponent extends BaseComponent {
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
         ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        getPage().waitForTimeout(500);
 
         return new TransactionsPage(getPage());
     }

@@ -9,6 +9,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 
@@ -37,22 +38,39 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getPage()).hasTitle(Constants.TRANSACTIONS_URL_TITLE);
     }
 
-    @Ignore
-    @Test
+    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("128")
     @Epic("Transactions")
-    @Feature("Displaying currency filter: EUR")
-    @Description("Displaying the currency filter on the screen when selecting EUR.")
-    public void testFilterByCurrency() {
+    @Feature("Currency")
+    @Description("Displaying selected currency")
+    public void testFilterDisplaysSelectedCurrency(String currency) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickTransactionsLink()
                 .clickCurrencySelector()
-                .clickCurrency("EUR")
+                .clickCurrency(currency)
                 .clickApplyDataButton();
 
-        Allure.step("Verify: currency filter - EUR");
-        assertTrue(transactionsPage.getTableRow("EUR"));
+        Allure.step("Verify: Filter displays the selected currency");
+        assertThat(transactionsPage.getCurrencySelector()).containsText(currency);
+    }
+
+    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
+    @TmsLink("319")
+    @Epic("Transactions")
+    @Feature("Currency")
+    @Description("Filtering transactions by Currency")
+    public void testFilterTransactionsByCurrency(String currency) {
+        List<String> currencyValues = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickCurrencySelector()
+                .clickCurrency(currency)
+                .getTable()
+                .getColumnValues("Currency");
+
+        Allure.step("Verify: All values in the Currency column match the selected currency");
+        assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
     }
 
     @Test
