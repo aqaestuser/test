@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 public class TableComponent extends BaseComponent {
 
     private final Locator tableHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
-    private final Locator tableRows = getPage().getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableHeader));
+    private final Locator tableRows = getPage()
+            .getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableHeader));
 
     public TableComponent(Page page) {
         super(page);

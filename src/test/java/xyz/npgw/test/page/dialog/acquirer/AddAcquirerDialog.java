@@ -21,6 +21,4 @@ public class AddAcquirerDialog extends AcquirerDialog<AddAcquirerDialog> {
 
         return new AcquirersPage(getPage());
     }
-
-
 }
