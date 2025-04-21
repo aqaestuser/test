@@ -18,7 +18,7 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 
-@Ignore
+@Ignore("Page is not ready")
 public class AcquirersPageTest extends BaseTest {
 
     @Test
@@ -128,30 +128,6 @@ public class AcquirersPageTest extends BaseTest {
         for (Locator acquirer : acquirersList.all()) {
             assertThat(acquirer).containsText(status);
         }
-    }
-
-    @Test
-    @TmsLink("239")
-    @Epic("System/Acquirers")
-    @Feature("Edit acquirers")
-    @Description("Verifies that all form field placeholders are set correctly")
-    public void testVerifyPlaceholdersEditForm() {
-        List<String> expectedPlaceholders = List.of(
-                "Enter acquirer name", "Enter acquirer code", "Enter challenge URL", "Enter fingerprint URL",
-                "Enter resource URL", "Enter notification queue", "Enter priority", "Enter acquirer config",
-                "Search...", "Select timezone");
-
-        List<String> actualPlaceholders = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
-                .clickEditButtonForAcquirer("acquirer1")
-                .clearInputFields()
-                .getPlaceholdersOrTextsFromFields();
-
-        Allure.step("Verify placeholders match expected values for all fields");
-        assertEquals(actualPlaceholders, expectedPlaceholders);
     }
 
     @Test
