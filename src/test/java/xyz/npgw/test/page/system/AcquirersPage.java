@@ -72,7 +72,7 @@ public class AcquirersPage extends BaseSystemPage {
     @Step("Select Acquirer Status '{status}'")
     public AcquirersPage selectAcquirerStatus(String status) {
         acquirerStatusOptions
-                .filter(new Locator.FilterOptions().setHasText(status))
+                .getByText(status, new Locator.GetByTextOptions().setExact(true))
                 .click();
         acquirerStatusDropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
