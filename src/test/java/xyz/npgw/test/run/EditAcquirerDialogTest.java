@@ -16,7 +16,6 @@ import static org.testng.Assert.assertEquals;
 
 public class EditAcquirerDialogTest extends BaseTest {
 
-
     @Ignore("Bug")
     @Test
     @TmsLink("239")

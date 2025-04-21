@@ -174,4 +174,31 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: Timezone dropdown has no timezone options, has 'No items.' text");
         assertThat(addAcquirerDialog.getSelectDropdown()).hasText("No items.");
     }
+
+    @Test(expectedExceptions = AssertionError.class)
+    @TmsLink("326")
+    @Epic("System/Acquirers")
+    @Feature("Add acquirer")
+    @Description("Verifies Re-selecting the Same Timezone Does Not Change the Value")
+    public void testReSelectingSameTimezoneKeepsValueUnchanged() {
+
+        Allure.step("This test is temporarily disabled till bug fixed.");
+
+        String oneTimezoneCountry = "Iceland";
+        String icelandTimezone = "+00:00 Greenwich Mean Time";
+
+        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemMenu()
+                .clickAcquirersTab()
+                .clickAddAcquirer()
+                .clickSelectCountry()
+                .clickCountryInDropdown(oneTimezoneCountry)
+                .clickSelectTimezone()
+                .clickTimezoneInDropdown(icelandTimezone);
+
+        Allure.step(String.format("Verify: Timezone field is timezone '%s'", icelandTimezone));
+        assertThat(addAcquirerDialog.getSelectTimezone()).hasText(icelandTimezone);
+    }
 }
