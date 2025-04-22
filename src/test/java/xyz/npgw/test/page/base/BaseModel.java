@@ -85,4 +85,8 @@ public abstract class BaseModel {
     protected Locator menuItemByName(String text) {
         return getPage().getByRole(AriaRole.MENUITEM, new Page.GetByRoleOptions().setName(text));
     }
+
+    protected Locator radioButton(String name) {
+        return getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName(name).setExact(true));
+    }
 }

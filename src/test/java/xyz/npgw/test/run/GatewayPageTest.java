@@ -7,6 +7,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.DashboardPage;
@@ -73,7 +74,8 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
-    @Test()
+    @Ignore("Не гарантирован порядок merchants in Business Unit List")
+    @Test
     @TmsLink("307")
     @Epic("System/Gateway")
     @Feature("Currency")

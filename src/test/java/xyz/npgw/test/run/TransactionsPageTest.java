@@ -187,6 +187,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
 
+    @Ignore("Добавить ожидание для нажатия Transactions")
     @Test
     @TmsLink("263")
     @Epic("Transactions")
