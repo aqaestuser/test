@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
 
-public class GatewayPage extends BaseSystemPage {
+public class GatewayPage extends BaseSystemPage<GatewayPage> {
 
     @Getter
     private final Locator businessUnitsListHeader = textExact("Business units list");

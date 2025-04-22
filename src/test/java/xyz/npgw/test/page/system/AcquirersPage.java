@@ -8,7 +8,7 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerDialog;
 
-public class AcquirersPage extends BaseSystemPage {
+public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
 
     @Getter
     private final Locator addAcquirerButton = locator("svg[data-icon='circle-plus']");
