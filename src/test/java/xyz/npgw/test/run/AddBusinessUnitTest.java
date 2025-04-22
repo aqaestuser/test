@@ -28,7 +28,7 @@ public class AddBusinessUnitTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
@@ -51,7 +51,7 @@ public class AddBusinessUnitTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton();
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("'Add business unit' button is disabled once no destination company is selected");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
@@ -68,7 +68,7 @@ public class AddBusinessUnitTest extends BaseTest {
         AddBusinessUnitDialog addBusinessUnitDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
@@ -93,7 +93,7 @@ public class AddBusinessUnitTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())

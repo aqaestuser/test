@@ -52,7 +52,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: the header contains the expected title text");
@@ -84,7 +84,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: all placeholders are correct for each field");
@@ -100,7 +100,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -120,7 +120,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name)
                 .fillCompanyTypeField(type);
@@ -138,7 +138,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .clickCloseButton();
 
@@ -157,7 +157,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Company" + character)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -181,7 +181,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(fullName)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -206,7 +206,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -226,7 +226,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickSelectCompanyDropdown()
                 .clickCompanyInDropdown(COMPANY_NAME);
 
@@ -243,7 +243,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -263,7 +263,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Амазон")
                 .fillCompanyTypeField("ООО")
@@ -297,7 +297,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(companyName)
                 .fillCompanyTypeField("LLC")
@@ -330,7 +330,7 @@ public class AddCompanyDialogTest extends BaseTest {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: 'Add company' dialog is displayed");
@@ -443,7 +443,7 @@ public class AddCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton();
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();

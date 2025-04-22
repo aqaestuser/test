@@ -16,8 +16,6 @@ import xyz.npgw.test.page.dialog.user.EditUserDialog;
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
 
-    private final Locator companiesAndBusinessUnitsTabButton = tab("Companies and business units");
-    private final Locator alertMessage = locator("div[role='alert']");
     private final Locator companyNameDropdownList = locator("[role='option']");
     private final Locator selectCompanyDropdown = locator("[aria-label='Show suggestions']:nth-child(2)");
     private final Locator lastDropdownOption = locator("[role='option']:last-child");
@@ -27,13 +25,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
 
     public TeamPage(Page page) {
         super(page);
-    }
-
-    @Step("Click 'Companies and business units' button")
-    public CompaniesAndBusinessUnitsPage clickCompaniesAndBusinessUnitsTabButton() {
-        companiesAndBusinessUnitsTabButton.click();
-
-        return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Click 'Select company' dropdown")
@@ -90,12 +81,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
         getPage().getByTestId("AddUserButtonTeamPage").click();
 
         return new AddUserDialog(getPage());
-    }
-
-    public Locator getAlertMessage() {
-        alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        return alertMessage;
     }
 
     @Step("Click 'Edit user'")

@@ -92,12 +92,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         return this;
     }
 
-    public Locator getAlertMessage() {
-        alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-
-        return alertMessage;
-    }
-
     @Step("Click 'Select company' dropdown")
     public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown() {
         getPage().waitForTimeout(1000);

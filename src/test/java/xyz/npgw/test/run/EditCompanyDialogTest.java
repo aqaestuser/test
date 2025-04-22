@@ -23,7 +23,7 @@ public class EditCompanyDialogTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .clickCompaniesAndBusinessUnitsTabButton()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickSelectCompanyDropdown()
                 .clickCompanyInDropdown("Kate")
                 .clickEditCompanyButton()
