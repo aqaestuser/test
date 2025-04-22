@@ -46,6 +46,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator amountClearButton = textExact("Clear");
     private final Locator amountApplied = textExact("Amount: 101 - 4999");
     private final Locator amountAppliedClearButton = buttonByName("close chip");
+    private final Locator amountErrorMessage = locator("[data-slot='error-message']");
 
     public TransactionsPage(Page page) {
         super(page);

@@ -245,4 +245,22 @@ public class TransactionsPageTest extends BaseTest {
                 .map(Integer::parseInt)
                 .allMatch(value -> value >= amountFrom && value <= amountTo));
     }
+
+    @Test
+    @TmsLink("335")
+    @Epic("Transactions")
+    @Feature("Amount")
+    @Description("error message 'From should be lesser than To' appears")
+    public void testErrorMessageByAmount() {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickAmountButton()
+                .fillAmountFromField("500")
+                .fillAmountToField("10");
+
+        Allure.step("Verify: error message 'From should be lesser than To' appears");
+        assertThat(transactionsPage.getAmountErrorMessage()).hasText("\"From\" should be lesser than \"To");
+    }
 }
