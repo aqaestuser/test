@@ -35,6 +35,9 @@ public class HeaderComponentTest extends BaseTest {
         Allure.step("Verify: Logo contains image");
         Assert.assertTrue(headerComponent.getImg().isVisible(), "Image inside logo should be visible");
         Assert.assertNotNull(headerComponent.getImg().getAttribute("src"), "Image should have a 'src' attribute");
+
+        Allure.step("Verify: Image inside logo is fully loaded");
+        Assert.assertTrue(headerComponent.isLogoImageLoaded(), "Image inside logo should be fully loaded");
     }
 
     @Test

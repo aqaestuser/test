@@ -115,4 +115,10 @@ public class HeaderComponent extends BaseComponent {
 
         return new LoginPage(getPage());
     }
+
+    public boolean isLogoImageLoaded() {
+        return (boolean) getImg().evaluate(
+                "img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0"
+                        + " && !img.src.includes('base64') && !img.src.endsWith('.svg') && !img.src.endsWith('.ico')");
+    }
 }
