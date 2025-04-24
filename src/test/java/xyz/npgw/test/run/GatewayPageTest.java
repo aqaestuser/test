@@ -74,7 +74,6 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
-    @Ignore("Не гарантирован порядок merchants in Business Unit List")
     @Test
     @TmsLink("307")
     @Epic("System/Gateway")
@@ -85,7 +84,8 @@ public class GatewayPageTest extends BaseTest {
     public void testBusinessUnitsListUpdatesOnCompanySelection() {
 
         String companyName = "Company 112172";
-        String[] businessUnitsList = new String[]{"Merchant for C112172", "Merchant 1 for C112172"};
+        String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant for C112172"};
+        int expectedCount = expectedBusinessUnitsList.length;
 
         GatewayPage gatewayPage = new DashboardPage(getPage())
                 .getHeader()
@@ -106,8 +106,16 @@ public class GatewayPageTest extends BaseTest {
         Allure.step("Verify: 'Business units list' title is visible");
         assertThat(gatewayPage.getBusinessUnitsListHeader()).isVisible();
 
-        Allure.step("Verify: List contains two Business units: " + Arrays.toString(businessUnitsList));
-        assertThat(gatewayPage.getBusinessUnitsList()).hasText(businessUnitsList);
+        Allure.step(String.format("Verify: Business units list has expected count of %d", expectedCount));
+        Locator actualBusinessUnitsList = gatewayPage.getBusinessUnitsList();
+        assertThat(actualBusinessUnitsList).hasCount(expectedCount);
+
+        for (int i = 0; i < expectedCount; i++) {
+            String actualBusinessUnitsText = actualBusinessUnitsList.nth(i).innerText().trim();
+            Allure.step(String.format("Verify: '%s' is in expected list", actualBusinessUnitsText));
+            Assert.assertTrue(Arrays.asList(expectedBusinessUnitsList).contains(actualBusinessUnitsText),
+                    String.format("Unexpected item: %s", actualBusinessUnitsText));
+        }
 
         gatewayPage.clickSelectCompanyClearIcon()
                 .clickSelectCompanyDropdownChevron();
@@ -123,5 +131,4 @@ public class GatewayPageTest extends BaseTest {
         Allure.step("Verify: 'Business units list' has 'No items.'");
         assertThat(gatewayPage.getBusinessUnitsList()).hasText(new String[]{"No items."});
     }
-
 }
