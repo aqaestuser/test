@@ -1,5 +1,7 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -262,5 +264,27 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: error message 'From should be lesser than To' appears");
         assertThat(transactionsPage.getAmountErrorMessage()).hasText("\"From\" should be lesser than \"To");
+    }
+
+    @Test
+    @TmsLink("#342")
+    @Epic("Transactions")
+    @Feature("Status")
+    @Description("Verify that user can see Payment Method Options")
+    public void testTheVisibilityOfThePaymentMethodOptions() {
+
+        List<String> options = List.of("ALL",
+                "VISA",
+                "Mastercard");
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickPaymentMethodSelector();
+
+        Allure.step("Verify: Payment Method Options are visible");
+        assertEquals(transactionsPage.getPaymentMethodOptions(), options);
+        Allure.step("Verify: Default selected option in Payment Method Options is 'ALL'");
+        assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
 }

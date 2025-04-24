@@ -2,6 +2,7 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator amountApplied = textExact("Amount: 101 - 4999");
     private final Locator amountAppliedClearButton = buttonByName("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
+    private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
 
     public TransactionsPage(Page page) {
         super(page);
@@ -189,5 +191,16 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     public List<String> getStatusSelectorOptions() {
         return statusSelectorOptions.all().stream().map(Locator::innerText).toList();
+    }
+
+    @Step("Click Payment Method Selector")
+    public TransactionsPage clickPaymentMethodSelector() {
+        paymentMethodSelector.click();
+
+        return this;
+    }
+
+    public List<String> getPaymentMethodOptions() {
+        return paymentMethodOptions.all().stream().map(Locator::innerText).toList();
     }
 }
