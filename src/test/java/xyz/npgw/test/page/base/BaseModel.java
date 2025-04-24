@@ -89,4 +89,8 @@ public abstract class BaseModel {
     protected Locator radioButton(String name) {
         return getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName(name).setExact(true));
     }
+
+    protected Locator spinButton() {
+        return getPage().getByRole(AriaRole.SPINBUTTON);
+    }
 }

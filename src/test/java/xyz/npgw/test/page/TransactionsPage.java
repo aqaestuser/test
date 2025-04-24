@@ -49,6 +49,9 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator amountAppliedClearButton = buttonByName("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
+    @Getter(AccessLevel.NONE)
+    private final Locator dateRange = spinButton();
+    private final Locator dataRangeErrorMessage = locator("[data-slot='error-message']");
 
     public TransactionsPage(Page page) {
         super(page);
@@ -200,5 +203,31 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     public List<String> getPaymentMethodOptions() {
         return paymentMethodOptions.all().stream().map(Locator::innerText).toList();
+    }
+
+    @Step("Set start date: {startDate}")
+    public TransactionsPage setStartDate(String startDate) {
+        Locator day = dateRange.nth(0);
+        Locator month = dateRange.nth(1);
+        Locator year = dateRange.nth(2);
+
+        day.fill(startDate.split("-")[0]);
+        month.fill(startDate.split("-")[1]);
+        year.fill(startDate.split("-")[2]);
+
+        return this;
+    }
+
+    @Step("Set end date: {endDate}")
+    public TransactionsPage setEndDate(String endDate) {
+        Locator day = dateRange.nth(3);
+        Locator month = dateRange.nth(4);
+        Locator year = dateRange.nth(5);
+
+        day.fill(endDate.split("-")[0]);
+        month.fill(endDate.split("-")[1]);
+        year.fill(endDate.split("-")[2]);
+
+        return this;
     }
 }
