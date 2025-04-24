@@ -7,78 +7,54 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import org.testng.Assert;
+import xyz.npgw.test.common.Constants;
+import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.common.TableTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
+import java.util.NoSuchElementException;
+
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
 
-    private final Locator companyNameDropdownList = locator("[role='option']");
-    private final Locator selectCompanyDropdown = locator("[aria-label='Show suggestions']:nth-child(2)");
-    private final Locator lastDropdownOption = locator("[role='option']:last-child");
+    private final Locator dropdownOptionList = getPage().getByRole(AriaRole.OPTION);
     @Getter
-    private final Locator selectCompanyInput = placeholder("Search...");
-    private final Locator applyFilter = locator("[data-icon='filter']");
+    private final Locator selectCompanyField = placeholder("Search...");
+    private final Locator applyFilterButton = getByTestId("ApplyFilterButtonTeamPage");
+    private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
 
     public TeamPage(Page page) {
         super(page);
     }
 
-    @Step("Click 'Select company' dropdown")
-    public TeamPage clickSelectCompanyDropdown() {
-        getPage().waitForTimeout(1000);
-        selectCompanyDropdown.click();
-
-        return this;
+    public Locator getCompanyNameInDropdownOption(String companyName) {
+        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(textExact(companyName)));
     }
 
-    @Step("Click '{companyName}' company in dropdown")
-    public TeamPage clickCompanyInDropdown(String companyName) {
-        String lastSeenText = "";
+    @Step("Select '{companyName}' company using filter")
+    public TeamPage selectCompany(String companyName) {
+        String lastName = "";
 
-        while (true) {
-            Locator options = companyNameDropdownList;
-            int count = options.count();
-
-            for (int i = 0; i < count; i++) {
-                String text = options.nth(i).innerText().trim();
-                if (text.equals(companyName)) {
-                    options.nth(i).click();
-                    return this;
-                }
+        selectCompanyField.fill(companyName);
+        while (getCompanyNameInDropdownOption(companyName).all().size() != 1) {
+            if (dropdownOptionList.last().innerText().equals(lastName)) {
+                throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
             }
+            dropdownOptionList.last().scrollIntoViewIfNeeded();
 
-            String currentLastText = options.nth(count - 1).innerText().trim();
-            if (currentLastText.equals(lastSeenText)) {
-                break;
-            }
-
-            lastSeenText = currentLastText;
-
-            lastDropdownOption.scrollIntoViewIfNeeded();
+            lastName = dropdownOptionList.last().innerText();
         }
-
-        Assert.fail("Company '" + companyName + "' not found in dropdown.");
-
-        return this;
-    }
-
-    @Step("Select a company into 'Select company' filter field")
-    public TeamPage selectCompanyInTheFilter(String name) {
-        selectCompanyInput.click();
-        selectCompanyInput.fill(name);
-
-        getPage().locator("li[role='option']:has-text('%s')".formatted(name)).first().click();
+        ResponseUtils.clickAndWaitForResponse(
+                getPage(), getCompanyNameInDropdownOption(companyName), Constants.USER_LIST_ENDPOINT);
 
         return this;
     }
 
     @Step("Click 'Add user' button")
     public AddUserDialog clickAddUserButton() {
-        getPage().getByTestId("AddUserButtonTeamPage").click();
+        ResponseUtils.clickAndWaitForResponse(getPage(), addUserButton, Constants.MERCHANT_ENDPOINT);
 
         return new AddUserDialog(getPage());
     }
@@ -116,8 +92,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
 
     @Step("Click 'Apply filter")
     public TeamPage clickApplyFilter() {
-        applyFilter.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        applyFilter.click();
+        applyFilterButton.click();
 
         return this;
     }
