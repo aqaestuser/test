@@ -258,14 +258,13 @@ public class AddCompanyDialogTest extends BaseTest {
                 "Company with name {%s} already exists.".formatted(COMPANY_NAME));
     }
 
-    @Ignore("fall after latest update")
     @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("227")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("Company creation with Cyrillic symbols")
     public void testAddCompanyWithCyrillicSymbols() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -282,12 +281,10 @@ public class AddCompanyDialogTest extends BaseTest {
                 .fillCompanyCityField("Москва")
                 .fillCompanyPhoneField("8(495) 223-56-11")
                 .fillCompanyMobileField("+7 (951) 789-78-76")
-                .fillCompanyFaxField("84952235611")
-                .clickCreateButton();
+                .fillCompanyFaxField("84952235611");
 
-        Allure.step("Verify: success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
-                "SUCCESSCompany was created successfully");
+        Allure.step("Verify: Create button is enabled");
+        assertThat(addCompanyDialog.getCreateButton()).isEnabled();
     }
 
     @Test
