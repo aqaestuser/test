@@ -7,6 +7,8 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
+import java.util.List;
+
 public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage, AddBusinessUnitDialog> {
 
     @Getter
@@ -60,6 +62,21 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
         return this;
     }
 
+    public AddBusinessUnitDialog selectState(String status) {
+        return status.equalsIgnoreCase("Active") ? selectStatus(true) : selectStatus(false);
+    }
+
+    public AddBusinessUnitDialog selectCurrencies(List<String> currencies) {
+        if (currencies.contains("USD")) {
+            setUsdCheckbox(true);
+        }
+        if (currencies.contains("EUR")) {
+            setEurCheckbox(true);
+        }
+
+        return this;
+    }
+
     @Step("Select merchant status")
     public AddBusinessUnitDialog selectStatus(boolean isActive) {
         if (isActive) {
@@ -76,5 +93,11 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
         createButton.click();
 
         return new CompaniesAndBusinessUnitsPage(getPage());
+    }
+
+    public AddBusinessUnitDialog setBusinessUnitName(String name) {
+        merchantNameField.fill(name);
+
+        return this;
     }
 }

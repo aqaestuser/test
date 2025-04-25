@@ -5,6 +5,8 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.util.User;
 
+import java.util.List;
+
 public class TestDataProvider {
 
     @DataProvider
@@ -81,6 +83,20 @@ public class TestDataProvider {
         return new Object[][]{
                 {"EUR"},
                 {"USD"},
+        };
+    }
+
+    @DataProvider(name = "merchantFormData")
+    public Object[][] merchantFormData() {
+        return new Object[][] {
+                {"Active", List.of()},
+                {"Active", List.of("USD")},
+                {"Active", List.of("EUR")},
+                {"Active", List.of("USD", "EUR")},
+                {"Inactive", List.of()},
+                {"Inactive", List.of("USD")},
+                {"Inactive", List.of("EUR")},
+                {"Inactive", List.of("USD", "EUR")},
         };
     }
 }
