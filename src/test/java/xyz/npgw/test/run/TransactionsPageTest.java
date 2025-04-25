@@ -21,6 +21,16 @@ import static org.testng.Assert.assertTrue;
 
 public class TransactionsPageTest extends BaseTest {
 
+    private static final List<String> COLUMNS_HEADERS = List.of(
+            "Creation Date",
+            "Merchant ID",
+            "NPGW Reference",
+            "Merchant Reference",
+            "Amount",
+            "Currency",
+            "Payment Method",
+            "Status");
+
     @Test
     @TmsLink("108")
     @Epic("Transactions")
@@ -49,7 +59,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .clickCurrencySelector()
                 .clickCurrency(currency)
-                .clickApplyDataButton();
+                .clickApplyFilterButton();
 
         Allure.step("Verify: Filter displays the selected currency");
         assertThat(transactionsPage.getCurrencySelector()).containsText(currency);
@@ -151,7 +161,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getResetFilterButton()).isVisible();
 
         Allure.step("Verify: Apply data button is visible");
-        assertThat(transactionsPage.getApplyDataButton()).isVisible();
+        assertThat(transactionsPage.getApplyFilterButton()).isVisible();
 
         Allure.step("Verify: Settings button is visible");
         assertThat(transactionsPage.getSettingsButton()).isVisible();
@@ -296,9 +306,36 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .setStartDate("01-04-2025")
                 .setEndDate("01-04-2024")
-                .clickApplyDataButton();
+                .clickApplyFilterButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
         assertThat(transactionsPage.getDataRangeErrorMessage()).hasText("Start date must be before end date.");
     }
+
+    @Test
+    @TmsLink("350")
+    @Epic("Transactions")
+    @Feature("Transactions table header")
+    @Description("Verify full lists of Columnheaders in table and Visible columns from Settings")
+    public void testVerifyAllColumnheadersAndSettingsVisibleColumns() {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
+                .clickSettingsButton()
+                .checkAllCheckboxInSettings();
+
+        List<String> visibleColumnsLabels = transactionsPage
+                .getVisibleColumnsLabels();
+
+        List<String> columnheadersList = transactionsPage
+                .clickSettingsButton()
+                .getTable().getColumnheadersText();
+
+        Allure.step("Verify: All columnheaders are displayed in the Settings");
+        assertEquals(visibleColumnsLabels, COLUMNS_HEADERS);
+
+        Allure.step("Verify: All columnheaders are displayed in the Transactions table");
+        assertEquals(columnheadersList, COLUMNS_HEADERS);
+    }
+
 }

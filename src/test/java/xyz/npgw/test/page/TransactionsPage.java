@@ -28,7 +28,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator statusSelector = labelExact("Status");
     private final Locator amountButton = buttonByName("Amount");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
-    private final Locator applyDataButton = getByTestId("ApplyFilterButtonTransactionsPage");
+    private final Locator applyFilterButton = getByTestId("ApplyFilterButtonTransactionsPage");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
     private final Locator statusSelectorOptions = listboxByRole().locator(optionByRole());
@@ -52,6 +52,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     @Getter(AccessLevel.NONE)
     private final Locator dateRange = spinButton();
     private final Locator dataRangeErrorMessage = locator("[data-slot='error-message']");
+    private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
 
     public TransactionsPage(Page page) {
         super(page);
@@ -73,8 +74,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     }
 
     @Step("Click Icon Apply Data")
-    public TransactionsPage clickApplyDataButton() {
-        applyDataButton.click();
+    public TransactionsPage clickApplyFilterButton() {
+        applyFilterButton.click();
 
         return this;
     }
@@ -191,6 +192,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     }
 
     public List<String> getStatusSelectorOptions() {
+
         return statusSelectorOptions.all().stream().map(Locator::innerText).toList();
     }
 
@@ -230,4 +232,50 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
         return this;
     }
+
+    public TransactionsPage clickSettingsButton() {
+        settingsButton.click();
+        textExact("Visible columns").waitFor();
+
+        return this;
+    }
+
+    public List<String> getVisibleColumnsLabels() {
+
+        return settingsVisibleColumns
+                .all()
+                .stream()
+                .map(l -> l.getAttribute("aria-label"))
+                .toList();
+    }
+
+    private void uncheckIfSelected(Locator checkbox) {
+        if ((boolean) checkbox.evaluate("el => el.checked")) {
+            checkbox.dispatchEvent("click");
+        }
+    }
+
+    private void checkIfNotSelected(Locator checkbox) {
+        if (!(boolean) checkbox.evaluate("el => el.checked")) {
+            checkbox.dispatchEvent("click");
+        }
+    }
+
+
+    public TransactionsPage uncheckAllCheckboxInSettings() {
+        settingsVisibleColumns
+                .all()
+                .forEach(this::uncheckIfSelected);
+
+        return this;
+    }
+
+    public TransactionsPage checkAllCheckboxInSettings() {
+        settingsVisibleColumns
+                .all()
+                .forEach(this::checkIfNotSelected);
+
+        return this;
+    }
+
 }
