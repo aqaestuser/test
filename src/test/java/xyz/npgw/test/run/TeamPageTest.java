@@ -133,7 +133,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "ban");
     }
 
-    @Ignore("fail on click 'System administration'")
     @Test(dependsOnMethods = "testAddAdminAndSighInAsAdmin")
     @TmsLink("331")
     @Epic("System/Team")

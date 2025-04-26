@@ -8,7 +8,7 @@ import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.TestUtils;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.Company;
@@ -18,8 +18,6 @@ import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -38,11 +36,6 @@ public class AddCompanyDialogTest extends BaseTest {
             "USA", "PA",
             "19876", "Warwick",
             "2151111111", "2152222222", "222333444");
-
-    private void deleteCompany(String name) {
-        getApiRequestContext().delete(ProjectProperties.getBaseUrl() + "/portal-v1/company/"
-                + URLEncoder.encode(name, StandardCharsets.UTF_8));
-    }
 
     @Test
     @TmsLink("160")
@@ -203,7 +196,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Company can be added by filling out required fields")
     public void testAddCompanyByFillRequiredFields() {
-        deleteCompany(COMPANY_NAME);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
@@ -294,7 +287,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Company creation with Latin symbols")
     public void testAddCompanyWithAllFilledFields() {
         final String companyName = "Google";
-        deleteCompany(companyName);
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
@@ -327,7 +320,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Validates successful company creation and correct field persistence (E2E test).")
     public void testAddCompanyEndToEndTest() {
-        deleteCompany(company.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader()
@@ -430,7 +423,6 @@ public class AddCompanyDialogTest extends BaseTest {
                 .hasValue(company.city());
     }
 
-    @Ignore("fail after latest update")
     @Test(dependsOnMethods = "testAddCompanyEndToEndTest")
     @TmsLink("290")
     @Epic("System/Companies and business units")
@@ -468,10 +460,7 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getAlertMessage()).containsText("Enter merchant name");
 
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
-                .fillMerchantNameField(merchant.merchantName())
-                .setUsdCheckbox(merchant.usd())
-                .setEurCheckbox(merchant.eur())
-                .selectStatus(merchant.active())
+                .fillBusinessUnitNameField(merchant.merchantName())
                 .clickCreateButton();
 
         Allure.step("Verify: Success alert is shown after business unit is added");

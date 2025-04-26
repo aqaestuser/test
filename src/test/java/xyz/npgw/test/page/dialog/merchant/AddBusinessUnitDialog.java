@@ -15,7 +15,7 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
     private final Locator companyNameField = locator("input[aria-label='Company name']");
     private final Locator addMerchantDialog = dialog();
     private final Locator createButton = buttonByName("Create");
-    private final Locator merchantNameField = placeholder("Enter merchant name");
+    private final Locator businessUnitNameField = placeholder("Enter business unit name");
     private final Locator usdCheckbox = labelExact("USD");
     private final Locator eurCheckbox = labelExact("EUR");
     private final Locator activeRadioInput = locator("[type='radio'][value='ACTIVE']");
@@ -42,8 +42,8 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
     }
 
     @Step("Fill in merchant name: {merchantName}")
-    public AddBusinessUnitDialog fillMerchantNameField(String merchantName) {
-        merchantNameField.fill(merchantName);
+    public AddBusinessUnitDialog fillBusinessUnitNameField(String merchantName) {
+        businessUnitNameField.fill(merchantName);
 
         return this;
     }
@@ -93,11 +93,5 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
         createButton.click();
 
         return new CompaniesAndBusinessUnitsPage(getPage());
-    }
-
-    public AddBusinessUnitDialog setBusinessUnitName(String name) {
-        merchantNameField.fill(name);
-
-        return this;
     }
 }
