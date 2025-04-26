@@ -19,7 +19,6 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class AcquirersPageTest extends BaseTest {
 
-    @Ignore("fail after latest update")
     @Test
     @TmsLink("134")
     @Epic("System/Acquirers")
@@ -44,8 +43,8 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify: Reset Filter Button is visible");
         assertThat(acquirersPage.getResetFilterButton()).isVisible();
 
-        Allure.step("Verify: Apply Filter Button is visible");
-        assertThat(acquirersPage.getApplyFilterButton()).isVisible();
+        Allure.step("Verify: Refresh data Button is visible");
+        assertThat(acquirersPage.getRefreshDataButton()).isVisible();
     }
 
     @Test
