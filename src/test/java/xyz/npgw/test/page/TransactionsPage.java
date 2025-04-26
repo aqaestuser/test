@@ -45,14 +45,16 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator amountToDecreaseArrow = amountToField.locator("//button[@aria-label='Decrease To']");
     private final Locator amountApplyButton = buttonByName("Apply");
     private final Locator amountClearButton = textExact("Clear");
-    private final Locator amountApplied = textExact("Amount: 101 - 4999");
-    private final Locator amountAppliedClearButton = buttonByName("close chip");
+    private final Locator amountAppliedClearButton = labelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
     @Getter(AccessLevel.NONE)
     private final Locator dateRange = spinButton();
     private final Locator dataRangeErrorMessage = locator("[data-slot='error-message']");
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
+    public Locator amountApplied(String amount) {
+        return textExact(amount);
+    }
 
     public TransactionsPage(Page page) {
         super(page);

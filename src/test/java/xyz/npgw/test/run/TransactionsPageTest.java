@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -196,7 +195,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getActiveOption()).containsText("ALL");
     }
 
-    @Ignore("fail after latest update")
     @Test
     @TmsLink("263")
     @Epic("Transactions")
@@ -222,7 +220,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickAmountApplyButton();
 
         Allure.step("Verify: Applied amount is visible");
-        assertThat(transactionsPage.getAmountApplied()).isVisible();
+        assertThat(transactionsPage.amountApplied("Amount: 101 - 4999")).isVisible();
 
         transactionsPage.clickAmountAppliedClearButton();
 
