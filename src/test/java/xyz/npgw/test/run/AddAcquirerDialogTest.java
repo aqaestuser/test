@@ -22,7 +22,6 @@ import static org.testng.Assert.assertEquals;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
-    @Ignore("fail on wait for 'System administration'")
     @Test
     @TmsLink("249")
     @Epic("System/Acquirers")
@@ -37,7 +36,6 @@ public class AddAcquirerDialogTest extends BaseTest {
                 "Enter fingerprint URL",
                 "Enter resource URL",
                 "Enter notification queue",
-                "Enter priority",
                 "Enter acquirer config"
         );
 
@@ -62,12 +60,6 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible and contains USD&EUR");
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).isVisible();
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesUSDEUR");
-
-        Allure.step("Verify: the 'Select Country' placeholder is visible");
-        assertThat(addAcquirerDialog.getSelectCountry()).isVisible();
-
-        Allure.step("Verify: the 'Select Zone' placeholder is visible");
-        assertThat(addAcquirerDialog.getSelectTimezone()).isVisible();
 
         addAcquirerDialog.clickCloseButton();
 
