@@ -31,7 +31,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
     @Getter
     private final Locator statusLabel = labelExact("Status");
     @Getter
-    private final Locator acquirerStatusValue = locator("div[data-slot='innerWrapper'] span");
+    private final Locator acquirerStatusValue = locator("div[data-slot='innerWrapper'] span").first();
     @Getter
     private final Locator acquirerStatusDropdown = locator("div[data-slot='listbox']");
     @Getter
