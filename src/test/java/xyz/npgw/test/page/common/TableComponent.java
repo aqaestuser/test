@@ -41,7 +41,7 @@ public class TableComponent extends BaseComponent {
                 .collect(Collectors.toList());
     }
 
-    public List<String> getColumnheadersText() {
+    public List<String> getColumnHeadersText() {
 
         return tableHeader
                 .all()

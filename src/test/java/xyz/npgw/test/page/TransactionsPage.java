@@ -28,7 +28,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator statusSelector = labelExact("Status");
     private final Locator amountButton = buttonByName("Amount");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
-    private final Locator applyFilterButton = getByTestId("ApplyFilterButtonTransactionsPage");
+    private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTransactionsPage");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
     private final Locator statusSelectorOptions = listboxByRole().locator(optionByRole());
@@ -74,8 +74,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     }
 
     @Step("Click Icon Apply Data")
-    public TransactionsPage clickApplyFilterButton() {
-        applyFilterButton.click();
+    public TransactionsPage clickRefreshDataButton() {
+        refreshDataButton.click();
 
         return this;
     }
@@ -233,6 +233,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         return this;
     }
 
+    @Step("Click on the Settings button")
     public TransactionsPage clickSettingsButton() {
         settingsButton.click();
         textExact("Visible columns").waitFor();
@@ -262,6 +263,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     }
 
 
+    @Step("Uncheck all 'Visible columns' in Settings")
     public TransactionsPage uncheckAllCheckboxInSettings() {
         settingsVisibleColumns
                 .all()
@@ -270,10 +272,36 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         return this;
     }
 
+    @Step("Uncheck Visible column '{name}' in Settings")
+    public TransactionsPage uncheckVisibleColumn(String name) {
+        settingsVisibleColumns
+                .all()
+                .stream()
+                .filter(l -> name.equals(l.getAttribute("aria-label")))
+                .findFirst()
+                .ifPresent(this::uncheckIfSelected);
+
+        return this;
+    }
+
+
+    @Step("Check all 'Visible columns' in Settings")
     public TransactionsPage checkAllCheckboxInSettings() {
         settingsVisibleColumns
                 .all()
                 .forEach(this::checkIfNotSelected);
+
+        return this;
+    }
+
+    @Step("Check Visible column '{name}' in Settings")
+    public TransactionsPage  checkVisibleColumn(String name) {
+        settingsVisibleColumns
+                .all()
+                .stream()
+                .filter(l -> name.equals(l.getAttribute("aria-label")))
+                .findFirst()
+                .ifPresent(this::checkIfNotSelected);
 
         return this;
     }
