@@ -48,7 +48,6 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getApplyFilterButton()).isVisible();
     }
 
-    @Ignore("fail after latest update")
     @Test
     @TmsLink("157")
     @Epic("System/Acquirers")
@@ -61,8 +60,8 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu()
                 .clickAcquirersTab();
 
-        Allure.step("Verify: Acquirers list header is visible");
-        assertThat(acquirersPage.getAcquirersListHeader()).isVisible();
+        Allure.step("Verify: 'Acquirer name' header is visible");
+        assertThat(acquirersPage.getAcquirerNameHeader()).isVisible();
 
         Locator acquirersList = acquirersPage.getAcquirersList();
 

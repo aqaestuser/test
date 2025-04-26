@@ -20,7 +20,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
     private final Locator applyFilterButton = locator("svg[data-icon='filter']");
 
     @Getter
-    private final Locator acquirersListHeader = textExact("Acquirers list");
+    private final Locator acquirerNameHeader = textExact("Acquirer name");
     private final Locator acquirersList = locator("div[data-slot='base'] li");
 
     @Getter
