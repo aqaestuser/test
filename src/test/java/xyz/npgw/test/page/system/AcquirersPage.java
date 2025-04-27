@@ -22,6 +22,10 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
     @Getter
     private final Locator acquirerNameHeader = textExact("Acquirer name");
     private final Locator acquirersList = locator("div[data-slot='base'] li");
+    @Getter
+    private final Locator rowsPerPage  = locator("button[aria-label='Rows Per Page']");
+    @Getter
+    private final Locator rowsPerPageDropdown  = locator("div[data-slot='listbox']");
 
     @Getter
     private final Locator selectAcquirerLabel = labelExact("Select acquirer");
@@ -91,5 +95,16 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
         optionByName(name).getByText("Edit").click();
 
         return new EditAcquirerDialog(getPage());
+    }
+
+    @Step("Click the 'Rows Per Page' dropdown Chevron")
+    public AcquirersPage clickRowsPerPageChevron() {
+        rowsPerPage.locator("svg").click();
+
+        return this;
+    }
+
+    public Locator getRowsPerPageOptions() {
+        return rowsPerPageDropdown.locator("li");
     }
 }
