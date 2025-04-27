@@ -89,7 +89,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(dropdownAcquirerList).not().hasCount(0);
     }
 
-    @Test(enabled = false)
+    @Test
     @TmsLink("187")
     @Epic("System/Acquirers")
     @Feature("Status")
