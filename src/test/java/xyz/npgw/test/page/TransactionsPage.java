@@ -52,6 +52,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator dateRange = spinButton();
     private final Locator dataRangeErrorMessage = locator("[data-slot='error-message']");
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
+    private final Locator amountEditButton = locator("svg[data-icon='pencil']");
+
     public Locator amountApplied(String amount) {
         return textExact(amount);
     }
@@ -296,8 +298,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         return this;
     }
 
-    @Step("Check Visible column '{name}' in Settings")
-    public TransactionsPage  checkVisibleColumn(String name) {
+    @Step("Check visible column '{name}' in Settings")
+    public TransactionsPage checkVisibleColumn(String name) {
         settingsVisibleColumns
                 .all()
                 .stream()
@@ -308,4 +310,10 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         return this;
     }
 
+    @Step("Click amount 'Edit' button")
+    public TransactionsPage clickAmountEditButton() {
+        amountEditButton.click();
+
+        return this;
+    }
 }
