@@ -414,4 +414,33 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Edited amount is visible");
         assertThat(transactionsPage.amountApplied("Amount: 500 - 10300")).isVisible();
     }
+
+    @Test
+    @TmsLink("355")
+    @Epic("Transactions")
+    @Feature("Amount")
+    @Description("Reset Amount Values")
+    public void testResetAmountValues() {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickTransactionsLink()
+                .clickAmountButton()
+                .fillAmountFromField("500")
+                .fillAmountToField("10000")
+                .clickAmountApplyButton()
+                .clickAmountAppliedClearButton()
+                .clickAmountButton();
+
+        Allure.step("Verify: From Amount is zero");
+        assertThat(transactionsPage.getAmountFromInputField()).hasValue("0.00");
+
+        Allure.step("Verify: To Amount is zero");
+        assertThat(transactionsPage.getAmountToInputField()).hasValue("0.00");
+
+        transactionsPage.clickAmountApplyButton();
+
+        Allure.step("Verify: Applied amount is visible");
+        assertThat(transactionsPage.amountApplied("Amount: 0 - 0")).isVisible();
+    }
 }
