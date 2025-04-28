@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
@@ -61,7 +60,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
-    @Ignore("Company 'testframework' not found in dropdown.")
     @Test(dataProvider = "getUsers", dataProviderClass = TestDataProvider.class)
     @TmsLink("298")
     @Epic("System/Team")

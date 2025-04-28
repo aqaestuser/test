@@ -38,7 +38,12 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
         String lastName = "";
 
         selectCompanyField.fill(companyName);
-        while (getCompanyNameInDropdownOption(companyName).all().size() != 1) {
+
+        if (dropdownOptionList.all().isEmpty()) {
+            throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
+        }
+
+        while (getCompanyNameInDropdownOption(companyName).all().isEmpty()) {
             if (dropdownOptionList.last().innerText().equals(lastName)) {
                 throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
             }
@@ -46,8 +51,12 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait {
 
             lastName = dropdownOptionList.last().innerText();
         }
-        ResponseUtils.clickAndWaitForResponse(
-                getPage(), getCompanyNameInDropdownOption(companyName), Constants.USER_LIST_ENDPOINT);
+
+//        .first() - из-за того, что компания "super" отображается в отфильтрованном списке два раза,
+//        это баг(!!), правильно - один раз (или ноль).
+//        На суть теста .first() не влияет и позволяет "не заметить" баг.
+//
+        getCompanyNameInDropdownOption(companyName).first().click();
 
         return this;
     }

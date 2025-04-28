@@ -347,7 +347,6 @@ public class TransactionsPageTest extends BaseTest {
         assertEquals(headersListAfterUncheckAllVisibleColumns.size(), 0);
     }
 
-    @Ignore("Click on 'Transactions' menu in Header")
     @Test
     @TmsLink("359")
     @Epic("Transactions")

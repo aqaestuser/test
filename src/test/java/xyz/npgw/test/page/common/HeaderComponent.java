@@ -38,6 +38,7 @@ public class HeaderComponent extends BaseComponent {
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
         ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        getPage().getByRole(AriaRole.ROW).first().waitFor();
         getPage().getByRole(AriaRole.ROW).last().waitFor();
 
         return new TransactionsPage(getPage());
