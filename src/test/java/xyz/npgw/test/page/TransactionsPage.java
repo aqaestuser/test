@@ -8,27 +8,27 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.util.ResponseUtils;
+import xyz.npgw.test.page.common.DateRangePickerTrait;
 import xyz.npgw.test.page.common.HeaderPage;
 import xyz.npgw.test.page.common.TableTrait;
 
 import java.util.List;
 
 @Getter
-public class TransactionsPage extends HeaderPage implements TableTrait {
+public class TransactionsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<TransactionsPage> {
 
     private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();
     @Getter(AccessLevel.NONE)
     private final Locator nextPageButton = buttonByName("next page button");
     private final Locator paginationItemTwoActiveButton = buttonByName("pagination item 2 active");
-    private final Locator dateRangePicker = group("DateRange");
     private final Locator businessUnitSelector = textExact("Business unit").locator("../../..");
     private final Locator currencySelector = labelExact("Currency");
     private final Locator paymentMethodSelector = labelExact("Payment method");
     private final Locator statusSelector = labelExact("Status");
     private final Locator amountButton = buttonByName("Amount");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
-    private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTransactionsPage");
+    private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
     private final Locator statusSelectorOptions = listboxByRole().locator(optionByRole());
@@ -48,9 +48,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
     private final Locator amountAppliedClearButton = labelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
-    @Getter(AccessLevel.NONE)
-    private final Locator dateRange = spinButton();
-    private final Locator dataRangeErrorMessage = locator("[data-slot='error-message']");
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
 
@@ -77,7 +74,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
         return this;
     }
 
-    @Step("Click Icon Apply Data")
+    @Step("Click 'Refresh Data' button")
     public TransactionsPage clickRefreshDataButton() {
         refreshDataButton.click();
 
@@ -209,32 +206,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait {
 
     public List<String> getPaymentMethodOptions() {
         return paymentMethodOptions.all().stream().map(Locator::innerText).toList();
-    }
-
-    @Step("Set start date: {startDate}")
-    public TransactionsPage setStartDate(String startDate) {
-        Locator day = dateRange.nth(0);
-        Locator month = dateRange.nth(1);
-        Locator year = dateRange.nth(2);
-
-        day.fill(startDate.split("-")[0]);
-        month.fill(startDate.split("-")[1]);
-        year.fill(startDate.split("-")[2]);
-
-        return this;
-    }
-
-    @Step("Set end date: {endDate}")
-    public TransactionsPage setEndDate(String endDate) {
-        Locator day = dateRange.nth(3);
-        Locator month = dateRange.nth(4);
-        Locator year = dateRange.nth(5);
-
-        day.fill(endDate.split("-")[0]);
-        month.fill(endDate.split("-")[1]);
-        year.fill(endDate.split("-")[2]);
-
-        return this;
     }
 
     @Step("Click on the Settings button")

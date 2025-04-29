@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -140,7 +139,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink();
 
         Allure.step("Verify: DataRange picker is visible");
-        assertThat(transactionsPage.getDateRangePicker()).isVisible();
+        assertThat(transactionsPage.getDateRangePicker().getDateRangePickerField()).isVisible();
 
         Allure.step("Verify: Business Unit selector is visible");
         assertThat(transactionsPage.getBusinessUnitSelector()).isVisible();
@@ -303,12 +302,13 @@ public class TransactionsPageTest extends BaseTest {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickTransactionsLink()
-                .setStartDate("01-04-2025")
-                .setEndDate("01-04-2024")
+                .getDateRangePicker()
+                .setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(transactionsPage.getDataRangeErrorMessage()).hasText("Start date must be before end date.");
+        assertThat(transactionsPage.getDateRangePicker().getDataRangePickerErrorMessage()).hasText(
+                "Start date must be before end date.");
     }
 
     @Test
