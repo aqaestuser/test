@@ -91,13 +91,14 @@ public class GatewayPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickGatewayTab()
-                .clickSelectCompanyPlaceholder()
-                .clickCompanyInDropdown(companyName);
+                .getSelectCompany().clickSelectCompanyPlaceholder()
+                .getSelectCompany().selectCompany(companyName);
 
-        Locator selectCompanyPlaceholder = gatewayPage.getSelectCompanyPlaceholder();
+        Locator selectCompanyPlaceholder = gatewayPage
+                .getSelectCompany().getSelectCompanyPlaceholder();
 
         Allure.step("Verify: The dropdown is closed.");
-        assertThat(gatewayPage.getCompanyDropdown()).not().isVisible();
+        assertThat(gatewayPage.getSelectCompany().getCompanyDropdown()).not().isVisible();
 
         Allure.step(String.format("Verify: Placeholder has value '%s'", companyName));
         assertThat(selectCompanyPlaceholder).hasValue(companyName);
@@ -116,8 +117,8 @@ public class GatewayPageTest extends BaseTest {
                     String.format("Unexpected item: %s", actualBusinessUnitsText));
         }
 
-        gatewayPage.clickSelectCompanyClearIcon()
-                .clickSelectCompanyDropdownChevron();
+        gatewayPage.getSelectCompany().clickSelectCompanyClearIcon()
+                .getSelectCompany().clickSelectCompanyDropdownChevron();
 
         Allure.step("Verify: Placeholder has value 'Search...'", () -> {
             Assert.assertEquals(selectCompanyPlaceholder.getAttribute("placeholder"), "Search...");

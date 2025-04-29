@@ -72,7 +72,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .selectCompany(user.companyName())
+                .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
                 .fillEmailField(user.email())
                 .fillPasswordField(user.password())
@@ -97,7 +97,7 @@ public class TeamPageTest extends BaseTest {
         AddUserDialog addUserDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .selectCompany(user.companyName())
+                .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton();
 
         Allure.step("Verify: 'Add user' header is displayed");
@@ -116,7 +116,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
-        assertThat(teamPage.getSelectCompanyField()).hasValue(user.companyName());
+        assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: new user's email is displayed in the table");
         assertThat(teamPage.getUsernameByEmail(user.email())).hasText(user.email());
@@ -140,7 +140,7 @@ public class TeamPageTest extends BaseTest {
         EditUserDialog editUserDialog = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .selectCompany(user.companyName())
+                .getSelectCompany().selectCompany(user.companyName())
                 .clickEditUser(user.email());
 
         Allure.step("Verify: 'Edit user' header is displayed");
@@ -157,7 +157,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was updated successfully");
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
-        assertThat(teamPage.getSelectCompanyField()).hasValue(user.companyName());
+        assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: updated user's email is still displayed correctly");
         assertThat(teamPage.getUsernameByEmail(user.email())).hasText(user.email());

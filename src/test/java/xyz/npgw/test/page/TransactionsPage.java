@@ -10,12 +10,14 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.common.DateRangePickerTrait;
 import xyz.npgw.test.page.common.HeaderPage;
+import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.common.TableTrait;
 
 import java.util.List;
 
 @Getter
-public class TransactionsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<TransactionsPage> {
+public class TransactionsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<TransactionsPage>,
+        SelectCompanyTrait<TransactionsPage> {
 
     private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();

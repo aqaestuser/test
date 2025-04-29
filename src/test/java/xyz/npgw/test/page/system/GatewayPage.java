@@ -6,23 +6,14 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
+import xyz.npgw.test.page.common.SelectCompanyTrait;
 
-public class GatewayPage extends BaseSystemPage<GatewayPage> {
+public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCompanyTrait<GatewayPage> {
 
     @Getter
     private final Locator businessUnitsListHeader = textExact("Business units list");
     @Getter
     private final Locator businessUnitsList = locator("div[data-slot='base'] li");
-    @Getter
-    private final Locator selectCompanyPlaceholder = locator("input[aria-label='Select company']");
-    private final Locator selectCompanyContainer =
-            locator("div[data-slot='input-wrapper']")
-                    .filter(new Locator.FilterOptions().setHas(selectCompanyPlaceholder));
-    private final Locator selectCompanyDropdownChevron =
-            selectCompanyContainer.locator("button[aria-label='Show suggestions']:last-child");
-
-    private final Locator selectCompanyClearIcon =
-            selectCompanyContainer.locator("button[aria-label='Show suggestions']:first-child");
     @Getter
     private final Locator companyDropdown = locator("div[data-slot='content']");
     private final Locator companyDropdownOptions = companyDropdown.locator("li");
@@ -53,13 +44,6 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> {
         return this;
     }
 
-    @Step("Click 'Select company' placeholder")
-    public GatewayPage clickSelectCompanyPlaceholder() {
-        selectCompanyPlaceholder.click();
-
-        return this;
-    }
-
     @Step("Click company '{company}' in dropdown")
     public GatewayPage clickCompanyInDropdown(String company) {
 
@@ -86,20 +70,6 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> {
                 getPage().waitForTimeout(200);
             }
         }
-
-        return this;
-    }
-
-    @Step("Click select Company clear icon")
-    public GatewayPage clickSelectCompanyClearIcon() {
-        selectCompanyClearIcon.dispatchEvent("click");
-
-        return this;
-    }
-
-    @Step("Click company dropdown toggle arrow '˅˄'")
-    public GatewayPage clickSelectCompanyDropdownChevron() {
-        selectCompanyDropdownChevron.click();
 
         return this;
     }

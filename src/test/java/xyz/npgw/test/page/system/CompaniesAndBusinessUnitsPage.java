@@ -7,29 +7,26 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
+import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 
-public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> {
+public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage>
+        implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage> {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     @Getter
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     @Getter
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
-    private final Locator companyDropdown = labelExact("Select company");
     @Getter
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
+    private final Locator companyNameDropdownList = locator("[role='option']");
     private final Locator successAlert = alert("SUCCESS");
+    private final Locator companyDropdown = labelExact("Select company");
     @Getter
     private final Locator addCompanyDialog = dialog();
-    private final Locator alertMessage = locator("[role='alert']");
-    private final Locator companyNameDropdownList = locator("[role='option']");
-    private final Locator selectCompanyDropdown = locator("[aria-label='Show suggestions']:nth-child(2)");
-    private final Locator lastDropdownOption = locator("[role='option']:last-child");
-    @Getter
-    private final Locator selectCompanyInput = placeholder("Search...");
     @Getter
     private final Locator descriptionFromCompanyInfoSection = labelExact("Description");
     @Getter
@@ -92,13 +89,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         return this;
     }
 
-    @Step("Click 'Select company' dropdown")
-    public CompaniesAndBusinessUnitsPage clickSelectCompanyDropdown() {
-        getPage().waitForTimeout(1000);
-        selectCompanyDropdown.click();
-
-        return this;
-    }
 
     @Step("Click 'Add business unit' button (+)")
     public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
