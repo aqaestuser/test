@@ -6,17 +6,30 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.AcquirersPage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class AcquirersPageTest extends BaseTest {
+
+    private static final List<String> COLUMNS_HEADERS = List.of(
+            "Acquirer name",
+            "Acquirer code",
+            "Currencies",
+            "Acquirer config",
+            "System config",
+            "Status",
+            "Actions");
+
+    String[] rowsPerPageOptions = new String[]{"10", "25", "50", "100"};
 
     @Test
     @TmsLink("134")
@@ -160,13 +173,13 @@ public class AcquirersPageTest extends BaseTest {
             assertThat(actualStatus).hasText(status);
         }
     }
-  
+
     @Test()
     @TmsLink("380")
     @Epic("System/Acquirers")
     @Feature("Rows Per Page")
     @Description("Verify the default 'Rows Per Page' value is 25 and the dropdown contains the correct options.")
-    public void testVerifyRowsPerPageDropdownOptions() {
+    public void testRowsPerPageDropdownOptions() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
@@ -183,7 +196,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getRowsPerPageDropdown()).isVisible();
 
         Allure.step("Verify: The dropdown contains all four options: 10, 25, 50, 100");
-        assertThat(acquirersPage.getRowsPerPageOptions()).hasText(new String[]{"10", "25", "50", "100"});
+        assertThat(acquirersPage.getRowsPerPageOptions()).hasText(rowsPerPageOptions);
     }
 
     @Test()
@@ -192,15 +205,13 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Rows Per Page")
     @Description("Verify Selecting 'Rows Per Page' Option Updates the Field Value.")
     public void testSelectingRowsPerPageOptionUpdatesFieldValue() {
-        String[] expectedOptions = new String[]{"10", "25", "50", "100"};
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab();
 
-        for (String option : expectedOptions) {
+        for (String option : rowsPerPageOptions) {
             acquirersPage
                     .clickRowsPerPageChevron()
                     .selectRowsPerPageOption(option);
@@ -208,5 +219,50 @@ public class AcquirersPageTest extends BaseTest {
             Allure.step(String.format("Verify: The Rows Per Page' value is set to '%s'", option));
             assertThat(acquirersPage.getRowsPerPage()).hasText(option);
         }
+    }
+
+    @Test()
+    @TmsLink("385")
+    @Epic("System/Acquirers")
+    @Feature("Rows Per Page")
+    @Description("Verify that selecting a 'Rows Per Page' option displays the correct number of rows in the table.")
+    public void testRowsPerPageSelectionDisplaysCorrectNumberOfRows() {
+        List<Integer> totalRows = new ArrayList<>();
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemMenu()
+                .clickAcquirersTab();
+
+        for (String option : rowsPerPageOptions) {
+            acquirersPage
+                    .clickRowsPerPageChevron()
+                    .selectRowsPerPageOption(option);
+
+            int rowsSum = 0;
+
+            while (true) {
+                int actualRowCount = acquirersPage.getTable().getTableRows().count();
+                rowsSum += actualRowCount;
+
+                Allure.step(String.format(
+                        "Verify: The table contains '%s' rows less than or equal to '%s'", actualRowCount, option));
+                Assert.assertTrue(actualRowCount <= Integer.parseInt(option));
+
+                if (acquirersPage.isLastPage()) {
+                    break;
+                }
+
+                acquirersPage.clickNextPage();
+            }
+
+            totalRows.add(rowsSum);
+            acquirersPage.clickOnPaginationPage("1");
+        }
+
+        boolean allTotalsSame = totalRows.stream().distinct().count() == 1;
+        Allure.step("Verify: Total rows count is the same for each 'Rows Per Page' option");
+        Assert.assertTrue(allTotalsSame, "Total rows should be the same for all 'Rows Per Page' options");
     }
 }

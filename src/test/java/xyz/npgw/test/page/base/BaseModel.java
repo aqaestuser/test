@@ -46,6 +46,10 @@ public abstract class BaseModel {
         return getPage().getByLabel(text, new Page.GetByLabelOptions().setExact(true));
     }
 
+    protected Locator label(String text) {
+        return getPage().getByLabel(text);
+    }
+
     protected Locator textExact(String text) {
         return getPage().getByText(text, new Page.GetByTextOptions().setExact(true));
     }

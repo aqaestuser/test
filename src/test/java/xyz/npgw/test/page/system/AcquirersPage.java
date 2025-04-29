@@ -5,12 +5,14 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.common.TableTrait;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerDialog;
 
 import java.util.List;
+import java.util.Objects;
 
-public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
+public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements TableTrait {
 
     @Getter
     private final Locator addAcquirerButton = locator("svg[data-icon='circle-plus']");
@@ -20,7 +22,6 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
     private final Locator resetFilterButton = locator("svg[data-icon='xmark']");
     @Getter
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
-
     @Getter
     private final Locator acquirerNameHeader = textExact("Acquirer name");
     private final Locator acquirersList = locator("div[data-slot='base'] li");
@@ -29,12 +30,14 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
     private final Locator rowsPerPage = locator("button[aria-label='Rows Per Page']");
     @Getter
     private final Locator rowsPerPageDropdown = locator("div[data-slot='listbox']");
-
+    @Getter
+    private final Locator paginationItems = label("pagination item");
+    @Getter
+    private final Locator paginationNext = labelExact("next page button");
     @Getter
     private final Locator selectAcquirerLabel = labelExact("Select acquirer");
     private final Locator selectAcquirerPlaceholder = placeholder("Search");
     private final Locator dropdownAcquirerList = locator("div[data-slot='content'] li");
-
     @Getter
     private final Locator statusLabel = labelExact("Status");
     @Getter
@@ -116,9 +119,29 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> {
         return rowsPerPageDropdown.locator("li");
     }
 
+    @Step("Select Rows Per Page '{option}'")
     public AcquirersPage selectRowsPerPageOption(String option) {
         rowsPerPageDropdown.getByText(option, new Locator.GetByTextOptions().setExact(true)).click();
+        getTable().getTableRows().last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 
         return this;
+    }
+
+    @Step("Click on page '{pageNumber}'")
+    public AcquirersPage clickOnPaginationPage(String pageNumber) {
+        label("pagination item " + pageNumber).click();
+
+        return this;
+    }
+
+    @Step("Click next page")
+    public AcquirersPage clickNextPage() {
+        paginationNext.click();
+
+        return this;
+    }
+
+    public boolean isLastPage() {
+        return Objects.equals(paginationNext.getAttribute("tabindex"), "-1");
     }
 }
