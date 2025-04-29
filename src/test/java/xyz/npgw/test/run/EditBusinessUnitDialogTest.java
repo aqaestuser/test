@@ -30,9 +30,10 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         Locator dialogTitle = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickSelectCompanyDropdown()
-                .clickCompanyInDropdown(companyName)
+                .getSystemMenu()
+                .clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany()
+                .selectCompany(companyName)
                 .clickEditBusinessUnitButton()
                 .getDialogHeader();
 
