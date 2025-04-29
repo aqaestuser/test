@@ -6,7 +6,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
@@ -107,25 +106,24 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(actualOptions).hasText(new String[]{"All", "Active", "Inactive"});
     }
 
-    @Ignore("fail after latest update")
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("243")
     @Epic("System/Acquirers")
     @Feature("Status")
     @Description("Filter acquirers by status.")
     public void testFilterAcquirersByStatus(String status) {
-        Locator acquirersList = new DashboardPage(getPage())
+        List<Locator> statuses = new DashboardPage(getPage())
                 .getHeader()
                 .clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAcquirerStatusPlaceholder()
                 .selectAcquirerStatus(status)
-                .getAcquirersList();
+                .getAcquirersStatus();
 
         Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
-        for (Locator acquirer : acquirersList.all()) {
-            assertThat(acquirer).containsText(status);
+        for (Locator actualStatus : statuses) {
+            assertThat(actualStatus).containsText(status);
         }
     }
 

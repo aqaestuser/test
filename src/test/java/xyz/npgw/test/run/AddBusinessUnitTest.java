@@ -8,7 +8,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
 import org.opentest4j.AssertionFailedError;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.TestUtils;
 import xyz.npgw.test.common.base.BaseTest;
@@ -24,7 +23,6 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class AddBusinessUnitTest extends BaseTest {
 
-    @Ignore("fail on AddCompanyButton")
     @Test
     @TmsLink("213")
     @Epic("System/Companies and business units")
@@ -66,7 +64,6 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
     }
 
-    @Ignore("fail on AddCompanyButton")
     @Test
     @TmsLink("238")
     @Epic("System/Companies and business units")
@@ -93,7 +90,6 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
-    @Ignore("fail on Click 'Add company' button")
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")

@@ -134,7 +134,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
             lastSeenText = currentLastText;
 
-            lastDropdownOption.scrollIntoViewIfNeeded();
+            companyNameDropdownList.last().scrollIntoViewIfNeeded();
         }
 
         Assert.fail("Company '" + companyName + "' not found in dropdown.");
