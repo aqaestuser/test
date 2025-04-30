@@ -52,6 +52,9 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
+    private final Locator downloadCsvOption = menuItemByName("CSV");
+    private final Locator downloadExcelOption = menuItemByName("EXCEL");
+    private final Locator downloadPdfOption = menuItemByName("PDF");
 
     public Locator amountApplied(String amount) {
         return textExact(amount);
@@ -286,6 +289,13 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     @Step("Click amount 'Edit' button")
     public TransactionsPage clickAmountEditButton() {
         amountEditButton.click();
+
+        return this;
+    }
+
+    @Step("Click 'Download' button")
+    public TransactionsPage clickDownloadButton() {
+        downloadButton.click();
 
         return this;
     }
