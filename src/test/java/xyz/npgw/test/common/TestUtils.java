@@ -16,14 +16,12 @@ public class TestUtils {
 
     public static void deleteUser(APIRequestContext request, User user) {
         request.delete(
-                "portal-v1/user?email=%s".formatted(URLEncoder.encode(user.email(), StandardCharsets.UTF_8)));
+                "portal-v1/user?email=%s".formatted(encode(user.email())));
     }
 
     public static void createBusinessUnit(APIRequestContext request, String companyName, String merchantName) {
         request.post(
-                "portal-v1/company/%s/merchant".formatted(URLEncoder.encode(
-                        companyName,
-                        StandardCharsets.UTF_8)),
+                "portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(merchantName)));
     }
 
@@ -67,18 +65,22 @@ public class TestUtils {
 
     public static void deleteCompany(APIRequestContext request, String companyName) {
         request.delete(
-                "portal-v1/company/%s".formatted(URLEncoder.encode(companyName, StandardCharsets.UTF_8)));
+                "portal-v1/company/%s".formatted(encode(companyName)));
+    }
+
+    private static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
     }
 
     private static boolean getCompany(APIRequestContext request, String companyName) {
         APIResponse response = request.get(
-                "portal-v1/company/%s".formatted(URLEncoder.encode(companyName, StandardCharsets.UTF_8)));
+                "portal-v1/company/%s".formatted(encode(companyName)));
         return response.ok() && response.text().contains(companyName);
     }
 
     private static boolean getBusinessUnit(APIRequestContext request, String companyName, String merchantName) {
         APIResponse response = request.get(
-                "portal-v1/company/%s/merchant".formatted(URLEncoder.encode(companyName, StandardCharsets.UTF_8)));
+                "portal-v1/company/%s/merchant".formatted(encode(companyName)));
         return response.ok() && response.text().contains(merchantName);
     }
 }
