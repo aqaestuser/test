@@ -8,11 +8,12 @@ import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.TestUtils;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.Address;
+import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.provider.TestDataProvider;
-import xyz.npgw.test.common.util.Company;
-import xyz.npgw.test.common.util.Merchant;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
@@ -30,12 +31,13 @@ public class AddCompanyDialogTest extends BaseTest {
 
     Company company = new Company(
             "CompanyNameTest", "Company Type Test",
+            new Address("USA", "PA",
+                    "19876", "Warwick",
+                    "2151111111", "2152222222", "222333444"),
             "Description Test",
             "https://www.test.com", "James Smith", "test@yahoo.com",
-            true, true,
-            "USA", "PA",
-            "19876", "Warwick",
-            "2151111111", "2152222222", "222333444");
+            true, true
+    );
 
     @Test
     @TmsLink("160")
@@ -311,7 +313,6 @@ public class AddCompanyDialogTest extends BaseTest {
                 "SUCCESSCompany was created successfully");
     }
 
-    @Ignore("Company 'CompanyNameTest' not found in dropdown list.")
     @Test
     @TmsLink("246")
     @Epic("System/Companies and business units")
@@ -321,8 +322,7 @@ public class AddCompanyDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
@@ -344,16 +344,16 @@ public class AddCompanyDialogTest extends BaseTest {
                 .fillCompanyDescriptionField(company.description())
                 .fillCompanyWebsiteField(company.website())
                 .fillCompanyPrimaryContactField(company.primaryContact())
-                .fillCompanyEmailField(company.companyEmail())
-                .setApiActiveCheckbox(company.apiActive())
-                .setPortalActiveCheckbox(company.portalActive())
-                .fillCompanyCountryField(company.country())
-                .fillCompanyStateField(company.state())
-                .fillCompanyZipField(company.zip())
-                .fillCompanyCityField(company.city())
-                .fillCompanyPhoneField(company.phone())
-                .fillCompanyMobileField(company.mobile())
-                .fillCompanyFaxField(company.fax())
+                .fillCompanyEmailField(company.email())
+                .setApiActiveCheckbox(company.isApiActive())
+                .setPortalActiveCheckbox(company.isPortalActive())
+                .fillCompanyCountryField(company.companyAddress().country())
+                .fillCompanyStateField(company.companyAddress().state())
+                .fillCompanyZipField(company.companyAddress().zip())
+                .fillCompanyCityField(company.companyAddress().city())
+                .fillCompanyPhoneField(company.companyAddress().phone())
+                .fillCompanyMobileField(company.companyAddress().mobile())
+                .fillCompanyFaxField(company.companyAddress().fax())
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed after company creation");
@@ -381,7 +381,7 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: email field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getEmailFromCompanyInfoSection())
-                .hasValue(company.companyEmail());
+                .hasValue(company.email());
 
         Allure.step("Verify: 'API active' checkbox is checked");
         assertThat(companiesAndBusinessUnitsPage.getApiActiveCheckboxFromCompanyInfoSection())
@@ -393,31 +393,31 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: phone field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getPhoneFromCompanyInfoSection())
-                .hasValue(company.phone());
+                .hasValue(company.companyAddress().phone());
 
         Allure.step("Verify: mobile field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getMobileFromCompanyInfoSection())
-                .hasValue(company.mobile());
+                .hasValue(company.companyAddress().mobile());
 
         Allure.step("Verify: fax field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getFaxFromCompanyInfoSection())
-                .hasValue(company.fax());
+                .hasValue(company.companyAddress().fax());
 
         Allure.step("Verify: country field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCountryFromCompanyInfoSection())
-                .hasValue(company.country());
+                .hasValue(company.companyAddress().country());
 
         Allure.step("Verify: state field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getStateFromCompanyInfoSection())
-                .hasValue(company.state());
+                .hasValue(company.companyAddress().state());
 
         Allure.step("Verify: ZIP code field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getZipFromCompanyInfoSection())
-                .hasValue(company.zip());
+                .hasValue(company.companyAddress().zip());
 
         Allure.step("Verify: city field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCityFromCompanyInfoSection())
-                .hasValue(company.city());
+                .hasValue(company.companyAddress().city());
     }
 
     @Ignore
@@ -427,11 +427,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Validates successful business unit addition to company (E2E test).")
     public void testAddBusinessUnitEndToEndTest() {
-        Merchant merchant = new Merchant(
-                "MerchantNameTest",
-                false, true,
-                false
-        );
+        BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader()
@@ -457,7 +453,7 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getAlertMessage()).containsText("Enter merchant name");
 
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
-                .fillBusinessUnitNameField(merchant.merchantName())
+                .fillBusinessUnitNameField(businessUnit.merchantName())
                 .clickCreateButton();
 
         Allure.step("Verify: Success alert is shown after business unit is added");
@@ -469,7 +465,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
 
         Allure.step("Verify: New business unit name appears in the list");
-        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(merchant.merchantName());
+        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(businessUnit.merchantName());
 
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");

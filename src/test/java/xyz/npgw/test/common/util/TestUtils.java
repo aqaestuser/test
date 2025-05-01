@@ -1,23 +1,20 @@
-package xyz.npgw.test.common;
+package xyz.npgw.test.common.util;
 
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.SystemConfig;
-import xyz.npgw.test.common.util.BusinessUnit;
-import xyz.npgw.test.common.util.Company;
-import xyz.npgw.test.common.util.User;
+import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 @Log4j2
-public class TestUtils {
+public final class TestUtils {
 
     public static void deleteUser(APIRequestContext request, User user) {
         APIResponse response = request.delete("portal-v1/user?email=%s".formatted(encode(user.email())));
@@ -94,13 +91,7 @@ public class TestUtils {
     }
 
     public static void deleteAcquirer(APIRequestContext request, String acquirerName) {
-        APIResponse response = request.delete(
-                "/portal-v1/acquirer/" + acquirerName);
-
-        if (response.ok()) {
-            log.info("Acquirer {} successfully deleted", acquirerName);
-        } else {
-            log.info("{}", response.text());
-        }
+        APIResponse response = request.delete("/portal-v1/acquirer/%s".formatted(encode(acquirerName)));
+        log.info("delete acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
     }
 }

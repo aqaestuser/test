@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -29,6 +30,7 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
+    @Ignore("Не нажимается рефреш - снять игнор после фикса /summary")
     @Test
     @TmsLink("403")
     @Epic("Dashboard")

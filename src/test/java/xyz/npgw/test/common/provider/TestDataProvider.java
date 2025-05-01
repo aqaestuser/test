@@ -3,7 +3,7 @@ package xyz.npgw.test.common.provider;
 import org.testng.annotations.DataProvider;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
-import xyz.npgw.test.common.util.User;
+import xyz.npgw.test.common.entity.User;
 
 public class TestDataProvider {
 

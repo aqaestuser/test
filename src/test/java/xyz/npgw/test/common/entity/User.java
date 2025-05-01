@@ -1,4 +1,4 @@
-package xyz.npgw.test.common.util;
+package xyz.npgw.test.common.entity;
 
 import xyz.npgw.test.common.UserRole;
 
