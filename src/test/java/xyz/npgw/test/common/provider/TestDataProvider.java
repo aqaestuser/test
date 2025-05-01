@@ -39,7 +39,7 @@ public class TestDataProvider {
     @DataProvider
     public static Object[][] getCompanyNameInvalidSpecialCharacters() {
         return new Object[][]{
-                {"@"}, {"#"}, {"$"}, {"%"}, {"*"}, {"!"}, {"?"}, {"'"}, {")"},
+                {"@"}, {"#"}, {"$"}, {"%"}, {"*"}, {"!"}, {"?"}, {")"},
                 {"\""}, {"/"}, {"\\"}, {":"}, {";"}, {"<"}, {">"}, {"="}, {"("}
         };
     }

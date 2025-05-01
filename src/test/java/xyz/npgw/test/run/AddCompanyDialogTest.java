@@ -6,7 +6,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
@@ -46,8 +45,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Verify that the 'Add Company' window displays the correct title in the header.")
     public void testVerifyAddCompanyWindowTitle() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
@@ -55,7 +53,6 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
     }
 
-    @Ignore
     @Test
     @TmsLink("189")
     @Epic("System/Companies and business units")
@@ -79,8 +76,7 @@ public class AddCompanyDialogTest extends BaseTest {
         );
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
@@ -95,8 +91,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Error message is shown for company name is shorter than 4 or longer than 100 characters.")
     public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name)
@@ -115,8 +110,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("'Create' button is disabled when required fields are not filled.")
     public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty(String name, String type) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name)
@@ -133,8 +127,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Verify that clicking the Close button successfully closes the 'Add Company' dialog.")
     public void testVerifyCloseAddCompanyDialogWhenCloseButtonIsClicked() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .clickCloseButton();
@@ -143,7 +136,6 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getAddCompanyDialog()).isHidden();
     }
 
-    @Ignore
     @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters",
             dataProviderClass = TestDataProvider.class)
     @TmsLink("215")
@@ -152,8 +144,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Error is displayed when trying to create a company with special characters in the name.")
     public void testErrorIsDisplayedWhenCreatingCompanyWithSpecialCharacters(String character) {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Company" + character)
@@ -175,8 +166,7 @@ public class AddCompanyDialogTest extends BaseTest {
         String fullName = name + character;
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(fullName)
@@ -189,7 +179,6 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
     }
 
-    @Ignore
     @Test
     @TmsLink("223")
     @Epic("System/Companies and business units")
@@ -199,8 +188,7 @@ public class AddCompanyDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME)
@@ -212,16 +200,16 @@ public class AddCompanyDialogTest extends BaseTest {
                 "Company was created successfully");
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddCompanyByFillRequiredFields")
+    @Test
     @TmsLink("224")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("Added company appears in the 'Select company' dropdown list")
     public void testVerifyCompanyPresenceInDropdown() {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
+
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME);
 
@@ -229,16 +217,16 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField()).hasValue(COMPANY_NAME);
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testVerifyCompanyPresenceInDropdown")
+    @Test
     @TmsLink("232")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("Error is displayed when trying to create a company with an already existing name")
     public void testAddCompanyWithSameName() {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
+
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME)
@@ -257,8 +245,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Company creation with Cyrillic symbols")
     public void testAddCompanyWithCyrillicSymbols() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Амазон")
@@ -289,8 +276,7 @@ public class AddCompanyDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(companyName)
@@ -420,18 +406,19 @@ public class AddCompanyDialogTest extends BaseTest {
                 .hasValue(company.companyAddress().city());
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddCompanyEndToEndTest")
+    @Test
     @TmsLink("290")
     @Epic("System/Companies and business units")
     @Feature("Add business unit")
     @Description("Validates successful business unit addition to company (E2E test).")
     public void testAddBusinessUnitEndToEndTest() {
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+
         BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
@@ -442,7 +429,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify: 'Add business unit' dialog is opened");
-        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader()).hasText("Add merchant");
+        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader()).hasText("Add business unit");
 
         Allure.step("Verify: Company name is pre-filled correctly");
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.companyName());
