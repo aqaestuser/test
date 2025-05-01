@@ -19,7 +19,9 @@ import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+import static xyz.npgw.test.common.TestUtils.createAcquirer;
 import static xyz.npgw.test.common.TestUtils.deleteAcquirer;
+import static xyz.npgw.test.common.TestUtils.getAcquirer;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
@@ -202,8 +204,8 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Test
     @TmsLink("412")
     @Epic("System/Acquirers")
-    @Feature("Rows Per Page")
-    @Description("Verify Selecting 'Rows Per Page' Option Updates the Field Value.")
+    @Feature("Add acquirer")
+    @Description("Verify that a new Acquirer can be successfully created and appears in the Acquirers dropdown.")
     public void testAcquirerSuccessfullyCreatedAndAppearsInDropdown() {
 
         String acquirerName = "Awesome acquirer";
@@ -216,6 +218,7 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickAcquirersTab()
                 .clickAddAcquirer()
                 .enterAcquirerName(acquirerName)
+                .clickCheckboxCurrency("USD")
                 .clickCreateButton();
 
         Allure.step("Verify: Acquirer creation success message is displayed");
@@ -229,5 +232,38 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step(String.format("Verify: Dropdown contain '%s' acquirer", acquirerName));
         assertThat(acquirersPage.getAddAcquirerDialog()).hasText(acquirerName);
+    }
+
+    @Test
+    @TmsLink("427")
+    @Epic("System/Acquirers")
+    @Feature("Add acquirer")
+    @Description("Verify error appears when creating an Acquirer with a duplicate name.")
+    public void testCreateAcquirerWithDuplicateNameShowsError() {
+
+        String acquirerName = "Awesome acquirer";
+        if (!getAcquirer(getApiRequestContext(), acquirerName)) {
+            createAcquirer(getApiRequestContext(), acquirerName);
+        }
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemMenu()
+                .clickAcquirersTab();
+
+        AddAcquirerDialog acquirerDialog = acquirersPage
+                .clickAddAcquirer()
+                .enterAcquirerName(acquirerName)
+                .clickCheckboxCurrency("USD");
+
+        acquirerDialog.clickCreateButton();
+
+        Allure.step("Verify: Acquirer Error message is displayed");
+        assertThat(acquirerDialog.getAlertMessage()).containsText(
+                "Acquirer with name {" + acquirerName + "} already exists.");
+
+        Allure.step("Verify: the 'Add acquirer' dialog is not closed");
+        assertThat(acquirersPage.getAddAcquirerDialog()).not().isHidden();
     }
 }

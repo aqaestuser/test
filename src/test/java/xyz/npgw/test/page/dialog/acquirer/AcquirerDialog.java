@@ -3,6 +3,7 @@ package xyz.npgw.test.page.dialog.acquirer;
 import com.microsoft.playwright.Keyboard;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
@@ -13,6 +14,7 @@ import xyz.npgw.test.page.system.AcquirersPage;
 public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<CurrentDialogT>>
         extends BaseDialog<AcquirersPage, CurrentDialogT> {
 
+    private final Locator acquirerNamePlaceholder = placeholder("Enter acquirer name");
     private final Locator statusSwitch = locator("div[role='radiogroup']");
     private final Locator allowedCurrenciesCheckboxes = locator("div[role='group']");
 
@@ -84,6 +86,21 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
                 .locator("li")
                 .filter(new Locator.FilterOptions().setHasText(timezone))
                 .click();
+        return (CurrentDialogT) this;
+    }
+
+
+    @Step("Enter acquirer name '{name}'")
+    public CurrentDialogT enterAcquirerName(String name) {
+        acquirerNamePlaceholder.fill(name);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Click currency '{currency}'")
+    public CurrentDialogT clickCheckboxCurrency(String currency) {
+        getPage().getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(currency)).check();
+
         return (CurrentDialogT) this;
     }
 }

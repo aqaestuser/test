@@ -4,12 +4,17 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
+import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.util.BusinessUnit;
 import xyz.npgw.test.common.util.Company;
 import xyz.npgw.test.common.util.User;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log4j2
 public class TestUtils {
@@ -73,6 +78,19 @@ public class TestUtils {
         APIResponse response = request.get("portal-v1/company/%s/merchant".formatted(encode(companyName)));
         log.info("get business unit '{}' - {} {}", businessUnitName, response.status(), response.text());
         return response.ok() && response.text().contains(businessUnitName);
+    }
+
+    public static void createAcquirer(APIRequestContext request, String acquirerName) {
+        Acquirer acquirer = new Acquirer("NGenius", "et", new SystemConfig(), acquirerName, new String[]{"USD"}, true);
+        APIResponse response = request.post("/portal-v1/acquirer", RequestOptions.create().setData(acquirer));
+        log.info("create acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+    }
+
+    public static boolean getAcquirer(APIRequestContext request, String acquirerName) {
+        APIResponse response = request.get("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
+        log.info("get acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+
+        return response.ok();
     }
 
     public static void deleteAcquirer(APIRequestContext request, String acquirerName) {
