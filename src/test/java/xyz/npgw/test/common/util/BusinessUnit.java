@@ -1,8 +1,8 @@
 package xyz.npgw.test.common.util;
 
-public record BusinessUnit(String[] currencyList, String merchantId, String merchantName, boolean isActive) {
+public record BusinessUnit(String merchantId, String merchantName) {
 
-    public BusinessUnit(String merchantName) {
-        this(new String[]{}, null, merchantName, true);
+    public BusinessUnit(String businessUnitName) {
+        this(null, businessUnitName);
     }
 }

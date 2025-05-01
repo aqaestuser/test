@@ -68,7 +68,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add users with roles [SUPER, ADMIN, USER] as super admin")
     public void testAddUser(User user) {
-        TestUtils.createBusinessUnitIfNeeded(getApiRequestContext(), user);
+        TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
         TestUtils.deleteUser(getApiRequestContext(), user);
 
         TeamPage teamPage = new DashboardPage(getPage())
@@ -94,7 +94,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
     public void testAddAdminAndSighInAsAdmin() {
-        TestUtils.createBusinessUnitIfNeeded(getApiRequestContext(), user);
+        TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
         TestUtils.deleteUser(getApiRequestContext(), user);
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())

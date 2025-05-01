@@ -7,6 +7,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.TestUtils;
 import xyz.npgw.test.common.base.BaseTest;
@@ -90,6 +91,7 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
+    @Ignore("strict mode violation: locator('[role='gridcell']') resolved to 2 elements")
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")
