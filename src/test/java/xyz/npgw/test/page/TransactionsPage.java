@@ -71,8 +71,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
         return this;
     }
 
-    @Step("Click Options Currency {value}")
-    public TransactionsPage clickCurrency(String value) {
+    @Step("Select currency {value} from dropdown menu")
+    public TransactionsPage selectCurrency(String value) {
         optionByName(value).waitFor();
         ResponseUtils.clickAndWaitForResponse(getPage(), optionByName(value), Constants.TRANSACTION_HISTORY_ENDPOINT);
 

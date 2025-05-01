@@ -58,14 +58,14 @@ public class TransactionsPageTest extends BaseTest {
                 .getHeader()
                 .clickTransactionsLink()
                 .clickCurrencySelector()
-                .clickCurrency(currency)
+                .selectCurrency(currency)
                 .clickRefreshDataButton();
 
         Allure.step("Verify: Filter displays the selected currency");
         assertThat(transactionsPage.getCurrencySelector()).containsText(currency);
     }
 
-    @Ignore
+    @Ignore("Fall on empty transactions table")
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("319")
     @Epic("Transactions")
@@ -73,10 +73,9 @@ public class TransactionsPageTest extends BaseTest {
     @Description("Filtering transactions by Currency")
     public void testFilterTransactionsByCurrency(String currency) {
         List<String> currencyValues = new DashboardPage(getPage())
-                .getHeader()
-                .clickTransactionsLink()
+                .getHeader().clickTransactionsLink()
                 .clickCurrencySelector()
-                .clickCurrency(currency)
+                .selectCurrency(currency)
                 .getTable()
                 .getColumnValues("Currency");
 

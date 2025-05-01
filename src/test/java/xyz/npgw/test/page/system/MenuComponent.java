@@ -2,6 +2,7 @@ package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BaseComponent;
 
@@ -32,6 +33,8 @@ public class MenuComponent extends BaseComponent {
     @Step("Click Gateway Tab")
     public GatewayPage clickGatewayTab() {
         gatewayTab.click();
+        textExact("Business units list")
+                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5678));
 
         return new GatewayPage(getPage());
     }

@@ -2,7 +2,6 @@ package xyz.npgw.test.page.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import lombok.Getter;
@@ -38,8 +37,6 @@ public class HeaderComponent extends BaseComponent {
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
         ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
-        getPage().getByRole(AriaRole.ROW).first().waitFor();
-        getPage().getByRole(AriaRole.ROW).last().waitFor();
 
         return new TransactionsPage(getPage());
     }
