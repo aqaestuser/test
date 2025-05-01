@@ -221,7 +221,7 @@ public class AcquirersPageTest extends BaseTest {
         }
     }
 
-    @Test()
+    @Test
     @TmsLink("385")
     @Epic("System/Acquirers")
     @Feature("Rows Per Page")
@@ -256,13 +256,10 @@ public class AcquirersPageTest extends BaseTest {
 
                 acquirersPage.clickNextPage();
             }
-
             totalRows.add(rowsSum);
-            acquirersPage.clickOnPaginationPage("1");
         }
 
-        boolean allTotalsSame = totalRows.stream().distinct().count() == 1;
-        Allure.step("Verify: Total rows count is the same for each 'Rows Per Page' option");
-        Assert.assertTrue(allTotalsSame, "Total rows should be the same for all 'Rows Per Page' options");
+        Assert.assertEquals(totalRows.stream().distinct().count(), 1,
+                "Total rows should be the same for all 'Rows Per Page' options");
     }
 }

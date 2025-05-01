@@ -70,6 +70,14 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
         return this;
     }
 
+    @Step("Enter '{acquirerName}' into select acquirer placeholder")
+    public AcquirersPage enterAcquirerName(String acquirerName) {
+        selectAcquirerLabel.waitFor();
+        selectAcquirerPlaceholder.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(100));
+
+        return this;
+    }
+
     public Locator getSelectAcquirersDropdownItems() {
         dropdownAcquirerList.last().waitFor();
 

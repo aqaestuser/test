@@ -83,4 +83,15 @@ public class TestUtils {
                 "portal-v1/company/%s/merchant".formatted(encode(companyName)));
         return response.ok() && response.text().contains(merchantName);
     }
+
+    public static void deleteAcquirer(APIRequestContext request, String acquirerName) {
+        APIResponse response = request.delete(
+                "/portal-v1/acquirer/" + acquirerName);
+
+        if (response.ok()) {
+            log.info("Acquirer {} successfully deleted", acquirerName);
+        } else {
+            log.info("{}", response.text());
+        }
+    }
 }

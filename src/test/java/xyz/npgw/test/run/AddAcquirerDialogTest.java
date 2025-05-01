@@ -19,6 +19,7 @@ import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+import static xyz.npgw.test.common.TestUtils.deleteAcquirer;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
@@ -196,5 +197,37 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step(String.format("Verify: Timezone field is timezone '%s'", icelandTimezone));
         assertThat(addAcquirerDialog.getSelectTimezone()).hasText(icelandTimezone);
+    }
+
+    @Test
+    @TmsLink("412")
+    @Epic("System/Acquirers")
+    @Feature("Rows Per Page")
+    @Description("Verify Selecting 'Rows Per Page' Option Updates the Field Value.")
+    public void testAcquirerSuccessfullyCreatedAndAppearsInDropdown() {
+
+        String acquirerName = "Awesome acquirer";
+        deleteAcquirer(getApiRequestContext(), acquirerName);
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader()
+                .clickSystemAdministrationLink()
+                .getSystemMenu()
+                .clickAcquirersTab()
+                .clickAddAcquirer()
+                .enterAcquirerName(acquirerName)
+                .clickCreateButton();
+
+        Allure.step("Verify: Acquirer creation success message is displayed");
+        assertThat(acquirersPage.getAlertMessage()).containsText(
+                "SUCCESSAcquirer was created successfully");
+
+        Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
+        assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
+
+        acquirersPage.enterAcquirerName(acquirerName);
+
+        Allure.step(String.format("Verify: Dropdown contain '%s' acquirer", acquirerName));
+        assertThat(acquirersPage.getAddAcquirerDialog()).hasText(acquirerName);
     }
 }
