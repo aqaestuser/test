@@ -90,7 +90,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
-    @Ignore("fail after latest update")
+    @Ignore("Country and Timezone fields not exists already - fail after latest update (FALU)")
     @Test
     @TmsLink("322")
     @Epic("System/Acquirers")
@@ -173,7 +173,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getSelectDropdown()).hasText("No items.");
     }
 
-    @Ignore("fail after latest update")
+    @Ignore("Timezone field not exists already (FALU)")
     @Test(expectedExceptions = AssertionError.class)
     @TmsLink("326")
     @Epic("System/Acquirers")
