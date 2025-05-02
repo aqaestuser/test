@@ -29,6 +29,8 @@ public class HeaderComponent extends BaseComponent {
     private final Locator repeatPasswordField = placeholder("Repeat new password");
     private final Locator saveButton = locator("button:has-text('Save')");
     private final Locator logOutButtonUserMenu = menuItemByName("Log Out");
+    private final Locator lightRadioButtonUserMenu = locator("//input[@value='light']");
+    private final Locator darkRadioButtonUserMenu = locator("//input[@value='dark']");
 
     public HeaderComponent(Page page) {
         super(page);
@@ -112,6 +114,20 @@ public class HeaderComponent extends BaseComponent {
         getPage().waitForURL("**/");
 
         return new LoginPage(getPage());
+    }
+
+    @Step("Click the 'Light' radio button in the user menu")
+    public DashboardPage clickLightRadioButton() {
+        lightRadioButtonUserMenu.click();
+
+        return new DashboardPage(getPage());
+    }
+
+    @Step ("Click the 'Dark' radio button in the user menu")
+    public DashboardPage clickDarkRadioButton() {
+        darkRadioButtonUserMenu.click();
+
+        return new DashboardPage(getPage());
     }
 
     public boolean isLogoImageLoaded() {
