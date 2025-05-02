@@ -11,6 +11,6 @@ public class ResponseUtils {
                 new Page.WaitForResponseOptions().setTimeout(9999),
                 locator::click
         );
-        page.waitForTimeout(555);
+        page.waitForTimeout(1000);
     }
 }

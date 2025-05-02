@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
@@ -61,7 +60,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
-    @Ignore
     @Test(dataProvider = "getUsers", dataProviderClass = TestDataProvider.class)
     @TmsLink("298")
     @Epic("System/Team")
@@ -72,8 +70,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.deleteUser(getApiRequestContext(), user);
 
         TeamPage teamPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
                 .fillEmailField(user.email())
@@ -87,7 +84,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
     }
 
-    @Ignore
     @Test
     @TmsLink("330")
     @Epic("System/Team")
@@ -98,8 +94,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.deleteUser(getApiRequestContext(), user);
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton();
 
@@ -134,7 +129,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "ban");
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddAdminAndSighInAsAdmin")
     @TmsLink("331")
     @Epic("System/Team")
@@ -142,8 +136,7 @@ public class TeamPageTest extends BaseTest {
     @Description("Edits the user's role and status, verifies the updates, and reactivates the user(e2e).")
     public void testEditUser() {
         EditUserDialog editUserDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickEditUser(user.email());
 

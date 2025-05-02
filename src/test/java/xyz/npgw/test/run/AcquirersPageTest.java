@@ -66,10 +66,8 @@ public class AcquirersPageTest extends BaseTest {
     @Description("The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: 'Acquirer name' header is visible");
         assertThat(acquirersPage.getAcquirerNameHeader()).isVisible();
