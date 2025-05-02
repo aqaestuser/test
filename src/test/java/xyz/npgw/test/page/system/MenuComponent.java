@@ -26,6 +26,8 @@ public class MenuComponent extends BaseComponent {
     @Step("Click Acquirers Tab")
     public AcquirersPage clickAcquirersTab() {
         acquirersTab.click();
+        textExact("Acquirer name")
+                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(5678));
 
         return new AcquirersPage(getPage());
     }
