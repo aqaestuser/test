@@ -2,15 +2,16 @@ package xyz.npgw.test.common.entity;
 
 import net.datafaker.Faker;
 
-public record Company(String companyName,
-                      String companyType,
-                      Address companyAddress,
-                      String description,
-                      String website,
-                      String primaryContact,
-                      String email,
-                      boolean isPortalActive,
-                      boolean isApiActive) {
+public record Company(
+        String companyName,
+        String companyType,
+        Address companyAddress,
+        String description,
+        String website,
+        String primaryContact,
+        String email,
+        boolean isPortalActive,
+        boolean isApiActive) {
 
     public Company(String companyName, String companyType) {
         this(companyName, companyType, new Address(),
