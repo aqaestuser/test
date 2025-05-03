@@ -6,8 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.common.TableTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
@@ -26,7 +24,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait, Se
 
     @Step("Click 'Add user' button")
     public AddUserDialog clickAddUserButton() {
-        ResponseUtils.clickAndWaitForResponse(getPage(), addUserButton, Constants.MERCHANT_ENDPOINT);
+        addUserButton.click();
 
         return new AddUserDialog(getPage());
     }

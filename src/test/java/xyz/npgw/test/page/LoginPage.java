@@ -21,6 +21,9 @@ public final class LoginPage extends BasePage {
     private final Locator rememberMeCheckbox = checkbox("Remember me");
     @Getter
     private final Locator loginFormTitle = locator(".login-form-container h3");
+    private final Locator newPasswordField = locator("input[aria-label='New password']");
+    private final Locator repeatNewPasswordField = locator("input[aria-label='Repeat password']");
+    private final Locator saveButton = buttonByName("Save");
 
     public LoginPage(Page page) {
         super(page);
@@ -40,11 +43,39 @@ public final class LoginPage extends BasePage {
         return this;
     }
 
+    @Step("Enter the user's password in the 'New password' field")
+    public LoginPage fillNewPasswordField(@Param(name = "Password", mode = MASKED) String userPassword) {
+        newPasswordField.fill(userPassword);
+
+        return this;
+    }
+
+    @Step("Enter the user's password in the 'Repeat new password' field")
+    public LoginPage fillRepeatNewPasswordField(@Param(name = "Password", mode = MASKED) String userPassword) {
+        repeatNewPasswordField.fill(userPassword);
+
+        return this;
+    }
+
     @Step("Press 'Login' button")
     public DashboardPage clickLoginButton() {
         loginButton.click();
 
         return new DashboardPage(getPage());
+    }
+
+    @Step("Press 'Login' button to change password")
+    public LoginPage clickLoginButtonToChangePassword() {
+        loginButton.click();
+
+        return this;
+    }
+
+    @Step("Press 'Save' button to save changed password")
+    public LoginPage clickSaveButton() {
+        saveButton.click();
+
+        return this;
     }
 
     @Step("Check 'Remember me' checkbox")

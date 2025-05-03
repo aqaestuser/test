@@ -2,11 +2,10 @@ package xyz.npgw.test.page.dialog.user;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
@@ -38,7 +37,7 @@ public class AddUserDialog extends UserDialog<AddUserDialog> {
 
     @Step("Click 'Create' button")
     public TeamPage clickCreateButton() {
-        ResponseUtils.clickAndWaitForResponse(getPage(), createButton, Constants.USER_LIST_ENDPOINT);
+        createButton.click();
 
         return new TeamPage(getPage());
     }

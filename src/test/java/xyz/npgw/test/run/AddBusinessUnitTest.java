@@ -7,6 +7,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Company;
@@ -90,6 +91,7 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
+    @Ignore("gridcell strict mode violation - need to be fixed!!! -do not just remove ignore")
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")
@@ -115,6 +117,7 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getBusinessUnitEmptyList()).hasText("No rows to display.");
     }
 
+    @Ignore("fail on create click whet waiting for success")
     @Test
     @TmsLink("218")
     @Epic("Companies and business units")

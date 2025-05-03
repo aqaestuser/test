@@ -26,7 +26,7 @@ public class TableComponent extends BaseComponent {
 
     private int getColumnHeaderIndexByName(String columnHeaderName) {
         tableHeader.last()
-                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(4999));
+                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(669));
 
         for (int i = 0; i < tableHeader.count(); i++) {
             if (tableHeader.nth(i).innerText().equals(columnHeaderName)) {

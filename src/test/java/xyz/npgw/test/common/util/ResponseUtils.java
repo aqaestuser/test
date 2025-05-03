@@ -8,7 +8,7 @@ public class ResponseUtils {
     public static void clickAndWaitForResponse(Page page, Locator locator, String endpoint) {
         page.waitForResponse(
                 response -> response.url().contains(endpoint),
-                new Page.WaitForResponseOptions().setTimeout(9999),
+                new Page.WaitForResponseOptions().setTimeout(11111),
                 locator::click
         );
         page.waitForTimeout(1000);
