@@ -2,6 +2,7 @@ package xyz.npgw.test.common.util;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 
 public class ResponseUtils {
 
@@ -12,5 +13,11 @@ public class ResponseUtils {
                 locator::click
         );
         page.waitForTimeout(1000);
+    }
+
+    public static void clickAndWaitForText(Page page, Locator locator, String text) {
+        locator.click();
+        page.getByText(text, new Page.GetByTextOptions().setExact(true))
+                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(6000));
     }
 }

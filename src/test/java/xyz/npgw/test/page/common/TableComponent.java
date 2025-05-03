@@ -3,7 +3,6 @@ package xyz.npgw.test.page.common;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
@@ -25,8 +24,7 @@ public class TableComponent extends BaseComponent {
     }
 
     private int getColumnHeaderIndexByName(String columnHeaderName) {
-        tableHeader.last()
-                .waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE).setTimeout(669));
+        tableHeader.last().waitFor();
 
         for (int i = 0; i < tableHeader.count(); i++) {
             if (tableHeader.nth(i).innerText().equals(columnHeaderName)) {

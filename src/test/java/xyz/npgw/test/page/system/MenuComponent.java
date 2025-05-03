@@ -2,8 +2,8 @@ package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
+import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.BaseComponent;
 
 public class MenuComponent extends BaseComponent {
@@ -25,16 +25,14 @@ public class MenuComponent extends BaseComponent {
 
     @Step("Click Acquirers Tab")
     public AcquirersPage clickAcquirersTab() {
-        acquirersTab.click();
-        textExact("Acquirer name").waitFor();
+        ResponseUtils.clickAndWaitForText(getPage(), acquirersTab, "Acquirer name");
 
         return new AcquirersPage(getPage());
     }
 
     @Step("Click Gateway Tab")
     public GatewayPage clickGatewayTab() {
-        gatewayTab.click();
-        textExact("Business units list").waitFor();
+        ResponseUtils.clickAndWaitForText(getPage(), gatewayTab, "Business units list");
 
         return new GatewayPage(getPage());
     }

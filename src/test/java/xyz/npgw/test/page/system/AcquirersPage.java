@@ -52,7 +52,6 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
     }
 
     public Locator getAcquirersList() {
-        getPage().waitForTimeout(1000);
 
         return acquirersList;
     }
