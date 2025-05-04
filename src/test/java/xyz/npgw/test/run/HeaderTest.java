@@ -19,7 +19,7 @@ import xyz.npgw.test.page.common.HeaderComponent;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class HeaderComponentTest extends BaseTest {
+public class HeaderTest extends BaseTest {
 
     @Test
     @TmsLink("209")
@@ -47,8 +47,7 @@ public class HeaderComponentTest extends BaseTest {
     @Description("Check after clicking on Transactions user redirected to Transactions page")
     public void testTransactionsLink() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickTransactionsLink();
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
         assertThat(transactionsPage.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
@@ -61,10 +60,8 @@ public class HeaderComponentTest extends BaseTest {
     @Description("Check that click on Logo return user to the dashboard page from other pages")
     public void testClickLogoReturnToDashboardPage() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickTransactionsLink()
-                .getHeader()
-                .clickLogoButton();
+                .getHeader().clickTransactionsLink()
+                .getHeader().clickLogoButton();
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
@@ -115,10 +112,8 @@ public class HeaderComponentTest extends BaseTest {
     public void testLogOutViaButtonInUserMenu() {
 
         LoginPage loginPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickUserMenuButton()
-                .getHeader()
-                .clickLogOutButtonUserMenu();
+                .getHeader().clickUserMenuButton()
+                .getHeader().clickLogOutButtonUserMenu();
 
         Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
@@ -132,8 +127,7 @@ public class HeaderComponentTest extends BaseTest {
     public void testLogOutViaButtonInHeader() {
 
         LoginPage loginPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickLogOutButton();
+                .getHeader().clickLogOutButton();
 
         Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);

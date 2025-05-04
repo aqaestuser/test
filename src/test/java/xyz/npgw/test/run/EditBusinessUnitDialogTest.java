@@ -16,7 +16,6 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class EditBusinessUnitDialogTest extends BaseTest {
 
-    @Ignore
     @Test
     @TmsLink("387")
     @Epic("System/Companies and business units")
@@ -25,21 +24,19 @@ public class EditBusinessUnitDialogTest extends BaseTest {
     public void testVerifyTitleEditBusinessUnitDialog() {
         String buName = "NewBUForEdit";
         String companyName = "CompanyForBU";
+
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
         Locator dialogTitle = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany()
-                .selectCompany(companyName)
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(companyName)
                 .clickEditBusinessUnitButton()
                 .getDialogHeader();
 
         Allure.step("Verify: the header contains the expected title text");
-        assertThat(dialogTitle).hasText("Edit merchant");
+        assertThat(dialogTitle).hasText("Edit business unit");
     }
 }
