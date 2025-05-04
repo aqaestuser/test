@@ -17,6 +17,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait, Se
 
     private final Locator applyFilterButton = getByTestId("ApplyFilterButtonTeamPage");
     private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
+    private final Locator selectCompanyInput = placeholder("Search...");
 
     public TeamPage(Page page) {
         super(page);
@@ -62,6 +63,8 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait, Se
 
     @Step("Click 'Apply filter")
     public TeamPage clickApplyFilter() {
+        selectCompanyInput.waitFor();
+
         applyFilterButton.click();
 
         return this;

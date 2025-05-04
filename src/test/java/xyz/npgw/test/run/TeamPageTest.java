@@ -88,14 +88,12 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
     }
 
-    @Ignore("<div data-slot='wrapper' from <div tabindex='-1'>…</div> subtree"
-            + " intercepts pointer event on tid ApplyFilterButtonTeamPage click")
     @Test
     @TmsLink("330")
     @Epic("System/Team")
     @Feature("Add user")
     @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
-    public void testAddAdminAndSighInAsAdmin() {
+    public void testAddCompanyAnalyst() {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
         TestUtils.deleteUser(getApiRequestContext(), user);
 
@@ -114,7 +112,7 @@ public class TeamPageTest extends BaseTest {
                 .setUserRoleRadiobutton(user.userRole())
                 .setAllowedBusinessUnits(user.merchantIds())
                 .clickCreateButton()
-                .clickApplyFilter(); // Шаг добавлен т.к. обновленные данные не каждый раз появляются на ui
+                .clickApplyFilter();
 
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
@@ -135,13 +133,16 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "ban");
     }
 
-    @Ignore("make it independent")
-    @Test(dependsOnMethods = "testAddAdminAndSighInAsAdmin")
+    @Test
     @TmsLink("331")
     @Epic("System/Team")
     @Feature("Edit user")
     @Description("Edits the user's role and status, verifies the updates, and reactivates the user(e2e).")
     public void testEditUser() {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), user);
+        TestUtils.deleteUser(getApiRequestContext(), user);
+        TestUtils.createUser(getApiRequestContext(), user);
+
         EditUserDialog editUserDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())

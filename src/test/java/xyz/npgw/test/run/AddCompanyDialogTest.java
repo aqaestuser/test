@@ -6,7 +6,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
@@ -407,15 +406,13 @@ public class AddCompanyDialogTest extends BaseTest {
                 .hasValue(company.companyAddress().city());
     }
 
-    @Ignore("Select 'CompanyNameTest' company using filter")
     @Test
     @TmsLink("290")
     @Epic("System/Companies and business units")
     @Feature("Add business unit")
     @Description("Validates successful business unit addition to company (E2E test).")
     public void testAddBusinessUnitEndToEndTest() {
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
 
         BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
 

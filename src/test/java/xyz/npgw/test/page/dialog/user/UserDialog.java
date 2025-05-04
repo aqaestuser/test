@@ -13,6 +13,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
 
     private final Locator activeRadioButton = radioButton("Active");
     private final Locator inactiveRadioButton = radioButton("Inactive");
+    private final Locator allowedBusinessUnitsTitle = textExact("Allowed business units");
 
     public UserDialog(Page page) {
         super(page);
@@ -78,6 +79,8 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
 
     @Step("Set checked 'Allowed business units' checkboxes by business units names")
     public CurrentDialogT setAllowedBusinessUnits(String[] businessUnits) {
+        allowedBusinessUnitsTitle.waitFor();
+
         for (String businessUnit : businessUnits) {
             checkbox(businessUnit).all().forEach(item -> item.setChecked(true));
         }
