@@ -7,7 +7,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Company;
@@ -30,17 +29,14 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickCompaniesAndBusinessUnitsTab()
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .getSelectCompany()
-                .selectCompany(company.companyName());
+                .getSelectCompany().selectCompany(company.companyName());
 
         Allure.step("'Add business unit' button is available");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
@@ -55,8 +51,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Verify 'Add business unit' button is disabled if 'Select company' filter's field is cleaned")
     public void testVerifyAddBusinessUnitButtonDefaultState() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("'Add business unit' button is disabled once no destination company is selected");
@@ -73,17 +68,14 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         AddBusinessUnitDialog addBusinessUnitDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickCompaniesAndBusinessUnitsTab()
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .getSelectCompany()
-                .selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify that Company name field is read-only and prefilled created company");
@@ -91,7 +83,6 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
-    @Ignore("gridcell strict mode violation - need to be fixed!!! -do not just remove ignore")
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")
@@ -114,10 +105,9 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickCloseButton();
 
         Allure.step("The table is empty and 'No rows to display.' is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitEmptyList()).hasText("No rows to display.");
+        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
     }
 
-    @Ignore("fail on create click whet waiting for success")
     @Test
     @TmsLink("218")
     @Epic("Companies and business units")
@@ -128,17 +118,14 @@ public class AddBusinessUnitTest extends BaseTest {
         Locator createdBusinessUnitRow = getPage().locator("td").locator("xpath=..");
 
         new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickCompaniesAndBusinessUnitsTab()
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
                 .waitUntilAlertIsGone()
-                .getSelectCompany()
-                .selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton()
                 .fillBusinessUnitNameField(company.companyType())
                 .clickCreateButton()
