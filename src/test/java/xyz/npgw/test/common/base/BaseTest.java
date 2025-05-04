@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.testng.ITestResult;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -32,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.Map;
 
@@ -45,6 +47,7 @@ public abstract class BaseTest {
     private Page page;
     @Getter(AccessLevel.PROTECTED)
     private APIRequestContext apiRequestContext;
+    private LocalTime bestBefore = LocalTime.now();
 
     @BeforeClass
     protected void beforeClass() {
@@ -77,13 +80,11 @@ public abstract class BaseTest {
                     .setSources(true));
         }
 
-        if (apiRequestContext == null) {
-            initApiRequestContext();
-        }
-
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
+        log.info("{}", getTestName(method, testResult).replace("(", "_").split("_")[0]);
+        initApiRequestContext();
         openSite(args);
     }
 
@@ -96,7 +97,10 @@ public abstract class BaseTest {
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{} {} in {} s", testName, testResult.isSuccess(), testDuration);
+        log.info("{} {} in {} s",
+                testResult.isSuccess() ? "OK" : "FAILED",
+                testName.split("/")[1],
+                testDuration);
 
         Path videoFilePath = Paths
                 .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".webm");
@@ -183,6 +187,10 @@ public abstract class BaseTest {
     }
 
     private void initApiRequestContext() {
+        if (LocalTime.now().isBefore(bestBefore)) {
+            return;
+        }
+
         APIResponse tokenResponse = playwright
                 .request()
                 .newContext()
@@ -192,19 +200,18 @@ public abstract class BaseTest {
                                 "password", ProjectProperties.getSuperPassword())));
 
         if (tokenResponse.ok()) {
+            Token token = new Gson().fromJson(tokenResponse.text(), TokenResponse.class).token();
             apiRequestContext = playwright
                     .request()
                     .newContext(new APIRequest
                             .NewContextOptions()
                             .setBaseURL(ProjectProperties.getBaseUrl())
-                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(new Gson()
-                                    .fromJson(tokenResponse.text(), TokenResponse.class)
-                                    .token()
-                                    .idToken))));
+                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken))));
+            bestBefore = LocalTime.now().plusSeconds(token.expiresIn).minusMinutes(1);
         } else {
             String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.text());
             log.error(message);
-            throw new RuntimeException(message);
+            throw new SkipException(message);
         }
     }
 
