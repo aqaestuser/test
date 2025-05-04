@@ -43,8 +43,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab();
 
@@ -78,8 +77,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     public void testToggleStatusRadioButtonsCorrectly(String status) {
 
         Locator statusRadiobutton = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer()
@@ -104,8 +102,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         String unitedStatesTimezone = "-09:00 Alaska Time";
 
         AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer();
@@ -187,8 +184,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         String icelandTimezone = "+00:00 Greenwich Mean Time";
 
         AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer()
@@ -212,8 +208,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         deleteAcquirer(getApiRequestContext(), acquirerName);
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer()
@@ -247,8 +242,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         }
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink()
+                .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab();
 

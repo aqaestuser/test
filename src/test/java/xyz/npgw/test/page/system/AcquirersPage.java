@@ -75,6 +75,13 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
         return this;
     }
 
+    @Step("Click '{acquirerName}' in dropdown")
+    public AcquirersPage clickAcquirerInDropdown(String acquirerName) {
+        dropdownAcquirerList.getByText(acquirerName, new Locator.GetByTextOptions().setExact(true)).click();
+
+        return this;
+    }
+
     public Locator getSelectAcquirersDropdownItems() {
         dropdownAcquirerList.last().waitFor();
 
@@ -106,8 +113,8 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
     }
 
     @Step("Click 'Edit' button to edit acquirer")
-    public EditAcquirerDialog clickEditButtonForAcquirer(String name) {
-        optionByName(name).getByText("Edit").click();
+    public EditAcquirerDialog clickEditAcquirerButton(Locator row) {
+        row.locator("button[data-testid='EditAcquirerButton']").click();
 
         return new EditAcquirerDialog(getPage());
     }
@@ -146,6 +153,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
     }
 
     public boolean isLastPage() {
+
         return Objects.equals(paginationNext.getAttribute("tabindex"), "-1");
     }
 }
