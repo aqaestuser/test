@@ -8,6 +8,7 @@ import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
+@SuppressWarnings("unchecked")
 public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialogT>>
         extends BaseDialog<TeamPage, CurrentDialogT> {
 
