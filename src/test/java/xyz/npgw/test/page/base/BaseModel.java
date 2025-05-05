@@ -97,4 +97,8 @@ public abstract class BaseModel {
     protected Locator spinButton() {
         return getPage().getByRole(AriaRole.SPINBUTTON);
     }
+
+    protected Locator alert(String text) {
+        return getPage().getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName(text));
+    }
 }

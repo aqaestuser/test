@@ -6,21 +6,26 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
+import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
+import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Getter
-public class TableComponent extends BaseComponent {
+public class TableComponent<CurrentPageT> extends BaseComponent {
 
     private final Locator tableHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
 
     private final Locator tableRows = getPage()
             .getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableHeader));
 
-    public TableComponent(Page page) {
+    private final CurrentPageT currentPage;
+
+    public TableComponent(Page page, CurrentPageT currentPage) {
         super(page);
+        this.currentPage = currentPage;
     }
 
     private int getColumnHeaderIndexByName(String columnHeaderName) {
@@ -50,5 +55,39 @@ public class TableComponent extends BaseComponent {
                 .stream()
                 .map(Locator::innerText)
                 .toList();
+    }
+
+    public Locator getTableRow(String email) {
+        Locator rowHeader = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(email));
+
+        return  getTableRows().filter(new Locator.FilterOptions().setHas(rowHeader));
+    }
+
+    public EditUserDialog clickEditUserButton(String email) {
+        getTableRow(email).getByTestId("EditUserButton").click();
+
+        return new EditUserDialog(getPage());
+    }
+
+    public ChangeUserActivityDialog clickDeactivateUserButton(String email) {
+        getTableRow(email).getByTestId("ChangeUserActivityButton").click();
+
+        return new ChangeUserActivityDialog(getPage());
+    }
+
+//    public EditUserDialog clickResetUserPasswordButton(String email) {
+//        getTableRow(email).getByTestId("ResetUserPasswordButton").click();
+//
+//        return new EditUserDialog(getPage());
+//    }
+
+    public Locator getUserStatus(String email) {
+        int columnIndex = getColumnHeaderIndexByName("Status") - 1;
+
+        return getTableRow(email).getByRole(AriaRole.GRIDCELL).nth(columnIndex);
+    }
+
+    public Locator getUserActivityIcon(String email) {
+        return getTableRow(email).getByTestId("ChangeUserActivityButton").locator("svg");
     }
 }

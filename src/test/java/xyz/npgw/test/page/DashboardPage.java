@@ -2,7 +2,6 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.common.DateRangePickerTrait;
@@ -15,10 +14,6 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
 
     public DashboardPage(Page page) {
         super(page);
-    }
-
-    protected Locator alert(String text) {
-        return getPage().getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName(text));
     }
 
     @Step("Click 'Refresh data' button")

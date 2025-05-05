@@ -178,7 +178,7 @@ public class TeamPageTest extends BaseTest {
     }
 
     @Test
-    @TmsLink("")
+    @TmsLink("474")
     @Epic("System/Team")
     @Feature("Add user")
     @Description("Create new company admin user")
@@ -208,5 +208,93 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
+    }
+
+    @Test
+    @TmsLink("475")
+    @Epic("System/Team")
+    @Feature("Edit user")
+    @Description("Edit user under company admin")
+    public void testEditCompanyUser(@Optional("UNAUTHORISED") String userRole) {
+        String email = "email@gmail.com";
+        TestUtils.deleteUser(getApiRequestContext(), email);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), "amazon3@gmail.com");
+
+        TeamPage teamPage = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .fillEmailField("amazon3@gmail.com")
+                .fillPasswordField("Amazon1!")
+                .clickLoginButtonToChangePassword()
+                .fillNewPasswordField("Amazon1!")
+                .fillRepeatNewPasswordField("Amazon1!")
+                .clickSaveButton()
+                .fillEmailField("amazon3@gmail.com")
+                .fillPasswordField("Amazon1!")
+                .clickLoginButton()
+                .waitUntilAlertIsGone()
+                .getHeader().clickSystemAdministrationLink()
+                .clickAddUserButton()
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
+                .waitUntilAlertIsGone()
+                .clickRefreshData()
+                .getTable().clickEditUserButton(email)
+                .checkInactiveRadiobutton()
+                .clickSaveChangesButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was updated successfully");
+
+        Allure.step("Verify: status of the user was changed");
+        assertThat(teamPage.getTable().getUserStatus(email)).hasText("Inactive");
+    }
+
+    @Test
+    @TmsLink("476")
+    @Epic("System/Team")
+    @Feature("Edit user")
+    @Description("Deactivate user under company admin")
+    public void testDeactivateCompanyUser(@Optional("UNAUTHORISED") String userRole) {
+        String email = "deactivated@gmail.com";
+        TestUtils.deleteUser(getApiRequestContext(), email);
+        TestUtils.createCompany(getApiRequestContext(), "Amazon1");
+        TestUtils.createCompanyAdmin(getApiRequestContext(), "amazon3@gmail.com");
+
+        TeamPage teamPage = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .fillEmailField("amazon3@gmail.com")
+                .fillPasswordField("Amazon1!")
+                .clickLoginButtonToChangePassword()
+                .fillNewPasswordField("Amazon1!")
+                .fillRepeatNewPasswordField("Amazon1!")
+                .clickSaveButton()
+                .fillEmailField("amazon3@gmail.com")
+                .fillPasswordField("Amazon1!")
+                .clickLoginButton()
+                .waitUntilAlertIsGone()
+                .getHeader().clickSystemAdministrationLink()
+                .clickAddUserButton()
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
+                .waitUntilAlertIsGone()
+                .clickRefreshData()
+                .getTable().clickDeactivateUserButton(email)
+                .clickDeactivateButton();
+
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was deactivated successfully");
+
+        teamPage.clickRefreshData();
+
+        Allure.step("Verify: status of the user was changed");
+        assertThat(teamPage.getTable().getUserStatus(email)).hasText("Inactive");
+
+        Allure.step("Verify: deactivate user icon appears");
+        assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "check");
     }
 }
