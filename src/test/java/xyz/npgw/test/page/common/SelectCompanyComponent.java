@@ -45,7 +45,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
         String lastName = "";
 
-        selectCompanyField.fill(companyName);
+        selectCompanyField.pressSequentially(companyName, new Locator.PressSequentiallyOptions().setDelay(100));
 
         if (dropdownOptionList.all().isEmpty()) {
             throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");

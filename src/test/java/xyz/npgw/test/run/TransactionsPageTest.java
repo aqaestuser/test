@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -107,7 +106,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getRowsPerPageOptions()).hasText("102550100");
     }
 
-    @Test(enabled = false)
+    @Test
     @TmsLink("130")
     @Epic("Transactions")
     @Feature("Pagination")
@@ -115,6 +114,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testPaginationNextButton() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
+                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
                 .clickNextPageButton();
 
         Allure.step("Verify: button 2 is active");
@@ -220,7 +220,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountButton()).isVisible();
     }
 
-    @Ignore
     @Test
     @TmsLink("311")
     @Epic("Transactions")
@@ -232,12 +231,12 @@ public class TransactionsPageTest extends BaseTest {
 
         List<String> amountValues = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
+                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
                 .clickAmountButton()
                 .fillAmountFromField(String.valueOf(amountFrom))
                 .fillAmountToField(String.valueOf(amountTo))
                 .clickAmountApplyButton()
-                .getTable()
-                .getColumnValues("Amount");
+                .getTable().getColumnValues("Amount");
 
         Allure.step("Verify: Amount column has values within the specified amount range");
         assertTrue(amountValues.stream()

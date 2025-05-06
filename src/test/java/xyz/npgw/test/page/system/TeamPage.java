@@ -15,7 +15,7 @@ import xyz.npgw.test.page.dialog.user.EditUserDialog;
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait<TeamPage>, SelectCompanyTrait<TeamPage> {
 
-    private final Locator applyFilterButton = getByTestId("ApplyFilterButtonTeamPage");
+    private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTeamPage");
     private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
     private final Locator selectCompanyInput = placeholder("Search...");
 
@@ -55,11 +55,11 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait<Tea
         return userRow(username).locator("td").nth(2);
     }
 
-    @Step("Click 'Apply filter")
-    public TeamPage clickApplyFilter() {
-        selectCompanyInput.waitFor();
+    @Step("Click 'Refresh data' button")
+    public TeamPage clickRefreshDataButton() {
+        refreshDataButton.waitFor();
 
-        applyFilterButton.click();
+        refreshDataButton.click();
 
         return this;
     }
@@ -82,13 +82,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait<Tea
     public TeamPage waitUntilAlertIsGone() {
         alert("SUCCESS").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
         alert("SUCCESS").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-
-        return this;
-    }
-
-    @Step("Click 'Refresh data'")
-    public TeamPage clickRefreshData() {
-        getPage().getByTestId("ApplyFilterButtonTeamPage").click();
 
         return this;
     }
