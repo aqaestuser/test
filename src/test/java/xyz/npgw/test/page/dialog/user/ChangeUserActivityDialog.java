@@ -20,16 +20,16 @@ public class ChangeUserActivityDialog extends BaseDialog<TeamPage, ChangeUserAct
         return new TeamPage(getPage());
     }
 
-    @Step("Click 'Activate' button")
-    public TeamPage clickActivateButton() {
-        activateButton.click();
+    @Step("Click 'Deactivate' button")
+    public TeamPage clickDeactivateButton() {
+        deactivateButton.click();
 
         return new TeamPage(getPage());
     }
 
-    @Step("Click 'Deactivate' button")
-    public TeamPage clickDeactivateButton() {
-        deactivateButton.click();
+    @Step("Click 'Activate' button")
+    public TeamPage clickActivateButton() {
+        activateButton.click();
 
         return new TeamPage(getPage());
     }
