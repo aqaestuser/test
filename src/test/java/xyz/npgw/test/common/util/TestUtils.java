@@ -105,8 +105,12 @@ public final class TestUtils {
 
     public static void createAcquirer(APIRequestContext request, String acquirerName) {
         Acquirer acquirer = new Acquirer("NGenius", "et", new SystemConfig(), acquirerName, new String[]{"USD"}, true);
+        createAcquirer(request, acquirer);
+    }
+
+    public static void createAcquirer(APIRequestContext request, Acquirer acquirer) {
         APIResponse response = request.post("portal-v1/acquirer", RequestOptions.create().setData(acquirer));
-        log.info("create acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+        log.info("create acquirer '{}' - {} {}", acquirer.acquirerName(), response.status(), response.text());
     }
 
     public static boolean getAcquirer(APIRequestContext request, String acquirerName) {

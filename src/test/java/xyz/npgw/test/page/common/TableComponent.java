@@ -11,7 +11,6 @@ import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
 @Getter
 public class TableComponent<CurrentPageT> extends BaseComponent {
@@ -39,13 +38,18 @@ public class TableComponent<CurrentPageT> extends BaseComponent {
         throw new NoSuchElementException("Column with header '" + columnHeaderName + "' not found.");
     }
 
+    public Locator getHeaderByName(String name) {
+
+        return tableHeader.getByText(name);
+    }
+
     @Step("Get list of values in column '{columnHeaderName}'")
     public List<String> getColumnValues(String columnHeaderName) {
-        int columnIndex = getColumnHeaderIndexByName(columnHeaderName) - 1;
+        Locator header = getHeaderByName(columnHeaderName);
+        int columnIndex = ((Number) header.evaluate("el => el.cellIndex")).intValue();
+        Locator cells = getPage().locator("tr[role='row'] > td:nth-child(" + (columnIndex + 1) + ")");
 
-        return tableRows.all().stream()
-                .map(row -> row.getByRole(AriaRole.GRIDCELL).nth(columnIndex).textContent())
-                .collect(Collectors.toList());
+        return cells.allInnerTexts();
     }
 
     public List<String> getColumnHeadersText() {

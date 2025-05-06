@@ -55,7 +55,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
     }
 
     @Step("Enter '{acquirerName}' into select acquirer placeholder")
-    public AcquirersPage enterAcquirerName(String acquirerName) {
+    public AcquirersPage typeAcquirerNameToSelectAcquirerInputField(String acquirerName) {
         selectAcquirerPlaceholder.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(100));
 
         return this;
@@ -103,6 +103,16 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
         row.locator("button[data-testid='EditAcquirerButton']").click();
 
         return new EditAcquirerDialog(getPage());
+    }
+
+    public Locator getEditAcquirerButton(Locator row) {
+
+        return row.locator("button[data-testid='EditAcquirerButton']");
+    }
+
+    public Locator getChangeAcquirerActivityButton(Locator row) {
+
+        return row.locator("button[data-testid='ChangeBusinessUnitActivityButton']");
     }
 
     @Step("Click the 'Rows Per Page' dropdown Chevron")

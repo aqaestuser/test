@@ -45,7 +45,7 @@ public class EditAcquirerDialogTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
-                .enterAcquirerName(acquirerName)
+                .typeAcquirerNameToSelectAcquirerInputField(acquirerName)
                 .clickAcquirerInDropdown(acquirerName);
 
         Locator row = acquirersPage
