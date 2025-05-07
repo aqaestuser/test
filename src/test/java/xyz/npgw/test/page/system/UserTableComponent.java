@@ -43,6 +43,13 @@ public class UserTableComponent extends TableComponent {
         return new ResetUserPasswordDialog(getPage());
     }
 
+    public Locator getUserRole(String email) {
+        int columnIndex = getColumnHeaderIndexByName("User role");
+        Locator row = getTableRow(email);
+
+        return row.getByRole(AriaRole.GRIDCELL).or(row.getByRole(AriaRole.ROWHEADER)).nth(columnIndex);
+    }
+
     public Locator getUserStatus(String email) {
         int columnIndex = getColumnHeaderIndexByName("Status");
         Locator row = getTableRow(email);

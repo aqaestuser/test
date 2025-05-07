@@ -92,6 +92,18 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
         return (CurrentDialogT) this;
     }
 
+    @Step("Set checked '{businessUnit}' checkbox")
+    public CurrentDialogT setAllowedBusinessUnit(String businessUnit) {
+            allowedBusinessUnitsTitle.waitFor();
+            checkbox(businessUnit).all()
+                    .forEach(item -> {
+                        item.waitFor();
+                        item.setChecked(true);
+                    });
+
+            return (CurrentDialogT) this;
+    }
+
     @Step("Unset checked 'Allowed business units' checkboxes by business units names")
     public CurrentDialogT unsetAllowedBusinessUnits(String[] businessUnits) {
         for (String businessUnit : businessUnits) {

@@ -137,4 +137,15 @@ public final class TestUtils {
         log.info("get all merchants for company '{}' - {} {}", companyName, response.status(), response.text());
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
+
+    public static void createMerchantIfNeeded(APIRequestContext request, String companyName, String businessUnitName) {
+        if (!existsMerchant(request, companyName, businessUnitName)) {
+            createMerchant(request, companyName, businessUnitName);
+        }
+    }
+
+    private static boolean existsMerchant(APIRequestContext request, String companyName, String businessUnitName) {
+        return Arrays.stream(getAllMerchants(request, companyName))
+                .anyMatch(businessUnit -> businessUnit.merchantName().equals(businessUnitName));
+    }
 }

@@ -411,4 +411,52 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSPassword is changed successfully");
     }
+
+    @Test
+    @TmsLink("492")
+    @Epic("System/Team")
+    @Feature("Edit user")
+    @Description("Create company analyst")
+    public void testCreateCompanyAnalyst(@Optional("UNAUTHORISED") String userRole) {
+        String email = "companyanalyst@gmail.com";
+        String companyName = "Analyst company";
+        TestUtils.deleteUser(getApiRequestContext(), email);
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompany(getApiRequestContext(), companyName);
+        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, "Business unit 1");
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, ADMIN_EMAIL, ADMIN_PASSWORD);
+
+        TeamPage teamPage = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .fillEmailField(ADMIN_EMAIL)
+                .fillPasswordField(ADMIN_PASSWORD)
+                .clickLoginButtonToChangePassword()
+                .fillNewPasswordField(ADMIN_PASSWORD)
+                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
+                .clickSaveButton()
+                .fillEmailField(ADMIN_EMAIL)
+                .fillPasswordField(ADMIN_PASSWORD)
+                .clickLoginButton()
+                .waitUntilAlertIsGone()
+                .getHeader().clickSystemAdministrationLink()
+                .clickAddUserButton()
+                .fillEmailField(email)
+                .fillPasswordField("CompanyAnalyst123!")
+                .setAllowedBusinessUnit("Business unit 1")
+                .clickCreateButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
+
+        teamPage.clickRefreshDataButton();
+
+        Allure.step("Verify: status of the user was changed");
+        assertThat(teamPage.getTable().getUserRole(email)).hasText("USER");
+
+        Allure.step("Verify: status of the user");
+        assertThat(teamPage.getTable().getUserStatus(email)).hasText("Active");
+
+        Allure.step("Verify: deactivate user icon appears");
+        assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
+    }
 }
