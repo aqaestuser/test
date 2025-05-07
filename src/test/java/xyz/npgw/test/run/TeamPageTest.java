@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -301,7 +300,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserStatus(email)).hasText("Inactive");
     }
 
-    @Ignore
     @Test
     @TmsLink("476")
     @Epic("System/Team")
