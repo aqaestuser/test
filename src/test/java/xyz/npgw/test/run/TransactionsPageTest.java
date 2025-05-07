@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -447,5 +448,21 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: PDF option is visible");
         assertThat(transactionsPage.getDownloadPdfOption()).isVisible();
+    }
+
+
+    @Test(dataProvider = "getMenuItemName", dataProviderClass = TestDataProvider.class)
+    @TmsLink("357")
+    @Epic("Transactions")
+    @Feature("Export table data")
+    @Description("Download files: PDF, Excel, CVS")
+    public void testDownloadFiles(String menuItemName) {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
+                .clickDownloadButton();
+
+        Allure.step("Verify: that files can be downloaded");
+        Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(menuItemName));
     }
 }

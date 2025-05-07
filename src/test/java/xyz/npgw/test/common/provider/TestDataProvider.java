@@ -83,4 +83,13 @@ public class TestDataProvider {
                 {"USD"},
         };
     }
+
+    @DataProvider
+    public Object[][] getMenuItemName() {
+        return new Object[][]{
+                {"CSV"},
+                {"EXCEL"},
+                //{"PDF"},
+        };
+    }
 }
