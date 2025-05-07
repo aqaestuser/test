@@ -7,13 +7,12 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.common.SelectCompanyTrait;
-import xyz.npgw.test.page.common.TableTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 @Log4j2
-public class TeamPage extends BaseSystemPage<TeamPage> implements TableTrait<TeamPage>, SelectCompanyTrait<TeamPage> {
+public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait, SelectCompanyTrait<TeamPage> {
 
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTeamPage");
     private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");

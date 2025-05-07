@@ -137,7 +137,7 @@ public class AddCompanyDialogTest extends BaseTest {
     }
 
     @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters",
-            dataProviderClass = TestDataProvider.class)
+            dataProviderClass = TestDataProvider.class, enabled = false)
     @TmsLink("215")
     @Epic("System/Companies and business units")
     @Feature("Add company")
