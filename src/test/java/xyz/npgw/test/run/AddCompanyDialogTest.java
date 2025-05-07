@@ -196,8 +196,8 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: company creation success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).containsText(
-                "Company was created successfully");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
+                "SUCCESSCompany was created successfully");
     }
 
     @Test
@@ -295,7 +295,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
                 "SUCCESSCompany was created successfully");
     }
 
@@ -343,7 +343,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed after company creation");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage())
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage())
                 .hasText("SUCCESSCompany was created successfully");
 
         companiesAndBusinessUnitsPage
@@ -443,8 +443,8 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: Success alert is shown after business unit is added");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).containsText(
-                "Business unit was created successfully");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
+                "SUCCESSBusiness unit was created successfully");
 
         Allure.step("Verify: Selected company is preserved after creation");
         assertThat(companiesAndBusinessUnitsPage

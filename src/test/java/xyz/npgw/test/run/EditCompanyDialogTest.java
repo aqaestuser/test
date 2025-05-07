@@ -40,7 +40,7 @@ public class EditCompanyDialogTest extends BaseTest {
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlertMessage()).hasText(
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
                 "SUCCESSCompany was updated successfully");
     }
 }

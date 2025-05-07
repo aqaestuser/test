@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
+import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
@@ -14,13 +15,12 @@ import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 
 @Getter
 public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage>
-        implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage> {
+        implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage>, AlertTrait<CompaniesAndBusinessUnitsPage> {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
-    private final Locator successAlert = alert("SUCCESS");
     private final Locator addCompanyDialog = dialog();
     private final Locator companyNameDropdownList = locator("[role='option']");
     private final Locator selectCompanyInput = placeholder("Search...");
@@ -53,12 +53,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         addCompanyButton.click();
 
         return new AddCompanyDialog(getPage());
-    }
-
-    public CompaniesAndBusinessUnitsPage waitUntilAlertIsGone() {
-        successAlert.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
-        successAlert.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-        return this;
     }
 
     @Step("Click 'Add business unit' button (+)")

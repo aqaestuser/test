@@ -35,7 +35,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
-                .waitUntilAlertIsGone()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getSelectCompany().selectCompany(company.companyName());
 
         Allure.step("'Add business unit' button is available");
@@ -74,7 +74,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
-                .waitUntilAlertIsGone()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton();
 
@@ -99,7 +99,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
-                .waitUntilAlertIsGone()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton()
                 .clickCloseButton();
@@ -124,12 +124,12 @@ public class AddBusinessUnitTest extends BaseTest {
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .clickCreateButton()
-                .waitUntilAlertIsGone()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton()
                 .fillBusinessUnitNameField(company.companyType())
                 .clickCreateButton()
-                .waitUntilAlertIsGone();
+                .getAlert().waitUntilSuccessAlertIsGone();
 
         assertThat(createdBusinessUnitRow).containsText(company.companyType());
         assertThat(createdBusinessUnitRow).containsText("id.merchant.");

@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
+import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.common.TableTrait;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerDialog;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
-public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements TableTrait {
+public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements TableTrait, AlertTrait<AcquirersPage> {
 
     private final Locator addAcquirerButton = getByTestId("AddAcquirerButton");
     private final Locator addAcquirerDialog = dialog();
