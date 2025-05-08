@@ -9,7 +9,6 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
-import com.microsoft.playwright.options.ColorScheme;
 import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
@@ -57,11 +56,15 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
+        if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
+            throw new SkipException("Test skipped due to failFast option being true");
+        }
+
         Browser.NewContextOptions options = new Browser
                 .NewContextOptions()
                 .setLocale("en-GB")
                 .setTimezoneId("Europe/Paris")
-                .setColorScheme(ColorScheme.DARK)
+                .setColorScheme(ProjectProperties.getColorScheme())
                 .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
                 .setBaseURL(ProjectProperties.getBaseUrl());
 
@@ -88,7 +91,7 @@ public abstract class BaseTest {
         openSite(args);
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterMethod
     protected void afterMethod(Method method, ITestResult testResult) {
         String testName = getTestName(method, testResult);
 
@@ -97,8 +100,8 @@ public abstract class BaseTest {
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{} {} in {} s",
-                testResult.isSuccess() ? "OK" : "FAILED",
+        log.info("{}_{}  {} in {} s",
+                testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(),
                 testName.split("/")[1],
                 testDuration);
 
@@ -107,7 +110,7 @@ public abstract class BaseTest {
         if (page != null) {
             page.close();
             if (ProjectProperties.isVideoMode() && page.video() != null) {
-                if (!testResult.isSuccess()) {
+                if (testResult.getStatus() == ITestResult.FAILURE) {
                     page.video().saveAs(videoFilePath);
                     addVideoToAllure(videoFilePath);
                 }
@@ -119,14 +122,23 @@ public abstract class BaseTest {
                 .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".zip");
         if (context != null) {
             if (ProjectProperties.isTracingMode()) {
-                if (testResult.isSuccess()) {
-                    context.tracing().stop();
-                } else {
+                if (testResult.getStatus() == ITestResult.FAILURE) {
                     context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
                     addTracesToAllure(traceFilePath);
+                } else {
+                    context.tracing().stop();
                 }
             }
             context.close();
+        }
+
+        if (testResult.getStatus() == ITestResult.FAILURE) {
+            ProjectProperties.setTracingMode(false);
+            ProjectProperties.setVideoMode(false);
+
+            if (ProjectProperties.isFailFast()) {
+                ProjectProperties.setSkipMode(true);
+            }
         }
     }
 

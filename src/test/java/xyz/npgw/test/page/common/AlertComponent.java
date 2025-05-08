@@ -28,4 +28,10 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
 
         return alertMessage;
     }
+
+    public CurrentPageT clickCloseButton() {
+        alertMessage.getByText("Close").click();
+
+        return currentPage;
+    }
 }

@@ -52,8 +52,9 @@ jobs:
             viewportWidth=1920;
             viewportHeight=1080;
             headlessMode=true;
-            tracingMode=true;
-            videoMode=true
+            tracingMode=false;
+            failFast=true;
+            videoMode=false
           CI_RUN: true
 
       - name: Create test report

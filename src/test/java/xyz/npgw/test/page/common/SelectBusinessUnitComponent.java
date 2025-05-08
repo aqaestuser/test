@@ -48,13 +48,12 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
                 new Locator.PressSequentiallyOptions().setDelay(100));
 
         if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown list.");
+            throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown.");
         }
 
         while (getBusinessUnitInDropdownOption(businessUnitName).all().isEmpty()) {
             if (dropdownOptionList.last().innerText().equals(lastName)) {
-                throw new NoSuchElementException(
-                        "Business unit '" + businessUnitName + "' not found in dropdown list.");
+                throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown.");
             }
             dropdownOptionList.last().scrollIntoViewIfNeeded();
 
@@ -87,4 +86,3 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
         return page;
     }
 }
-

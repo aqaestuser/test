@@ -61,12 +61,12 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     private final Locator downloadExcelOption = menuItemByName("EXCEL");
     private final Locator downloadPdfOption = menuItemByName("PDF");
 
-    public Locator amountApplied(String amount) {
-        return textExact(amount);
-    }
-
     public TransactionsPage(Page page) {
         super(page);
+    }
+
+    public Locator amountApplied(String amount) {
+        return textExact(amount);
     }
 
     @Step("Click Currency Selector")
@@ -305,7 +305,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     }
 
     public boolean isFileAvailableAndNotEmpty(String menuItemName) {
-
         Download download = getPage().waitForDownload(() -> menuItemByName(menuItemName).click());
 
         int length = 0;
@@ -317,4 +316,3 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
         return length > 0;
     }
 }
-

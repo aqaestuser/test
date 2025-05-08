@@ -170,7 +170,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Status")
     @Description("Verify that user can see selector Status Options")
     public void testTheVisibilityOfTheStatusSelectorOptions() {
-
         List<String> options = List.of("ALL",
                 "INITIATED",
                 "PENDING",
@@ -251,7 +250,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("error message 'From should be lesser than To' appears")
     public void testErrorMessageByAmount() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
@@ -268,7 +266,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Status")
     @Description("Verify that user can see Payment Method Options")
     public void testTheVisibilityOfThePaymentMethodOptions() {
-
         List<String> options = List.of("ALL",
                 "VISA",
                 "Mastercard");
@@ -305,7 +302,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Transactions table header")
     @Description("Verify full lists of column headers in table and visible columns from Settings")
     public void testCheckUncheckAllVisibleColumns() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickSettingsButton()
@@ -341,7 +337,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Settings")
     @Description("Check/Uncheck Visible columns in the Settings and verify table column headers")
     public void testCheckUncheckOneVisibleColumn() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickSettingsButton()
@@ -386,7 +381,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Edit Amount")
     public void testEditAmount() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
@@ -407,7 +401,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Reset Amount Values")
     public void testResetAmountValues() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
@@ -435,7 +428,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Export table data")
     @Description("The presence of the dropdown options export table data to  file")
     public void testPresenceOfDownloadFilesOptions() {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickDownloadButton();
@@ -457,7 +449,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Export table data")
     @Description("Download files: PDF, Excel, CVS")
     public void testDownloadFiles(String menuItemName) {
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickDownloadButton();

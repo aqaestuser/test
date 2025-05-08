@@ -7,7 +7,6 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.common.AlertTrait;
-import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
@@ -19,7 +18,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
 
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTeamPage");
     private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
-    private final Locator selectCompanyInput = placeholder("Search...");
 
     public TeamPage(Page page) {
         super(page);
@@ -59,6 +57,8 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
 
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
+//        TODO remove after bugfix
+        getPage().waitForTimeout(500);
         refreshDataButton.waitFor();
 
         refreshDataButton.click();

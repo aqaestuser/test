@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -30,7 +29,6 @@ public class TeamPageTest extends BaseTest {
     private static final String ADMIN_COMPANY_NAME = "AdminCompany";
     private static final String ADMIN_EMAIL = "admin.email@gmail.com";
     private static final String ADMIN_PASSWORD = "AdminPassword1!";
-
 
     User user = new User(
             COMPANY_NAME,
@@ -114,11 +112,12 @@ public class TeamPageTest extends BaseTest {
                 .setStatusRadiobutton(user.enabled())
                 .setUserRoleRadiobutton(user.userRole())
                 .setAllowedBusinessUnits(user.merchantIds())
-                .clickCreateButton()
-                .clickRefreshDataButton();
+                .clickCreateButton();
 
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was created successfully");
+
+        teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
@@ -221,7 +220,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was created successfully");
     }
 
-    @Ignore("Locator expected to have text: Inactive but Active")
     @Test
     @TmsLink("471")
     @Epic("System/Team")

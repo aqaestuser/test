@@ -1,0 +1,12 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+
+<suite name="suite name" parallel="false">
+    <listeners>
+        <listener class-name="xyz.npgw.test.common.base.RetryListener"/>
+    </listeners>
+    <test name="test name">
+        <packages>
+            <package name="xyz.npgw.test.run.*"/>
+        </packages>
+    </test>
+</suite>
