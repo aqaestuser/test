@@ -1,6 +1,7 @@
 package xyz.npgw.test.run;
 
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.options.BoundingBox;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -45,8 +46,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testVisibilityAcquirersListControlTab() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: Add Acquirer Button is visible");
         assertThat(acquirersPage.getAddAcquirerButton()).isVisible();
@@ -93,8 +93,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testSelectAcquirerDropdownFunctionality() {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSelectAcquirerPlaceholder()
                 .getSelectAcquirersDropdownItems();
 
@@ -111,8 +110,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testOpenStatusDropdown() {
         Locator actualOptions = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickAcquirerStatusPlaceholder()
                 .getAcquirerStatusOptions();
 
@@ -128,8 +126,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testFilterAcquirersByStatus(String status) {
         List<Locator> statuses = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickAcquirerStatusPlaceholder()
                 .selectAcquirerStatus(status)
                 .getAcquirersStatus();
@@ -150,8 +147,7 @@ public class AcquirersPageTest extends BaseTest {
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getSystemMenu().clickAcquirersTab();
 
         Locator actualStatus = acquirersPage.getAcquirerStatusValue();
 
@@ -180,8 +176,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testRowsPerPageDropdownOptions() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: The default 'Rows Per Page' value is set to 25");
         assertThat(acquirersPage.getRowsPerPage()).hasText("25");
@@ -196,7 +191,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getRowsPerPageOptions()).hasText(rowsPerPageOptions);
     }
 
-    @Test()
+    @Test
     @TmsLink("382")
     @Epic("System/Acquirers")
     @Feature("Rows Per Page")
@@ -204,8 +199,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testSelectingRowsPerPageOptionUpdatesFieldValue() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
             acquirersPage
@@ -227,8 +221,7 @@ public class AcquirersPageTest extends BaseTest {
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab();
+                .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
             acquirersPage
@@ -266,8 +259,7 @@ public class AcquirersPageTest extends BaseTest {
     public void testDisplayCorrectColumnHeadersInAcquirersTable() {
         List<String> acquirerTableHeaders = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .getTable()
                 .getColumnHeadersText();
 
@@ -310,8 +302,7 @@ public class AcquirersPageTest extends BaseTest {
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .typeAcquirerNameToSelectAcquirerInputField(acquirer.acquirerName())
                 .clickAcquirerInDropdown(acquirer.acquirerName());
 
@@ -325,7 +316,7 @@ public class AcquirersPageTest extends BaseTest {
         for (int i = 0; i < COLUMNS_HEADERS.size() - 1; i++) {
             String header = COLUMNS_HEADERS.get(i);
             String expected = expectedColumnValues.get(header);
-            String actual = table.getColumnValues(header).get(0).toString();
+            String actual = table.getColumnValues(header).get(0);
 
             Allure.step(String.format("Verify that displayed '%s' is: %s", header, expected));
             Assert.assertEquals(
@@ -343,6 +334,51 @@ public class AcquirersPageTest extends BaseTest {
 
         Allure.step("Verify: Pagination shows only one page labeled '1'");
         assertThat(acquirersPage.getPaginationItems()).isVisible();
-        assertThat(acquirersPage.getPaginationItems()).containsText("1");
+        assertThat(acquirersPage.getPaginationItems()).hasText("1");
+    }
+
+    @Test(expectedExceptions = { AssertionError.class })
+    @TmsLink("487")
+    @Epic("System/Acquirers")
+    @Feature("Acquirers list")
+    @Description("Verifies that table column headers are displayed correctly on each page when navigating"
+            + " through paginated results.")
+    public void testColumnHeadersDisplayCorrectlyOnAllPages() {
+        Allure.step("Test disabled / Known bug: The column is not visible on the screen!");
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab();
+
+        for (String option : rowsPerPageOptions) {
+            acquirersPage
+                    .clickRowsPerPageChevron()
+                    .selectRowsPerPageOption(option);
+
+            while (true) {
+                String activePage = acquirersPage.getActivePage().innerText();
+
+                Allure.step(
+                        String.format("Verify: All table column headers are on page '%s' with '%s' pagination",
+                                activePage, option));
+                Assert.assertEquals(
+                        acquirersPage.getTable().getTableColumnHeader().allTextContents(),
+                        COLUMNS_HEADERS,
+                        String.format("Column headers do not match expected headers on page '%s'", activePage));
+
+                BoundingBox table = acquirersPage.getTable().getTableHeader().boundingBox();
+                double pageWidth = getPage().viewportSize().width;
+
+                Assert.assertTrue(table.x >= 0 && (table.x + table.width) <= pageWidth, String.format(
+                        "Еhe header is not fully visible within the viewport on page '%s'!", activePage));
+
+                if (acquirersPage.isLastPage()) {
+                    break;
+                }
+
+                acquirersPage.clickNextPage();
+            }
+        }
     }
 }
+

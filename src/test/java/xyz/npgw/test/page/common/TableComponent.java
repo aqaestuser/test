@@ -12,20 +12,22 @@ import java.util.NoSuchElementException;
 @Getter
 public class TableComponent extends BaseComponent {
 
-    private final Locator tableHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
+    private final Locator tableColumnHeader = getPage().getByRole(AriaRole.COLUMNHEADER);
+    private final Locator tableHeader = getPage()
+            .getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHas(tableColumnHeader));
 
     private final Locator tableRows = getPage()
-            .getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableHeader));
+            .getByRole(AriaRole.ROW).filter(new Locator.FilterOptions().setHasNot(tableColumnHeader));
 
     public TableComponent(Page page) {
         super(page);
     }
 
     protected int getColumnHeaderIndexByName(String columnHeaderName) {
-        tableHeader.last().waitFor();
+        tableColumnHeader.last().waitFor();
 
-        for (int i = 0; i < tableHeader.count(); i++) {
-            if (tableHeader.nth(i).innerText().equals(columnHeaderName)) {
+        for (int i = 0; i < tableColumnHeader.count(); i++) {
+            if (tableColumnHeader.nth(i).innerText().equals(columnHeaderName)) {
                 return i;
             }
         }
@@ -34,7 +36,7 @@ public class TableComponent extends BaseComponent {
 
     public Locator getHeaderByName(String name) {
 
-        return tableHeader.getByText(name);
+        return tableColumnHeader.getByText(name);
     }
 
     public List<String> getColumnValues(String columnHeaderName) {
@@ -46,7 +48,7 @@ public class TableComponent extends BaseComponent {
     }
 
     public List<String> getColumnHeadersText() {
-        return tableHeader.allInnerTexts();
+        return tableColumnHeader.allInnerTexts();
     }
 
     public Locator getTableRow(String header) {

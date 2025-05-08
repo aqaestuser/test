@@ -437,7 +437,8 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButton()
-                .waitUntilAlertIsGone()
+                .getAlert()
+                .waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -446,7 +447,7 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlertMessage()).hasText("SUCCESSUser was created successfully");
+        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was created successfully");
 
         teamPage.clickRefreshDataButton();
 
