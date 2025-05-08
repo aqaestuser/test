@@ -364,13 +364,16 @@ public class AcquirersPageTest extends BaseTest {
                 Assert.assertEquals(
                         acquirersPage.getTable().getTableColumnHeader().allTextContents(),
                         COLUMNS_HEADERS,
-                        String.format("Column headers do not match expected headers on page '%s'", activePage));
+                        String.format(
+                                "Column headers do not match expected headers on page '%s' with '%s' pagination!",
+                                activePage, option));
 
                 BoundingBox table = acquirersPage.getTable().getTableHeader().boundingBox();
                 double pageWidth = getPage().viewportSize().width;
 
                 Assert.assertTrue(table.x >= 0 && (table.x + table.width) <= pageWidth, String.format(
-                        "Еhe header is not fully visible within the viewport on page '%s'!", activePage));
+                        "The header is not fully visible within the viewport on page '%s' with '%s' pagination!",
+                        activePage, option));
 
                 if (acquirersPage.isLastPage()) {
                     break;
