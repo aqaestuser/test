@@ -8,13 +8,9 @@ import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.testng.Assert;
-import org.testng.SkipException;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.util.ResponseUtils;
-import xyz.npgw.test.page.common.DateRangePickerTrait;
-import xyz.npgw.test.page.common.HeaderPage;
-import xyz.npgw.test.page.common.SelectCompanyTrait;
-import xyz.npgw.test.page.common.TableTrait;
+import xyz.npgw.test.page.common.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +18,7 @@ import java.util.List;
 
 @Getter
 public class TransactionsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<TransactionsPage>,
-        SelectCompanyTrait<TransactionsPage> {
+        SelectCompanyTrait<TransactionsPage>, SelectBusinessUnitTrait<TransactionsPage> {
 
     private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
     private final Locator rowsPerPageOptions = dialog();

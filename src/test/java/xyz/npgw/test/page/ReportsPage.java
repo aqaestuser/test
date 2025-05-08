@@ -5,9 +5,11 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.common.DateRangePickerTrait;
 import xyz.npgw.test.page.common.HeaderPage;
+import xyz.npgw.test.page.common.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.TableTrait;
 
-public class ReportsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<ReportsPage> {
+public class ReportsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<ReportsPage>,
+        SelectBusinessUnitTrait<ReportsPage> {
 
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
 
