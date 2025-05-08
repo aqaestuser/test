@@ -53,7 +53,8 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
         while (getBusinessUnitInDropdownOption(businessUnitName).all().isEmpty()) {
             if (dropdownOptionList.last().innerText().equals(lastName)) {
-                throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown list.");
+                throw new NoSuchElementException(
+                        "Business unit '" + businessUnitName + "' not found in dropdown list.");
             }
             dropdownOptionList.last().scrollIntoViewIfNeeded();
 

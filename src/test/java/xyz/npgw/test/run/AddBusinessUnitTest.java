@@ -134,4 +134,28 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(createdBusinessUnitRow).containsText(company.companyType());
         assertThat(createdBusinessUnitRow).containsText("id.merchant.");
     }
+
+    @Test
+    @TmsLink("480")
+    @Epic("Companies and business units")
+    @Feature("Reset filter")
+    @Description("Verify default filter state was applied once reset")
+    public void testResetAppliedFilter() {
+        Company company = new Company(new Faker());
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickOnResetFilterButton();
+
+        assertThat(companiesAndBusinessUnitsPage.getPageContent())
+                .containsText("Select company name to view merchants");
+    }
 }
