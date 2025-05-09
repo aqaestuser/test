@@ -2,6 +2,7 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.common.DateRangePickerTrait;
 import xyz.npgw.test.page.common.HeaderPage;
@@ -13,7 +14,7 @@ public class ReportsPage extends HeaderPage implements TableTrait, DateRangePick
         SelectBusinessUnitTrait<ReportsPage> {
 
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
-    private final Locator generateReportButton = buttonByName("Generate report");
+    private final Locator generateReportButton = getByRole(AriaRole.BUTTON, "Generate report");
 
     public ReportsPage(Page page) {
         super(page);

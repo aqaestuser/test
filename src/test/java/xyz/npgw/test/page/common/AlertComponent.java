@@ -10,6 +10,7 @@ import xyz.npgw.test.page.base.BaseComponent;
 public class AlertComponent<CurrentPageT> extends BaseComponent {
 
     private final Locator alertMessage = locator("[role='alert']");
+    private final Locator successMessage = getByRole(AriaRole.ALERT, "SUCCESS");
 
     private final CurrentPageT currentPage;
 
@@ -19,8 +20,8 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
     }
 
     public CurrentPageT waitUntilSuccessAlertIsGone() {
-        alert("SUCCESS").waitFor();
-        alert("SUCCESS").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+        successMessage.waitFor();
+        successMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return currentPage;
     }
@@ -33,7 +34,7 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Close 'SUCCESS' alert message")
     public CurrentPageT clickCloseButton() {
-        getPage().getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName("SUCCESS")).getByLabel("Close");
+        successMessage.getByLabel("Close");
 
         return currentPage;
     }

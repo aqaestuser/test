@@ -2,6 +2,7 @@ package xyz.npgw.test.page.dialog.company;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
@@ -9,7 +10,7 @@ import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 @Getter
 public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
 
-    private final Locator createButton = buttonByName("Create");
+    private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
     public AddCompanyDialog(Page page) {
         super(page);

@@ -115,7 +115,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Add a new Merchant with 'Add business unit' button")
     public void testAddNewMerchants() {
         Company company = new Company(new Faker());
-        Locator createdBusinessUnitRow = getPage().locator("td").locator("xpath=..");
 
         new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -131,7 +130,11 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
+//        TODO add steps and cleanup createdBusinessUnitRow locator
+        Locator createdBusinessUnitRow = getPage().locator("td").locator("xpath=..");
+        Allure.step("");
         assertThat(createdBusinessUnitRow).containsText(company.companyType());
+        Allure.step("");
         assertThat(createdBusinessUnitRow).containsText("id.merchant.");
     }
 
@@ -155,6 +158,8 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnResetFilterButton();
 
+//        TODO add stepr
+        Allure.step("");
         assertThat(companiesAndBusinessUnitsPage.getPageContent())
                 .containsText("Select company name to view merchants");
     }

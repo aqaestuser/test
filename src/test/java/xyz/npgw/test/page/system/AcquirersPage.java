@@ -2,6 +2,7 @@ package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
@@ -19,26 +20,26 @@ import java.util.regex.Pattern;
 public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements TableTrait, AlertTrait<AcquirersPage> {
 
     private final Locator addAcquirerButton = getByTestId("AddAcquirerButton");
-    private final Locator addAcquirerDialog = dialog();
+    private final Locator addAcquirerDialog = getByRole(AriaRole.DIALOG);
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
-    private final Locator acquirerNameHeader = textExact("Acquirer name");
+    private final Locator acquirerNameHeader = getByTextExact("Acquirer name");
     private final Locator acquirersList = locator("div[data-slot='base'] li");
     @Getter(AccessLevel.NONE)
     private final Locator acquirersStatus = locator("span.flex-1.text-inherit");
     private final Locator rowsPerPage = locator("button[aria-label='Rows Per Page']");
     private final Locator rowsPerPageDropdown = locator("div[data-slot='listbox']");
-    private final Locator paginationItems = label("pagination item");
-    private final Locator paginationNext = labelExact("next page button");
-    private final Locator selectAcquirerLabel = labelExact("Select acquirer");
+    private final Locator paginationItems = getPage().getByLabel("pagination item");
+    private final Locator paginationNext = getByLabelExact("next page button");
+    private final Locator selectAcquirerLabel = getByLabelExact("Select acquirer");
     @Getter(AccessLevel.NONE)
-    private final Locator selectAcquirerPlaceholder = placeholder("Search");
+    private final Locator selectAcquirerPlaceholder = getByPlaceholder("Search");
     @Getter(AccessLevel.NONE)
     private final Locator dropdownAcquirerList = locator("div[data-slot='content'] li");
-    private final Locator statusLabel = labelExact("Status");
+    private final Locator statusLabel = getByLabelExact("Status");
     private final Locator acquirerStatusValue = locator("div[data-slot='innerWrapper'] span").first();
     private final Locator acquirerStatusDropdown = locator("div[data-slot='listbox']");
-    private final Locator acquirerStatusOptions = option(acquirerStatusDropdown);
+    private final Locator acquirerStatusOptions = acquirerStatusDropdown.getByRole(AriaRole.OPTION);
 
     public AcquirersPage(Page page) {
         super(page);
@@ -142,7 +143,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
 
     @Step("Click on page '{pageNumber}'")
     public AcquirersPage clickOnPaginationPage(String pageNumber) {
-        label("pagination item " + pageNumber).click();
+        getPage().getByLabel("pagination item " + pageNumber).click();
 
         return this;
     }

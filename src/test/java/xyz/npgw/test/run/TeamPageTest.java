@@ -189,6 +189,7 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "check");
     }
 
+//    TODO add tms link
     @Test
     @TmsLink("")
     @Epic("System/Team")
@@ -363,6 +364,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
     }
 
+//    TODO add tms link
     @Test
     @TmsLink("")
     @Epic("System/Team")

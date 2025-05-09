@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
-    private final Locator selectBusinessUnitField = labelExact("Business unit");
+    private final Locator selectBusinessUnitField = getByLabelExact("Business unit");
     @Getter
     private final Locator selectBusinessUnitPlaceholder = locator("input[aria-label='Business unit']");
     @Getter
@@ -34,7 +34,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
     }
 
     public Locator getBusinessUnitInDropdownOption(String businessUnitName) {
-        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(textExact(businessUnitName)));
+        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(getByTextExact(businessUnitName)));
     }
 
     @Step("Select '{businessUnitName}' business unit using filter")

@@ -2,6 +2,7 @@ package xyz.npgw.test.page.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,9 +12,9 @@ import xyz.npgw.test.page.base.BaseComponent;
 public class DateRangePickerComponent<CurrentPageT> extends BaseComponent {
 
     @Getter(AccessLevel.NONE)
-    private final Locator dateRangeFields = spinButton();
+    private final Locator dateRangeFields = getByRole(AriaRole.SPINBUTTON);
     private final Locator dataRangePickerErrorMessage = locator("[data-slot='error-message']");
-    private final Locator dateRangePickerField = group("DateRange");
+    private final Locator dateRangePickerField = getByRole(AriaRole.GROUP, "DateRange");
 
     private final CurrentPageT currentPage;
 

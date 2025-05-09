@@ -24,24 +24,25 @@ import java.util.List;
 public class TransactionsPage extends HeaderPage implements TableTrait, DateRangePickerTrait<TransactionsPage>,
         SelectCompanyTrait<TransactionsPage>, SelectBusinessUnitTrait<TransactionsPage> {
 
-    private final Locator rowsPerPageButton = buttonByName("Rows Per Page");
-    private final Locator rowsPerPageOptions = dialog();
+    private final Locator rowsPerPageButton = getByRole(AriaRole.BUTTON, "Rows Per Page");
+    private final Locator rowsPerPageOptions = getByRole(AriaRole.DIALOG);
     @Getter(AccessLevel.NONE)
-    private final Locator nextPageButton = buttonByName("next page button");
-    private final Locator paginationItemTwoActiveButton = buttonByName("pagination item 2 active");
-    private final Locator businessUnitSelector = textExact("Business unit").locator("../../..");
-    private final Locator currencySelector = labelExact("Currency");
-    private final Locator paymentMethodSelector = labelExact("Payment method");
-    private final Locator statusSelector = labelExact("Status");
-    private final Locator amountButton = buttonByName("Amount");
+    private final Locator nextPageButton = getByRole(AriaRole.BUTTON, "next page button");
+    private final Locator paginationItemTwoActiveButton = getByRole(AriaRole.BUTTON, "pagination item 2 active");
+    private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
+    private final Locator currencySelector = getByLabelExact("Currency");
+    private final Locator paymentMethodSelector = getByLabelExact("Payment method");
+    private final Locator statusSelector = getByLabelExact("Status");
+    private final Locator amountButton = getByRole(AriaRole.BUTTON, "Amount");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
-    private final Locator statusSelectorOptions = listboxByRole().locator(optionByRole());
-    private final Locator activeOption = listboxByRole().locator("[aria-selected='true']");
-    private final Locator amountFromField = labelExact("From").locator("..");
-    private final Locator amountToField = labelExact("To").locator("..");
+    //TODO this is a strange one
+    private final Locator statusSelectorOptions = getByRole(AriaRole.LISTBOX).locator(getByRole(AriaRole.OPTION));
+    private final Locator activeOption = getByRole(AriaRole.LISTBOX).locator("[aria-selected='true']");
+    private final Locator amountFromField = getByLabelExact("From").locator("..");
+    private final Locator amountToField = getByLabelExact("To").locator("..");
     private final Locator clearAmountFromButton = amountFromField.locator("//button[@aria-label='clear input']");
     private final Locator clearAmountToButton = amountToField.locator("//button[@aria-label='clear input']");
     private final Locator amountFromInputField = amountFromField.locator("//input[@type='text']");
@@ -50,23 +51,23 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     private final Locator amountFromDecreaseArrow = amountFromField.locator("//button[@aria-label='Decrease From']");
     private final Locator amountToIncreaseArrow = amountToField.locator("//button[@aria-label='Increase To']");
     private final Locator amountToDecreaseArrow = amountToField.locator("//button[@aria-label='Decrease To']");
-    private final Locator amountApplyButton = buttonByName("Apply");
-    private final Locator amountClearButton = textExact("Clear");
-    private final Locator amountAppliedClearButton = labelExact("close chip");
+    private final Locator amountApplyButton = getByRole(AriaRole.BUTTON, "Apply");
+    private final Locator amountClearButton = getByTextExact("Clear");
+    private final Locator amountAppliedClearButton = getByLabelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
-    private final Locator downloadCsvOption = menuItemByName("CSV");
-    private final Locator downloadExcelOption = menuItemByName("EXCEL");
-    private final Locator downloadPdfOption = menuItemByName("PDF");
+    private final Locator downloadCsvOption = getByRole(AriaRole.MENUITEM, "CSV");
+    private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
+    private final Locator downloadPdfOption = getByRole(AriaRole.MENUITEM, "PDF");
 
     public TransactionsPage(Page page) {
         super(page);
     }
 
     public Locator amountApplied(String amount) {
-        return textExact(amount);
+        return getByTextExact(amount);
     }
 
     @Step("Click Currency Selector")
@@ -78,8 +79,9 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
 
     @Step("Select currency {value} from dropdown menu")
     public TransactionsPage selectCurrency(String value) {
-        optionByName(value).waitFor();
-        ResponseUtils.clickAndWaitForResponse(getPage(), optionByName(value), Constants.TRANSACTION_HISTORY_ENDPOINT);
+        Locator option = getByRole(AriaRole.OPTION, value);
+        option.waitFor();
+        ResponseUtils.clickAndWaitForResponse(getPage(), option, Constants.TRANSACTION_HISTORY_ENDPOINT);
 
         return this;
     }
@@ -305,7 +307,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
     }
 
     public boolean isFileAvailableAndNotEmpty(String menuItemName) {
-        Download download = getPage().waitForDownload(() -> menuItemByName(menuItemName).click());
+        Download download = getPage().waitForDownload(() -> getByRole(AriaRole.MENUITEM, menuItemName).click());
 
         int length = 0;
         try (InputStream inputStream = download.createReadStream()) {

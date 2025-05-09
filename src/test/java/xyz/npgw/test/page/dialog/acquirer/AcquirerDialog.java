@@ -1,6 +1,5 @@
 package xyz.npgw.test.page.dialog.acquirer;
 
-import com.microsoft.playwright.Keyboard;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
@@ -14,16 +13,11 @@ import xyz.npgw.test.page.system.AcquirersPage;
 public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<CurrentDialogT>>
         extends BaseDialog<AcquirersPage, CurrentDialogT> {
 
-    private final Locator acquirerNamePlaceholder = placeholder("Enter acquirer name");
+    private final Locator acquirerNamePlaceholder = getByPlaceholder("Enter acquirer name");
     private final Locator statusSwitch = locator("div[role='radiogroup']");
     private final Locator allowedCurrenciesCheckboxes = locator("div[role='group']");
 
-    private final Locator selectCountry = labelExact("Select country");
-
-    private final Locator selectTimezoneLabel = buttonByName("Timezone");
-    private final Locator selectTimezone = labelExact("Timezone").locator("span[data-slot='value']");
-
-    private final Locator selectDropdown = dialog();
+    private final Locator selectDropdown = getByRole(AriaRole.DIALOG);
 
     public AcquirerDialog(Page page) {
         super(page);
@@ -35,35 +29,9 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         return new AcquirersPage(getPage());
     }
 
-    @Step("Click on the 'Select country' chevron")
-    public CurrentDialogT clickSelectCountry() {
-        selectCountry.locator("..")
-                .locator("svg[role=presentation]")
-                .last()
-                .click();
-        return (CurrentDialogT) this;
-    }
-
-    @Step("Click 'select country' clear icon")
-    public CurrentDialogT clickSelectCountryClearIcon() {
-        selectCountry.locator("..")
-                .locator("svg[role=presentation]")
-                .first()
-                .dispatchEvent("click");
-        return (CurrentDialogT) this;
-    }
-
-    @Step("Click on the 'Select timezone' chevron")
-    public CurrentDialogT clickSelectTimezone() {
-        selectTimezoneLabel
-                .locator("svg[role=presentation]")
-                .click();
-        return (CurrentDialogT) this;
-    }
-
     @Step("Click on the '{option}' radiobutton")
     public CurrentDialogT clickStatusRadiobutton(String option) {
-        labelExact(option).click();
+        getByLabelExact(option).click();
 
         return (CurrentDialogT) this;
     }
@@ -72,55 +40,37 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         return statusSwitch.locator("label:has(input[value='" + value.toUpperCase() + "'])");
     }
 
-    @Step("Click on the '{country}' from dropdown")
-    public CurrentDialogT clickCountryInDropdown(String country) {
-        getPage().keyboard().type(country, new Keyboard.TypeOptions().setDelay(100));
-        selectDropdown.locator("li").first().click();
-
-        return (CurrentDialogT) this;
-    }
-
-    @Step("Click on the '{timezone}' from dropdown")
-    public CurrentDialogT clickTimezoneInDropdown(String timezone) {
-        selectDropdown
-                .locator("li")
-                .filter(new Locator.FilterOptions().setHasText(timezone))
-                .click();
-        return (CurrentDialogT) this;
-    }
-
-
     @Step("Enter acquirer name '{name}'")
     public CurrentDialogT fillAcquirerName(String name) {
-        placeholder("Enter acquirer name").fill(name);
+        getByPlaceholder("Enter acquirer name").fill(name);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter challenge URL '{url}'")
     public CurrentDialogT fillChallengeUrl(String url) {
-        placeholder("Enter challenge URL").fill(url);
+        getByPlaceholder("Enter challenge URL").fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter fingerprint URL '{url}'")
     public CurrentDialogT fillFingerprintUrl(String url) {
-        placeholder("Enter fingerprint URL").fill(url);
+        getByPlaceholder("Enter fingerprint URL").fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter resource URL '{url}'")
     public CurrentDialogT fillResourceUrl(String url) {
-        placeholder("Enter resource URL").fill(url);
+        getByPlaceholder("Enter resource URL").fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter notification queue '{queue}'")
     public CurrentDialogT fillNotificationQueue(String queue) {
-        placeholder("Enter notification queue").fill(queue);
+        getByPlaceholder("Enter notification queue").fill(queue);
 
         return (CurrentDialogT) this;
     }

@@ -2,8 +2,8 @@ package xyz.npgw.test.page.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.common.Constants;
@@ -18,20 +18,20 @@ import xyz.npgw.test.page.system.TeamPage;
 @Getter
 public class HeaderComponent extends BaseComponent {
 
-    private final Locator img = altText("logo");
-    private final Locator logo = link().filter(new Locator.FilterOptions().setHas(img));
-    private final Locator transactionsButton = linkByName("Transactions");
-    private final Locator reportsButton = linkByName("Reports");
-    private final Locator systemAdministrationButton = linkByName("System administration");
-    private final Locator logOutButton = textExact("Log out");
+    private final Locator img = getPage().getByAltText("logo");
+    private final Locator logo = getByRole(AriaRole.LINK).filter(new Locator.FilterOptions().setHas(img));
+    private final Locator transactionsButton = getByRole(AriaRole.LINK, "Transactions");
+    private final Locator reportsButton = getByRole(AriaRole.LINK, "Reports");
+    private final Locator systemAdministrationButton = getByRole(AriaRole.LINK, "System administration");
+    private final Locator logOutButton = getByTextExact("Log out");
     private final Locator userMenuButton = getByTestId("userMenuToggle");
-    private final Locator profileSettingsButton = textExact("Profile Settings");
-    private final Locator passwordField = placeholder("Enter new password");
-    private final Locator repeatPasswordField = placeholder("Repeat new password");
+    private final Locator profileSettingsButton = getByTextExact("Profile Settings");
+    private final Locator passwordField = getByPlaceholder("Enter new password");
+    private final Locator repeatPasswordField = getByPlaceholder("Repeat new password");
     private final Locator saveButton = locator("button:has-text('Save')");
-    private final Locator logOutButtonUserMenu = menuItemByName("Log Out");
-    private final Locator lightRadioButtonInUserMenu = radioButton("Light");
-    private final Locator darkRadioButtonInUserMenu = radioButton("Dark");
+    private final Locator logOutButtonUserMenu = getByRole(AriaRole.MENUITEM, "Log Out");
+    private final Locator lightRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Light");
+    private final Locator darkRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Dark");
 
     public HeaderComponent(Page page) {
         super(page);

@@ -12,16 +12,16 @@ import java.util.List;
 
 @Getter
 @SuppressWarnings("unchecked")
-public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT extends BaseDialog>
+public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT extends BaseDialog<?, ?>>
         extends BaseModel {
 
     private final Locator dialogHeader = locator("section header");
-    private final Locator banner = dialog().getByRole(AriaRole.BANNER);
-    private final Locator closeButton = dialog().getByText("Close");
-    private final Locator closeIcon = dialog().getByLabel("Close");
-    private final Locator requiredFields = dialog().locator("[required]");
-    private final Locator allInputFields = dialog().getByRole(AriaRole.TEXTBOX);
-    private final Locator fieldsWithPlaceholder = dialog()
+    private final Locator banner = getByRole(AriaRole.DIALOG).getByRole(AriaRole.BANNER);
+    private final Locator closeButton = getByRole(AriaRole.DIALOG).getByText("Close");
+    private final Locator closeIcon = getByRole(AriaRole.DIALOG).getByLabel("Close");
+    private final Locator requiredFields = getByRole(AriaRole.DIALOG).locator("[required]");
+    private final Locator allInputFields = getByRole(AriaRole.DIALOG).getByRole(AriaRole.TEXTBOX);
+    private final Locator fieldsWithPlaceholder = getByRole(AriaRole.DIALOG)
             .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");
     private final Locator allPlaceholdersWithoutSearch = locator("[data-slot='input']:not([placeholder='Search...'])");
     private final Locator alertMessage = locator("[role='alert']");
@@ -29,6 +29,8 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
     public BaseDialog(Page page) {
         super(page);
     }
+
+    protected abstract ReturnPageT getReturnPage();
 
     public List<String> getPlaceholdersOrTextsFromFields() {
         fieldsWithPlaceholder.last().waitFor();
@@ -56,8 +58,6 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
         return (CurrentDialogT) this;
     }
 
-    protected abstract ReturnPageT getReturnPage();
-
     @Step("Click on the 'Close' button to close form")
     public ReturnPageT clickCloseButton() {
         closeButton.click();
@@ -71,5 +71,4 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
 
         return getReturnPage();
     }
-
 }

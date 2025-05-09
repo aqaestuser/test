@@ -6,8 +6,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.SystemConfig;
@@ -86,110 +84,6 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step(String.format("Verify: The radiobutton %s clicked.", status));
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
-    }
-
-    @Ignore("Country and Timezone fields not exists already - fail after latest update (FALU)")
-    @Test
-    @TmsLink("322")
-    @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("Verifies Country and Timezone field interaction during Acquirer creation.")
-    public void testCountryAndTimezoneFieldInteraction() {
-        String oneTimezoneCountry = "Iceland";
-        String icelandTimezone = "+00:00 Greenwich Mean Time";
-        String multipleTimezoneCountry = "United States";
-        String unitedStatesTimezone = "-09:00 Alaska Time";
-
-        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
-                .clickAddAcquirer();
-
-        Allure.step("Verify: Country fields has default 'Search...' text", () -> {
-            Assert.assertEquals(addAcquirerDialog.getSelectCountry().getAttribute("placeholder"), "Search...");
-            assertThat(addAcquirerDialog.getSelectCountry()).hasValue("");
-        });
-        Allure.step("Verify: Timezone fields has default 'Select timezone' text");
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText("Select timezone");
-
-        addAcquirerDialog
-                .clickSelectCountry();
-
-        Allure.step("Verify: Dropdown with the country options is visible");
-        assertThat(addAcquirerDialog.getSelectDropdown()).isVisible();
-
-        addAcquirerDialog
-                .clickCountryInDropdown(oneTimezoneCountry);
-
-        Allure.step(String.format("Verify: Country field is populated with '%s'", oneTimezoneCountry));
-        assertThat(addAcquirerDialog.getSelectCountry()).hasValue(oneTimezoneCountry);
-
-        Allure.step(String.format("Verify: Timezone field is auto-filled with the timezone '%s'", icelandTimezone));
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText(icelandTimezone);
-
-        addAcquirerDialog
-                .clickSelectCountryClearIcon();
-
-        Allure.step("Verify: Country fields has default 'Search...' text");
-        assertThat(addAcquirerDialog.getSelectCountry()).hasValue("");
-
-        Allure.step("Verify: Timezone fields has default 'Select timezone' text");
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText("Select timezone");
-
-        addAcquirerDialog
-                .clickSelectCountry()
-                .clickCountryInDropdown(multipleTimezoneCountry);
-
-        Allure.step(String.format("Verify: Country field is populated with %s", multipleTimezoneCountry));
-        assertThat(addAcquirerDialog.getSelectCountry()).hasValue(multipleTimezoneCountry);
-
-        Allure.step("Verify: Timezone fields has default 'Select timezone' text");
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText("Select timezone");
-
-        addAcquirerDialog
-                .clickSelectTimezone()
-                .clickTimezoneInDropdown(unitedStatesTimezone);
-
-        Allure.step(String.format("Verify: Timezone field is timezone '%s'", unitedStatesTimezone));
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText(unitedStatesTimezone);
-
-        addAcquirerDialog
-                .clickSelectCountryClearIcon()
-                .clickSelectCountry()
-                .clickSelectTimezone();
-
-        Allure.step("Verify: Country fields has default 'Search...' text");
-        assertThat(addAcquirerDialog.getSelectCountry()).hasValue("");
-
-        Allure.step("Verify: Timezone fields has default 'Select timezone' text");
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText("Select timezone");
-
-        Allure.step("Verify: Timezone dropdown has no timezone options, has 'No items.' text");
-        assertThat(addAcquirerDialog.getSelectDropdown()).hasText("No items.");
-    }
-
-    @Ignore("Timezone field not exists already (FALU)")
-    @Test(expectedExceptions = AssertionError.class)
-    @TmsLink("326")
-    @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("Verifies Re-selecting the Same Timezone Does Not Change the Value")
-    public void testReSelectingSameTimezoneKeepsValueUnchanged() {
-        Allure.step("This test is temporarily disabled till bug fixed.");
-
-        String oneTimezoneCountry = "Iceland";
-        String icelandTimezone = "+00:00 Greenwich Mean Time";
-
-        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
-                .clickAddAcquirer().clickSelectCountry()
-                .clickCountryInDropdown(oneTimezoneCountry)
-                .clickSelectTimezone()
-                .clickTimezoneInDropdown(icelandTimezone);
-
-        Allure.step(String.format("Verify: Timezone field is timezone '%s'", icelandTimezone));
-        assertThat(addAcquirerDialog.getSelectTimezone()).hasText(icelandTimezone);
     }
 
     @Test

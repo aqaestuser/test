@@ -12,8 +12,8 @@ import java.util.NoSuchElementException;
 public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
-    private final Locator selectCompanyField = labelExact("Select company");
-    private final Locator dropdownOptionList = getPage().getByRole(AriaRole.OPTION);
+    private final Locator selectCompanyField = getByLabelExact("Select company");
+    private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
     @Getter
     private final Locator selectCompanyPlaceholder = locator("input[aria-label='Select company']");
     @Getter
@@ -35,7 +35,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
     }
 
     public Locator getCompanyNameInDropdownOption(String companyName) {
-        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(textExact(companyName)));
+        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(getByTextExact(companyName)));
     }
 
     @Step("Select '{companyName}' company using filter")
