@@ -6,13 +6,13 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseModel;
-import xyz.npgw.test.page.system.BaseSystemPage;
+import xyz.npgw.test.page.base.BasePage;
 
 import java.util.List;
 
 @Getter
 @SuppressWarnings("unchecked")
-public abstract class BaseDialog<ReturnPageT extends BaseSystemPage, CurrentDialogT extends BaseDialog>
+public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT extends BaseDialog>
         extends BaseModel {
 
     private final Locator dialogHeader = locator("section header");
