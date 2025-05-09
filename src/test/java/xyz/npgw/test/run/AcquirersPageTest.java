@@ -230,7 +230,7 @@ public class AcquirersPageTest extends BaseTest {
 
             int rowsSum = 0;
 
-            while (true) {
+            do {
                 int actualRowCount = acquirersPage.getTable().getTableRows().count();
                 rowsSum += actualRowCount;
 
@@ -238,12 +238,8 @@ public class AcquirersPageTest extends BaseTest {
                         "Verify: The table contains '%s' rows less than or equal to '%s'", actualRowCount, option));
                 Assert.assertTrue(actualRowCount <= Integer.parseInt(option));
 
-                if (acquirersPage.isLastPage()) {
-                    break;
-                }
+            } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
 
-                acquirersPage.clickNextPage();
-            }
             totalRows.add(rowsSum);
         }
 
@@ -354,8 +350,7 @@ public class AcquirersPageTest extends BaseTest {
             acquirersPage
                     .clickRowsPerPageChevron()
                     .selectRowsPerPageOption(option);
-
-            while (true) {
+            do {
                 String activePage = acquirersPage.getActivePage().innerText();
 
                 Allure.step(
@@ -375,12 +370,8 @@ public class AcquirersPageTest extends BaseTest {
                         "The header is not fully visible within the viewport on page '%s' with '%s' pagination!",
                         activePage, option));
 
-                if (acquirersPage.isLastPage()) {
-                    break;
-                }
-
-                acquirersPage.clickNextPage();
             }
+            while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
         }
     }
 }
