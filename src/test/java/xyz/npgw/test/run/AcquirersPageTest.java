@@ -278,8 +278,8 @@ public class AcquirersPageTest extends BaseTest {
     public void testDisplaySingleRowWhenAcquirerIsSelected() {
         Acquirer acquirer = new Acquirer(
                 "NGenius",
-                "et",
-                new SystemConfig("something 1", "something 2", "something 3", "something 4"),
+                "default",
+                new SystemConfig(),
                 "Acquirer 11.002.01",
                 new String[]{"USD", "EUR"},
                 true);

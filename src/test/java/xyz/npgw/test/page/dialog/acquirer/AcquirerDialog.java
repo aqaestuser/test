@@ -91,8 +91,36 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
 
     @Step("Enter acquirer name '{name}'")
-    public CurrentDialogT enterAcquirerName(String name) {
-        acquirerNamePlaceholder.fill(name);
+    public CurrentDialogT fillAcquirerName(String name) {
+        placeholder("Enter acquirer name").fill(name);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter challenge URL '{url}'")
+    public CurrentDialogT fillChallengeUrl(String url) {
+        placeholder("Enter challenge URL").fill(url);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter fingerprint URL '{url}'")
+    public CurrentDialogT fillFingerprintUrl(String url) {
+        placeholder("Enter fingerprint URL").fill(url);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter resource URL '{url}'")
+    public CurrentDialogT fillResourceUrl(String url) {
+        placeholder("Enter resource URL").fill(url);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter notification queue '{queue}'")
+    public CurrentDialogT fillNotificationQueue(String queue) {
+        placeholder("Enter notification queue").fill(queue);
 
         return (CurrentDialogT) this;
     }

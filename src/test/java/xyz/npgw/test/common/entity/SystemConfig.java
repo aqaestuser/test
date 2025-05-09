@@ -7,6 +7,10 @@ public record SystemConfig(
         String notificationQueue) {
 
     public SystemConfig() {
-        this("", "", "", "");
+        this(
+                "https://test.npgw.xyz/challenge/url",
+                "https://test.npgw.xyz/fingerprint/url",
+                "https://test.npgw.xyz/resource/url",
+                "notificationQueue");
     }
 }

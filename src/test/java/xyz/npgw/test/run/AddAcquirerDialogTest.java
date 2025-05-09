@@ -10,6 +10,7 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
@@ -24,6 +25,8 @@ import static xyz.npgw.test.common.util.TestUtils.deleteAcquirer;
 import static xyz.npgw.test.common.util.TestUtils.getAcquirer;
 
 public class AddAcquirerDialogTest extends BaseTest {
+
+    private final SystemConfig defaultConfig = new SystemConfig();
 
     @Test
     @TmsLink("249")
@@ -202,7 +205,10 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
-                .enterAcquirerName(acquirerName)
+                .fillAcquirerName(acquirerName)
+                .fillChallengeUrl(defaultConfig.challengeUrl())
+                .fillFingerprintUrl(defaultConfig.fingerprintUrl())
+                .fillResourceUrl(defaultConfig.resourceUrl())
                 .clickCheckboxCurrency("USD")
                 .clickCreateButton();
 
@@ -236,7 +242,10 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         AddAcquirerDialog acquirerDialog = acquirersPage
                 .clickAddAcquirer()
-                .enterAcquirerName(acquirerName)
+                .fillAcquirerName(acquirerName)
+                .fillChallengeUrl(defaultConfig.challengeUrl())
+                .fillFingerprintUrl(defaultConfig.fingerprintUrl())
+                .fillResourceUrl(defaultConfig.resourceUrl())
                 .clickCheckboxCurrency("USD");
 
         acquirerDialog.clickCreateButton();
