@@ -15,7 +15,5 @@ public class Constants {
     public static final String SYSTEM_URL_TITLE = "NPGW";
 
     public static final String TRANSACTION_HISTORY_ENDPOINT = "/transaction/history";
-    public static final String USER_LIST_ENDPOINT = "/user/list";
     public static final String ASSETS_TEAM = "/assets/Team";
-    public static final String MERCHANT_ENDPOINT = "/merchant";
 }

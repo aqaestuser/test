@@ -131,7 +131,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Tabl
     @Step("Select Rows Per Page '{option}'")
     public AcquirersPage selectRowsPerPageOption(String option) {
         rowsPerPageDropdown.getByText(option, new Locator.GetByTextOptions().setExact(true)).click();
-        getTable().getTableRows().last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        getTable().getTableRows().last().waitFor();
 
         return this;
     }

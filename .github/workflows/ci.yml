@@ -50,7 +50,7 @@ jobs:
             USER.password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             viewportWidth=1920;
-            viewportHeight=1080;
+            viewportHeight=953;
             headlessMode=true;
             tracingMode=false;
             failFast=true;

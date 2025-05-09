@@ -3,7 +3,6 @@ package xyz.npgw.test.page.dialog;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseModel;
@@ -12,6 +11,7 @@ import xyz.npgw.test.page.system.BaseSystemPage;
 import java.util.List;
 
 @Getter
+@SuppressWarnings("unchecked")
 public abstract class BaseDialog<ReturnPageT extends BaseSystemPage, CurrentDialogT extends BaseDialog>
         extends BaseModel {
 
@@ -31,7 +31,7 @@ public abstract class BaseDialog<ReturnPageT extends BaseSystemPage, CurrentDial
     }
 
     public List<String> getPlaceholdersOrTextsFromFields() {
-        fieldsWithPlaceholder.last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        fieldsWithPlaceholder.last().waitFor();
 
         return fieldsWithPlaceholder.all().stream().map(locator -> {
             String placeholder = locator.getAttribute("placeholder");
@@ -40,15 +40,14 @@ public abstract class BaseDialog<ReturnPageT extends BaseSystemPage, CurrentDial
     }
 
     public List<String> getAllFieldPlaceholders() {
-        allPlaceholdersWithoutSearch
-                .first().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        allPlaceholdersWithoutSearch.first().waitFor();
 
         return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
     @Step("Clear all form input fields")
     public CurrentDialogT clearInputFields() {
-        allInputFields.last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        allInputFields.last().waitFor();
 
         allInputFields.all().forEach(locator -> {
             locator.clear();

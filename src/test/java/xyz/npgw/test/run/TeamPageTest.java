@@ -55,8 +55,7 @@ public class TeamPageTest extends BaseTest {
             + "on 'System administration' link on the header")
     public void testNavigateToSystemAdministrationPage() {
         TeamPage systemAdministrationPage = new DashboardPage(getPage())
-                .getHeader()
-                .clickSystemAdministrationLink();
+                .getHeader().clickSystemAdministrationLink();
 
         Allure.step("Verify: System administration Page URL");
         assertThat(systemAdministrationPage.getPage()).hasURL(Constants.SYSTEM_PAGE_URL);

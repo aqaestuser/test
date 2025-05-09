@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Properties;
 
 @Log4j2
@@ -37,6 +38,7 @@ public final class ProjectProperties {
     private static final String SKIP_MODE = PREFIX_PROP + "skipMode";
     private static final String ADDITIONAL_RETRIES = PREFIX_PROP + "additionalRetries";
     private static final String COLOR_SCHEME = PREFIX_PROP + "colorScheme";
+    private static final String DEBUG = PREFIX_PROP + "DEBUG";
 
     private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
 
@@ -168,5 +170,10 @@ public final class ProjectProperties {
 
     public static ColorScheme getColorScheme() {
         return ColorScheme.valueOf(properties.getProperty(COLOR_SCHEME, "DARK").toUpperCase());
+    }
+
+    public static Map<String, String> getEnv() {
+        String debug = properties.getProperty(DEBUG, "");
+        return debug.isEmpty() ? Map.of() : Map.of("DEBUG", debug);
     }
 }

@@ -8,11 +8,12 @@ import lombok.Getter;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.common.AlertTrait;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public final class LoginPage extends BasePage {
+public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
 
     @Getter
     private final Locator emailField = placeholder("Enter your email");
@@ -112,6 +113,38 @@ public final class LoginPage extends BasePage {
         uncheckRememberMeCheckbox();
         clickLoginButton();
         assertThat(getPage()).hasURL("/dashboard");
+
+        return new DashboardPage(getPage());
+    }
+
+    @Step("Login with '{email}' user")
+    public DashboardPage login(String email, String password) {
+        fillEmailField(email);
+        fillPasswordField(password);
+        clickLoginButton();
+
+        return new DashboardPage(getPage());
+    }
+
+    @Step("Change password")
+    public LoginPage changePassword(String newPassword) {
+        fillNewPasswordField(newPassword);
+        fillRepeatNewPasswordField(newPassword);
+        clickSaveButton();
+
+        getAlert().clickCloseButton();
+        return this;
+    }
+
+    public DashboardPage loginAndChangePassword(String email, String password) {
+        return loginAndChangePassword(email, password, password);
+    }
+
+    @Step("Login with '{email}' user and change password")
+    public DashboardPage loginAndChangePassword(String email, String password, String newPassword) {
+        login(email, password);
+        changePassword(newPassword);
+        login(email, newPassword);
 
         return new DashboardPage(getPage());
     }

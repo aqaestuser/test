@@ -50,7 +50,7 @@ public abstract class BaseTest {
 
     @BeforeClass
     protected void beforeClass() {
-        playwright = Playwright.create();
+        playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
         browser = BrowserFactory.getBrowser(playwright);
     }
 

@@ -3,7 +3,6 @@ package xyz.npgw.test.page.system;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.common.AlertTrait;
@@ -16,9 +15,6 @@ import xyz.npgw.test.page.dialog.user.EditUserDialog;
 public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait, SelectCompanyTrait<TeamPage>,
         AlertTrait<TeamPage> {
 
-    private final Locator refreshDataButton = getByTestId("ApplyFilterButtonTeamPage");
-    private final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
-
     public TeamPage(Page page) {
         super(page);
     }
@@ -29,7 +25,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
 
     @Step("Click 'Add user' button")
     public AddUserDialog clickAddUserButton() {
-        addUserButton.click();
+        getByTestId("AddUserButtonTeamPage").click();
 
         return new AddUserDialog(getPage());
     }
@@ -59,9 +55,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
     public TeamPage clickRefreshDataButton() {
 //        TODO remove after bugfix
         getPage().waitForTimeout(500);
-        refreshDataButton.waitFor();
-
-        refreshDataButton.click();
+        getByTestId("ApplyFilterButtonTeamPage").click();
 
         return this;
     }
@@ -75,7 +69,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
     @Step("Click user activation button")
     public ChangeUserActivityDialog clickChangeUserActivityButton(String username) {
         Locator button = getChangeUserActivityButton(username);
-        button.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        button.waitFor();
         button.click();
 
         return new ChangeUserActivityDialog(getPage());

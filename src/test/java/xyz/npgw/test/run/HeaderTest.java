@@ -9,8 +9,8 @@ import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
@@ -67,37 +67,39 @@ public class HeaderTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
     }
 
-    @Test(enabled = false)
+    @Test
     @TmsLink("289")
     @Epic("Header")
     @Feature("User menu")
     @Description("Check if the user can change the password through the profile settings in the user menu")
     public void testChangePassword(@Optional("UNAUTHORISED") String userRole) {
-
+        String company = "Change 'CompanyAdmin' user password from menu";
+        String email = "company.admin@email.com";
+        String password = "CompanyAdmin123!";
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), company);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), company, email, password);
         String newPassword = "QWEdsa123@";
 
         DashboardPage dashboardPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ProjectProperties.getUserEmail())
-                .fillPasswordField(ProjectProperties.getUserPassword())
+                .fillEmailField(email)
+                .fillPasswordField(password)
+                .clickLoginButtonToChangePassword()
+                .fillNewPasswordField(password)
+                .fillRepeatNewPasswordField(password)
+                .clickSaveButton()
+                .fillEmailField(email)
+                .fillPasswordField(password)
                 .clickLoginButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickUserMenuButton()
                 .getHeader().clickProfileSettingsButton()
                 .getHeader().fillPasswordField(newPassword)
                 .getHeader().fillRepeatPasswordField(newPassword)
                 .getHeader().clickSaveButton()
                 .getHeader().clickLogOutButton()
-                .fillEmailField(ProjectProperties.getUserEmail())
+                .fillEmailField(email)
                 .fillPasswordField(newPassword)
-                .clickLoginButton()
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickProfileSettingsButton()
-                .getHeader().fillPasswordField(ProjectProperties.getUserPassword())
-                .getHeader().fillRepeatPasswordField(ProjectProperties.getUserPassword())
-                .getHeader().clickSaveButton()
-                .getHeader().clickLogOutButton()
-                .fillEmailField(ProjectProperties.getUserEmail())
-                .fillPasswordField(ProjectProperties.getUserPassword())
                 .clickLoginButton();
 
         Allure.step("Verify: Dashboard Page URL");
@@ -138,7 +140,7 @@ public class HeaderTest extends BaseTest {
     @Epic("Header")
     @Feature("User menu")
     @Description("Verify that the user can switch to the dark theme")
-    public  void testDarkColorThemeSwitch() {
+    public void testDarkColorThemeSwitch() {
         new DashboardPage(getPage())
                 .getHeader().clickUserMenuButton()
                 .getHeader().clickDarkRadioButton();
@@ -152,7 +154,7 @@ public class HeaderTest extends BaseTest {
     @Epic("Header")
     @Feature("User menu")
     @Description("Verify that the user can switch to the light theme")
-    public  void testLightColorThemeSwitch() {
+    public void testLightColorThemeSwitch() {
         new DashboardPage(getPage())
                 .getHeader().clickUserMenuButton()
                 .getHeader().clickLightRadioButton();

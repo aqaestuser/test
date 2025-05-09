@@ -1,6 +1,5 @@
 package xyz.npgw.test.page.system;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.util.ResponseUtils;
@@ -8,31 +7,27 @@ import xyz.npgw.test.page.base.BaseComponent;
 
 public class MenuComponent extends BaseComponent {
 
-    private final Locator companiesAndBusinessUnitsTabButton = tab("Companies and business units");
-    private final Locator acquirersTab = tab("Acquirers");
-    private final Locator gatewayTab = tab("Gateway");
-
     public MenuComponent(Page page) {
         super(page);
     }
 
-    @Step("Click 'Companies and business units' Tab")
+    @Step("Click 'Companies and business units' tab")
     public CompaniesAndBusinessUnitsPage clickCompaniesAndBusinessUnitsTab() {
-        companiesAndBusinessUnitsTabButton.click();
+        tab("Companies and business units").click();
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
-    @Step("Click Acquirers Tab")
+    @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
-        ResponseUtils.clickAndWaitForText(getPage(), acquirersTab, "Acquirer name");
+        ResponseUtils.clickAndWaitForText(getPage(), tab("Acquirers"), "Acquirer name");
 
         return new AcquirersPage(getPage());
     }
 
-    @Step("Click Gateway Tab")
+    @Step("Click 'Gateway' tab")
     public GatewayPage clickGatewayTab() {
-        ResponseUtils.clickAndWaitForText(getPage(), gatewayTab, "Business units list");
+        ResponseUtils.clickAndWaitForText(getPage(), tab("Gateway"), "Business units list");
 
         return new GatewayPage(getPage());
     }
