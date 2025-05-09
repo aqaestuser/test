@@ -9,6 +9,7 @@ import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -161,5 +162,15 @@ public class HeaderTest extends BaseTest {
 
         Allure.step("Verify that the light color theme is selected");
         assertThat(getPage().locator("html.light")).isVisible();
+    }
+
+    @Test
+    @TmsLink("494")
+    @Epic("Header")
+    @Feature("User menu")
+    @Description("Verify that the color theme matching with the default browser theme")
+    public  void testDefaultThemeMatching() {
+        Allure.step("Verify that the current color theme matches the default browser theme");
+        assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
     }
 }
