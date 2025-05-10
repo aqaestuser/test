@@ -137,8 +137,7 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getAddCompanyDialog()).isHidden();
     }
 
-    @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters",
-            dataProviderClass = TestDataProvider.class, enabled = false)
+    @Test(dataProvider = "getCompanyNameInvalidSpecialCharacters", dataProviderClass = TestDataProvider.class)
     @TmsLink("215")
     @Epic("System/Companies and business units")
     @Feature("Add company")

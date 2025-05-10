@@ -30,7 +30,7 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
-    @Ignore("Не нажимается рефреш - снять игнор после фикса /summary")
+//    @Ignore("Не нажимается рефреш - снять игнор после фикса /summary")
     @Test
     @TmsLink("403")
     @Epic("Dashboard")

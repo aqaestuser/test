@@ -26,7 +26,7 @@ import static org.testng.Assert.assertEquals;
 public class TeamPageTest extends BaseTest {
 
     private static final String COMPANY_NAME = "Smitham-Johnson";
-    private static final String ADMIN_COMPANY_NAME = "AdminCompany";
+    private static final String ADMIN_COMPANY_NAME = "Admin company";
     private static final String ADMIN_EMAIL = "admin.email@gmail.com";
     private static final String ADMIN_PASSWORD = "AdminPassword1!";
     private static final String SUCCESS_MESSAGE_USER_DEACTIVATED = "SUCCESSUser was deactivated successfully";
@@ -421,7 +421,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Create company analyst")
     public void testCreateCompanyAnalyst(@Optional("UNAUTHORISED") String userRole) {
-        String email = "companyanalyst@gmail.com";
+        String email = "company.analyst@gmail.com";
         String companyName = "Analyst company";
         TestUtils.deleteUser(getApiRequestContext(), email);
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
