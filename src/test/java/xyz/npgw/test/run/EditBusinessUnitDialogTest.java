@@ -12,10 +12,20 @@ import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
+import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
+
+import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class EditBusinessUnitDialogTest extends BaseTest {
+    private final String companyName = "CompanyForBuEdit";
+    private final String buName = "NewBUForEdit";
+    private final List<String> expectedFieldsLabel = List.of(
+            "Company name",
+            "Business unit name"
+    );
 
     @Test
     @TmsLink("387")
@@ -23,11 +33,8 @@ public class EditBusinessUnitDialogTest extends BaseTest {
     @Feature("Edit business unit")
     @Description("Verify that the title of the 'Edit Business Unit' dialog matches the expected result")
     public void testVerifyTitleEditBusinessUnitDialog(@Optional("UNAUTHORISED") String userRole) {
-        String buName = "NewBUForEdit";
-        String companyName = "CompanyForBU";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
 
         Locator dialogTitle = new AboutBlankPage(getPage())
                 .navigate("/login")
@@ -40,5 +47,28 @@ public class EditBusinessUnitDialogTest extends BaseTest {
 
         Allure.step("Verify: the header contains the expected title text");
         assertThat(dialogTitle).hasText("Edit business unit");
+    }
+
+    @Test
+    @TmsLink("501")
+    @Epic("System/Companies and business units")
+    @Feature("Edit business unit")
+    @Description("Verify that the label of each field is correct")
+    public void testVerifyLabelOfEachField(@Optional("UNAUTHORISED") String userRole) {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
+
+        EditBusinessUnitDialog editBusinessUnitDialog = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .loginAs(UserRole.SUPER)
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(companyName)
+                .clickEditBusinessUnitButton();
+
+        List<String> actualLabelList = editBusinessUnitDialog.getAllFieldsLabel();
+
+        Allure.step("Verify: all labels are correct for each field");
+        assertThat(editBusinessUnitDialog.getFieldLabel()).hasText(new String[]{"Company name", "Business unit name"});
     }
 }

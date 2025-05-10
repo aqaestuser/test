@@ -24,6 +24,8 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
     private final Locator fieldsWithPlaceholder = getByRole(AriaRole.DIALOG)
             .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");
     private final Locator allPlaceholdersWithoutSearch = locator("[data-slot='input']:not([placeholder='Search...'])");
+    private final Locator alertMessage = locator("[role='alert']");
+    private final Locator fieldLabel = getByRole(AriaRole.DIALOG).locator("label[data-slot='label']");
 
     public BaseDialog(Page page) {
         super(page);
@@ -44,6 +46,12 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
         allPlaceholdersWithoutSearch.first().waitFor();
 
         return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
+    }
+
+    public List<String> getAllFieldsLabel() {
+        fieldLabel.first().waitFor();
+
+        return fieldLabel.all().stream().map(Locator::textContent).toList();
     }
 
     @Step("Clear all form input fields")
