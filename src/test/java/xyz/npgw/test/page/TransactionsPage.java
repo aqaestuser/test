@@ -248,7 +248,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
         }
     }
 
-
     @Step("Uncheck all 'Visible columns' in Settings")
     public TransactionsPage uncheckAllCheckboxInSettings() {
         settingsVisibleColumns
@@ -269,7 +268,6 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
 
         return this;
     }
-
 
     @Step("Check all 'Visible columns' in Settings")
     public TransactionsPage checkAllCheckboxInSettings() {

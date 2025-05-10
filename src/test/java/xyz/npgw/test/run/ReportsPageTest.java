@@ -88,4 +88,62 @@ public class ReportsPageTest extends BaseTest {
                 new HashSet<>(generationParametersDialog.getReportColumns()), new HashSet<>(REPORT_COLUMNS));
     }
 
+    @Test
+    @TmsLink("512")
+    @Epic("Reports")
+    @Feature("Generate report")
+    @Description("Check/uncheck reports columns in the 'Generation Parameters dialog'")
+    public void testCheckboxesOfGenerationParameters() {
+        ReportsParametersDialog generationParametersDialog = new DashboardPage(getPage())
+                .getHeader().clickReportsLink()
+                .clickGenerateReportButton();
+
+        Allure.step("Verify: All report columns are checked at first opening the 'Generation Parameters dialog'");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+
+        generationParametersDialog
+                .hoverOnReportColumnsCheckbox();
+
+        Allure.step("Verify: Tooltip 'Deselect all' appears after hover on the 'Report columns' checkbox");
+        Assert.assertTrue(generationParametersDialog.isTextVisible("Deselect all"));
+
+        generationParametersDialog
+                .clickReportColumnsCheckbox();
+
+        Allure.step("Verify: All report columns are unchecked after click on the 'Report columns' checkbox");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+
+        generationParametersDialog
+                .clickCloseIcon()
+                .getHeader().clickTransactionsLink()
+                .getHeader().clickReportsLink()
+                .clickGenerateReportButton();
+
+        Allure.step("Verify: All report columns remained unchecked after exiting the 'Generation Parameters dialog'");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+
+        generationParametersDialog
+                .hoverOnReportColumnsCheckbox();
+
+        Allure.step("Verify: Tooltip 'Select all' appears after hover on the 'Report columns' checkbox");
+        Assert.assertTrue(generationParametersDialog.isTextVisible("Select all"));
+
+        generationParametersDialog
+                .clickReportColumnsCheckbox();
+
+        Allure.step("Verify: All report columns are checked after click on the 'Report columns' checkbox");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+
+        generationParametersDialog
+                .clickAllColumnCheckboxesOneByOne();
+
+        Allure.step("Verify: All report columns are unchecked after clicking on them one by one");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+
+        generationParametersDialog
+                .clickAllColumnCheckboxesOneByOne();
+
+        Allure.step("Verify: All report columns are checked after clicking on them one by one");
+        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+    }
 }

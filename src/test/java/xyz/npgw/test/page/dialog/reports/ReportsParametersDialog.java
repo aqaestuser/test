@@ -3,6 +3,7 @@ package xyz.npgw.test.page.dialog.reports;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.common.DateRangePickerTrait;
@@ -39,5 +40,58 @@ public class ReportsParametersDialog extends BaseDialog<ReportsPage, ReportsPara
                 .skip(1)
                 .map(l -> l.locator("span").last().innerText())
                 .toList();
+    }
+
+    @Step("Click on the checkbox 'Report columns'")
+    public ReportsParametersDialog clickReportColumnsCheckbox() {
+        checkboxes.first().click();
+
+        return this;
+    }
+
+    public boolean isAllColumnnsChecked() {
+        checkboxes.last().waitFor();
+
+        int totalColumns = checkboxes.count() - 1;
+        int checked = 0;
+        for (int i = 1; i <= totalColumns; i++) {
+            if (checkboxes.nth(i).getAttribute("data-selected") != null) {
+                checked++;
+            }
+        }
+        return checked == totalColumns;
+    }
+
+    public boolean isAllColumnnsUnchecked() {
+        checkboxes.last().waitFor();
+
+        int totalColumns = checkboxes.count() - 1;
+        int checked = 0;
+        for (int i = 1; i <= totalColumns; i++) {
+            if (checkboxes.nth(i).getAttribute("data-selected") != null) {
+                checked++;
+            }
+        }
+        return checked == 0;
+    }
+
+    @Step("Hover on the checkbox 'Report columns'")
+    public void hoverOnReportColumnsCheckbox() {
+        checkboxes.first().hover();
+    }
+
+    public boolean isTextVisible(String text) {
+
+        return getByTextExact(text).isVisible();
+    }
+
+    @Step("Click on the all column checkboxes one by one")
+    public void clickAllColumnCheckboxesOneByOne() {
+        checkboxes.last().waitFor();
+
+        int totalColumns = checkboxes.count() - 1;
+        for (int i = 1; i <= totalColumns; i++) {
+            checkboxes.nth(i).dispatchEvent("click");
+        }
     }
 }
