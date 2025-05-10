@@ -5,10 +5,12 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage, AddBusinessUnitDialog> {
+public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage, AddBusinessUnitDialog>
+        implements AlertTrait<AddBusinessUnitDialog> {
 
     @Getter
     private final Locator companyNameField = locator("input[aria-label='Company name']");

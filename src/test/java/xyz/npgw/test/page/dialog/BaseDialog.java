@@ -24,7 +24,6 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
     private final Locator fieldsWithPlaceholder = getByRole(AriaRole.DIALOG)
             .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");
     private final Locator allPlaceholdersWithoutSearch = locator("[data-slot='input']:not([placeholder='Search...'])");
-    private final Locator alertMessage = locator("[role='alert']");
 
     public BaseDialog(Page page) {
         super(page);

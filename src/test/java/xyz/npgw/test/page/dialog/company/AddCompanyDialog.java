@@ -5,10 +5,12 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 @Getter
-public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
+public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog>
+        implements AlertTrait<AddCompanyDialog> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 

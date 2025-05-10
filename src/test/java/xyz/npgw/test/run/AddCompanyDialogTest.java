@@ -100,8 +100,9 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
-        assertThat(addCompanyDialog.getAlertMessage()).containsText(
-                "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
+        assertThat(addCompanyDialog
+                .getAlert().getAlertMessage())
+                .containsText("Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
 
     @Test(dataProvider = "getEmptyRequiredFields", dataProviderClass = TestDataProvider.class)
@@ -234,8 +235,9 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message is displayed for duplicate company name");
-        assertThat(addCompanyDialog.getAlertMessage()).containsText(
-                "Company with name {%s} already exists.".formatted(COMPANY_NAME));
+        assertThat(addCompanyDialog
+                .getAlert().getAlertMessage())
+                .containsText("Company with name {%s} already exists.".formatted(COMPANY_NAME));
     }
 
     @Test(expectedExceptions = AssertionFailedError.class)
@@ -432,7 +434,9 @@ public class AddCompanyDialogTest extends BaseTest {
         addBusinessUnitDialog.clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: Validation error is shown when merchant name is not filled");
-        assertThat(addBusinessUnitDialog.getAlertMessage()).containsText("Enter merchant name");
+        assertThat(addBusinessUnitDialog
+                .getAlert().getAlertMessage())
+                .containsText("Enter merchant name");
 
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
                 .fillBusinessUnitNameField(businessUnit.merchantName())

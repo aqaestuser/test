@@ -113,7 +113,8 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
         assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
 
-        acquirersPage.typeAcquirerNameToSelectAcquirerInputField(acquirerName);
+        acquirersPage
+                .getSelectAcquirer().typeAcquirerNameToSelectAcquirerInputField(acquirerName);
 
         Allure.step(String.format("Verify: Dropdown contain '%s' acquirer", acquirerName));
         assertThat(acquirersPage.getAddAcquirerDialog()).hasText(acquirerName);
@@ -145,8 +146,9 @@ public class AddAcquirerDialogTest extends BaseTest {
         acquirerDialog.clickCreateButton();
 
         Allure.step("Verify: Acquirer Error message is displayed");
-        assertThat(acquirerDialog.getAlertMessage()).containsText(
-                "Acquirer with name {" + acquirerName + "} already exists.");
+        assertThat(acquirerDialog
+                .getAlert().getAlertMessage())
+                .containsText("Acquirer with name {" + acquirerName + "} already exists.");
 
         Allure.step("Verify: the 'Add acquirer' dialog is not closed");
         assertThat(acquirersPage.getAddAcquirerDialog()).not().isHidden();

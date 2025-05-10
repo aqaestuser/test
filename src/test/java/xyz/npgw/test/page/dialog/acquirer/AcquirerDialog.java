@@ -5,19 +5,19 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<CurrentDialogT>>
-        extends BaseDialog<AcquirersPage, CurrentDialogT> {
+        extends BaseDialog<AcquirersPage, CurrentDialogT>
+        implements AlertTrait<CurrentDialogT> {
 
     private final Locator acquirerNamePlaceholder = getByPlaceholder("Enter acquirer name");
     private final Locator statusSwitch = locator("div[role='radiogroup']");
     private final Locator allowedCurrenciesCheckboxes = locator("div[role='group']");
-
-    private final Locator selectDropdown = getByRole(AriaRole.DIALOG);
 
     public AcquirerDialog(Page page) {
         super(page);
