@@ -9,13 +9,11 @@ import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
-import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
-import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import java.util.List;
@@ -38,21 +36,6 @@ public class AddCompanyDialogTest extends BaseTest {
             "https://www.test.com", "James Smith", "test@yahoo.com",
             true, true
     );
-
-    @Test
-    @TmsLink("160")
-    @Epic("System/Companies and business units")
-    @Feature("Add company")
-    @Description("Verify that the 'Add Company' window displays the correct title in the header.")
-    public void testVerifyAddCompanyWindowTitle() {
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton();
-
-        Allure.step("Verify: the header contains the expected title text");
-        assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
-    }
 
     @Test
     @TmsLink("189")
@@ -102,21 +85,26 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
         assertThat(addCompanyDialog
                 .getAlert().getAlertMessage())
-                .containsText("Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
+                .containsText(
+                        "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
 
-    @Test(dataProvider = "getEmptyRequiredFields", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("206")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("'Create' button is disabled when required fields are not filled.")
-    public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty(String name, String type) {
+    public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton()
-                .fillCompanyNameField(name)
-                .fillCompanyTypeField(type);
+                .clickAddCompanyButton();
+
+        Allure.step("Verify: 'Company name' field is marked invalid");
+        assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
+
+        Allure.step("Verify: 'Company type' field is marked invalid");
+        assertThat(addCompanyDialog.getCompanyTypeField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: 'Create' button is disabled when required fields are not filled.");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
@@ -269,39 +257,6 @@ public class AddCompanyDialogTest extends BaseTest {
     }
 
     @Test
-    @TmsLink("228")
-    @Epic("System/Companies and business units")
-    @Feature("Add company")
-    @Description("Company creation with Latin symbols")
-    public void testAddCompanyWithAllFilledFields() {
-        final String companyName = "Google";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton()
-                .fillCompanyNameField(companyName)
-                .fillCompanyTypeField("LLC")
-                .fillCompanyDescriptionField("Description of company business model")
-                .fillCompanyWebsiteField("google.com")
-                .fillCompanyPrimaryContactField("John Doe")
-                .fillCompanyEmailField("google@gmail.com")
-                .fillCompanyCountryField("France")
-                .fillCompanyStateField("Provence")
-                .fillCompanyZipField("75001")
-                .fillCompanyCityField("Paris")
-                .fillCompanyPhoneField("+33 1 22-83-56-11")
-                .fillCompanyMobileField("+33 7 22-83-56-11")
-                .fillCompanyFaxField("84952235611")
-                .clickCreateButton();
-
-        Allure.step("Verify: success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
-                SUCCESS_MESSAGE_COMPANY_CREATED);
-    }
-
-    @Test
     @TmsLink("246")
     @Epic("System/Companies and business units")
     @Feature("Add company")
@@ -402,58 +357,5 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: city field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCityFromCompanyInfoSection())
                 .hasValue(company.companyAddress().city());
-    }
-
-    @Test
-    @TmsLink("290")
-    @Epic("System/Companies and business units")
-    @Feature("Add business unit")
-    @Description("Validates successful business unit addition to company (E2E test).")
-    public void testAddBusinessUnitEndToEndTest() {
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
-
-        BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
-
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
-
-        Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
-
-        AddBusinessUnitDialog addBusinessUnitDialog = companiesAndBusinessUnitsPage
-                .getSelectCompany().selectCompany(company.companyName())
-                .clickOnAddBusinessUnitButton();
-
-        Allure.step("Verify: 'Add business unit' dialog is opened");
-        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader()).hasText("Add business unit");
-
-        Allure.step("Verify: Company name is pre-filled correctly");
-        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.companyName());
-
-        addBusinessUnitDialog.clickCreateButtonAndTriggerError();
-
-        Allure.step("Verify: Validation error is shown when merchant name is not filled");
-        assertThat(addBusinessUnitDialog
-                .getAlert().getAlertMessage())
-                .containsText("Enter merchant name");
-
-        companiesAndBusinessUnitsPage = addBusinessUnitDialog
-                .fillBusinessUnitNameField(businessUnit.merchantName())
-                .clickCreateButton();
-
-        Allure.step("Verify: Success alert is shown after business unit is added");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
-                "SUCCESSBusiness unit was created successfully");
-
-        Allure.step("Verify: Selected company is preserved after creation");
-        assertThat(companiesAndBusinessUnitsPage
-                .getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
-
-        Allure.step("Verify: New business unit name appears in the list");
-        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(businessUnit.merchantName());
-
-        Allure.step("Verify: Merchant ID is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
     }
 }

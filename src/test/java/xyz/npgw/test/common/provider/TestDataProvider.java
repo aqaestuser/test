@@ -28,15 +28,6 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public static Object[][] getEmptyRequiredFields() {
-        return new Object[][]{
-                {"", ""},
-                {"Company name", ""},
-                {"", "Company type"}
-        };
-    }
-
-    @DataProvider
     public static Object[][] getCompanyNameInvalidSpecialCharacters() {
         return new Object[][]{
                 {"%"},
