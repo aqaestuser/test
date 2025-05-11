@@ -13,6 +13,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
+import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -84,5 +85,26 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(editBusinessUnitDialog.getCompanyNameField()).hasValue(companyName);
         Allure.step("Verify: Company name field is read-only");
         assertThat(editBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
+    }
+
+    @Test
+    @TmsLink("528")
+    @Epic("System/Companies and business units")
+    @Feature("Edit business unit")
+    @Description("Verify that the dialog is closed by clicking on the 'Close' button")
+    public void testVerifyDialogClosedByClickButtonClose(@Optional("UNAUTHORISED") String userRole) {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .loginAs(UserRole.SUPER)
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(companyName)
+                .clickEditBusinessUnitButton()
+                .clickCloseButton();
+
+        assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
     }
 }

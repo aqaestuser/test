@@ -37,6 +37,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator cityFromCompanyInfoSection = getByLabelExact("City");
     private final Locator apiActiveCheckboxFromCompanyInfoSection = getByLabelExact("API active");
     private final Locator portalActiveCheckboxFromCompanyInfoSection = getByLabelExact("Portal active");
+    private final Locator editBusinessUnitDialog = getByRole(AriaRole.DIALOG).getByTitle("Edit business unit");
     private final Locator businessUnitNameData = locator("[role='row'] span").first();
     private final Locator merchantIdData = locator("[role='row'] span").nth(1);
     private final Locator editBusinessUnitButton = getByTestId("EditBusinessUnitButton");
