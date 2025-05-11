@@ -6,10 +6,13 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
+import xyz.npgw.test.common.util.TestUtils;
+import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 
@@ -20,6 +23,8 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
 public class TransactionsPageTest extends BaseTest {
+
+    private static final String ADMIN_COMPANY_NAME = "A2 Company";
 
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Creation Date",
@@ -455,5 +460,45 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: that files can be downloaded");
         Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(menuItemName));
+    }
+
+    @Test
+    @TmsLink("520")
+    @Epic("Transactions")
+    @Feature("Business unit")
+    @Description("Verify that the Company admin can see all the company's business units in the Business unit "
+            + "dropdown list")
+    public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("UNAUTHORISED") String userRole) {
+        List<String> businessUnitNames = List.of("Business unit 1", "Business unit 2", "Business unit 3",
+                "Business unit 4");
+        String companyAdminEmail = "companyAdmin@gmail.com";
+        String companyAdminPassword = "CompanyAdmin1!";
+        TestUtils.deleteUser(getApiRequestContext(), companyAdminEmail);
+        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
+        TestUtils.createCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
+        TestUtils.createCompanyAdmin(
+                getApiRequestContext(), ADMIN_COMPANY_NAME, companyAdminEmail, companyAdminPassword);
+        businessUnitNames.forEach(businessUnitName -> TestUtils.createBusinessUnit(
+                getApiRequestContext(), ADMIN_COMPANY_NAME, businessUnitName));
+
+        TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
+                .navigate("/login")
+                .fillEmailField(companyAdminEmail)
+                .fillPasswordField(companyAdminPassword)
+                .clickLoginButtonToChangePassword()
+                .fillNewPasswordField(companyAdminPassword)
+                .fillRepeatNewPasswordField(companyAdminPassword)
+                .clickSaveButton()
+                .fillEmailField(companyAdminEmail)
+                .fillPasswordField(companyAdminPassword)
+                .clickLoginButton()
+                .getAlert()
+                .waitUntilSuccessAlertIsGone()
+                .getHeader().clickTransactionsLink()
+                .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
+
+        Allure.step("Verify: Company's business units are visible");
+        assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames
+                .toArray(String[]::new));
     }
 }
