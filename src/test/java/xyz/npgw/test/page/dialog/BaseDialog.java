@@ -48,12 +48,6 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
         return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
-    public List<String> getAllFieldsLabel() {
-        fieldLabel.first().waitFor();
-
-        return fieldLabel.all().stream().map(Locator::textContent).toList();
-    }
-
     @Step("Clear all form input fields")
     public CurrentDialogT clearInputFields() {
         allInputFields.last().waitFor();

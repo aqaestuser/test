@@ -6,14 +6,12 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.common.AlertTrait;
-import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsPage, AddBusinessUnitDialog>
+public class AddBusinessUnitDialog extends BusinessUnitDialog<AddBusinessUnitDialog>
         implements AlertTrait<AddBusinessUnitDialog> {
 
     @Getter
-    private final Locator companyNameField = locator("input[aria-label='Company name']");
     private final Locator addMerchantDialog = getByRole(AriaRole.DIALOG);
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
     private final Locator businessUnitNameField = getByPlaceholder("Enter business unit name");
@@ -23,12 +21,6 @@ public class AddBusinessUnitDialog extends BaseDialog<CompaniesAndBusinessUnitsP
 
     public AddBusinessUnitDialog(Page page) {
         super(page);
-    }
-
-    @Override
-    protected CompaniesAndBusinessUnitsPage getReturnPage() {
-
-        return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Click on the 'Create' button and trigger an error")
