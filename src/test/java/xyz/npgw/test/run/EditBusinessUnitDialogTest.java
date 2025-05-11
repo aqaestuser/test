@@ -17,7 +17,6 @@ import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertEquals;
 
 public class EditBusinessUnitDialogTest extends BaseTest {
     private final String companyName = "CompanyForBuEdit";
@@ -65,8 +64,6 @@ public class EditBusinessUnitDialogTest extends BaseTest {
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
                 .clickEditBusinessUnitButton();
-
-        List<String> actualLabelList = editBusinessUnitDialog.getAllFieldsLabel();
 
         Allure.step("Verify: all labels are correct for each field");
         assertThat(editBusinessUnitDialog.getFieldLabel()).hasText(new String[]{"Company name", "Business unit name"});

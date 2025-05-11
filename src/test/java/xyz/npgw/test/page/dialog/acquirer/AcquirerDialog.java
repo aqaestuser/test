@@ -42,6 +42,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
     @Step("Enter acquirer name '{name}'")
     public CurrentDialogT fillAcquirerName(String name) {
+        getDialogHeader().waitFor();
         getByPlaceholder("Enter acquirer name").fill(name);
 
         return (CurrentDialogT) this;
@@ -78,6 +79,13 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     @Step("Click currency '{currency}'")
     public CurrentDialogT clickCheckboxCurrency(String currency) {
         getPage().getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(currency)).check();
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Click acquirer config '{acquirerConfig}'")
+    public CurrentDialogT fillAcquirerConfig(String acquirerConfig) {
+        getByPlaceholder("Enter notification queue").fill("Enter acquirer config");
 
         return (CurrentDialogT) this;
     }

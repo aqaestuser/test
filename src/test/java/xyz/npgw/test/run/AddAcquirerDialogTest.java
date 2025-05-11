@@ -153,4 +153,25 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: the 'Add acquirer' dialog is not closed");
         assertThat(acquirersPage.getAddAcquirerDialog()).not().isHidden();
     }
+
+    @Test
+    @TmsLink("526")
+    @Epic("System/Acquirers")
+    @Feature("Add acquirer")
+    @Description("Verify that 'Create' button is disabled when Acquirer name is empty.")
+    public void testDisableCreateButtonWhenAcquirerNameIsEmpty() {
+        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .clickAddAcquirer()
+                .fillAcquirerName("Acquirer name");
+
+        Allure.step("Verify: 'Create' button is not disabled.");
+        assertThat(addAcquirerDialog.getCreateButton()).not().isDisabled();
+
+        addAcquirerDialog.getAcquirerNamePlaceholder().clear();
+
+        Allure.step("Verify: 'Create' button is disabled.");
+        assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
+    }
 }
