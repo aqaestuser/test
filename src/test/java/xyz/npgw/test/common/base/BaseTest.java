@@ -211,6 +211,7 @@ public abstract class BaseTest {
                         log.info("reusing NONE state {} th {}", noneTokenBestBefore, Thread.currentThread().getId());
                         return;
                     }
+                    noneTokenBestBefore = LocalTime.now().plusMinutes(14);
                     log.info("store NONE state {}", Thread.currentThread().getId());
                     context.storageState(new BrowserContext
                             .StorageStateOptions()
