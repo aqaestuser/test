@@ -472,7 +472,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("UNAUTHORISED") String userRole) {
         String[] businessUnitNames = {"Business unit 1", "Business unit 2", "Business unit 3",
                 "Business unit 4"};
-        String companyAdminEmail = "companyAdmin@gmail.com";
+        String companyAdminEmail = "company.admin.520@gmail.com";
         String companyAdminPassword = "CompanyAdmin1!";
         TestUtils.deleteUser(getApiRequestContext(), companyAdminEmail);
         TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
