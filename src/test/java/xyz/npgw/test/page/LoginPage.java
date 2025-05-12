@@ -19,7 +19,6 @@ import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
 
-    private static final Logger log = LogManager.getLogger(LoginPage.class);
     @Getter
     private final Locator emailField = getByPlaceholder("Enter your email");
     private final Locator passwordField = getByPlaceholder("Enter your password");
