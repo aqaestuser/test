@@ -60,4 +60,11 @@ public class UserTableComponent extends TableComponent {
     public Locator getUserActivityIcon(String email) {
         return getTableRow(email).getByTestId("ChangeUserActivityButton").locator("svg");
     }
+
+    public TeamPage deactivateUser(String email) {
+        return clickDeactivateUserButton(email)
+                .clickDeactivateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .clickRefreshDataButton();
+    }
 }
