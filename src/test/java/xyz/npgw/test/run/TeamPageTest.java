@@ -209,6 +209,7 @@ public class TeamPageTest extends BaseTest {
                 .fillNewPasswordField(ADMIN_PASSWORD)
                 .fillRepeatNewPasswordField(ADMIN_PASSWORD)
                 .clickSaveButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButton()
