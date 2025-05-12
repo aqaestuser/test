@@ -52,10 +52,9 @@ jobs:
             viewportWidth=1920;
             viewportHeight=953;
             headlessMode=true;
-            tracingMode=true;
-            failFast=false;
-            DEBUG=pw:api;
-            videoMode=true
+            tracingMode=false;
+            failFast=true;
+            videoMode=false
           CI_RUN: true
 
       - name: Create test report

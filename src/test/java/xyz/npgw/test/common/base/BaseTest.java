@@ -149,7 +149,7 @@ public abstract class BaseTest {
         if (page != null) {
             page.close();
             if (ProjectProperties.isVideoMode() && page.video() != null) {
-                if (true) { //testResult.getStatus() == ITestResult.FAILURE) {
+                if (testResult.getStatus() == ITestResult.FAILURE) {
                     Path videoFilePath = Paths.get(testId + ".webm");
                     page.video().saveAs(videoFilePath);
                     Allure.getLifecycle().addAttachment(
@@ -161,7 +161,7 @@ public abstract class BaseTest {
 
         if (context != null) {
             if (ProjectProperties.isTracingMode()) {
-                if (true) { //testResult.getStatus() == ITestResult.FAILURE) {
+                if (testResult.getStatus() == ITestResult.FAILURE) {
                     Path traceFilePath = Paths.get(testId + ".zip");
                     context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
                     Allure.getLifecycle().addAttachment(
