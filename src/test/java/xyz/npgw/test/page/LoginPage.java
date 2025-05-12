@@ -75,7 +75,6 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
 
     @Step("Press 'Save' button to save changed password")
     public LoginPage clickSaveButton() {
-        saveButton.waitFor();
         saveButton.click();
 
         return this;
