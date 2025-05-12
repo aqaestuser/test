@@ -199,6 +199,7 @@ public abstract class BaseTest {
                 userRole = UserRole.valueOf((String) args[0]);
             } catch (IllegalArgumentException ignored) {
                 if (args[0].equals("UNAUTHORISED")) {
+                    new AboutBlankPage(page).navigate("/");
 //                    log.info("open login page as UNAUTHORISED user");
 //                    new AboutBlankPage(page).navigate("/login");
                     return;
@@ -220,11 +221,11 @@ public abstract class BaseTest {
                     .setPath(Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId()))));
         }
         if (userRole == UserRole.ADMIN) {
-            if (LocalTime.now().isBefore(adminTokenBestBefore)) {
-                log.info("reusing ADMIN state {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/");
-                return;
-            }
+//            if (LocalTime.now().isBefore(adminTokenBestBefore)) {
+//                log.info("reusing ADMIN state {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
+//                new AboutBlankPage(page).navigate("/");
+//                return;
+//            }
             log.info("refresh and store ADMIN state");
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             adminTokenBestBefore = LocalTime.now().plusMinutes(14);
@@ -233,11 +234,11 @@ public abstract class BaseTest {
                     .setPath(Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId()))));
         }
         if (userRole == UserRole.USER) {
-            if (LocalTime.now().isBefore(userTokenBestBefore)) {
-                log.info("reusing USER state {} th {}", userTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/");
-                return;
-            }
+//            if (LocalTime.now().isBefore(userTokenBestBefore)) {
+//                log.info("reusing USER state {} th {}", userTokenBestBefore, Thread.currentThread().getId());
+//                new AboutBlankPage(page).navigate("/");
+//                return;
+//            }
             log.info("refresh and store USER state");
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             userTokenBestBefore = LocalTime.now().plusMinutes(14);
