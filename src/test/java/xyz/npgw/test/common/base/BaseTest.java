@@ -133,10 +133,11 @@ public abstract class BaseTest {
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{}_{} <<< {} in {} s",
+        log.info("{}_{} <<< {} in {} s th {}",
                 testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(),
                 testId,
-                testDuration);
+                testDuration,
+                Thread.currentThread().getId());
 
         if (page != null) {
             page.close();
