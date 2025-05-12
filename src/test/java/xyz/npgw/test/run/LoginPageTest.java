@@ -41,7 +41,7 @@ public class LoginPageTest extends BaseTest {
     @Description("User email is remembered after first successful login with checked 'Remember me'")
     public void testRememberMeCheckedSavesUserEmail(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ProjectProperties.getSuperEmail())
                 .fillPasswordField(ProjectProperties.getSuperPassword())
                 .checkRememberMeCheckbox()

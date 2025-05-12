@@ -202,7 +202,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), ADMIN_COMPANY_NAME, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButtonToChangePassword()
@@ -275,7 +275,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), ADMIN_COMPANY_NAME, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButtonToChangePassword()
@@ -318,7 +318,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), ADMIN_COMPANY_NAME, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButtonToChangePassword()
@@ -380,7 +380,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), ADMIN_COMPANY_NAME, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButtonToChangePassword()
@@ -434,7 +434,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(ADMIN_EMAIL)
                 .fillPasswordField(ADMIN_PASSWORD)
                 .clickLoginButtonToChangePassword()

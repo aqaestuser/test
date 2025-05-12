@@ -483,7 +483,7 @@ public class TransactionsPageTest extends BaseTest {
                 getApiRequestContext(), ADMIN_COMPANY_NAME, businessUnitName));
 
         TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(companyAdminEmail)
                 .fillPasswordField(companyAdminPassword)
                 .clickLoginButtonToChangePassword()

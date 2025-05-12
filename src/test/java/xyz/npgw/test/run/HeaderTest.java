@@ -82,7 +82,7 @@ public class HeaderTest extends BaseTest {
         String newPassword = "QWEdsa123@";
 
         DashboardPage dashboardPage = new AboutBlankPage(getPage())
-                .navigate("/login")
+                .navigate("/")
                 .fillEmailField(email)
                 .fillPasswordField(password)
                 .clickLoginButtonToChangePassword()
