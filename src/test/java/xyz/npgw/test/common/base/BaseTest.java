@@ -14,13 +14,14 @@ import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.testng.annotations.Listeners;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
@@ -37,6 +38,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Log4j2
+@Listeners(TestListener.class)
 public abstract class BaseTest {
 
     private Playwright playwright;
@@ -46,16 +48,31 @@ public abstract class BaseTest {
     private Page page;
     @Getter(AccessLevel.PROTECTED)
     private APIRequestContext apiRequestContext;
-    private LocalTime bestBefore = LocalTime.now();
+    private LocalTime apiTokenBestBefore = LocalTime.now();
+    private String testId;
+    private LocalTime superTokenBestBefore = LocalTime.now();
+    private LocalTime adminTokenBestBefore = LocalTime.now();
+    private LocalTime userTokenBestBefore = LocalTime.now();
 
     @BeforeClass
-    protected void beforeClass() {
+    protected void beforeClass(ITestContext testContext) {
         playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
         browser = BrowserFactory.getBrowser(playwright);
+        log.info(">>> >>> >>> before CLASS {} th {}",
+                testContext.getAttribute("testRunId"),
+                Thread.currentThread().getId());
     }
 
     @BeforeMethod
-    protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
+    protected void beforeMethod(ITestContext testContext, Method method, ITestResult testResult, Object[] args) {
+        testId = "%s/%s/%s/%s(%d)%s".formatted(
+                ProjectProperties.getArtefactDir(),
+                ProjectProperties.getBrowserType(),
+                method.getDeclaringClass().getSimpleName(),
+                method.getName(),
+                testResult.getMethod().getCurrentInvocationCount(),
+                new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
+
         if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
             throw new SkipException("Test skipped due to failFast option being true");
         }
@@ -67,6 +84,24 @@ public abstract class BaseTest {
                 .setColorScheme(ProjectProperties.getColorScheme())
                 .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
                 .setBaseURL(ProjectProperties.getBaseUrl());
+
+        UserRole userRole = UserRole.SUPER;
+        if (args.length != 0 && (args[0] instanceof String)) {
+            try {
+                userRole = UserRole.valueOf((String) args[0]);
+            } catch (IllegalArgumentException ignored) {
+                if (!args[0].equals("UNAUTHORISED")) {
+                    log.info("value {} not recognized as user role, using SUPER instead", args[0]);
+                }
+            }
+        }
+
+        if (userRole == UserRole.SUPER && LocalTime.now().isBefore(superTokenBestBefore)
+                || userRole == UserRole.ADMIN && LocalTime.now().isBefore(adminTokenBestBefore)
+                || userRole == UserRole.USER && LocalTime.now().isBefore(userTokenBestBefore)) {
+            options.setStorageStatePath(
+                    Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId())));
+        }
 
         if (ProjectProperties.isVideoMode()) {
             options.setRecordVideoDir(Paths.get(ProjectProperties.getArtefactDir()))
@@ -86,45 +121,43 @@ public abstract class BaseTest {
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
-        log.info("{}", getTestName(method, testResult).replace("(", "_").split("_")[0]);
+        log.info(">>> {} th {}", testId, Thread.currentThread().getId());
         initApiRequestContext();
         openSite(args);
     }
 
     @AfterMethod
-    protected void afterMethod(Method method, ITestResult testResult) {
-        String testName = getTestName(method, testResult);
-
+    protected void afterMethod(ITestContext testContext, Method method, ITestResult testResult) throws IOException {
         if (!testResult.isSuccess() && !ProjectProperties.closeBrowserIfError()) {
             page.pause();
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{}_{}  {} in {} s",
+        log.info("{}_{} <<< {} in {} s",
                 testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(),
-                testName.split("/")[1],
+                testId,
                 testDuration);
 
-        Path videoFilePath = Paths
-                .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".webm");
         if (page != null) {
             page.close();
             if (ProjectProperties.isVideoMode() && page.video() != null) {
                 if (testResult.getStatus() == ITestResult.FAILURE) {
+                    Path videoFilePath = Paths.get(testId + ".webm");
                     page.video().saveAs(videoFilePath);
-                    addVideoToAllure(videoFilePath);
+                    Allure.getLifecycle().addAttachment(
+                            "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
                 }
                 page.video().delete();
             }
         }
 
-        Path traceFilePath = Paths
-                .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".zip");
         if (context != null) {
             if (ProjectProperties.isTracingMode()) {
                 if (testResult.getStatus() == ITestResult.FAILURE) {
+                    Path traceFilePath = Paths.get(testId + ".zip");
                     context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
-                    addTracesToAllure(traceFilePath);
+                    Allure.getLifecycle().addAttachment(
+                            "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
                 } else {
                     context.tracing().stop();
                 }
@@ -143,7 +176,7 @@ public abstract class BaseTest {
     }
 
     @AfterClass(alwaysRun = true)
-    protected void afterClass() {
+    protected void afterClass(ITestContext testContext) {
         if (browser != null) {
             browser.close();
         }
@@ -153,32 +186,9 @@ public abstract class BaseTest {
         if (playwright != null) {
             playwright.close();
         }
-    }
-
-    private String getTestName(Method method, ITestResult testResult) {
-        String testName = method.getDeclaringClass().getSimpleName() + "/" + method.getName();
-        if (!method.getAnnotation(Test.class).dataProvider().isEmpty()) {
-            testName = "%s(%d)".formatted(testName, testResult.getMethod().getCurrentInvocationCount() - 1);
-        }
-        return testName + new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
-    }
-
-    private void addVideoToAllure(Path path) {
-        try {
-            Allure.getLifecycle()
-                    .addAttachment("video", "video/webm", "webm", Files.readAllBytes(path));
-        } catch (IOException e) {
-            log.error("Add video to allure failed: {}", e.getMessage());
-        }
-    }
-
-    private void addTracesToAllure(Path path) {
-        try {
-            Allure.getLifecycle()
-                    .addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(path));
-        } catch (IOException e) {
-            log.error("Add traces to allure failed: {}", e.getMessage());
-        }
+        log.info("<<< <<< <<< after CLASS {} th {}",
+                testContext.getAttribute("testRunId"),
+                Thread.currentThread().getId());
     }
 
     private void openSite(Object[] args) {
@@ -186,20 +196,58 @@ public abstract class BaseTest {
         if (args.length != 0 && (args[0] instanceof String)) {
             try {
                 userRole = UserRole.valueOf((String) args[0]);
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException ignored) {
                 if (args[0].equals("UNAUTHORISED")) {
-                    new AboutBlankPage(page).navigate("/");
+                    log.info("open login page as UNAUTHORISED user");
+                    new AboutBlankPage(page).navigate("/login");
                     return;
-                } else {
-                    log.debug("Unknown user role, will use SUPER");
                 }
             }
         }
-        new AboutBlankPage(page).navigate("/").loginAs(userRole);
+
+        if (userRole == UserRole.SUPER) {
+            if (LocalTime.now().isBefore(superTokenBestBefore)) {
+                log.info("reusing SUPER state {} th {}", superTokenBestBefore, Thread.currentThread().getId());
+                new AboutBlankPage(page).navigate("/dashboard");
+                return;
+            }
+            log.info("refresh and store SUPER state");
+            new AboutBlankPage(page).navigate("/").loginAs(userRole);
+            superTokenBestBefore = LocalTime.now().plusMinutes(14);
+            context.storageState(new BrowserContext
+                    .StorageStateOptions()
+                    .setPath(Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId()))));
+        }
+        if (userRole == UserRole.ADMIN) {
+            if (LocalTime.now().isBefore(adminTokenBestBefore)) {
+                log.info("reusing ADMIN state {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
+                new AboutBlankPage(page).navigate("/dashboard");
+                return;
+            }
+            log.info("refresh and store ADMIN state");
+            new AboutBlankPage(page).navigate("/").loginAs(userRole);
+            adminTokenBestBefore = LocalTime.now().plusMinutes(14);
+            context.storageState(new BrowserContext
+                    .StorageStateOptions()
+                    .setPath(Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId()))));
+        }
+        if (userRole == UserRole.USER) {
+            if (LocalTime.now().isBefore(userTokenBestBefore)) {
+                log.info("reusing USER state {} th {}", userTokenBestBefore, Thread.currentThread().getId());
+                new AboutBlankPage(page).navigate("/dashboard");
+                return;
+            }
+            log.info("refresh and store USER state");
+            new AboutBlankPage(page).navigate("/").loginAs(userRole);
+            userTokenBestBefore = LocalTime.now().plusMinutes(14);
+            context.storageState(new BrowserContext
+                    .StorageStateOptions()
+                    .setPath(Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId()))));
+        }
     }
 
     private void initApiRequestContext() {
-        if (LocalTime.now().isBefore(bestBefore)) {
+        if (LocalTime.now().isBefore(apiTokenBestBefore)) {
             return;
         }
 
@@ -219,7 +267,7 @@ public abstract class BaseTest {
                             .NewContextOptions()
                             .setBaseURL(ProjectProperties.getBaseUrl())
                             .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken))));
-            bestBefore = LocalTime.now().plusSeconds(token.expiresIn).minusMinutes(1);
+            apiTokenBestBefore = LocalTime.now().plusSeconds(token.expiresIn).minusMinutes(1);
         } else {
             String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.text());
             log.error(message);
@@ -230,6 +278,6 @@ public abstract class BaseTest {
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
     }
 
-    private record TokenResponse(String userChallengeType, Token token) {
+    private record TokenResponse(String userChallengeType, Token token, String sessionId) {
     }
 }
