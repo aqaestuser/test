@@ -483,14 +483,13 @@ public class TransactionsPageTest extends BaseTest {
                 getApiRequestContext(), ADMIN_COMPANY_NAME, businessUnitName));
 
         TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
-                .navigate("/")
+                .navigate("/login")
                 .fillEmailField(companyAdminEmail)
                 .fillPasswordField(companyAdminPassword)
                 .clickLoginButtonToChangePassword()
                 .fillNewPasswordField(companyAdminPassword)
                 .fillRepeatNewPasswordField(companyAdminPassword)
                 .clickSaveButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .fillEmailField(companyAdminEmail)
                 .fillPasswordField(companyAdminPassword)
                 .clickLoginButton()
