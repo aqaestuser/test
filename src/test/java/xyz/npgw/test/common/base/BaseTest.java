@@ -207,11 +207,11 @@ public abstract class BaseTest {
         }
 
         if (userRole == UserRole.SUPER) {
-            if (LocalTime.now().isBefore(superTokenBestBefore)) {
-                log.info("reusing SUPER state {} th {}", superTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/");
-                return;
-            }
+//            if (LocalTime.now().isBefore(superTokenBestBefore)) {
+//                log.info("reusing SUPER state {} th {}", superTokenBestBefore, Thread.currentThread().getId());
+//                new AboutBlankPage(page).navigate("/");
+//                return;
+//            }
             log.info("refresh and store SUPER state");
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             superTokenBestBefore = LocalTime.now().plusMinutes(14);
