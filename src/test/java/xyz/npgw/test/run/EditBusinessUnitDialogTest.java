@@ -31,7 +31,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
 
         Locator dialogTitle = new AboutBlankPage(getPage())
-                .navigate("/")
+                .navigate("/login")
                 .loginAs(UserRole.SUPER)
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -53,7 +53,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
 
         EditBusinessUnitDialog editBusinessUnitDialog = new AboutBlankPage(getPage())
-                .navigate("/")
+                .navigate("/login")
                 .loginAs(UserRole.SUPER)
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -74,7 +74,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
 
         EditBusinessUnitDialog editBusinessUnitDialog = new AboutBlankPage(getPage())
-                .navigate("/")
+                .navigate("/login")
                 .loginAs(UserRole.SUPER)
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -97,7 +97,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new AboutBlankPage(getPage())
-                .navigate("/")
+                .navigate("/login")
                 .loginAs(UserRole.SUPER)
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
