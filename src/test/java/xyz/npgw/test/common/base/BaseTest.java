@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Log4j2
-//@Listeners(TestListener.class)
+@Listeners(TestListener.class)
 public abstract class BaseTest {
 
     private Playwright playwright;
