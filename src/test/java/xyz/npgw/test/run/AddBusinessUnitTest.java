@@ -24,7 +24,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("213")
     @Epic("System/Companies and business units")
-    @Feature("Add merchant")
+    @Feature("Add business unit")
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
         Company company = new Company(new Faker());
@@ -49,7 +49,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("214")
     @Epic("System/Companies and business units")
-    @Feature("Add merchant")
+    @Feature("Add business unit")
     @Description("Verify 'Add business unit' button is disabled if 'Select company' filter's field is cleaned")
     public void testVerifyAddBusinessUnitButtonDefaultState() {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
@@ -63,7 +63,7 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("238")
     @Epic("System/Companies and business units")
-    @Feature("Add merchant")
+    @Feature("Add business unit")
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
         Company company = new Company(new Faker());
@@ -90,8 +90,8 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")
-    @Feature("Add merchant")
-    @Description("Verify that a new Merchant wasn't added once click 'Close' button")
+    @Feature("Add business unit")
+    @Description("Verify that a new business unit wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
         Company company = new Company(new Faker());
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
@@ -115,8 +115,8 @@ public class AddBusinessUnitTest extends BaseTest {
     @Test
     @TmsLink("218")
     @Epic("Companies and business units")
-    @Feature("Add merchant")
-    @Description("Add a new Merchant with 'Add business unit' button")
+    @Feature("Add business unit")
+    @Description("Add a new business unit with 'Add business unit' button")
     public void testAddNewMerchants() {
         Company company = new Company(new Faker());
 
