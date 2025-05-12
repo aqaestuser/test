@@ -3,9 +3,12 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.base.BasePage;
@@ -16,6 +19,7 @@ import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
 
+    private static final Logger log = LogManager.getLogger(LoginPage.class);
     @Getter
     private final Locator emailField = getByPlaceholder("Enter your email");
     private final Locator passwordField = getByPlaceholder("Enter your password");
@@ -69,6 +73,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     @Step("Press 'Login' button to change password")
     public LoginPage clickLoginButtonToChangePassword() {
         loginButton.click();
+        getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
         return this;
     }
