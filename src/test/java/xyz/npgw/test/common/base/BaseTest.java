@@ -209,7 +209,7 @@ public abstract class BaseTest {
         if (userRole == UserRole.SUPER) {
             if (LocalTime.now().isBefore(superTokenBestBefore)) {
                 log.info("reusing SUPER state {} th {}", superTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/dashboard");
+                new AboutBlankPage(page).navigate("/");
                 return;
             }
             log.info("refresh and store SUPER state");
@@ -222,7 +222,7 @@ public abstract class BaseTest {
         if (userRole == UserRole.ADMIN) {
             if (LocalTime.now().isBefore(adminTokenBestBefore)) {
                 log.info("reusing ADMIN state {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/dashboard");
+                new AboutBlankPage(page).navigate("/");
                 return;
             }
             log.info("refresh and store ADMIN state");
@@ -235,7 +235,7 @@ public abstract class BaseTest {
         if (userRole == UserRole.USER) {
             if (LocalTime.now().isBefore(userTokenBestBefore)) {
                 log.info("reusing USER state {} th {}", userTokenBestBefore, Thread.currentThread().getId());
-                new AboutBlankPage(page).navigate("/dashboard");
+                new AboutBlankPage(page).navigate("/");
                 return;
             }
             log.info("refresh and store USER state");
