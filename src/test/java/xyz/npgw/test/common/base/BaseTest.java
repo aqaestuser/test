@@ -199,8 +199,8 @@ public abstract class BaseTest {
                 userRole = UserRole.valueOf((String) args[0]);
             } catch (IllegalArgumentException ignored) {
                 if (args[0].equals("UNAUTHORISED")) {
-                    log.info("open login page as UNAUTHORISED user");
-                    new AboutBlankPage(page).navigate("/login");
+//                    log.info("open login page as UNAUTHORISED user");
+//                    new AboutBlankPage(page).navigate("/login");
                     return;
                 }
             }
