@@ -13,7 +13,6 @@ public class AboutBlankPage extends BasePage {
     @Step("Navigate to '{url}' endpoint")
     public LoginPage navigate(String url) {
         getPage().navigate(url);
-        getPage().waitForTimeout(2000);
 
         return new LoginPage(getPage());
     }
