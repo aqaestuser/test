@@ -274,7 +274,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testTheVisibilityOfThePaymentMethodOptions() {
         List<String> options = List.of("ALL",
                 "VISA",
-                "Mastercard");
+                "MASTERCARD");
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .getHeader().clickTransactionsLink()

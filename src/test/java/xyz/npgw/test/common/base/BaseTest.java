@@ -136,7 +136,7 @@ public abstract class BaseTest {
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
 
-        log.info("current opts are ->{} th {}", options.storageStatePath, Thread.currentThread().getId());
+        log.info("current opts are -> {} th {}", options.storageStatePath, Thread.currentThread().getId());
         initApiRequestContext();
         openSite(args);
     }
