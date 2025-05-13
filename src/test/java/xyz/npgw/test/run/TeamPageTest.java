@@ -22,6 +22,7 @@ import xyz.npgw.test.page.system.TeamPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class TeamPageTest extends BaseTest {
 
@@ -29,10 +30,8 @@ public class TeamPageTest extends BaseTest {
     private static final String ADMIN_COMPANY_NAME = "Admin company";
     private static final String ADMIN_EMAIL = "admin.email@gmail.com";
     private static final String ADMIN_PASSWORD = "AdminPassword1!";
-    private static final String SUCCESS_MESSAGE_USER_DEACTIVATED = "SUCCESSUser was deactivated successfully";
     private static final String SUCCESS_MESSAGE_USER_CREATED = "SUCCESSUser was created successfully";
     private static final String SUCCESS_MESSAGE_USER_UPDATED = "SUCCESSUser was updated successfully";
-
 
     User user = new User(
             COMPANY_NAME,
@@ -98,8 +97,9 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
     public void testAddCompanyAnalyst() {
-        TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
         TestUtils.deleteUser(getApiRequestContext(), user);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), user.companyName());
+        TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -125,17 +125,14 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
-        Allure.step("Verify: new user's email is displayed in the table");
-        assertThat(teamPage.getUserEmailByUsername(user.email())).hasText(user.email());
-
         Allure.step("Verify: new user has the role 'USER'");
-        assertThat(teamPage.getUserRoleByUsername(user.email())).hasText("USER");
+        assertThat(teamPage.getTable().getUserRole(user.email())).hasText("USER");
 
         Allure.step("Verify: new user has status 'Active'");
-        assertThat(teamPage.getUserStatusByUsername(user.email())).hasText("Active");
+        assertThat(teamPage.getTable().getUserStatus(user.email())).hasText("Active");
 
         Allure.step("Verify: 'Deactivate' icon is shown for the new user");
-        assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "ban");
+        assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "ban");
     }
 
     @Test
@@ -176,20 +173,17 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
-        Allure.step("Verify: updated user's email is still displayed correctly");
-        assertThat(teamPage.getUserEmailByUsername(user.email())).hasText(user.email());
-
         Allure.step("Verify: user role was updated to 'ADMIN'");
-        assertThat(teamPage.getUserRoleByUsername(user.email())).hasText("ADMIN");
+        assertThat(teamPage.getTable().getUserRole(user.email())).hasText("ADMIN");
 
         Allure.step("Verify: Verify that user status was updated to 'Inactive'");
-        assertThat(teamPage.getUserStatusByUsername(user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getUserStatus(user.email())).hasText("Inactive");
 
         Allure.step("Verify: 'Activate' icon is shown for the user");
-        assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "check");
+        assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
-//    TODO add tms link
+    //    TODO add tms link
     @Test
     @TmsLink("")
     @Epic("System/Team")
@@ -231,6 +225,7 @@ public class TeamPageTest extends BaseTest {
     @Description("Deactivate user by 'Change user activity button' and verify status change")
     public void testDeactivateUserViaChangeUserActivityButton() {
         TestUtils.deleteUser(getApiRequestContext(), user.email());
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), user);
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         TeamPage teamPage = new DashboardPage(getPage())
@@ -244,22 +239,16 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .clickChangeUserActivityButton(user.email())
-                .clickDeactivateButton();
-
-        Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_DEACTIVATED);
-
-        teamPage.clickRefreshDataButton();
+                .getTable().deactivateUser(user.email());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: user status becomes 'Inactive' in the table");
-        assertThat(teamPage.getUserStatusByUsername(user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getUserStatus(user.email())).hasText("Inactive");
 
         Allure.step("Verify: 'Activate user' icon is shown for the user");
-        assertEquals(teamPage.getChangeUserActivityButton(user.email()).getAttribute("data-icon"), "check");
+        assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
     @Test
@@ -339,7 +328,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_DEACTIVATED);
+        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was deactivated successfully");
 
         teamPage.clickRefreshDataButton();
 
@@ -364,7 +353,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
     }
 
-//    TODO add tms link
+    //    TODO add tms link
     @Test
     @TmsLink("")
     @Epic("System/Team")
@@ -462,5 +451,40 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
+    }
+
+    @Test
+    @TmsLink("531")
+    @Epic("System/Team")
+    @Feature("Status")
+    @Description("Status filter correctly displays users with 'Active' or 'Inactive' status")
+    public void testStatusFilterDisplaysCorrectUsers() {
+        final String statusColumnName = "Status";
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyAdminPassword = ProjectProperties.getAdminPassword();
+        final String companyName = "framework";
+
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
+
+        TeamPage teamPage = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getTable().deactivateUser(companyAdmin)
+                .clickStatusSelector()
+                .selectActiveStatus();
+
+        Allure.step("Verify: All visible users are 'Active' after applying 'Active' filter");
+        assertTrue(teamPage.getTable().getColumnValues(statusColumnName)
+                .stream().allMatch(value -> value.equals("Active")));
+
+        teamPage.clickStatusSelector()
+                .selectInactiveStatus();
+
+        Allure.step("Verify: All visible users are 'Inactive' after applying Inactive filter");
+        assertTrue(teamPage.getTable().getColumnValues(statusColumnName)
+                .stream().allMatch(value -> value.equals("Inactive")));
+
+        TestUtils.deleteUser(getApiRequestContext(), companyAdmin);
     }
 }

@@ -8,12 +8,13 @@ import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.common.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
-import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait, SelectCompanyTrait<TeamPage>,
         AlertTrait<TeamPage> {
+
+    private final Locator statusSelector = getByLabelExact("Status");
 
     public TeamPage(Page page) {
         super(page);
@@ -39,18 +40,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         return new EditUserDialog(getPage());
     }
 
-    public Locator getUserEmailByUsername(String username) {
-        return userRow(username).locator("td").first();
-    }
-
-    public Locator getUserRoleByUsername(String username) {
-        return userRow(username).locator("td").nth(1);
-    }
-
-    public Locator getUserStatusByUsername(String username) {
-        return userRow(username).locator("td").nth(2);
-    }
-
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
 //        TODO remove after bugfix
@@ -60,18 +49,24 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         return this;
     }
 
-    public Locator getChangeUserActivityButton(String username) {
-        return userRow(username)
-                .getByTestId("ChangeUserActivityButton")
-                .locator("svg");
+    @Step("Click 'Status' Selector")
+    public TeamPage clickStatusSelector() {
+        statusSelector.click();
+
+        return this;
     }
 
-    @Step("Click user activation button")
-    public ChangeUserActivityDialog clickChangeUserActivityButton(String username) {
-        Locator button = getChangeUserActivityButton(username);
-        button.waitFor();
-        button.click();
+    @Step("Select 'Active' status")
+    public TeamPage selectActiveStatus() {
+        getPage().getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Active").setExact(true)).click();
 
-        return new ChangeUserActivityDialog(getPage());
+        return this;
+    }
+
+    @Step("Select 'Inactive' status")
+    public TeamPage selectInactiveStatus() {
+        getPage().getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Inactive")).click();
+
+        return this;
     }
 }
