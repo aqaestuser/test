@@ -61,6 +61,7 @@ public class UserTableComponent extends TableComponent {
         return getTableRow(email).getByTestId("ChangeUserActivityButton").locator("svg");
     }
 
+    @Step("Deactivate user")
     public TeamPage deactivateUser(String email) {
         return clickDeactivateUserButton(email)
                 .clickDeactivateButton()

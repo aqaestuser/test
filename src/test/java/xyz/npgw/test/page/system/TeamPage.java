@@ -40,18 +40,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         return new EditUserDialog(getPage());
     }
 
-    public Locator getUserEmailByUsername(String username) {
-        return userRow(username).locator("td").first();
-    }
-
-    public Locator getUserRoleByUsername(String username) {
-        return userRow(username).locator("td").nth(1);
-    }
-
-    public Locator getUserStatusByUsername(String username) {
-        return userRow(username).locator("td").nth(2);
-    }
-
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
 //        TODO remove after bugfix
@@ -59,12 +47,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         getByTestId("ApplyFilterButtonTeamPage").click();
 
         return this;
-    }
-
-    public Locator getChangeUserActivityButton(String username) {
-        return userRow(username)
-                .getByTestId("ChangeUserActivityButton")
-                .locator("svg");
     }
 
     @Step("Click 'Status' Selector")
@@ -76,9 +58,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
 
     @Step("Select 'Active' status")
     public TeamPage selectActiveStatus() {
-        getPage().getByRole(AriaRole.OPTION, new Page.GetByRoleOptions()
-                .setName("Active")
-                .setExact(true)).click();
+        getPage().getByRole(AriaRole.OPTION, new Page.GetByRoleOptions().setName("Active").setExact(true)).click();
 
         return this;
     }
