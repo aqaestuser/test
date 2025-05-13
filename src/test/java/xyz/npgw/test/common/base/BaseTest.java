@@ -73,8 +73,10 @@ public abstract class BaseTest {
                 method.getName(),
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
+        log.info(">>> {} th {}", testId, Thread.currentThread().getId());
 
         if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
+            log.info("Test {} skipped isSkipMode && isFailFast - true th {}", testId, Thread.currentThread().getId());
             throw new SkipException("Test skipped due to failFast option being true");
         }
 
@@ -87,6 +89,7 @@ public abstract class BaseTest {
                 .setBaseURL(ProjectProperties.getBaseUrl());
 
         UserRole userRole = UserRole.SUPER;
+        boolean isUnathorised = false;
         if (args.length != 0 && (args[0] instanceof String)) {
             try {
                 userRole = UserRole.valueOf((String) args[0]);
@@ -94,7 +97,9 @@ public abstract class BaseTest {
                 if (!args[0].equals("UNAUTHORISED")) {
                     log.info("value {} not recognized as user role, using SUPER instead", args[0]);
                 } else {
+                    isUnathorised = true;
                     if (LocalTime.now().isBefore(noneTokenBestBefore)) {
+                        log.info("set NONE state {} th {}", testId, Thread.currentThread().getId());
                         options.setStorageStatePath(
                                 Paths.get("target/NONE-%s-state.json".formatted(Thread.currentThread().getId())));
                     }
@@ -102,11 +107,14 @@ public abstract class BaseTest {
             }
         }
 
-        if (userRole == UserRole.SUPER && LocalTime.now().isBefore(superTokenBestBefore)
-                || userRole == UserRole.ADMIN && LocalTime.now().isBefore(adminTokenBestBefore)
-                || userRole == UserRole.USER && LocalTime.now().isBefore(userTokenBestBefore)) {
-            options.setStorageStatePath(
-                    Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId())));
+        if (!isUnathorised) {
+            if (userRole == UserRole.SUPER && LocalTime.now().isBefore(superTokenBestBefore)
+                    || userRole == UserRole.ADMIN && LocalTime.now().isBefore(adminTokenBestBefore)
+                    || userRole == UserRole.USER && LocalTime.now().isBefore(userTokenBestBefore)) {
+                log.info("set {} state {} th {}", userRole, testId, Thread.currentThread().getId());
+                options.setStorageStatePath(
+                        Paths.get("target/%s-%s-state.json".formatted(userRole, Thread.currentThread().getId())));
+            }
         }
 
         if (ProjectProperties.isVideoMode()) {
@@ -127,8 +135,8 @@ public abstract class BaseTest {
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
-        log.info("opts->{} th {}", options.storageStatePath, Thread.currentThread().getId());
-        log.info(">>> {} th {}", testId, Thread.currentThread().getId());
+
+        log.info("current opts are ->{} th {}", options.storageStatePath, Thread.currentThread().getId());
         initApiRequestContext();
         openSite(args);
     }
@@ -206,13 +214,14 @@ public abstract class BaseTest {
                 userRole = UserRole.valueOf((String) args[0]);
             } catch (IllegalArgumentException ignored) {
                 if (args[0].equals("UNAUTHORISED")) {
-                    new AboutBlankPage(page).navigate("/");
                     if (LocalTime.now().isBefore(noneTokenBestBefore)) {
-                        log.info("reusing NONE state {} th {}", noneTokenBestBefore, Thread.currentThread().getId());
+                        log.info("navigate('/') as NONE {} th {}", noneTokenBestBefore, Thread.currentThread().getId());
+                        new AboutBlankPage(page).navigate("/");
                         return;
                     }
+                    log.info("navigate('/') as NONE and store state th {}", Thread.currentThread().getId());
+                    new AboutBlankPage(page).navigate("/");
                     noneTokenBestBefore = LocalTime.now().plusMinutes(14);
-                    log.info("store NONE state {}", Thread.currentThread().getId());
                     context.storageState(new BrowserContext
                             .StorageStateOptions()
                             .setPath(Paths.get("target/NONE-%s-state.json".formatted(Thread.currentThread().getId()))));
@@ -223,11 +232,11 @@ public abstract class BaseTest {
 
         if (userRole == UserRole.SUPER) {
             if (LocalTime.now().isBefore(superTokenBestBefore)) {
-                log.info("reusing SUPER state {} th {}", superTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as SUPER {} th {}", superTokenBestBefore, Thread.currentThread().getId());
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("refresh and store SUPER state{}", Thread.currentThread().getId());
+            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             superTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext
@@ -236,11 +245,11 @@ public abstract class BaseTest {
         }
         if (userRole == UserRole.ADMIN) {
             if (LocalTime.now().isBefore(adminTokenBestBefore)) {
-                log.info("reusing ADMIN state {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as ADMIN {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("refresh and store ADMIN state{}", Thread.currentThread().getId());
+            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             adminTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext
@@ -249,11 +258,11 @@ public abstract class BaseTest {
         }
         if (userRole == UserRole.USER) {
             if (LocalTime.now().isBefore(userTokenBestBefore)) {
-                log.info("reusing USER state {} th {}", userTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as USER {} th {}", userTokenBestBefore, Thread.currentThread().getId());
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("refresh and store USER state{}", Thread.currentThread().getId());
+            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             userTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext
