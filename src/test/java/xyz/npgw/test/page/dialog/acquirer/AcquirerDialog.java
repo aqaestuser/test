@@ -5,9 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.page.common.AlertTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
+
+import java.util.Arrays;
+import java.util.Map;
 
 @Getter
 @SuppressWarnings("unchecked")
@@ -85,7 +89,24 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
     @Step("Click acquirer config '{acquirerConfig}'")
     public CurrentDialogT fillAcquirerConfig(String acquirerConfig) {
-        getByPlaceholder("Enter notification queue").fill("Enter acquirer config");
+        getByPlaceholder("Enter acquirer config").fill(acquirerConfig);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Fill acquirer form")
+    public CurrentDialogT fillAcquirerForm(Acquirer acquirer) {
+        fillChallengeUrl(acquirer.systemConfig().challengeUrl())
+                .fillFingerprintUrl(acquirer.systemConfig().fingerprintUrl())
+                .fillResourceUrl(acquirer.systemConfig().resourceUrl())
+                .fillNotificationQueue(acquirer.systemConfig().notificationQueue())
+                .fillAcquirerConfig(acquirer.acquirerConfig());
+
+        clickStatusRadiobutton(acquirer.isActive() ? "Active" : "Inactive");
+
+        for (String currency : acquirer.currencyList()) {
+            clickCheckboxCurrency(currency);
+        }
 
         return (CurrentDialogT) this;
     }
