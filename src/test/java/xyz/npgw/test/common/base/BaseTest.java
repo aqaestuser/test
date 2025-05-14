@@ -75,6 +75,9 @@ public abstract class BaseTest {
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
         log.info(">>> {} th {}", testId, Thread.currentThread().getId());
+        Thread.currentThread().setName("th%s%s".formatted(
+                Thread.currentThread().getId(),
+                testId.substring(testId.length() - 12)));
 
         if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
             log.info("Test {} skipped isSkipMode && isFailFast - true th {}", testId, Thread.currentThread().getId());
@@ -228,11 +231,11 @@ public abstract class BaseTest {
             } catch (IllegalArgumentException ignored) {
                 if (args[0].equals("UNAUTHORISED")) {
                     if (LocalTime.now().isBefore(noneTokenBestBefore)) {
-                        log.info("navigate('/') as NONE {} th {}", noneTokenBestBefore, Thread.currentThread().getId());
+                        log.info("navigate('/') as NONE {} th {} {}", noneTokenBestBefore, Thread.currentThread().getId(), runAs);
                         new AboutBlankPage(page).navigate("/");
                         return;
                     }
-                    log.info("navigate('/') as NONE and store state th {}", Thread.currentThread().getId());
+                    log.info("navigate('/') as NONE and store state th {} {}", Thread.currentThread().getId(), runAs);
                     new AboutBlankPage(page).navigate("/");
                     noneTokenBestBefore = LocalTime.now().plusMinutes(14);
                     context.storageState(new BrowserContext
@@ -245,11 +248,11 @@ public abstract class BaseTest {
 
         if (userRole == UserRole.SUPER) {
             if (LocalTime.now().isBefore(superTokenBestBefore)) {
-                log.info("navigate('/') as SUPER {} th {}", superTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as SUPER {} th {} {}", superTokenBestBefore, Thread.currentThread().getId(), runAs);
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
+            log.info("login as {} and store state th {} {}", userRole, Thread.currentThread().getId(), runAs);
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             superTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext
@@ -258,11 +261,11 @@ public abstract class BaseTest {
         }
         if (userRole == UserRole.ADMIN) {
             if (LocalTime.now().isBefore(adminTokenBestBefore)) {
-                log.info("navigate('/') as ADMIN {} th {}", adminTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as ADMIN {} th {} {}", adminTokenBestBefore, Thread.currentThread().getId(), runAs);
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
+            log.info("login as {} and store state th {} {}", userRole, Thread.currentThread().getId(), runAs);
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             adminTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext
@@ -271,11 +274,11 @@ public abstract class BaseTest {
         }
         if (userRole == UserRole.USER) {
             if (LocalTime.now().isBefore(userTokenBestBefore)) {
-                log.info("navigate('/') as USER {} th {}", userTokenBestBefore, Thread.currentThread().getId());
+                log.info("navigate('/') as USER {} th {} {}", userTokenBestBefore, Thread.currentThread().getId(), runAs);
                 new AboutBlankPage(page).navigate("/");
                 return;
             }
-            log.info("login as {} and store state th {}", userRole, Thread.currentThread().getId());
+            log.info("login as {} and store state th {} {}", userRole, Thread.currentThread().getId(), runAs);
             new AboutBlankPage(page).navigate("/").loginAs(userRole);
             userTokenBestBefore = LocalTime.now().plusMinutes(14);
             context.storageState(new BrowserContext

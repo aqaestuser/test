@@ -142,7 +142,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         fillRepeatNewPasswordField(newPassword);
         clickSaveButton();
 
-        getAlert().clickCloseButton();
+        getAlert().waitUntilSuccessAlertIsGone();
         return this;
     }
 
