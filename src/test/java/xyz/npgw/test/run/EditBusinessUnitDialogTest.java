@@ -105,6 +105,29 @@ public class EditBusinessUnitDialogTest extends BaseTest {
                 .clickEditBusinessUnitButton()
                 .clickCloseButton();
 
+        Allure.step("Verify: Dialog 'Edit business unit' is not displayed");
+        assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
+    }
+
+    @Test
+    @TmsLink("544")
+    @Epic("System/Companies and business units")
+    @Feature("Edit business unit")
+    @Description("Verify that the dialog is closed by clicking on the 'Close' icon")
+    public void testVerifyDialogClosedByClickIconClose(@Optional("UNAUTHORISED") String userRole) {
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, buName);
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new AboutBlankPage(getPage())
+                .navigate("/login")
+                .loginAs(UserRole.SUPER)
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(companyName)
+                .clickEditBusinessUnitButton()
+                .clickCloseIcon();
+
+        Allure.step("Verify: Dialog 'Edit business unit' is not displayed");
         assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
     }
 }

@@ -34,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -88,6 +89,11 @@ public abstract class BaseTest {
                 .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
                 .setBaseURL(ProjectProperties.getBaseUrl());
 
+        RunAs runAs = RunAs.SUPER;
+        if (args.length != 0 && Arrays.stream(RunAs.values()).anyMatch(e -> e.name().equals(args[0]))) {
+            runAs = RunAs.valueOf((String) args[0]);
+        }
+
         UserRole userRole = UserRole.SUPER;
         boolean isUnathorised = false;
         if (args.length != 0 && (args[0] instanceof String)) {
@@ -136,9 +142,10 @@ public abstract class BaseTest {
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
 
-        log.info("current opts are -> {} th {}", options.storageStatePath, Thread.currentThread().getId());
+        log.info("current opts are -> {} th {} runAs {}", options.storageStatePath,
+                Thread.currentThread().getId(), runAs);
         initApiRequestContext();
-        openSite(args);
+        openSite(runAs, args);
     }
 
     @AfterMethod
@@ -207,7 +214,13 @@ public abstract class BaseTest {
                 Thread.currentThread().getId());
     }
 
-    private void openSite(Object[] args) {
+    private void openSite(RunAs runAs, Object[] args) {
+//        RunAs runAs = RunAs.SUPER;
+//        if (args.length != 0 && Arrays.stream(RunAs.values()).anyMatch(e -> e.name().equals(args[0]))) {
+//            runAs = RunAs.valueOf((String) args[0]);
+//        }
+//        log.info("runAs in open site after if-> {}", runAs);
+
         UserRole userRole = UserRole.SUPER;
         if (args.length != 0 && (args[0] instanceof String)) {
             try {
@@ -298,6 +311,13 @@ public abstract class BaseTest {
             log.error(message);
             throw new SkipException(message);
         }
+    }
+
+    private enum RunAs {
+        SUPER,
+        ADMIN,
+        USER,
+        UNAUTHORISED
     }
 
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {

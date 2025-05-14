@@ -7,8 +7,6 @@ import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.base.BasePage;
@@ -129,6 +127,13 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         clickLoginButton();
 
         return new DashboardPage(getPage());
+    }
+
+    @Step("Login as disabled user with '{email}'")
+    public LoginPage loginAsDisabledUser(String email, String password) {
+        login(email, password);
+
+        return new LoginPage(getPage());
     }
 
     @Step("Change password")
