@@ -483,17 +483,8 @@ public class TransactionsPageTest extends BaseTest {
 
         TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
                 .navigate("/login")
-                .fillEmailField(companyAdminEmail)
-                .fillPasswordField(companyAdminPassword)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(companyAdminPassword)
-                .fillRepeatNewPasswordField(companyAdminPassword)
-                .clickSaveButton()
-                .fillEmailField(companyAdminEmail)
-                .fillPasswordField(companyAdminPassword)
-                .clickLoginButton()
-                .getAlert()
-                .waitUntilSuccessAlertIsGone()
+                .loginAndChangePassword(companyAdminEmail, companyAdminPassword)
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 

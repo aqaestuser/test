@@ -16,6 +16,7 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.system.TeamPage;
@@ -197,15 +198,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(ADMIN_PASSWORD)
-                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
-                .clickSaveButton()
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButton()
+                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
@@ -264,15 +257,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(ADMIN_PASSWORD)
-                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
-                .clickSaveButton()
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButton()
+                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
@@ -306,15 +291,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(ADMIN_PASSWORD)
-                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
-                .clickSaveButton()
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButton()
+                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
@@ -353,13 +330,12 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
     }
 
-    //    TODO add tms link
     @Test
-    @TmsLink("")
+    @TmsLink("554")
     @Epic("System/Team")
     @Feature("Edit user")
-    @Description("Reset user password under company admin")
-    public void testResetUserPasswordCompanyUser(@Optional("UNAUTHORISED") String userRole) {
+    @Description("Reset company analyst password under company admin")
+    public void testResetPasswordForCompanyAnalyst(@Optional("UNAUTHORISED") String userRole) {
         String email = "reset.password@gmail.com";
         TestUtils.deleteUser(getApiRequestContext(), email);
         TestUtils.createCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
@@ -367,15 +343,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(ADMIN_PASSWORD)
-                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
-                .clickSaveButton()
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButton()
+                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
@@ -409,10 +377,11 @@ public class TeamPageTest extends BaseTest {
     @Epic("System/Team")
     @Feature("Edit user")
     @Description("Create company analyst")
-    public void testCreateCompanyAnalyst(@Optional("UNAUTHORISED") String userRole) {
-        String email = "company.analyst@gmail.com";
+    public void testCreateCompanyAnalystAndDeactivate(@Optional("UNAUTHORISED") String userRole) {
+        String analystEmail = "company.analyst@gmail.com";
+        String analystPassword = "CompanyAnalyst123!";
         String companyName = "Analyst company";
-        TestUtils.deleteUser(getApiRequestContext(), email);
+        TestUtils.deleteUser(getApiRequestContext(), analystEmail);
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, "Business unit 1");
@@ -420,37 +389,60 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButtonToChangePassword()
-                .fillNewPasswordField(ADMIN_PASSWORD)
-                .fillRepeatNewPasswordField(ADMIN_PASSWORD)
-                .clickSaveButton()
-                .fillEmailField(ADMIN_EMAIL)
-                .fillPasswordField(ADMIN_PASSWORD)
-                .clickLoginButton()
-                .getAlert()
-                .waitUntilSuccessAlertIsGone()
+                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("CompanyAnalyst123!")
+                .fillEmailField(analystEmail)
+                .fillPasswordField(analystPassword)
                 .setAllowedBusinessUnit("Business unit 1")
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
+        teamPage.getAlert().waitUntilSuccessAlertIsGone()
+                .clickRefreshDataButton();
+
+        Allure.step("Verify: status of the user was changed");
+        assertThat(teamPage.getTable().getUserRole(analystEmail)).hasText("USER");
+
+        Allure.step("Verify: status of the user");
+        assertThat(teamPage.getTable().getUserStatus(analystEmail)).hasText("Active");
+
+        Allure.step("Verify: deactivate user icon appears");
+        assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "ban");
+
+        teamPage.getTable().clickDeactivateUserButton(analystEmail)
+                .clickDeactivateButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was deactivated successfully");
+
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getUserRole(email)).hasText("USER");
-
-        Allure.step("Verify: status of the user");
-        assertThat(teamPage.getTable().getUserStatus(email)).hasText("Active");
+        assertThat(teamPage.getTable().getUserStatus(analystEmail)).hasText("Inactive");
 
         Allure.step("Verify: deactivate user icon appears");
-        assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
+        assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "check");
+
+        LoginPage loginPage = teamPage.getHeader().clickLogOutButton()
+                .loginAsDisabledUser(analystEmail, analystPassword);
+
+        Allure.step("Verify: error message is displayed");
+        assertThat(teamPage.getAlert().getAlertMessage()).hasText("ERRORUser is disabled.");
+
+        DashboardPage dashboardPage = loginPage.login(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .getHeader().clickSystemAdministrationLink()
+                .getTable().clickEditUserButton(analystEmail)
+                .checkActiveRadiobutton()
+                .clickSaveChangesButton()
+                .getHeader().clickLogOutButton()
+                .loginAndChangePassword(analystEmail, analystPassword);
+
+        Allure.step("Verify: error message is displayed");
+        assertThat(dashboardPage.getHeader().getUserMenuButton()).hasText(analystEmail.substring(0, 3));
     }
 
     @Test
