@@ -123,7 +123,7 @@ public abstract class BaseTest {
 
         log.info("current opts are -> {} runAs {}", options.storageStatePath, runAs);
         initApiRequestContext();
-        openSite(runAs, args);
+        openSite(runAs);
     }
 
     @AfterMethod
@@ -190,7 +190,7 @@ public abstract class BaseTest {
         log.info("<<< <<< <<< CLASS {}", testContext.getAttribute("testRunId"));
     }
 
-    private void openSite(RunAs runAs, Object[] args) {
+    private void openSite(RunAs runAs) {
         if (runAs == RunAs.UNAUTHORISED || isOk(runAs)) {
             log.info("navigate('/') as {}", runAs);
             new AboutBlankPage(page).navigate("/");
