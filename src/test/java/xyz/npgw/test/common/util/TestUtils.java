@@ -28,14 +28,14 @@ public final class TestUtils {
         User newUser = new User(user.companyName(), user.enabled(), user.userRole(),
                 businessUnits.toArray(BusinessUnit[]::new), user.email(), user.password());
         APIResponse response = request.post("portal-v1/user/create", RequestOptions.create().setData(newUser));
-        log.info("create user '{}' - {} {}", user.email(), response.status(), response.text());
+        log.debug("create user '{}' - {} {}", user.email(), response.status(), response.text());
     }
 
     public static void createCompanyAdmin(APIRequestContext request, String company, String email, String password) {
         User user = new User(company, true, UserRole.ADMIN, new String[]{}, email, password);
         deleteUser(request, user);
         APIResponse response = request.post("portal-v1/user/create", RequestOptions.create().setData(user));
-        log.info("create company admin '{}' - {} {}", user.email(), response.status(), response.text());
+        log.debug("create company admin '{}' - {} {}", user.email(), response.status(), response.text());
     }
 
     public static void deleteUser(APIRequestContext request, User user) {
@@ -44,13 +44,13 @@ public final class TestUtils {
 
     public static void deleteUser(APIRequestContext request, String email) {
         APIResponse response = request.delete("portal-v1/user?email=%s".formatted(encode(email)));
-        log.info("delete user '{}' - {} {}", email, response.status(), response.text());
+        log.debug("delete user '{}' - {} {}", email, response.status(), response.text());
     }
 
     public static void createBusinessUnit(APIRequestContext request, String companyName, String businessUnitName) {
         APIResponse response = request.post("portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(businessUnitName)));
-        log.info("create business unit '{}' - {} {}", businessUnitName, response.status(), response.text());
+        log.debug("create business unit '{}' - {} {}", businessUnitName, response.status(), response.text());
     }
 
     public static void createBusinessUnitsIfNeeded(APIRequestContext request, User user) {
@@ -69,7 +69,7 @@ public final class TestUtils {
     public static void createCompany(APIRequestContext request, String companyName) {
         APIResponse response = request.post("portal-v1/company",
                 RequestOptions.create().setData(new Company(companyName)));
-        log.info("create company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("create company '{}' - {} {}", companyName, response.status(), response.text());
     }
 
     public static void createCompanyIfNeeded(APIRequestContext request, User user) {
@@ -84,7 +84,7 @@ public final class TestUtils {
 
     public static void deleteCompany(APIRequestContext request, String companyName) {
         APIResponse response = request.delete("portal-v1/company/%s".formatted(encode(companyName)));
-        log.info("delete company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("delete company '{}' - {} {}", companyName, response.status(), response.text());
     }
 
     private static String encode(String value) {
@@ -93,13 +93,13 @@ public final class TestUtils {
 
     private static boolean existsCompany(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/company/%s".formatted(encode(companyName)));
-        log.info("get company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("get company '{}' - {} {}", companyName, response.status(), response.text());
         return response.ok() && response.text().contains(companyName);
     }
 
     private static boolean existsBusinessUnit(APIRequestContext request, String companyName, String businessUnitName) {
         APIResponse response = request.get("portal-v1/company/%s/merchant".formatted(encode(companyName)));
-        log.info("get business unit '{}' - {} {}", businessUnitName, response.status(), response.text());
+        log.debug("get business unit '{}' - {} {}", businessUnitName, response.status(), response.text());
         return response.ok() && response.text().contains(businessUnitName);
     }
 
@@ -110,31 +110,31 @@ public final class TestUtils {
 
     public static void createAcquirer(APIRequestContext request, Acquirer acquirer) {
         APIResponse response = request.post("portal-v1/acquirer", RequestOptions.create().setData(acquirer));
-        log.info("create acquirer '{}' - {} {}", acquirer.acquirerName(), response.status(), response.text());
+        log.debug("create acquirer '{}' - {} {}", acquirer.acquirerName(), response.status(), response.text());
     }
 
     public static boolean getAcquirer(APIRequestContext request, String acquirerName) {
         APIResponse response = request.get("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("get acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+        log.debug("get acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
 
         return response.ok();
     }
 
     public static void deleteAcquirer(APIRequestContext request, String acquirerName) {
         APIResponse response = request.delete("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("delete acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+        log.debug("delete acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
     }
 
     public static BusinessUnit createMerchant(APIRequestContext request, String companyName, String businessUnitName) {
         APIResponse response = request.post("portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(businessUnitName)));
-        log.info("create merchant for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("create merchant for company '{}' - {} {}", companyName, response.status(), response.text());
         return new Gson().fromJson(response.text(), BusinessUnit.class);
     }
 
     public static BusinessUnit[] getAllMerchants(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/company/%s/merchant".formatted(encode(companyName)));
-        log.info("get all merchants for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("get all merchants for company '{}' - {} {}", companyName, response.status(), response.text());
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
 

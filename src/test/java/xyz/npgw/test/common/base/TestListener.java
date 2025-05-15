@@ -23,11 +23,6 @@ public final class TestListener implements ITestListener {
         log.info("START SUITE");
         log.info("");
 
-        log.info("write NONE state file to target, overwrite if present");
-        Files.write((new File("target/NONE-state.json")).toPath(),
-                Collections.singleton("{\"cookies\":[],\"origins\":[]}"),
-                StandardCharsets.UTF_8);
-
         log.info("create test accounts super/admin/user one test company and one business unit per each thread");
         log.info("create answer challenge for each user");
         log.info("store state for each role and expiration time");
