@@ -5,12 +5,10 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-@Log4j2
 public class AddUserDialog extends UserDialog<AddUserDialog> {
 
     private final Locator emailField = getByPlaceholder("Enter user email");
