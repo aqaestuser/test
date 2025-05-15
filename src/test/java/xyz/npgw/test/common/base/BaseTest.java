@@ -59,12 +59,12 @@ public abstract class BaseTest {
     protected void beforeClass(ITestContext testContext) {
         playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
         browser = BrowserFactory.getBrowser(playwright);
-        log.debug(">>> >>> >>> CLASS {}", testContext.getAttribute("testRunId"));
+        log.info(">>> >>> >>> CLASS {}", testContext.getAttribute("testRunId"));
     }
 
     @BeforeMethod
     protected void beforeMethod(ITestContext testContext, Method method, ITestResult testResult, Object[] args) {
-        log.debug(">>> thread {} is entering before method", Thread.currentThread().getName());
+        log.info(">>> thread {} is entering before method", Thread.currentThread().getName());
 
         testId = "%s/%s/%s/%s(%d)%s".formatted(
                 ProjectProperties.getArtefactDir(),
@@ -183,7 +183,7 @@ public abstract class BaseTest {
         if (playwright != null) {
             playwright.close();
         }
-        log.debug("<<< <<< <<< CLASS {}", testContext.getAttribute("testRunId"));
+        log.info("<<< <<< <<< CLASS {}", testContext.getAttribute("testRunId"));
     }
 
     private void openSite(RunAs runAs) {
