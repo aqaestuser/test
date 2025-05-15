@@ -1,17 +1,16 @@
-package xyz.npgw.test.common.base;
+package xyz.npgw.test.common.state;
 
-import lombok.Getter;
-import lombok.Setter;
+import xyz.npgw.test.common.base.RunAs;
 
 import java.time.LocalTime;
 
 public class StateManager {
 
-    private static final ThreadLocal<State> userState = ThreadLocal.withInitial(State::new);
+    private static final ThreadLocal<State> USER_STATE = ThreadLocal.withInitial(State::new);
 
     public static void setState(RunAs runAs) {
-        State state = userState.get();
-        LocalTime localTime = LocalTime.now().plusMinutes(2); // 14);
+        State state = USER_STATE.get();
+        LocalTime localTime = LocalTime.now().plusMinutes(14);
 
         switch (runAs) {
             case SUPER -> state.setSuperExpiration(localTime);
@@ -23,7 +22,7 @@ public class StateManager {
     }
 
     public static boolean isOk(RunAs runAs) {
-        State state = userState.get();
+        State state = USER_STATE.get();
         LocalTime now = LocalTime.now();
 
         switch (runAs) {
@@ -41,12 +40,4 @@ public class StateManager {
             }
         }
     }
-}
-
-@Setter
-@Getter
-class State {
-    private LocalTime superExpiration = LocalTime.now().minusMinutes(1);
-    private LocalTime adminExpiration = LocalTime.now().minusMinutes(1);
-    private LocalTime userExpiration = LocalTime.now().minusMinutes(1);
 }

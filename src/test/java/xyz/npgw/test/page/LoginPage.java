@@ -8,7 +8,7 @@ import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.AlertTrait;
 

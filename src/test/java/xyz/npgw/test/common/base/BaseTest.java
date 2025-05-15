@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Listeners;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.AboutBlankPage;
 
 import java.io.IOException;
@@ -38,8 +38,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
-import static xyz.npgw.test.common.base.StateManager.isOk;
-import static xyz.npgw.test.common.base.StateManager.setState;
+import static xyz.npgw.test.common.state.StateManager.isOk;
+import static xyz.npgw.test.common.state.StateManager.setState;
 
 @Log4j2
 @Listeners(TestListener.class)
@@ -59,12 +59,12 @@ public abstract class BaseTest {
     protected void beforeClass(ITestContext testContext) {
         playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
         browser = BrowserFactory.getBrowser(playwright);
-        log.info(">>> >>> >>> CLASS {}", testContext.getAttribute("testRunId"));
+        log.debug(">>> >>> >>> CLASS {}", testContext.getAttribute("testRunId"));
     }
 
     @BeforeMethod
     protected void beforeMethod(ITestContext testContext, Method method, ITestResult testResult, Object[] args) {
-        log.info(">>> thread {} is entering before method", Thread.currentThread().getName());
+        log.debug(">>> thread {} is entering before method", Thread.currentThread().getName());
 
         testId = "%s/%s/%s/%s(%d)%s".formatted(
                 ProjectProperties.getArtefactDir(),
@@ -79,7 +79,7 @@ public abstract class BaseTest {
         log.info(">>> {}", testId);
 
         if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
-            log.info("Test {} skipped isSkipMode && isFailFast - true th {}", testId, Thread.currentThread().getId());
+            log.info("Test {} skipped isSkipMode && isFailFast - true", testId);
             throw new SkipException("Test skipped due to failFast option being true");
         }
 
@@ -133,11 +133,8 @@ public abstract class BaseTest {
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{}_{} <<< {} in {} s th {}",
-                testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(),
-                testId,
-                testDuration,
-                Thread.currentThread().getId());
+        log.info("{}_{} <<< {} in {} s",
+                testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(), testId, testDuration);
 
         if (page != null) {
             page.close();
@@ -187,7 +184,7 @@ public abstract class BaseTest {
         if (playwright != null) {
             playwright.close();
         }
-        log.info("<<< <<< <<< CLASS {}", testContext.getAttribute("testRunId"));
+        log.debug("<<< <<< <<< CLASS {}", testContext.getAttribute("testRunId"));
     }
 
     private void openSite(RunAs runAs) {
@@ -197,7 +194,8 @@ public abstract class BaseTest {
             return;
         }
         log.info("login as {} setState and store {}",
-                UserRole.valueOf(runAs.name()), "target/%s-%s-state.json".formatted(runAs, Thread.currentThread().getId()));
+                UserRole.valueOf(runAs.name()),
+                "target/%s-%s-state.json".formatted(runAs, Thread.currentThread().getId()));
         new AboutBlankPage(page).navigate("/").loginAs(UserRole.valueOf(runAs.name()));
         setState(runAs);
         context.storageState(new BrowserContext

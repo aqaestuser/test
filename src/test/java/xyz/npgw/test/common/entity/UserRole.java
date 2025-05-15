@@ -1,4 +1,4 @@
-package xyz.npgw.test.common;
+package xyz.npgw.test.common.entity;
 
 import lombok.Getter;
 

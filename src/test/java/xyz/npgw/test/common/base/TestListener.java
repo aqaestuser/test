@@ -19,12 +19,11 @@ public final class TestListener implements ITestListener {
         log.info("START SUITE");
         log.info("");
 
-        log.info("create test accounts super/admin/user one test company and one business unit per each thread");
-        log.info("create answer challenge for each user");
-        log.info("store state for each role and expiration time");
+        log.debug("create test accounts super/admin/user one test company and one business unit per each thread");
+        log.debug("create answer challenge for each user");
+        log.debug("store state for each role and expiration time");
 
-        String testRunId = new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
-        context.setAttribute("testRunId", testRunId);
+        context.setAttribute("testRunId", new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
     }
 
     @Override
@@ -32,7 +31,7 @@ public final class TestListener implements ITestListener {
         ITestListener.super.onFinish(context);
 
         log.info("");
-        log.info("testRunId - {}", context.getAttribute("testRunId"));
+        log.debug("testRunId - {}", context.getAttribute("testRunId"));
         log.info("FINISH SUITE");
     }
 }

@@ -5,12 +5,12 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

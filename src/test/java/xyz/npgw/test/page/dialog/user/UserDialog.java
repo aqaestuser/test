@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
