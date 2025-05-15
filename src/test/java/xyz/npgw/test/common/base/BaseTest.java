@@ -100,7 +100,7 @@ public abstract class BaseTest {
         if (runAs != RunAs.UNAUTHORISED && isOk(runAs)) {
             options.setStorageStatePath(
                     Paths.get("target/%s-%s-state.json".formatted(runAs, Thread.currentThread().getId())));
-            log.info("set for current runAs {} option path {}", runAs, options.storageStatePath);
+            log.debug("set for current runAs {} option path {}", runAs, options.storageStatePath);
         }
 
         if (ProjectProperties.isVideoMode()) {
@@ -121,7 +121,6 @@ public abstract class BaseTest {
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
 
-        log.info("current opts are -> {} runAs {}", options.storageStatePath, runAs);
         initApiRequestContext();
         openSite(runAs);
     }
