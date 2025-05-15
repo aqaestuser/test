@@ -48,12 +48,22 @@ public class TableComponent extends BaseComponent {
     }
 
     public List<String> getColumnHeadersText() {
+
         return tableColumnHeader.allInnerTexts();
     }
 
-    public Locator getTableRow(String header) {
-        Locator rowHeader = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(header));
+    public Locator getRowByPrimaryColumn(String name) {
+        Locator rowHeader = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(name));
 
         return getTableRows().filter(new Locator.FilterOptions().setHas(rowHeader));
+    }
+
+    public Locator getColumnCellsByRowText(String columnHeaderName, String text) {
+        Locator header = getHeaderByName(columnHeaderName);
+        int columnIndex = ((Number) header.evaluate("el => el.cellIndex")).intValue();
+        return getPage()
+                .locator("tr[role='row']")
+                .filter(new Locator.FilterOptions().setHasText(text))
+                .locator("td:nth-child(" + (columnIndex + 1) + ")");
     }
 }

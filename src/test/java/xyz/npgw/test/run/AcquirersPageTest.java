@@ -24,6 +24,7 @@ import java.util.Map;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static xyz.npgw.test.common.util.TestUtils.createAcquirer;
 import static xyz.npgw.test.common.util.TestUtils.deleteAcquirer;
+import static xyz.npgw.test.common.util.TestUtils.getAcquirer;
 
 public class AcquirersPageTest extends BaseTest {
 
@@ -374,5 +375,62 @@ public class AcquirersPageTest extends BaseTest {
 
             } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
         }
+    }
+
+
+    @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
+    @TmsLink("557")
+    @Epic("System/Acquirers")
+    @Feature("Acquirers list")
+    @Description("Verify that Acquirer with status 'Active/Inactive' is displayed correctly in the list")
+    public void testAcquirerStatusDisplaysCorrectly(String status) {
+        String acquirerName = "ZAcquirer status check";
+        boolean isFound = false;
+
+        if (getAcquirer(getApiRequestContext(), acquirerName)) {
+            deleteAcquirer(getApiRequestContext(), acquirerName);
+        }
+
+        Acquirer acquirer = new Acquirer(
+                "",
+                "Acquirer Config",
+                new SystemConfig(
+                        "https://challenge.example.com",
+                        "https://fingerprint.example.com",
+                        "https://resource.example.com",
+                        "notification-queue"),
+                acquirerName,
+                new String[]{"USD"},
+                status.equals("Active")
+        );
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .clickAddAcquirer()
+                .fillAcquirerName(acquirerName)
+                .fillAcquirerForm(acquirer)
+                .clickCreateButton();
+
+        do {
+            if (acquirersPage.getTable().getRowByPrimaryColumn(acquirerName).count() > 0) {
+                isFound = true;
+                break;
+            }
+        } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
+
+        Allure.step(String.format(
+                "Verify: After creation '%s' it shows up. Page: %s",
+                acquirerName,
+                acquirersPage.getActivePage() != null
+                        ? acquirersPage.getActivePage().innerText()
+                        : "unknown")
+        );
+        Assert.assertTrue(
+                isFound, "Acquirer with name '%s' was not found in the table");
+
+        Allure.step(String.format("Verify: '%s' has status %s", acquirerName, status)
+        );
+        assertThat(acquirersPage.getTable().getColumnCellsByRowText("Status", acquirerName)).hasText(status);
     }
 }
