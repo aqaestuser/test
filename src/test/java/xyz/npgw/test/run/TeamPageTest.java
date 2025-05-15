@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -20,6 +21,10 @@ import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.system.TeamPage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -479,4 +484,58 @@ public class TeamPageTest extends BaseTest {
 
         TestUtils.deleteUser(getApiRequestContext(), companyAdmin);
     }
+
+    @Test
+    @TmsLink("551")
+    @Epic("System/Team")
+    @Feature("Sorting in table")
+    @Description("Verify that users can be sorted alphabetically")
+    public void testCheckSortingListOfUsersAlphabetically() {
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyAdminPassword = ProjectProperties.getAdminPassword();
+        final String companyName = "framework";
+
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
+
+        List<String> sortedUsersAlphabetically = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getTable().clickSortIcon("Username")
+                .getTable().getColumnValues("Username");
+
+        List<String> expectedSortedList = new ArrayList<>(sortedUsersAlphabetically);
+        Collections.sort(expectedSortedList);
+
+        Assert.assertEquals(sortedUsersAlphabetically, expectedSortedList,
+                "Список пользователей не отсортирован по алфавиту");
+    }
+
+    @Test
+    @TmsLink("552")
+    @Epic("System/Team")
+    @Feature("Sorting in table")
+    @Description("Verify that users can be sorted in reverse alphabetical order")
+    public void testCheckSortingListOfUsersReverse() {
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyAdminPassword = ProjectProperties.getAdminPassword();
+        final String companyName = "framework";
+
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
+
+        List<String> sortedUsersReverseAlphabetically = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getTable().clickSortIcon("Username")
+                .getTable().clickSortIcon("Username")
+                .getTable().getColumnValues("Username");
+
+        List<String> expectedSortedList = new ArrayList<>(sortedUsersReverseAlphabetically);
+        expectedSortedList.sort(Collections.reverseOrder());
+
+        Assert.assertEquals(sortedUsersReverseAlphabetically, expectedSortedList,
+                "Список пользователей не отсортирован по алфавиту в обратном порядке");
+    }
 }
+

@@ -68,4 +68,12 @@ public class UserTableComponent extends TableComponent {
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton();
     }
+
+    @Step("@Step(Click sort icon in '{columnName}' column)")
+    public TeamPage clickSortIcon(String columnName) {
+        getHeaderByName(columnName).locator("svg").click();
+        getPage().waitForTimeout(500);
+
+        return new TeamPage(getPage());
+    }
 }
