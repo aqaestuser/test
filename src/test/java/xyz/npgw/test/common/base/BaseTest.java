@@ -27,21 +27,17 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.page.AboutBlankPage;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 
-import static xyz.npgw.test.common.base.StateManager.getState;
 import static xyz.npgw.test.common.base.StateManager.isOk;
 import static xyz.npgw.test.common.base.StateManager.setState;
 
@@ -69,8 +65,6 @@ public abstract class BaseTest {
     @BeforeMethod
     protected void beforeMethod(ITestContext testContext, Method method, ITestResult testResult, Object[] args) {
         log.info(">>> thread {} is entering before method", Thread.currentThread().getName());
-        log.info("- super {} admin {} user {}-", getState().getSuperExpiration(),
-                getState().getAdminExpiration(), getState().getUserExpiration());
 
         testId = "%s/%s/%s/%s(%d)%s".formatted(
                 ProjectProperties.getArtefactDir(),
