@@ -9,9 +9,9 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -199,7 +199,6 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -258,7 +257,6 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -292,7 +290,6 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -344,7 +341,6 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -390,7 +386,6 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)

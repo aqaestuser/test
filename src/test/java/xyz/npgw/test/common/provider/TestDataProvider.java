@@ -2,10 +2,10 @@ package xyz.npgw.test.common.provider;
 
 import org.testng.annotations.DataProvider;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
 
 public class TestDataProvider {
 
