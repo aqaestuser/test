@@ -1,9 +1,10 @@
-package xyz.npgw.test.common;
+package xyz.npgw.test.common.entity;
 
 import lombok.Getter;
 
 @Getter
 public enum UserRole {
+
     SUPER("System admin"),
     ADMIN("Company admin"),
     USER("Company analyst");

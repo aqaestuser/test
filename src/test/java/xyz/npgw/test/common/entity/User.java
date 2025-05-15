@@ -1,7 +1,5 @@
 package xyz.npgw.test.common.entity;
 
-import xyz.npgw.test.common.UserRole;
-
 import java.util.Arrays;
 
 public record User(

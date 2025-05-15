@@ -16,6 +16,7 @@ import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -469,27 +470,25 @@ public class TransactionsPageTest extends BaseTest {
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
             + "dropdown list")
     public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("UNAUTHORISED") String userRole) {
-        List<String> businessUnitNames = List.of("Business unit 1", "Business unit 2", "Business unit 3",
-                "Business unit 4");
-        String companyAdminEmail = "companyAdmin@gmail.com";
+        String[] businessUnitNames = {"Business unit 1", "Business unit 2", "Business unit 3",
+                "Business unit 4"};
+        String companyAdminEmail = "company.admin.520@gmail.com";
         String companyAdminPassword = "CompanyAdmin1!";
         TestUtils.deleteUser(getApiRequestContext(), companyAdminEmail);
         TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
         TestUtils.createCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
         TestUtils.createCompanyAdmin(
                 getApiRequestContext(), ADMIN_COMPANY_NAME, companyAdminEmail, companyAdminPassword);
-        businessUnitNames.forEach(businessUnitName -> TestUtils.createBusinessUnit(
+        Arrays.stream(businessUnitNames).forEach(businessUnitName -> TestUtils.createBusinessUnit(
                 getApiRequestContext(), ADMIN_COMPANY_NAME, businessUnitName));
 
         TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
                 .navigate("/login")
                 .loginAndChangePassword(companyAdminEmail, companyAdminPassword)
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .getHeader().clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
         Allure.step("Verify: Company's business units are visible");
-        assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames
-                .toArray(String[]::new));
+        assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 }

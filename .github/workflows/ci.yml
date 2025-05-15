@@ -54,6 +54,7 @@ jobs:
             headlessMode=true;
             tracingMode=false;
             failFast=true;
+            defaultTimeout=7000;
             videoMode=false
           CI_RUN: true
 

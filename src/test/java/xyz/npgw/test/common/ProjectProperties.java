@@ -2,6 +2,7 @@ package xyz.npgw.test.common;
 
 import com.microsoft.playwright.options.ColorScheme;
 import lombok.extern.log4j.Log4j2;
+import xyz.npgw.test.common.entity.UserRole;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,7 +90,7 @@ public final class ProjectProperties {
     }
 
     public static int getViewportHeight() {
-        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "1080"));
+        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "953"));
     }
 
     public static boolean isTracingMode() {

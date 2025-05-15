@@ -5,12 +5,12 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import lombok.extern.log4j.Log4j2;
+import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-@Log4j2
 public class AddUserDialog extends UserDialog<AddUserDialog> {
 
     private final Locator emailField = getByPlaceholder("Enter user email");
@@ -41,4 +41,26 @@ public class AddUserDialog extends UserDialog<AddUserDialog> {
 
         return new TeamPage(getPage());
     }
+
+    // TODO add step annotation here
+    public TeamPage createUser(User user) {
+        return fillEmailField(user.email())
+                .fillPasswordField(user.password())
+                .setStatusRadiobutton(user.enabled())
+                .setUserRoleRadiobutton(user.userRole())
+                .setAllowedBusinessUnits(user.merchantIds())
+                .clickCreateButton();
+    }
+
+    public TeamPage createCompanyAdmin(String email, String password) {
+
+        return createUser(new User(
+                "",
+                true,
+                UserRole.ADMIN,
+                new String[]{},
+                email,
+                password));
+    }
+
 }
