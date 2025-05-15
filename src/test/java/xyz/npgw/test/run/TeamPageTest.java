@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -20,6 +21,10 @@ import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.system.TeamPage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -111,12 +116,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(addUserDialog.getDialogHeader()).hasText("Add user");
 
         TeamPage teamPage = addUserDialog
-                .fillEmailField(user.email())
-                .fillPasswordField(user.password())
-                .setStatusRadiobutton(user.enabled())
-                .setUserRoleRadiobutton(user.userRole())
-                .setAllowedBusinessUnits(user.merchantIds())
-                .clickCreateButton();
+                .createUser(user);
 
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
@@ -149,11 +149,7 @@ public class TeamPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
-                .fillEmailField(user.email())
-                .fillPasswordField(user.password())
-                .checkCompanyAnalystRadiobutton()
-                .setAllowedBusinessUnits(user.merchantIds())
-                .clickCreateButton()
+                .createUser(user)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .clickEditUserButton(user.email());
@@ -184,9 +180,8 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
-    //    TODO add tms link
     @Test
-    @TmsLink("")
+    @TmsLink("474")
     @Epic("System/Team")
     @Feature("Add user")
     @Description("Create new company admin user")
@@ -201,10 +196,7 @@ public class TeamPageTest extends BaseTest {
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("Password1!")
-                .checkCompanyAdminRadiobutton()
-                .clickCreateButton();
+                .createCompanyAdmin(email, "Password1!");
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
@@ -224,11 +216,7 @@ public class TeamPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
-                .fillEmailField(user.email())
-                .fillPasswordField(user.password())
-                .checkCompanyAnalystRadiobutton()
-                .setAllowedBusinessUnits(user.merchantIds())
-                .clickCreateButton()
+                .createUser(user)
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().deactivateUser(user.email());
@@ -259,10 +247,7 @@ public class TeamPageTest extends BaseTest {
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("Password1!")
-                .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
+                .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickEditUserButton(email)
@@ -292,10 +277,7 @@ public class TeamPageTest extends BaseTest {
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("Password1!")
-                .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
+                .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickDeactivateUserButton(email)
@@ -343,10 +325,7 @@ public class TeamPageTest extends BaseTest {
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getHeader().clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("Password1!")
-                .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
+                .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickResetUserPasswordButton(email)
@@ -474,4 +453,58 @@ public class TeamPageTest extends BaseTest {
 
         TestUtils.deleteUser(getApiRequestContext(), companyAdmin);
     }
+
+    @Test
+    @TmsLink("551")
+    @Epic("System/Team")
+    @Feature("Sorting in table")
+    @Description("Verify that users can be sorted alphabetically")
+    public void testCheckSortingListOfUsersAlphabetically() {
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyAdminPassword = ProjectProperties.getAdminPassword();
+        final String companyName = "framework";
+
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
+
+        List<String> sortedUsersAlphabetically = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getTable().clickSortIcon("Username")
+                .getTable().getColumnValues("Username");
+
+        List<String> expectedSortedList = new ArrayList<>(sortedUsersAlphabetically);
+        Collections.sort(expectedSortedList);
+
+        Assert.assertEquals(sortedUsersAlphabetically, expectedSortedList,
+                "Список пользователей не отсортирован по алфавиту");
+    }
+
+    @Test
+    @TmsLink("552")
+    @Epic("System/Team")
+    @Feature("Sorting in table")
+    @Description("Verify that users can be sorted in reverse alphabetical order")
+    public void testCheckSortingListOfUsersReverse() {
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyAdminPassword = ProjectProperties.getAdminPassword();
+        final String companyName = "framework";
+
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
+
+        List<String> sortedUsersReverseAlphabetically = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getTable().clickSortIcon("Username")
+                .getTable().clickSortIcon("Username")
+                .getTable().getColumnValues("Username");
+
+        List<String> expectedSortedList = new ArrayList<>(sortedUsersReverseAlphabetically);
+        expectedSortedList.sort(Collections.reverseOrder());
+
+        Assert.assertEquals(sortedUsersReverseAlphabetically, expectedSortedList,
+                "Список пользователей не отсортирован по алфавиту в обратном порядке");
+    }
 }
+
