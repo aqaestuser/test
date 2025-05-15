@@ -8,6 +8,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
@@ -173,5 +174,30 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step("Verify: 'Create' button is disabled.");
         assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
+    }
+
+    @Test(dataProvider = "acquirerNegativeData", dataProviderClass = TestDataProvider.class)
+    @TmsLink("547")
+    @Epic("System/Acquirers")
+    @Feature("Add acquirer")
+    @Description("Verify validation messages when creating Acquirer with invalid input.")
+    public void testDisplayValidationErrorsForInvalidAcquirerInput(Acquirer acquirer, String expectedError) {
+        if (getAcquirer(getApiRequestContext(), acquirer.acquirerName())) {
+            deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
+        }
+
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu()
+                .clickAcquirersTab()
+                .clickAddAcquirer()
+                .fillAcquirerName(acquirer.acquirerName())
+                .fillAcquirerForm(acquirer)
+                .clickCreateButton();
+
+        assertThat(acquirersPage.getAlert().getAlertMessage()).isVisible();
+
+        Allure.step(String.format("Verify error message is: %s", expectedError));
+        assertThat(acquirersPage.getAlert().getAlertMessage()).hasText(expectedError);
     }
 }
