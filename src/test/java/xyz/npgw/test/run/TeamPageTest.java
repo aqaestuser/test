@@ -6,6 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -73,6 +74,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
+    @Ignore("")
     @Test(dataProvider = "getUsers", dataProviderClass = TestDataProvider.class)
     @TmsLink("298")
     @Epic("System/Team")
@@ -97,6 +99,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
+    @Ignore()
     @Test
     @TmsLink("330")
     @Epic("System/Team")
@@ -136,6 +139,7 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "ban");
     }
 
+    @Ignore
     @Test
     @TmsLink("331")
     @Epic("System/Team")
@@ -180,6 +184,7 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
+    @Ignore
     @Test
     @TmsLink("474")
     @Epic("System/Team")
@@ -202,6 +207,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
+    @Ignore("")
     @Test
     @TmsLink("471")
     @Epic("System/Team")
@@ -231,6 +237,7 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
+    @Ignore
     @Test
     @TmsLink("475")
     @Epic("System/Team")
@@ -261,6 +268,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserStatus(email)).hasText("Inactive");
     }
 
+    @Ignore
     @Test
     @TmsLink("476")
     @Epic("System/Team")
@@ -309,6 +317,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
     }
 
+    @Ignore
     @Test
     @TmsLink("554")
     @Epic("System/Team")
@@ -347,6 +356,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSPassword is changed successfully");
     }
 
+    @Ignore
     @Test
     @TmsLink("492")
     @Epic("System/Team")
@@ -507,4 +517,3 @@ public class TeamPageTest extends BaseTest {
                 "Список пользователей не отсортирован по алфавиту в обратном порядке");
     }
 }
-

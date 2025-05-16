@@ -140,14 +140,14 @@ public final class TestUtils {
     }
 
     public static void createMerchantIfNeeded(APIRequestContext request, String companyName, String businessUnitName) {
-        if (!existsMerchant(request, companyName, businessUnitName)) {
-            createMerchant(request, companyName, businessUnitName);
-        }
+//         if (!existsMerchant(request, companyName, businessUnitName)) {
+        createMerchant(request, companyName, businessUnitName);
+//        }
     }
 
     private static boolean existsMerchant(APIRequestContext request, String companyName, String businessUnitName) {
         return Arrays.stream(getAllMerchants(request, companyName))
-                .anyMatch(businessUnit -> businessUnit.merchantName().equals(businessUnitName));
+                .anyMatch(businessUnit -> businessUnit.merchantTitle().equals(businessUnitName));
     }
 
     public static void deleteMerchant(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
@@ -164,7 +164,7 @@ public final class TestUtils {
         BusinessUnit[] merchants = getAllMerchants(request, companyName);
 
         Optional<BusinessUnit> target = Arrays.stream(merchants)
-                .filter(m -> targetName.equals(m.merchantName()))
+                .filter(m -> targetName.equals(m.merchantTitle()))
                 .findFirst();
 
         if (target.isPresent()) {

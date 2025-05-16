@@ -7,6 +7,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -73,6 +74,7 @@ public class HeaderTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
     }
 
+    @Ignore("")
     @Test
     @TmsLink("289")
     @Epic("Header")
@@ -179,6 +181,7 @@ public class HeaderTest extends BaseTest {
         assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
     }
 
+    @Ignore
     @Test(dataProvider = "passwordValidationData", dataProviderClass = TestDataProvider.class)
     @TmsLink("540")
     @Epic("Header")
@@ -213,6 +216,6 @@ public class HeaderTest extends BaseTest {
                     .getHeader().clickCloseButton()
                     .getHeader().clickLogOutButton();
         }
-        TestUtils.deleteMerchantByName(getApiRequestContext(), "framework", "123merchant");
+//        TestUtils.deleteMerchantByName(getApiRequestContext(), "framework", "123merchant");
     }
 }

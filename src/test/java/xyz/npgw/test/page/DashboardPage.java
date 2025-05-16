@@ -23,4 +23,11 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
 
         return this;
     }
+
+    @Step("Reload dashboard page")
+    public DashboardPage reloadDashboard() {
+        getPage().reload();
+
+        return this;
+    }
 }

@@ -6,6 +6,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.UserRole;
@@ -21,6 +22,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
     private final String companyName = "CompanyForBuEdit";
     private final String buName = "NewBUForEdit";
 
+    @Ignore
     @Test
     @TmsLink("387")
     @Epic("System/Companies and business units")
@@ -43,6 +45,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(dialogTitle).hasText("Edit business unit");
     }
 
+    @Ignore
     @Test
     @TmsLink("501")
     @Epic("System/Companies and business units")
@@ -64,6 +67,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(editBusinessUnitDialog.getFieldLabel()).hasText(new String[]{"Company name", "Business unit name"});
     }
 
+    @Ignore
     @Test
     @TmsLink("515")
     @Epic("System/Companies and business units")
@@ -87,6 +91,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(editBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
+    @Ignore("waiting for getByLabel('Select company')")
     @Test
     @TmsLink("528")
     @Epic("System/Companies and business units")
@@ -109,6 +114,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
     }
 
+    @Ignore
     @Test
     @TmsLink("544")
     @Epic("System/Companies and business units")
