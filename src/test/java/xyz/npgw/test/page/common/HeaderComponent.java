@@ -29,6 +29,7 @@ public class HeaderComponent extends BaseComponent {
     private final Locator passwordField = getByPlaceholder("Enter new password");
     private final Locator repeatPasswordField = getByPlaceholder("Repeat new password");
     private final Locator saveButton = locator("button:has-text('Save')");
+    private final Locator closeButton = getByTextExact("Close");
     private final Locator logOutButtonUserMenu = getByRole(AriaRole.MENUITEM, "Log Out");
     private final Locator lightRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Light");
     private final Locator darkRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Dark");
@@ -104,6 +105,13 @@ public class HeaderComponent extends BaseComponent {
     @Step("Press 'Save' button")
     public DashboardPage clickSaveButton() {
         saveButton.click();
+
+        return new DashboardPage(getPage());
+    }
+
+    @Step("Press 'Close' button")
+    public DashboardPage clickCloseButton() {
+        closeButton.click();
 
         return new DashboardPage(getPage());
     }

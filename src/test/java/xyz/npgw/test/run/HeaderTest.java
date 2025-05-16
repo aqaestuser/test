@@ -5,12 +5,16 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import lombok.extern.slf4j.Slf4j;
 import org.testng.Assert;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
@@ -20,6 +24,7 @@ import xyz.npgw.test.page.common.HeaderComponent;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
+@Slf4j
 public class HeaderTest extends BaseTest {
 
     @Test
@@ -169,8 +174,45 @@ public class HeaderTest extends BaseTest {
     @Epic("Header")
     @Feature("User menu")
     @Description("Verify that the color theme matching with the default browser theme")
-    public  void testDefaultThemeMatching() {
+    public void testDefaultThemeMatching() {
         Allure.step("Verify that the current color theme matches the default browser theme");
         assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
+    }
+
+    @Test(dataProvider = "passwordValidationData", dataProviderClass = TestDataProvider.class)
+    @TmsLink("540")
+    @Epic("Header")
+    @Feature("User menu")
+    @Description("Check validation error messages when changing password")
+    public void testChangePasswordValidationMessages(String userRole, String newPassword, String expectedMessage) {
+        User[] users = new User[]{
+                new User("framework", true, UserRole.ADMIN, new String[]{},
+                        "admintest008@example.com", "Qwerty1!"),
+                new User("framework", true, UserRole.SUPER, new String[]{},
+                        "supertest008@example.com", "Qwerty1!"),
+                new User("framework", true, UserRole.USER, new String[]{"123merchant"},
+                        "usertest008@example.com", "Qwerty1!")
+        };
+
+        for (User user : users) {
+            TestUtils.deleteUser(getApiRequestContext(), user.email());
+            TestUtils.createUser(getApiRequestContext(), user);
+
+            new LoginPage(getPage())
+                    .loginAndChangePassword(user.email(), user.password())
+                    .getHeader().clickUserMenuButton()
+                    .getHeader().clickProfileSettingsButton()
+                    .getHeader().fillPasswordField(newPassword)
+                    .getHeader().fillRepeatPasswordField(newPassword)
+                    .getHeader().clickSaveButton();
+
+            Allure.step("Verify: error message presence for: " + user.userRole());
+            assertThat(getPage().getByText(expectedMessage)).isVisible();
+
+            new DashboardPage(getPage())
+                    .getHeader().clickCloseButton()
+                    .getHeader().clickLogOutButton();
+        }
+        TestUtils.deleteMerchantByName(getApiRequestContext(), "framework", "123merchant");
     }
 }

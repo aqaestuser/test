@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Log4j2
 public final class TestUtils {
@@ -147,5 +148,29 @@ public final class TestUtils {
     private static boolean existsMerchant(APIRequestContext request, String companyName, String businessUnitName) {
         return Arrays.stream(getAllMerchants(request, companyName))
                 .anyMatch(businessUnit -> businessUnit.merchantName().equals(businessUnitName));
+    }
+
+    public static void deleteMerchant(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+        APIResponse response = request.delete(
+                "portal-v1/company/%s/merchant/%s".formatted(encode(companyName), businessUnit.merchantId()));
+        log.info("delete merchant '{}' for company '{}' - {} {}",
+                businessUnit.merchantId(),
+                companyName,
+                response.status(),
+                response.text());
+    }
+
+    public static void deleteMerchantByName(APIRequestContext request, String companyName, String targetName) {
+        BusinessUnit[] merchants = getAllMerchants(request, companyName);
+
+        Optional<BusinessUnit> target = Arrays.stream(merchants)
+                .filter(m -> targetName.equals(m.merchantName()))
+                .findFirst();
+
+        if (target.isPresent()) {
+            deleteMerchant(request, companyName, target.get());
+        } else {
+            throw new RuntimeException("Merchant with name '" + targetName + "' not found");
+        }
     }
 }
