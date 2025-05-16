@@ -315,4 +315,11 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
         }
         return length > 0;
     }
+
+    @Step("Click 'Reset filter' button")
+    public TransactionsPage clickResetFilterButton() {
+        resetFilterButton.click();
+
+        return this;
+    }
 }
