@@ -25,7 +25,7 @@ public class AddCompanyDialogTest extends BaseTest {
 
     private static final String COMPANY_NAME = "CompanyName";
     private static final String COMPANY_TYPE = "CompanyType";
-    private static final String SUCCESS_MESSAGE_COMPANY_CREATED = "SUCCESSCompany was created successfully";
+    private static final String CREATED_SUCCESSFULLY = "SUCCESSCompany was created successfully";
 
     Company company = new Company(
             "CompanyNameTest", "Company Type Test",
@@ -185,8 +185,9 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: company creation success message is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
-                SUCCESS_MESSAGE_COMPANY_CREATED);
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(CREATED_SUCCESSFULLY);
+
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 
     @Test
@@ -195,7 +196,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Added company appears in the 'Select company' dropdown list")
     public void testVerifyCompanyPresenceInDropdown() {
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -203,7 +204,10 @@ public class AddCompanyDialogTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME);
 
         Allure.step("Verify: company is present in the 'Select company' field");
-        assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField()).hasValue(COMPANY_NAME);
+        assertThat(companiesAndBusinessUnitsPage
+                .getSelectCompany().getSelectCompanyField()).hasValue(COMPANY_NAME);
+
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 
     @Test
@@ -212,7 +216,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Error is displayed when trying to create a company with an already existing name")
     public void testAddCompanyWithSameName() {
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
 
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -226,6 +230,8 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addCompanyDialog
                 .getAlert().getAlertMessage())
                 .containsText("Company with name {%s} already exists.".formatted(COMPANY_NAME));
+
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 
     @Test(expectedExceptions = AssertionFailedError.class)
@@ -234,11 +240,13 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Company creation with Cyrillic symbols")
     public void testAddCompanyWithCyrillicSymbols() {
+        String companyName = "Амазон";
+
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField("Амазон")
+                .fillCompanyNameField(companyName)
                 .fillCompanyTypeField("ООО")
                 .fillCompanyDescriptionField("Описание деятельности компании Амазон")
                 .fillCompanyWebsiteField("амазон.рф")
@@ -254,6 +262,8 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: Create button is enabled");
         assertThat(addCompanyDialog.getCreateButton()).isEnabled();
+
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
     @Test
@@ -263,7 +273,7 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Validates successful company creation and correct field persistence (E2E test).")
     public void testAddCompanyEndToEndTest() {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
-
+        
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -273,10 +283,10 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
 
         Allure.step("Verify: 'Company name' field is marked as invalid");
-        assertEquals(addCompanyDialog.getCompanyNameField().getAttribute("aria-invalid"), "true");
+        assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: 'Company type' field is marked as invalid");
-        assertEquals(addCompanyDialog.getCompanyTypeField().getAttribute("aria-invalid"), "true");
+        assertThat(addCompanyDialog.getCompanyTypeField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: 'Create' button is disabled before filling required fields");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
@@ -303,59 +313,48 @@ public class AddCompanyDialogTest extends BaseTest {
                 .getSelectCompany().selectCompany(company.companyName());
 
         Allure.step("Verify: selected company is shown in the input field");
-        assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField())
-                .hasValue(company.companyName());
+        assertThat(companiesAndBusinessUnitsPage
+                .getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
 
         Allure.step("Verify: description field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getDescriptionFromCompanyInfoSection())
-                .hasValue(company.description());
+        assertThat(companiesAndBusinessUnitsPage.getDescription()).hasValue(company.description());
 
         Allure.step("Verify: website field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getWebsiteFromCompanyInfoSection())
-                .hasValue(company.website());
+        assertThat(companiesAndBusinessUnitsPage.getWebsite()).hasValue(company.website());
 
         Allure.step("Verify: primary contact field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getPrimaryContactFromCompanyInfoSection())
-                .hasValue(company.primaryContact());
+        assertThat(companiesAndBusinessUnitsPage.getPrimaryContact()).hasValue(company.primaryContact());
 
         Allure.step("Verify: email field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getEmailFromCompanyInfoSection())
-                .hasValue(company.email());
+        assertThat(companiesAndBusinessUnitsPage.getEmail()).hasValue(company.email());
 
         Allure.step("Verify: 'API active' checkbox is checked");
-        assertThat(companiesAndBusinessUnitsPage.getApiActiveCheckboxFromCompanyInfoSection())
-                .isChecked();
+        assertThat(companiesAndBusinessUnitsPage.getApiActive()).isChecked();
 
         Allure.step("Verify: 'Portal active' checkbox is checked");
-        assertThat(companiesAndBusinessUnitsPage.getPortalActiveCheckboxFromCompanyInfoSection())
-                .isChecked();
+        assertThat(companiesAndBusinessUnitsPage.getPortalActive()).isChecked();
 
         Allure.step("Verify: phone field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getPhoneFromCompanyInfoSection())
-                .hasValue(company.companyAddress().phone());
+        assertThat(companiesAndBusinessUnitsPage.getPhone()).hasValue(company.companyAddress().phone());
 
         Allure.step("Verify: mobile field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getMobileFromCompanyInfoSection())
-                .hasValue(company.companyAddress().mobile());
+        assertThat(companiesAndBusinessUnitsPage.getMobile()).hasValue(company.companyAddress().mobile());
 
         Allure.step("Verify: fax field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getFaxFromCompanyInfoSection())
-                .hasValue(company.companyAddress().fax());
+        assertThat(companiesAndBusinessUnitsPage.getFax()).hasValue(company.companyAddress().fax());
 
         Allure.step("Verify: country field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getCountryFromCompanyInfoSection())
-                .hasValue(company.companyAddress().country());
+        assertThat(companiesAndBusinessUnitsPage.getCountry()).hasValue(company.companyAddress().country());
 
         Allure.step("Verify: state field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getStateFromCompanyInfoSection())
-                .hasValue(company.companyAddress().state());
+        assertThat(companiesAndBusinessUnitsPage.getState()).hasValue(company.companyAddress().state());
 
         Allure.step("Verify: ZIP code field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getZipFromCompanyInfoSection())
-                .hasValue(company.companyAddress().zip());
+        assertThat(companiesAndBusinessUnitsPage.getZip()).hasValue(company.companyAddress().zip());
 
         Allure.step("Verify: city field is correctly filled");
-        assertThat(companiesAndBusinessUnitsPage.getCityFromCompanyInfoSection())
-                .hasValue(company.companyAddress().city());
+        assertThat(companiesAndBusinessUnitsPage.getCity()).hasValue(company.companyAddress().city());
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 }
