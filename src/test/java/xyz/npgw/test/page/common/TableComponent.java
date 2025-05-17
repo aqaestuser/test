@@ -52,18 +52,18 @@ public class TableComponent extends BaseComponent {
         return tableColumnHeader.allInnerTexts();
     }
 
-    public Locator getRowByPrimaryColumn(String name) {
-        Locator rowHeader = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(name));
+    public Locator getTableRow(String rowHeader) {
+        Locator header = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(rowHeader));
 
-        return getTableRows().filter(new Locator.FilterOptions().setHas(rowHeader));
+        return getTableRows().filter(new Locator.FilterOptions().setHas(header));
     }
 
-    public Locator getColumnCellsByRowText(String columnHeaderName, String text) {
-        Locator header = getHeaderByName(columnHeaderName);
+    public Locator getCell(String columnHeader, String rowHeader) {
+        Locator header = getHeaderByName(columnHeader);
         int columnIndex = ((Number) header.evaluate("el => el.cellIndex")).intValue();
         return getPage()
                 .locator("tr[role='row']")
-                .filter(new Locator.FilterOptions().setHasText(text))
+                .filter(new Locator.FilterOptions().setHasText(rowHeader))
                 .locator("td:nth-child(" + (columnIndex + 1) + ")");
     }
 }

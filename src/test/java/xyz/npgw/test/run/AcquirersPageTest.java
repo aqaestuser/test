@@ -385,14 +385,10 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("557")
     @Epic("System/Acquirers")
     @Feature("Acquirers list")
-    @Description("Verify that Acquirer with status 'Active/Inactive' is displayed correctly in the list")
-    public void testAcquirerStatusDisplaysCorrectly(String status) {
+    @Description("Verify Acquirer status 'Active/Inactive' is displayed in column 'Status'")
+    public void testVerifyAcquirerStatus(String status) {
         String acquirerName = "ZAcquirer status check";
-        boolean isFound = false;
-
-        if (getAcquirer(getApiRequestContext(), acquirerName)) {
-            deleteAcquirer(getApiRequestContext(), acquirerName);
-        }
+        deleteAcquirer(getApiRequestContext(), acquirerName);
 
         Acquirer acquirer = new Acquirer(
                 "",
@@ -416,24 +412,12 @@ public class AcquirersPageTest extends BaseTest {
                 .clickCreateButton();
 
         do {
-            if (acquirersPage.getTable().getRowByPrimaryColumn(acquirerName).count() > 0) {
-                isFound = true;
+            if (acquirersPage.getTable().getTableRow(acquirerName).count() > 0) {
                 break;
             }
         } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
 
-        Allure.step(String.format(
-                "Verify: After creation '%s' it shows up. Page: %s",
-                acquirerName,
-                acquirersPage.getActivePage() != null
-                        ? acquirersPage.getActivePage().innerText()
-                        : "unknown")
-        );
-        Assert.assertTrue(
-                isFound, "Acquirer with name '%s' was not found in the table");
-
-        Allure.step(String.format("Verify: '%s' has status %s", acquirerName, status)
-        );
-        assertThat(acquirersPage.getTable().getColumnCellsByRowText("Status", acquirerName)).hasText(status);
+        Allure.step("Verify: Acquirer status");
+        assertThat(acquirersPage.getTable().getCell("Status", acquirerName)).hasText(status);
     }
 }
