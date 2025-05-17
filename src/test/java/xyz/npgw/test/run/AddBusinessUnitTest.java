@@ -6,6 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
+import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
@@ -29,7 +30,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
         Company company = new Company(new Faker());
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -45,6 +45,8 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
         Allure.step("Verify: 'Edit selected company' button is available");
         assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isEnabled();
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @Test
@@ -68,7 +70,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
         Company company = new Company(new Faker());
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         AddBusinessUnitDialog addBusinessUnitDialog = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -86,6 +87,8 @@ public class AddBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: 'Company name' field is non-editable");
         assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @Test
@@ -95,7 +98,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Verify that a new business unit wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
         Company company = new Company(new Faker());
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -111,9 +113,11 @@ public class AddBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: The table is empty and 'No rows to display.' is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("")
+    @Ignore
     @Test
     @TmsLink("218")
     @Epic("Companies and business units")
@@ -141,6 +145,9 @@ public class AddBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
+
+        TestUtils.deleteMerchantByName(getApiRequestContext(), company.companyName(), company.companyType());
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @Test
@@ -150,7 +157,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Description("Verify default filter state was applied once reset")
     public void testResetAppliedFilter() {
         Company company = new Company(new Faker());
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -166,10 +172,11 @@ public class AddBusinessUnitTest extends BaseTest {
         Allure.step("Verify: Ensure the prompt appears when no company is selected");
         assertThat(companiesAndBusinessUnitsPage.getPageContent())
                 .containsText("Select company name to view merchants");
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("unexpected value 'ERRORmerchantTitle must be defined'")
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("290")
     @Epic("System/Companies and business units")
     @Feature("Add business unit")
@@ -220,5 +227,8 @@ public class AddBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
+
+        TestUtils.deleteMerchantByName(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 }
