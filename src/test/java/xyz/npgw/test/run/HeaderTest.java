@@ -12,9 +12,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -181,41 +179,48 @@ public class HeaderTest extends BaseTest {
         assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
     }
 
-    @Ignore
-    @Test(dataProvider = "passwordValidationData", dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "getAllUserRoles", dataProviderClass = TestDataProvider.class)
     @TmsLink("540")
     @Epic("Header")
     @Feature("User menu")
-    @Description("Check validation error messages when changing password")
-    public void testChangePasswordValidationMessages(String userRole, String newPassword, String expectedMessage) {
-        User[] users = new User[]{
-                new User("framework", true, UserRole.ADMIN, new String[]{},
-                        "admintest008@example.com", "Qwerty1!"),
-                new User("framework", true, UserRole.SUPER, new String[]{},
-                        "supertest008@example.com", "Qwerty1!"),
-                new User("framework", true, UserRole.USER, new String[]{"123merchant"},
-                        "usertest008@example.com", "Qwerty1!")
-        };
+    @Description("Check password policy validation error messages when changing password in user menu")
+    public void testChangePasswordValidationMessages(String userRole) {
+        DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getHeader().clickUserMenuButton()
+                .getHeader().clickProfileSettingsButton()
+                .getHeader().fillPasswordField("QWERTY1!")
+                .getHeader().fillRepeatPasswordField("QWERTY1!")
+                .getHeader().clickSaveButton();
 
-        for (User user : users) {
-            TestUtils.deleteUser(getApiRequestContext(), user.email());
-            TestUtils.createUser(getApiRequestContext(), user);
+        Allure.step("Verify: error message for missing lowercase");
+        assertThat(dashboardPage.getAlert().getAlertMessage())
+                .hasText("ERRORPassword does not conform to policy: Password must have lowercase characters");
 
-            new LoginPage(getPage())
-                    .loginAndChangePassword(user.email(), user.password())
-                    .getHeader().clickUserMenuButton()
-                    .getHeader().clickProfileSettingsButton()
-                    .getHeader().fillPasswordField(newPassword)
-                    .getHeader().fillRepeatPasswordField(newPassword)
-                    .getHeader().clickSaveButton();
+        dashboardPage
+                .getHeader().fillPasswordField("qwerty1!")
+                .getHeader().fillRepeatPasswordField("qwerty1!")
+                .getHeader().clickSaveButton();
 
-            Allure.step("Verify: error message presence for: " + user.userRole());
-            assertThat(getPage().getByText(expectedMessage)).isVisible();
+        Allure.step("Verify: error message for missing uppercase");
+        assertThat(dashboardPage.getAlert().getAlertMessage())
+                .hasText("ERRORPassword does not conform to policy: Password must have uppercase characters");
 
-            new DashboardPage(getPage())
-                    .getHeader().clickCloseButton()
-                    .getHeader().clickLogOutButton();
-        }
-//        TestUtils.deleteMerchantByName(getApiRequestContext(), "framework", "123merchant");
+        dashboardPage
+                .getHeader().fillPasswordField("Qwertyu!")
+                .getHeader().fillRepeatPasswordField("Qwertyu!")
+                .getHeader().clickSaveButton();
+
+        Allure.step("Verify: error message for missing numeric");
+        assertThat(dashboardPage.getAlert().getAlertMessage())
+                .hasText("ERRORPassword does not conform to policy: Password must have numeric characters");
+
+        dashboardPage
+                .getHeader().fillPasswordField("Qwertyu1")
+                .getHeader().fillRepeatPasswordField("Qwertyu1")
+                .getHeader().clickSaveButton();
+
+        Allure.step("Verify: error message for missing symbol");
+        assertThat(dashboardPage.getAlert().getAlertMessage())
+                .hasText("ERRORPassword does not conform to policy: Password must have symbol characters");
     }
 }

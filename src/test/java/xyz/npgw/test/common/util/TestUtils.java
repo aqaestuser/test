@@ -83,7 +83,14 @@ public final class TestUtils {
         }
     }
 
+    public static void deleteCompany(APIRequestContext request, User user) {
+        deleteCompany(request, user.companyName());
+    }
+
     public static void deleteCompany(APIRequestContext request, String companyName) {
+        if (companyName.equals("super")) {
+            return;
+        }
         APIResponse response = request.delete("portal-v1/company/%s".formatted(encode(companyName)));
         log.info("delete company '{}' - {} {}", companyName, response.status(), response.text());
     }
@@ -160,7 +167,7 @@ public final class TestUtils {
                 response.text());
     }
 
-    public static void deleteMerchantByName(APIRequestContext request, String companyName, String targetName) {
+    public static void deleteMerchant(APIRequestContext request, String companyName, String targetName) {
         BusinessUnit[] merchants = getAllMerchants(request, companyName);
 
         Optional<BusinessUnit> target = Arrays.stream(merchants)

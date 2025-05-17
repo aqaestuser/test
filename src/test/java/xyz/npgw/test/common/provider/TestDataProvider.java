@@ -10,6 +10,15 @@ import xyz.npgw.test.common.entity.User;
 public class TestDataProvider {
 
     @DataProvider
+    public static Object[][] getAllUserRoles() {
+        return new Object[][]{
+                {"SUPER"},
+                {"ADMIN"},
+                {"USER"}
+        };
+    }
+
+    @DataProvider
     public static Object[][] getAuthenticatedEndpoints() {
         return new Object[][]{
                 {"UNAUTHORISED", "/dashboard"},
@@ -75,6 +84,18 @@ public class TestDataProvider {
         return new Object[][]{
                 {"EUR"},
                 {"USD"},
+        };
+    }
+
+    @DataProvider
+    public static Object[][] getNewUsers() {
+        String companyName = "company008";
+        String merchantTitle = "merchantTitle";
+
+        return new Object[][]{
+                {"SUPER", User.createSystemAdmin("newsuper@test.com")},
+                {"ADMIN", User.createCompanyAdmin(companyName, "newadmin@test.com")},
+                {"USER", User.createCompanyAnalyst(companyName, new String[]{merchantTitle}, "newuser@test.com")}
         };
     }
 
@@ -173,20 +194,6 @@ ERRORsystemConfig.challengeUrl doesn’t qualify for the URL syntax
 systemConfig.fingerprintUrl doesn’t qualify for the URL syntax
 systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
                 }
-        };
-    }
-
-    @DataProvider(name = "passwordValidationData")
-    public static Object[][] passwordValidationData() {
-        return new Object[][]{
-                {"UNAUTHORISED", "QWERTY1!",
-                        "Password does not conform to policy: Password must have lowercase characters"},
-                {"UNAUTHORISED", "qwerty1!",
-                        "Password does not conform to policy: Password must have uppercase characters"},
-                {"UNAUTHORISED", "Qwertyu!",
-                        "Password does not conform to policy: Password must have numeric characters"},
-                {"UNAUTHORISED", "Qwertyu1",
-                        "Password does not conform to policy: Password must have symbol characters"}
         };
     }
 }
