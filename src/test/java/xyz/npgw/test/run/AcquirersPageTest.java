@@ -15,7 +15,7 @@ import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.common.TableComponent;
+import xyz.npgw.test.page.common.table.AcquirersTableComponent;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.ArrayList;
@@ -25,7 +25,6 @@ import java.util.Map;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static xyz.npgw.test.common.util.TestUtils.createAcquirer;
 import static xyz.npgw.test.common.util.TestUtils.deleteAcquirer;
-import static xyz.npgw.test.common.util.TestUtils.getAcquirer;
 
 public class AcquirersPageTest extends BaseTest {
 
@@ -68,7 +67,6 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getRefreshDataButton()).isVisible();
     }
 
-    @Ignore("")
     @Test
     @TmsLink("157")
     @Epic("System/Acquirers")
@@ -80,14 +78,14 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: 'Acquirer name' header is visible");
-        assertThat(acquirersPage.getAcquirerNameHeader()).isVisible();
+        assertThat(acquirersPage.getTable().getColumnHeader("Acquirer name")).isVisible();
 
-        Locator acquirersList = acquirersPage.getAcquirersList();
+        List<Locator> acquirersList = acquirersPage.getTable().getCells("Acquirer name");
 
         Allure.step(String.format(
-                "Verify: Acquirers list is visible and contains elements. INFO: (%d elements)", acquirersList.count()));
-        assertThat(acquirersList.first()).isVisible();
-        assertThat(acquirersList.last()).isVisible();
+                "Verify: Acquirers list is visible and contains elements. INFO: (%d elements)", acquirersList.size()));
+        assertThat(acquirersList.get(0)).isVisible();
+        assertThat(acquirersList.get(acquirersList.size() - 1)).isVisible();
     }
 
     @Test
@@ -116,8 +114,8 @@ public class AcquirersPageTest extends BaseTest {
         Locator actualOptions = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .clickAcquirerStatusPlaceholder()
-                .getAcquirerStatusOptions();
+                .clickStatusValue()
+                .getStatusOptions();
 
         Allure.step("Verify: The 'Status' dropdown toggles and contains options All, Active, Inactive.");
         assertThat(actualOptions).hasText(new String[]{"All", "Active", "Inactive"});
@@ -132,9 +130,9 @@ public class AcquirersPageTest extends BaseTest {
         List<Locator> statuses = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .clickAcquirerStatusPlaceholder()
+                .clickStatusValue()
                 .selectAcquirerStatus(status)
-                .getAcquirersStatus();
+                .getTable().getCells("Status");
 
         Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
         for (Locator actualStatus : statuses) {
@@ -154,18 +152,18 @@ public class AcquirersPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        Locator actualStatus = acquirersPage.getAcquirerStatusValue();
+        Locator actualStatus = acquirersPage.getStatusValue();
 
         for (String status : expectedOptions) {
             acquirersPage
-                    .clickAcquirerStatusPlaceholder()
+                    .clickStatusValue()
                     .selectAcquirerStatus(status);
 
             Allure.step("Verify placeholder matches expected value: " + status);
             assertThat(actualStatus).hasText(status);
 
             acquirersPage
-                    .clickAcquirerStatusPlaceholder()
+                    .clickStatusValue()
                     .selectAcquirerStatus(status);
 
             Allure.step("Verify again placeholder matches expected value: " + status);
@@ -184,16 +182,15 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: The default 'Rows Per Page' value is set to 25");
-        assertThat(acquirersPage.getRowsPerPage()).hasText("25");
+        assertThat(acquirersPage.getTable().getRowsPerPage()).hasText("25");
 
-        acquirersPage
-                .clickRowsPerPageChevron();
+        acquirersPage.getTable().clickRowsPerPageChevron();
 
         Allure.step("Verify: Dropdown is visible");
-        assertThat(acquirersPage.getRowsPerPageDropdown()).isVisible();
+        assertThat(acquirersPage.getTable().getRowsPerPageDropdown()).isVisible();
 
         Allure.step("Verify: The dropdown contains all four options: 10, 25, 50, 100");
-        assertThat(acquirersPage.getRowsPerPageOptions()).hasText(rowsPerPageOptions);
+        assertThat(acquirersPage.getTable().getRowsPerPageOptions()).hasText(rowsPerPageOptions);
     }
 
     @Test
@@ -208,11 +205,11 @@ public class AcquirersPageTest extends BaseTest {
 
         for (String option : rowsPerPageOptions) {
             acquirersPage
-                    .clickRowsPerPageChevron()
-                    .selectRowsPerPageOption(option);
+                    .getTable().clickRowsPerPageChevron()
+                    .getTable().selectRowsPerPageOption(option);
 
             Allure.step(String.format("Verify: The Rows Per Page' value is set to '%s'", option));
-            assertThat(acquirersPage.getRowsPerPage()).hasText(option);
+            assertThat(acquirersPage.getTable().getRowsPerPage()).hasText(option);
         }
     }
 
@@ -230,20 +227,20 @@ public class AcquirersPageTest extends BaseTest {
 
         for (String option : rowsPerPageOptions) {
             acquirersPage
-                    .clickRowsPerPageChevron()
-                    .selectRowsPerPageOption(option);
+                    .getTable().clickRowsPerPageChevron()
+                    .getTable().selectRowsPerPageOption(option);
 
             int rowsSum = 0;
 
             do {
-                int actualRowCount = acquirersPage.getTable().getTableRows().count();
+                int actualRowCount = acquirersPage.getTable().getRows().count();
                 rowsSum += actualRowCount;
 
                 Allure.step(String.format(
                         "Verify: The table contains '%s' rows less than or equal to '%s'", actualRowCount, option));
                 Assert.assertTrue(actualRowCount <= Integer.parseInt(option));
 
-            } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
+            } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
 
             totalRows.add(rowsSum);
         }
@@ -308,9 +305,9 @@ public class AcquirersPageTest extends BaseTest {
                 .getSelectAcquirer().typeAcquirerNameToSelectAcquirerInputField(acquirer.acquirerName())
                 .getSelectAcquirer().clickAcquirerInDropdown(acquirer.acquirerName());
 
-        TableComponent table = acquirersPage.getTable();
+        AcquirersTableComponent table = acquirersPage.getTable();
 
-        Locator row = table.getTableRows();
+        Locator row = table.getRows();
 
         Allure.step("Verify: List of acquirers has only 1 row in the table");
         assertThat(row).hasCount(1);
@@ -329,14 +326,14 @@ public class AcquirersPageTest extends BaseTest {
         }
 
         Allure.step("Verify: Edit button is visible");
-        assertThat(acquirersPage.getEditAcquirerButton(row)).isVisible();
+        assertThat(acquirersPage.getTable().getEditAcquirerButton(row)).isVisible();
 
         Allure.step("Verify: Activate/Deactivate acquirer button is visible");
-        assertThat(acquirersPage.getChangeAcquirerActivityButton(row)).isVisible();
+        assertThat(acquirersPage.getTable().getChangeAcquirerActivityButton(row)).isVisible();
 
         Allure.step("Verify: Pagination shows only one page labeled '1'");
-        assertThat(acquirersPage.getPaginationItems()).isVisible();
-        assertThat(acquirersPage.getPaginationItems()).hasText("1");
+        assertThat(acquirersPage.getTable().getPaginationItems()).isVisible();
+        assertThat(acquirersPage.getTable().getPaginationItems()).hasText("1");
     }
 
     @Test(expectedExceptions = {AssertionError.class})
@@ -354,29 +351,29 @@ public class AcquirersPageTest extends BaseTest {
 
         for (String option : rowsPerPageOptions) {
             acquirersPage
-                    .clickRowsPerPageChevron()
-                    .selectRowsPerPageOption(option);
+                    .getTable().clickRowsPerPageChevron()
+                    .getTable().selectRowsPerPageOption(option);
             do {
-                String activePage = acquirersPage.getActivePage().innerText();
+                String activePage = acquirersPage.getTable().getActivePage().innerText();
 
                 Allure.step(
                         String.format("Verify: All table column headers are on page '%s' with '%s' pagination",
                                 activePage, option));
                 Assert.assertEquals(
-                        acquirersPage.getTable().getTableColumnHeader().allTextContents(),
+                        acquirersPage.getTable().getColumnHeader().allTextContents(),
                         COLUMNS_HEADERS,
                         String.format(
                                 "Column headers do not match expected headers on page '%s' with '%s' pagination!",
                                 activePage, option));
 
-                BoundingBox table = acquirersPage.getTable().getTableHeader().boundingBox();
+                BoundingBox table = acquirersPage.getTable().getHeadersRow().boundingBox();
                 double pageWidth = getPage().viewportSize().width;
 
                 Assert.assertTrue(table.x >= 0 && (table.x + table.width) <= pageWidth, String.format(
                         "The header is not fully visible within the viewport on page '%s' with '%s' pagination!",
                         activePage, option));
 
-            } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
+            } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
         }
     }
 
@@ -415,7 +412,7 @@ public class AcquirersPageTest extends BaseTest {
             if (acquirersPage.getTable().getTableRow(acquirerName).count() > 0) {
                 break;
             }
-        } while (!acquirersPage.isLastPage() && acquirersPage.clickNextPage() != null);
+        } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getCell("Status", acquirerName)).hasText(status);

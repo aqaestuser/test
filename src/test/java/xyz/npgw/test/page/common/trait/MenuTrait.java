@@ -1,6 +1,7 @@
-package xyz.npgw.test.page.system;
+package xyz.npgw.test.page.common.trait;
 
 import xyz.npgw.test.page.base.BaseTrait;
+import xyz.npgw.test.page.common.MenuComponent;
 
 public interface MenuTrait extends BaseTrait {
 

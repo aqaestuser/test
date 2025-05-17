@@ -6,8 +6,8 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.ReportsPage;
-import xyz.npgw.test.page.common.DateRangePickerTrait;
-import xyz.npgw.test.page.common.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
+import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 
 import java.util.List;

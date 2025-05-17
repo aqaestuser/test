@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.common.AlertTrait;
+import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 public class AddBusinessUnitDialog extends BusinessUnitDialog<AddBusinessUnitDialog>

@@ -1,10 +1,13 @@
-package xyz.npgw.test.page.system;
+package xyz.npgw.test.page.common;
 
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.BaseComponent;
+import xyz.npgw.test.page.system.AcquirersPage;
+import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.GatewayPage;
 
 public class MenuComponent extends BaseComponent {
 

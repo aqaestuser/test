@@ -1,18 +1,23 @@
-package xyz.npgw.test.page.system;
+package xyz.npgw.test.page.common.table;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.common.TableComponent;
 import xyz.npgw.test.page.dialog.user.ChangeUserActivityDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.dialog.user.ResetUserPasswordDialog;
+import xyz.npgw.test.page.system.TeamPage;
 
-public class UserTableComponent extends TableComponent {
+public class UserTableComponent extends BaseTableComponent<TeamPage> {
 
     public UserTableComponent(Page page) {
         super(page);
+    }
+
+    @Override
+    protected TeamPage getCurrentPage() {
+
+        return new TeamPage(getPage());
     }
 
     @Step("Click 'Edit user'")
@@ -43,20 +48,6 @@ public class UserTableComponent extends TableComponent {
         return new ResetUserPasswordDialog(getPage());
     }
 
-    public Locator getUserRole(String email) {
-        int columnIndex = getColumnHeaderIndexByName("User role");
-        Locator row = getTableRow(email);
-
-        return row.getByRole(AriaRole.GRIDCELL).or(row.getByRole(AriaRole.ROWHEADER)).nth(columnIndex);
-    }
-
-    public Locator getUserStatus(String email) {
-        int columnIndex = getColumnHeaderIndexByName("Status");
-        Locator row = getTableRow(email);
-
-        return row.getByRole(AriaRole.GRIDCELL).or(row.getByRole(AriaRole.ROWHEADER)).nth(columnIndex);
-    }
-
     public Locator getUserActivityIcon(String email) {
         return getTableRow(email).getByTestId("ChangeUserActivityButton").locator("svg");
     }
@@ -67,13 +58,5 @@ public class UserTableComponent extends TableComponent {
                 .clickDeactivateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton();
-    }
-
-    @Step("@Step(Click sort icon in '{columnName}' column)")
-    public TeamPage clickSortIcon(String columnName) {
-        getHeaderByName(columnName).locator("svg").click();
-        getPage().waitForTimeout(500);
-
-        return new TeamPage(getPage());
     }
 }

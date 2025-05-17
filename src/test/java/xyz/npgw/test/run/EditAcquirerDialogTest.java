@@ -1,6 +1,5 @@
 package xyz.npgw.test.run;
 
-import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -47,11 +46,8 @@ public class EditAcquirerDialogTest extends BaseTest {
                 .getSelectAcquirer().typeAcquirerNameToSelectAcquirerInputField(acquirerName)
                 .getSelectAcquirer().clickAcquirerInDropdown(acquirerName);
 
-        Locator row = acquirersPage
-                .getTable().getTableRows();
-
         List<String> actualPlaceholders = acquirersPage
-                .clickEditAcquirerButton(row)
+                .getTable().clickEditAcquirerButton()
                 .getPlaceholdersOrTextsFromFields();
 
         Allure.step("Verify placeholders match expected values for all fields");
