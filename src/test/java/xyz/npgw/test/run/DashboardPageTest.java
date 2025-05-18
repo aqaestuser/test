@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -30,7 +29,6 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
-//    @Ignore("Не нажимается рефреш - снять игнор после фикса /summary")
     @Test
     @TmsLink("403")
     @Epic("Dashboard")
@@ -45,5 +43,26 @@ public class DashboardPageTest extends BaseTest {
         Allure.step("Verify: error message is shown for invalid date range");
         assertThat(dashboardPage.getDateRangePicker().getDataRangePickerErrorMessage()).hasText(
                 "Start date must be before end date.");
+    }
+
+    @Test
+    @TmsLink("575")
+    @Epic("Dashboard")
+    @Feature("Chart Display")
+    @Description("All key chart elements are correctly displayed")
+    public void testVisibleChartElementsAreDisplayedCorrectly() {
+        DashboardPage dashboardPage = new DashboardPage(getPage());
+
+        Allure.step("Verify: Y-axis percentage labels are correctly displayed");
+        assertThat(dashboardPage.getYAxisLabels())
+                .hasText(new String[]{"100%", "80%", "60%", "40%", "20%", "0%"});
+
+        Allure.step("Verify: status chart legend labels are correctly displayed");
+        assertThat(dashboardPage.getXAxisTexts())
+                .hasText(new String[]{"INITIATED", "FAILED"});
+
+        Allure.step("Verify: currency legend labels are correctly displayed");
+        assertThat(dashboardPage.getCurrencyLegendLabels())
+                .hasText(new String[]{"USD", "EUR"});
     }
 }
