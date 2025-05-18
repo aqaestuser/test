@@ -8,6 +8,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -64,5 +65,29 @@ public class DashboardPageTest extends BaseTest {
         Allure.step("Verify: currency legend labels are correctly displayed");
         assertThat(dashboardPage.getCurrencyLegendLabels())
                 .hasText(new String[]{"USD", "EUR"});
+    }
+
+
+    // TODO: Add business unit check when enabled
+    @Test
+    @TmsLink("577")
+    @Epic("Dashboard")
+    @Feature("Reset filter")
+    @Description("'Reset filter' clears selected options to default")
+    public void testResetFilter() {
+        final String companyName = "framework";
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+
+        DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getSelectCompany().selectCompany(companyName)
+                .clickCurrencySelector()
+                .selectCurrency("EUR")
+                .clickResetFilterButton();
+
+        Allure.step("Verify: the selected company field is empty after reset");
+        assertThat(dashboardPage.getSelectCompany().getSelectCompanyField()).hasValue("");
+
+        Allure.step("Verify: the currency selector displays 'ALL' after reset");
+        assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
     }
 }
