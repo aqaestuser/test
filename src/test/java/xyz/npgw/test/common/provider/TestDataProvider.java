@@ -93,9 +93,9 @@ public class TestDataProvider {
         String merchantTitle = "merchantTitle";
 
         return new Object[][]{
-                {"SUPER", User.createSystemAdmin("newsuper@test.com")},
-                {"ADMIN", User.createCompanyAdmin(companyName, "newadmin@test.com")},
-                {"USER", User.createCompanyAnalyst(companyName, new String[]{merchantTitle}, "newuser@test.com")}
+                {"SUPER", User.newSystemAdmin("newsuper@test.com")},
+                {"ADMIN", User.newCompanyAdmin(companyName, "newadmin@test.com")},
+                {"USER", User.newCompanyAnalyst(companyName, new String[]{merchantTitle}, "newuser@test.com")}
         };
     }
 

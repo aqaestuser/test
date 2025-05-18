@@ -146,7 +146,7 @@ public class AddBusinessUnitTest extends BaseTest {
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
 
-        TestUtils.deleteMerchant(getApiRequestContext(), company.companyName(), company.companyType());
+        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company.companyName(), company.companyType());
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
@@ -228,7 +228,7 @@ public class AddBusinessUnitTest extends BaseTest {
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
 
-        TestUtils.deleteMerchant(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
+        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 }

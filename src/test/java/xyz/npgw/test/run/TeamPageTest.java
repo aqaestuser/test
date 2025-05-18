@@ -82,7 +82,7 @@ public class TeamPageTest extends BaseTest {
     @Description("Add users with roles [SUPER, ADMIN, USER] as super admin")
     public void testAddUser(User user) {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
-        TestUtils.deleteUser(getApiRequestContext(), user);
+        TestUtils.deleteUser(getApiRequestContext(), user.email());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -106,7 +106,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
     public void testAddCompanyAnalyst() {
-        TestUtils.deleteUser(getApiRequestContext(), user);
+        TestUtils.deleteUser(getApiRequestContext(), user.email());
         TestUtils.createCompanyIfNeeded(getApiRequestContext(), user.companyName());
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
@@ -215,7 +215,7 @@ public class TeamPageTest extends BaseTest {
     @Description("Deactivate user by 'Change user activity button' and verify status change")
     public void testDeactivateUserViaChangeUserActivityButton() {
         TestUtils.deleteUser(getApiRequestContext(), user.email());
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), user);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), user.companyName());
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         TeamPage teamPage = new DashboardPage(getPage())
@@ -369,7 +369,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.deleteUser(getApiRequestContext(), analystEmail);
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
         TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createMerchantIfNeeded(getApiRequestContext(), companyName, "Business unit 1");
+        TestUtils.createMerchantTitleIfNeeded(getApiRequestContext(), companyName, "Business unit 1");
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, ADMIN_EMAIL, ADMIN_PASSWORD);
 
         TeamPage teamPage = new AboutBlankPage(getPage())
