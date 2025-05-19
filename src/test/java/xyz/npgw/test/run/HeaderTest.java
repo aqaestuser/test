@@ -72,7 +72,7 @@ public class HeaderTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
     }
 
-    @Ignore("")
+    @Ignore
     @Test
     @TmsLink("289")
     @Epic("Header")

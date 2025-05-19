@@ -1,5 +1,6 @@
 package xyz.npgw.test.common.entity;
 
+import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
@@ -16,10 +17,6 @@ public record Acquirer(
         String[] currencyList,
         boolean isActive) {
 
-    public Acquirer() {
-        this("", "", new SystemConfig(), "", new String[]{}, true);
-    }
-
     public Acquirer(String acquirerName) {
         this("NGenius", "et", new SystemConfig(), acquirerName, new String[]{"USD"}, true);
     }
@@ -34,6 +31,12 @@ public record Acquirer(
         log.info("get acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
 
         return response.ok();
+    }
+
+    public static Acquirer[] getAll(APIRequestContext request) {
+        APIResponse response = request.get("portal-v1/acquirer");
+        log.info("get all acquirers - {} {}", response.status(), response.text());
+        return new Gson().fromJson(response.text(), Acquirer[].class);
     }
 
     public static void delete(APIRequestContext request, String acquirerName) {

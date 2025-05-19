@@ -1,5 +1,6 @@
 package xyz.npgw.test.common.entity;
 
+import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
@@ -45,6 +46,12 @@ public record User(
     public static void create(APIRequestContext request, User user) {
         APIResponse response = request.post("portal-v1/user/create", RequestOptions.create().setData(user));
         log.info("create company admin '{}' - {} {}", user.email(), response.status(), response.text());
+    }
+
+    public static User[] getAll(APIRequestContext request, String companyName) {
+        APIResponse response = request.get("portal-v1/user/list/%s".formatted(encode(companyName)));
+        log.info("get all users for company '{}' - {} {}", companyName, response.status(), response.text());
+        return new Gson().fromJson(response.text(), User[].class);
     }
 
     public static void delete(APIRequestContext request, User user) {

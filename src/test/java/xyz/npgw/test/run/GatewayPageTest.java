@@ -71,7 +71,7 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
-    @Ignore("")
+    @Ignore
     @Test
     @TmsLink("307")
     @Epic("System/Gateway")

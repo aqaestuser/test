@@ -1,5 +1,6 @@
 package xyz.npgw.test.common.entity;
 
+import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
@@ -42,6 +43,12 @@ public record Company(
         APIResponse response = request.post("portal-v1/company",
                 RequestOptions.create().setData(new Company(companyName)));
         log.info("create company '{}' - {} {}", companyName, response.status(), response.text());
+    }
+
+    public static Company[] getAll(APIRequestContext request) {
+        APIResponse response = request.get("portal-v1/company");
+        log.info("get all companies - {} {}", response.status(), response.text());
+        return new Gson().fromJson(response.text(), Company[].class);
     }
 
     public static void delete(APIRequestContext request, User user) {
