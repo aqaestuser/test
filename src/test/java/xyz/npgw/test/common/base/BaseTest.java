@@ -9,6 +9,7 @@ import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
+import com.microsoft.playwright.options.Cookie;
 import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 
@@ -196,6 +198,7 @@ public abstract class BaseTest {
             }
         }
         new AboutBlankPage(page).navigate("/").loginAs(userRole);
+        initPageRequestContext();
     }
 
     private void initApiRequestContext() {
@@ -225,6 +228,27 @@ public abstract class BaseTest {
             log.error(message);
             throw new SkipException(message);
         }
+    }
+
+    private void initPageRequestContext() {
+        StorageState storageState = new Gson().fromJson(context.storageState(), StorageState.class);
+        LocalStorage[] localStorage = storageState.origins()[0].localStorage();
+        String tokenData = Arrays.stream(localStorage)
+                .filter(item -> item.name().equals("token_data"))
+                .findAny()
+                .map(LocalStorage::value)
+                .orElse("");
+        Token token = new Gson().fromJson(tokenData, Token.class);
+        context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken)));
+    }
+
+    private record StorageState(Cookie[] cookies, Origin[] origins) {
+    }
+
+    private record Origin(String origin, LocalStorage[] localStorage) {
+    }
+
+    private record LocalStorage(String name, String value) {
     }
 
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {

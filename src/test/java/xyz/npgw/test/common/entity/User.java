@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
 
+import java.util.Map;
+
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
 @Log4j2
@@ -61,6 +63,12 @@ public record User(
     public static void delete(APIRequestContext request, String email) {
         APIResponse response = request.delete("portal-v1/user?email=%s".formatted(encode(email)));
         log.info("delete user '{}' - {} {}", email, response.status(), response.text());
+    }
+
+    public static void changePassword(APIRequestContext request, String email, String newPassword) {
+        APIResponse response = request.post("portal-v1/user/password/change",
+                RequestOptions.create().setData(Map.of("email", email, "password", newPassword)));
+        log.info("change user '{}' password - {} {}", email, response.status(), response.text());
     }
 
     @Override

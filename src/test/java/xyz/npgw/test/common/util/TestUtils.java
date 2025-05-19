@@ -21,6 +21,10 @@ public final class TestUtils {
         User.delete(request, email);
     }
 
+    public static void changeUserPassword(APIRequestContext request, String email, String newPassword) {
+        User.changePassword(request, email, newPassword);
+    }
+
     public static void createBusinessUnit(APIRequestContext request, String companyName, String merchantTitle) {
         BusinessUnit.create(request, companyName, merchantTitle);
     }
