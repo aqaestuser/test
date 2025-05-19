@@ -24,7 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.AboutBlankPage;
 
 import java.io.IOException;

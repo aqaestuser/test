@@ -2,11 +2,11 @@ package xyz.npgw.test.common.util;
 
 import com.microsoft.playwright.APIRequestContext;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.common.UserRole;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
 
 import java.util.Arrays;
 import java.util.List;
