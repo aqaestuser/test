@@ -23,7 +23,8 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
     private final Locator addCompanyDialog = getByRole(AriaRole.DIALOG);
     private final Locator companyNameDropdownList = locator("[role='option']");
-    private final Locator selectCompanyInput = getByPlaceholder("Search...");
+    private final Locator name = getByLabelExact("Name");
+    private final Locator type = getByLabelExact("Type");
     private final Locator description = getByLabelExact("Description");
     private final Locator website = getByLabelExact("Website");
     private final Locator primaryContact = getByLabelExact("Primary contact");

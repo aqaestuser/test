@@ -207,7 +207,7 @@ public class AddBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: Validation error is shown when merchant name is not filled");
         assertThat(addBusinessUnitDialog
-                .getAlert().getAlertMessage())
+                .getAlert().getMessage())
                 .containsText("Enter merchant name");
 
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
@@ -215,7 +215,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: Success alert is shown after business unit is added");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getAlertMessage()).hasText(
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage()).hasText(
                 "SUCCESSBusiness unit was created successfully");
 
         Allure.step("Verify: Selected company is preserved after creation");

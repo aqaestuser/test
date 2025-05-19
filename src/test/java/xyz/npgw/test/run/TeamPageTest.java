@@ -96,7 +96,7 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
     @Ignore()
@@ -122,7 +122,7 @@ public class TeamPageTest extends BaseTest {
                 .createUser(user);
 
         Allure.step("Verify: a success alert appears after user creation");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
         teamPage.clickRefreshDataButton();
 
@@ -169,7 +169,7 @@ public class TeamPageTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: success alert appears after user update");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
@@ -204,7 +204,7 @@ public class TeamPageTest extends BaseTest {
                 .createCompanyAdmin(email, "Password1!");
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
     @Ignore("")
@@ -262,7 +262,7 @@ public class TeamPageTest extends BaseTest {
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
@@ -292,7 +292,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was deactivated successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
         teamPage.clickRefreshDataButton();
 
@@ -306,7 +306,7 @@ public class TeamPageTest extends BaseTest {
                 .clickActivateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was activated successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was activated successfully");
 
         teamPage.clickRefreshDataButton();
 
@@ -342,7 +342,7 @@ public class TeamPageTest extends BaseTest {
                 .clickResetButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSPassword was reseted successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword was reseted successfully");
 
         teamPage.getHeader().clickLogOutButton()
                 .fillEmailField(email)
@@ -353,7 +353,7 @@ public class TeamPageTest extends BaseTest {
                 .clickSaveButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSPassword is changed successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword is changed successfully");
     }
 
     @Ignore
@@ -383,7 +383,7 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
         teamPage.getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton();
@@ -401,7 +401,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("SUCCESSUser was deactivated successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
         teamPage.clickRefreshDataButton();
 
@@ -415,7 +415,7 @@ public class TeamPageTest extends BaseTest {
                 .loginAsDisabledUser(analystEmail, analystPassword);
 
         Allure.step("Verify: error message is displayed");
-        assertThat(teamPage.getAlert().getAlertMessage()).hasText("ERRORUser is disabled.");
+        assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
         DashboardPage dashboardPage = loginPage.login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .getHeader().clickSystemAdministrationLink()

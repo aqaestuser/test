@@ -26,7 +26,7 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
         return currentPage;
     }
 
-    public Locator getAlertMessage() {
+    public Locator getMessage() {
         alertMessage.waitFor();
 
         return alertMessage;

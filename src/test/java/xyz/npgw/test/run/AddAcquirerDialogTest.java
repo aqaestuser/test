@@ -108,7 +108,7 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: Acquirer creation success message is displayed");
-        assertThat(acquirersPage.getAlert().getAlertMessage()).containsText(
+        assertThat(acquirersPage.getAlert().getMessage()).containsText(
                 "SUCCESSAcquirer was created successfully");
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
@@ -148,7 +148,7 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step("Verify: Acquirer Error message is displayed");
         assertThat(acquirerDialog
-                .getAlert().getAlertMessage())
+                .getAlert().getMessage())
                 .containsText("Acquirer with name {" + acquirerName + "} already exists.");
 
         Allure.step("Verify: the 'Add acquirer' dialog is not closed");
@@ -193,9 +193,9 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .fillAcquirerForm(acquirer)
                 .clickCreateButton();
 
-        assertThat(acquirersPage.getAlert().getAlertMessage()).isVisible();
+        assertThat(acquirersPage.getAlert().getMessage()).isVisible();
 
         Allure.step(String.format("Verify error message is: %s", expectedError));
-        assertThat(acquirersPage.getAlert().getAlertMessage()).hasText(expectedError);
+        assertThat(acquirersPage.getAlert().getMessage()).hasText(expectedError);
     }
 }
