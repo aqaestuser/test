@@ -45,7 +45,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("The visibility of elements in the 'Acquirers List' control panel")
     public void testVisibilityAcquirersListControlTab() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: Add Acquirer Button is visible");
@@ -73,7 +73,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
     public void testVisibilityHeaderAndAcquirersList() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: 'Acquirer name' header is visible");
@@ -94,7 +94,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
     public void testSelectAcquirerDropdownFunctionality() {
         Locator dropdownAcquirerList = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirer().clickSelectAcquirerPlaceholder()
                 .getSelectAcquirer().getSelectAcquirersDropdownItems();
@@ -111,7 +111,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("The 'Status' dropdown toggles and contains options All, Active, Inactive.")
     public void testOpenStatusDropdown() {
         Locator actualOptions = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickStatusValue()
                 .getStatusOptions();
@@ -127,7 +127,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Filter acquirers by status.")
     public void testFilterAcquirersByStatus(String status) {
         List<Locator> statuses = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickStatusValue()
                 .selectAcquirerStatus(status)
@@ -148,7 +148,7 @@ public class AcquirersPageTest extends BaseTest {
         List<String> expectedOptions = List.of("All", "Active", "Inactive");
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         Locator actualStatus = acquirersPage.getStatusValue();
@@ -177,7 +177,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Verify the default 'Rows Per Page' value is 25 and the dropdown contains the correct options.")
     public void testRowsPerPageDropdownOptions() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: The default 'Rows Per Page' value is set to 25");
@@ -199,7 +199,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Verify Selecting 'Rows Per Page' Option Updates the Field Value.")
     public void testSelectingRowsPerPageOptionUpdatesFieldValue() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
@@ -221,7 +221,7 @@ public class AcquirersPageTest extends BaseTest {
         List<Integer> totalRows = new ArrayList<>();
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
@@ -255,7 +255,7 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Verify Acquirers table contains correct column headers")
     public void testDisplayCorrectColumnHeadersInAcquirersTable() {
         List<String> acquirerTableHeaders = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getTable()
                 .getColumnHeadersText();
@@ -298,7 +298,7 @@ public class AcquirersPageTest extends BaseTest {
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirer().typeName(acquirer.acquirerName())
                 .getSelectAcquirer().clickAcquirerInDropdown(acquirer.acquirerName());
@@ -344,7 +344,7 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Test disabled / Known bug: The column is not visible on the screen!");
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
@@ -399,7 +399,7 @@ public class AcquirersPageTest extends BaseTest {
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .fillAcquirerName(acquirerName)
@@ -434,7 +434,7 @@ public class AcquirersPageTest extends BaseTest {
         createAcquirer(getApiRequestContext(), acquirer);
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirer().typeName(acquirerName)
                 .getSelectAcquirer().clickAcquirerInDropdown(acquirerName);

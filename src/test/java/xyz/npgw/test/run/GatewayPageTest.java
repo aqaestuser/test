@@ -27,7 +27,7 @@ public class GatewayPageTest extends BaseTest {
     @Description("The 'Currency' dropdown toggles and contains options All, USD, EUR.")
     public void testOpenCurrencyDropdown() {
         Locator actualOptions = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
                 .clickCurrencyValue()
                 .getCurrencyOptions();
@@ -48,7 +48,7 @@ public class GatewayPageTest extends BaseTest {
         List<String> expectedOptions = List.of("ALL", "USD", "EUR");
 
         GatewayPage gatewayPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab();
 
         Locator actualCurrency = gatewayPage
@@ -86,7 +86,7 @@ public class GatewayPageTest extends BaseTest {
         int expectedCount = expectedBusinessUnitsList.length;
 
         GatewayPage gatewayPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().clickSelectCompanyPlaceholder()
                 .getSelectCompany().selectCompany(companyName);

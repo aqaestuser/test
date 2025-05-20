@@ -42,7 +42,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("User navigate to 'Reports page' after clicking on 'Reports' link on the header")
     public void testNavigateToReportsPage() {
         ReportsPage reportsPage = new DashboardPage(getPage())
-                .getHeader().clickReportsLink();
+                .clickReportsLink();
 
         Allure.step("Verify: Reports Page URL");
         assertThat(reportsPage.getPage()).hasURL(Constants.REPORTS_PAGE_URL);
@@ -58,7 +58,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("Error message is displayed when start date is after end date.")
     public void testErrorMessageForReversedDateRange() {
         ReportsPage reportsPage = new DashboardPage(getPage())
-                .getHeader().clickReportsLink()
+                .clickReportsLink()
                 .getDateRangePicker().setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
 
@@ -74,7 +74,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("Verify content of 'Generation Parameters dialog'")
     public void testContentOfGenerationParametersDalog() {
         ReportsParametersDialog generationParametersDialog = new DashboardPage(getPage())
-                .getHeader().clickReportsLink()
+                .clickReportsLink()
                 .clickGenerateReportButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
@@ -95,7 +95,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("Check/uncheck reports columns in the 'Generation Parameters dialog'")
     public void testCheckboxesOfGenerationParameters() {
         ReportsParametersDialog generationParametersDialog = new DashboardPage(getPage())
-                .getHeader().clickReportsLink()
+                .clickReportsLink()
                 .clickGenerateReportButton();
 
         Allure.step("Verify: All report columns are checked at first opening the 'Generation Parameters dialog'");
@@ -115,8 +115,8 @@ public class ReportsPageTest extends BaseTest {
 
         generationParametersDialog
                 .clickCloseIcon()
-                .getHeader().clickTransactionsLink()
-                .getHeader().clickReportsLink()
+                .clickTransactionsLink()
+                .clickReportsLink()
                 .clickGenerateReportButton();
 
         Allure.step("Verify: All report columns remained unchecked after exiting the 'Generation Parameters dialog'");

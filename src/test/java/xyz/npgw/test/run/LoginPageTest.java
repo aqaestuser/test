@@ -46,7 +46,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(ProjectProperties.getSuperPassword())
                 .checkRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader()
+                
                 .clickLogOutButton();
 
         Allure.step("Verify: The user's email is in the email field");
@@ -65,7 +65,7 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(ProjectProperties.getSuperPassword())
                 .uncheckRememberMeCheckbox()
                 .clickLoginButton()
-                .getHeader()
+                
                 .clickLogOutButton();
 
         Allure.step("Verify: The user's email is not in the email field");

@@ -16,7 +16,6 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.TransactionsPage;
-import xyz.npgw.test.page.common.HeaderComponent;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -29,17 +28,17 @@ public class HeaderTest extends BaseTest {
     @Feature("Logo")
     @Description("Check that Logo in header contains text 'NPGW' and image")
     public void testLogoContainsTextAndImage() {
-        HeaderComponent headerComponent = new DashboardPage(getPage()).getHeader();
+        DashboardPage header = new DashboardPage(getPage());
 
         Allure.step("Verify: Logo contains text 'NPGW'");
-        assertThat(headerComponent.getLogo()).hasText("NPGW");
+        assertThat(header.getLogo()).hasText("NPGW");
 
         Allure.step("Verify: Logo contains image");
-        Assert.assertTrue(headerComponent.getImg().isVisible(), "Image inside logo should be visible");
-        Assert.assertNotNull(headerComponent.getImg().getAttribute("src"), "Image should have a 'src' attribute");
+        Assert.assertTrue(header.getImg().isVisible(), "Image inside logo should be visible");
+        Assert.assertNotNull(header.getImg().getAttribute("src"), "Image should have a 'src' attribute");
 
         Allure.step("Verify: Image inside logo is fully loaded");
-        Assert.assertTrue(headerComponent.isLogoImageLoaded(), "Image inside logo should be fully loaded");
+        Assert.assertTrue(header.isLogoImageLoaded(), "Image inside logo should be fully loaded");
     }
 
     @Test
@@ -49,7 +48,7 @@ public class HeaderTest extends BaseTest {
     @Description("Check after clicking on Transactions user redirected to Transactions page")
     public void testTransactionsLink() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .getHeader().clickTransactionsLink();
+                .clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
         assertThat(transactionsPage.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
@@ -62,8 +61,8 @@ public class HeaderTest extends BaseTest {
     @Description("Check that click on Logo return user to the dashboard page from other pages")
     public void testClickLogoReturnToDashboardPage() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getHeader().clickTransactionsLink()
-                .getHeader().clickLogoButton();
+                .clickTransactionsLink()
+                .clickLogoButton();
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
@@ -79,20 +78,20 @@ public class HeaderTest extends BaseTest {
         TestUtils.changeUserPassword(getPage().request(), email, newPassword);
 
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getHeader().clickLogOutButton()
+                .clickLogOutButton()
                 .login(email, newPassword)
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickProfileSettingsButton()
-                .getHeader().fillPasswordField(ProjectProperties.getUserPassword())
-                .getHeader().fillRepeatPasswordField(ProjectProperties.getUserPassword())
-                .getHeader().clickSaveButton();
+                .clickUserMenuButton()
+                .clickProfileSettingsButton()
+                .fillPasswordField(ProjectProperties.getUserPassword())
+                .fillRepeatPasswordField(ProjectProperties.getUserPassword())
+                .clickSaveButton();
 
         Allure.step("Verify: success message for changing password");
         assertThat(dashboardPage.getAlert().getMessage())
                 .hasText("SUCCESSPassword was changed successfull");
 
         dashboardPage
-                .getHeader().clickLogOutButton()
+                .clickLogOutButton()
                 .login(email, ProjectProperties.getUserPassword());
 
         Allure.step("Verify: Successfully login with changed password");
@@ -107,8 +106,8 @@ public class HeaderTest extends BaseTest {
     public void testLogOutViaButtonInUserMenu() {
 
         LoginPage loginPage = new DashboardPage(getPage())
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickLogOutButtonUserMenu();
+                .clickUserMenuButton()
+                .clickLogOutButtonUserMenu();
 
         Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
@@ -122,7 +121,7 @@ public class HeaderTest extends BaseTest {
     public void testLogOutViaButtonInHeader() {
 
         LoginPage loginPage = new DashboardPage(getPage())
-                .getHeader().clickLogOutButton();
+                .clickLogOutButton();
 
         Allure.step("Verify: Login Page URL");
         assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
@@ -135,8 +134,8 @@ public class HeaderTest extends BaseTest {
     @Description("Verify that the user can switch to the dark theme")
     public void testDarkColorThemeSwitch() {
         new DashboardPage(getPage())
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickDarkRadioButton();
+                .clickUserMenuButton()
+                .clickDarkRadioButton();
 
         Allure.step("Verify that the dark color theme is selected");
         assertThat(getPage().locator("html.dark")).isVisible();
@@ -149,8 +148,8 @@ public class HeaderTest extends BaseTest {
     @Description("Verify that the user can switch to the light theme")
     public void testLightColorThemeSwitch() {
         new DashboardPage(getPage())
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickLightRadioButton();
+                .clickUserMenuButton()
+                .clickLightRadioButton();
 
         Allure.step("Verify that the light color theme is selected");
         assertThat(getPage().locator("html.light")).isVisible();
@@ -173,38 +172,38 @@ public class HeaderTest extends BaseTest {
     @Description("Check password policy validation error messages when changing password in user menu")
     public void testChangePasswordValidationMessages(String userRole) {
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getHeader().clickUserMenuButton()
-                .getHeader().clickProfileSettingsButton()
-                .getHeader().fillPasswordField("QWERTY1!")
-                .getHeader().fillRepeatPasswordField("QWERTY1!")
-                .getHeader().clickSaveButton();
+                .clickUserMenuButton()
+                .clickProfileSettingsButton()
+                .fillPasswordField("QWERTY1!")
+                .fillRepeatPasswordField("QWERTY1!")
+                .clickSaveButton();
 
         Allure.step("Verify: error message for missing lowercase");
         assertThat(dashboardPage.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have lowercase characters");
 
         dashboardPage
-                .getHeader().fillPasswordField("qwerty1!")
-                .getHeader().fillRepeatPasswordField("qwerty1!")
-                .getHeader().clickSaveButton();
+                .fillPasswordField("qwerty1!")
+                .fillRepeatPasswordField("qwerty1!")
+                .clickSaveButton();
 
         Allure.step("Verify: error message for missing uppercase");
         assertThat(dashboardPage.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have uppercase characters");
 
         dashboardPage
-                .getHeader().fillPasswordField("Qwertyu!")
-                .getHeader().fillRepeatPasswordField("Qwertyu!")
-                .getHeader().clickSaveButton();
+                .fillPasswordField("Qwertyu!")
+                .fillRepeatPasswordField("Qwertyu!")
+                .clickSaveButton();
 
         Allure.step("Verify: error message for missing numeric");
         assertThat(dashboardPage.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have numeric characters");
 
         dashboardPage
-                .getHeader().fillPasswordField("Qwertyu1")
-                .getHeader().fillRepeatPasswordField("Qwertyu1")
-                .getHeader().clickSaveButton();
+                .fillPasswordField("Qwertyu1")
+                .fillRepeatPasswordField("Qwertyu1")
+                .clickSaveButton();
 
         Allure.step("Verify: error message for missing symbol");
         assertThat(dashboardPage.getAlert().getMessage())

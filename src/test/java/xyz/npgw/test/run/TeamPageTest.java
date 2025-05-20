@@ -65,7 +65,7 @@ public class TeamPageTest extends BaseTest {
             + "on 'System administration' link on the header")
     public void testNavigateToSystemAdministrationPage() {
         TeamPage systemAdministrationPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink();
+                .clickSystemAdministrationLink();
 
         Allure.step("Verify: System administration Page URL");
         assertThat(systemAdministrationPage.getPage()).hasURL(Constants.SYSTEM_PAGE_URL);
@@ -85,7 +85,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.deleteUser(getApiRequestContext(), user.email());
 
         TeamPage teamPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
                 .fillEmailField(user.email())
@@ -111,7 +111,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton();
 
@@ -150,7 +150,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         EditUserDialog editUserDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
                 .createUser(user)
@@ -199,7 +199,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .createCompanyAdmin(email, "Password1!");
 
@@ -219,7 +219,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         TeamPage teamPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
                 .createUser(user)
@@ -252,7 +252,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
@@ -283,7 +283,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
@@ -332,7 +332,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .createCompanyAdmin(email, "Password1!")
                 .getAlert().waitUntilSuccessAlertIsGone()
@@ -344,7 +344,7 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword was reseted successfully");
 
-        teamPage.getHeader().clickLogOutButton()
+        teamPage.clickLogOutButton()
                 .fillEmailField(email)
                 .fillPasswordField("NewPassword1!")
                 .clickLoginButtonToChangePassword()
@@ -375,7 +375,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)
                 .fillPasswordField(analystPassword)
@@ -411,22 +411,22 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "check");
 
-        LoginPage loginPage = teamPage.getHeader().clickLogOutButton()
+        LoginPage loginPage = teamPage.clickLogOutButton()
                 .loginAsDisabledUser(analystEmail, analystPassword);
 
         Allure.step("Verify: error message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
         DashboardPage dashboardPage = loginPage.login(ADMIN_EMAIL, ADMIN_PASSWORD)
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()
                 .clickSaveChangesButton()
-                .getHeader().clickLogOutButton()
+                .clickLogOutButton()
                 .loginAndChangePassword(analystEmail, analystPassword);
 
         Allure.step("Verify: error message is displayed");
-        assertThat(dashboardPage.getHeader().getUserMenuButton()).hasText(analystEmail.substring(0, 3));
+        assertThat(dashboardPage.getUserMenuButton()).hasText(analystEmail.substring(0, 3));
     }
 
     @Test
@@ -444,7 +444,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
 
         TeamPage teamPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(companyName)
                 .getTable().deactivateUser(companyAdmin)
                 .clickStatusSelector()
@@ -478,7 +478,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
 
         List<String> sortedUsersAlphabetically = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(companyName)
                 .getTable().clickSortIcon("Username")
                 .getTable().getColumnValues("Username");
@@ -504,7 +504,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin, companyAdminPassword);
 
         List<String> sortedUsersReverseAlphabetically = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(companyName)
                 .getTable().clickSortIcon("Username")
                 .getTable().clickSortIcon("Username")

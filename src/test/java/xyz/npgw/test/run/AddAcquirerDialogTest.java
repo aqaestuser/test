@@ -45,7 +45,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         AddAcquirerDialog addAcquirerDialog = acquirersPage.clickAddAcquirer();
@@ -77,7 +77,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Description("Verifies that the status radio buttons ('Active' and 'Inactive') toggle correctly.")
     public void testToggleStatusRadioButtonsCorrectly(String status) {
         Locator statusRadiobutton = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .clickStatusRadiobutton(status)
@@ -97,7 +97,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         deleteAcquirer(getApiRequestContext(), acquirerName);
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .fillAcquirerName(acquirerName)
@@ -133,7 +133,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         }
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         AddAcquirerDialog acquirerDialog = acquirersPage
@@ -162,7 +162,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Description("Verify that 'Create' button is disabled when Acquirer name is empty.")
     public void testDisableCreateButtonWhenAcquirerNameIsEmpty() {
         AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .fillAcquirerName("Acquirer name");
@@ -185,7 +185,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu()
                 .clickAcquirersTab()
                 .clickAddAcquirer()

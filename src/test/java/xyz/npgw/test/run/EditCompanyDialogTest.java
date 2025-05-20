@@ -24,7 +24,7 @@ public class EditCompanyDialogTest extends BaseTest {
         TestUtils.createCompanyIfNeeded(getApiRequestContext(), "Kate");
 
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
+                .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany("Kate")
                 .clickEditCompanyButton()
