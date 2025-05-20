@@ -115,7 +115,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
 
         acquirersPage
-                .getSelectAcquirer().typeAcquirerNameToSelectAcquirerInputField(acquirerName);
+                .getSelectAcquirer().typeName(acquirerName);
 
         Allure.step(String.format("Verify: Dropdown contain '%s' acquirer", acquirerName));
         assertThat(acquirersPage.getAddAcquirerDialog()).hasText(acquirerName);

@@ -54,7 +54,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage> extend
         return columnHeader.allInnerTexts();
     }
 
-    public Locator getTableRow(String rowHeader) {
+    public Locator getRow(String rowHeader) {
         Locator header = getPage().getByRole(AriaRole.ROWHEADER, new Page.GetByRoleOptions().setName(rowHeader));
 
         return getRows().filter(new Locator.FilterOptions().setHas(header));
