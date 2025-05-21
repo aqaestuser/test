@@ -9,12 +9,15 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 
 import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
+import static org.testng.Assert.assertTrue;
 
 public class DashboardPageTest extends BaseTest {
 
@@ -93,6 +96,27 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: the currency selector displays 'ALL' after reset");
         assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
+    }
+
+    @Test
+    @TmsLink("609")
+    @Epic("Dashboard")
+    @Feature("Refresh data")
+    @Description("Correct merchant ID is sent to the server")
+    public void testCheckMerchantId() {
+        final String companyName = "Amazon";
+        final String merchantTitle = "Amazon business unit 1";
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        BusinessUnit businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
+
+        DashboardPage dashboardPage = new DashboardPage(getPage())
+                .reloadDashboard()
+                .getSelectCompany().selectCompany(companyName)
+                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle);
+
+        Allure.step("Verify: correct merchant ID is sent to the server");
+        assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
     @Ignore

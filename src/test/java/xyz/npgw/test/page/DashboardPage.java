@@ -6,12 +6,16 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 
+import java.util.concurrent.atomic.AtomicReference;
+
+@Log4j2
 @Getter
 public final class DashboardPage extends HeaderPage implements DateRangePickerTrait<DashboardPage>,
         AlertTrait<DashboardPage>, SelectBusinessUnitTrait<DashboardPage>,
@@ -39,7 +43,6 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
 
     private final Locator amountButton = getByTextExact("Amount");
     private final Locator countButton = getByTextExact("Count");
-
 
 
     public DashboardPage(Page page) {
@@ -93,5 +96,17 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
         countButton.click();
 
         return this;
+    }
+
+    public String getRequestData() {
+        AtomicReference<String> data = new AtomicReference<>("");
+        getPage().waitForResponse(response -> {
+            if (response.url().contains("/transaction/summary")) {
+                data.set(response.request().postData());
+                return true;
+            }
+            return false;
+        }, refreshDataButton::click);
+        return data.get();
     }
 }
