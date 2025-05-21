@@ -7,6 +7,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.common.trait.AlertTrait;
+import xyz.npgw.test.page.common.trait.BusinessUnitsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
@@ -14,13 +15,14 @@ import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 
 @Getter
-public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage>
-        implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage>, AlertTrait<CompaniesAndBusinessUnitsPage> {
+public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> implements
+        SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
+        AlertTrait<CompaniesAndBusinessUnitsPage>,
+        BusinessUnitsTableTrait {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
-    private final Locator businessUnitEmptyList = locator("[role='gridcell']");
     private final Locator addCompanyDialog = getByRole(AriaRole.DIALOG);
     private final Locator companyNameDropdownList = locator("[role='option']");
     private final Locator name = getByLabelExact("Name");
@@ -41,7 +43,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator editBusinessUnitDialog = getByRole(AriaRole.DIALOG).getByTitle("Edit business unit");
     private final Locator businessUnitNameData = locator("[role='row'] span").first();
     private final Locator merchantIdData = locator("[role='row'] span").nth(1);
-    private final Locator editBusinessUnitButton = getByTestId("EditBusinessUnitButton");
     private final Locator merchantsTable = getByLabelExact("merchants table");
     private final Locator resetFilterButton = getByTestId("ResetButtonTeamPage");
     private final Locator pageContent = locator("[class='contentBlock']");
@@ -77,15 +78,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         editCompanyButton.click();
 
         return new EditCompanyDialog(getPage());
-    }
-
-    @Step("Click 'Edit Business Unit' button")
-    public EditBusinessUnitDialog clickEditBusinessUnitButton() {
-        editBusinessUnitButton.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.ATTACHED));
-        editBusinessUnitButton.click();
-
-        return new EditBusinessUnitDialog(getPage());
     }
 
     @Step("Click 'Reset filter' button")

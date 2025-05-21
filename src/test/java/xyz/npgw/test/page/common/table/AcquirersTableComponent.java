@@ -15,17 +15,14 @@ public class AcquirersTableComponent extends BaseTableComponent<AcquirersPage> {
 
     @Override
     protected AcquirersPage getCurrentPage() {
-
         return new AcquirersPage(getPage());
     }
 
     public Locator getEditAcquirerButton(Locator row) {
-
         return row.getByTestId("EditAcquirerButton");
     }
 
     public Locator getChangeActivityButton(Locator row) {
-
         return row.getByTestId("ChangeBusinessUnitActivityButton");
     }
 

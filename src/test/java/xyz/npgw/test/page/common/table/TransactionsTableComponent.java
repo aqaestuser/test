@@ -11,7 +11,6 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
     @Override
     protected TransactionsPage getCurrentPage() {
-
         return new TransactionsPage(getPage());
     }
 }

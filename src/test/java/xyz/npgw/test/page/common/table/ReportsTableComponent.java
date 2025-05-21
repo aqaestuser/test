@@ -10,7 +10,6 @@ public class ReportsTableComponent extends BaseTableComponent<ReportsPage> {
 
     @Override
     protected ReportsPage getCurrentPage() {
-
         return new ReportsPage(getPage());
     }
 }

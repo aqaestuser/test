@@ -21,10 +21,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         super(page);
     }
 
-    public Locator userRow(String username) {
-        return getPage().getByRole(AriaRole.ROW, new Page.GetByRoleOptions().setName(username));
-    }
-
     @Step("Click 'Add user' button")
     public AddUserDialog clickAddUserButton() {
         getByTestId("AddUserButtonTeamPage").click();
@@ -32,9 +28,9 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait
         return new AddUserDialog(getPage());
     }
 
-    @Step("Click 'Edit user'")
+    @Step("Click 'Edit user' button")
     public EditUserDialog clickEditUserButton(String username) {
-        Locator editButton = userRow(username).getByTestId("EditUserButton");
+        Locator editButton = getTable().getRow(username).getByTestId("EditUserButton");
         editButton.waitFor();
         editButton.click();
 

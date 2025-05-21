@@ -38,7 +38,6 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage> extend
     }
 
     public Locator getColumnHeader(String name) {
-
         return columnHeader.getByText(name);
     }
 
@@ -50,7 +49,6 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage> extend
     }
 
     public List<String> getColumnHeadersText() {
-
         return columnHeader.allInnerTexts();
     }
 
@@ -61,14 +59,12 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage> extend
     }
 
     public Locator getCell(String columnHeader, String rowHeader) {
-
         return rows
                 .filter(new Locator.FilterOptions().setHasText(rowHeader))
                 .locator("td:nth-child(" + (getColumnHeaderIndex(columnHeader) + 1) + ")");
     }
 
     public List<Locator> getCells(String columnHeader) {
-
         return rows.locator("td:nth-child(" + (getColumnHeaderIndex(columnHeader) + 1) + ")").all();
     }
 
@@ -117,8 +113,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage> extend
         return getCurrentPage();
     }
 
-    public boolean isLastPage() {
-
-        return Objects.equals(paginationNext.getAttribute("tabindex"), "-1");
+    public boolean isNotLastPage() {
+        return !Objects.equals(paginationNext.getAttribute("tabindex"), "-1");
     }
 }

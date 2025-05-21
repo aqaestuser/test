@@ -34,7 +34,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
         this.page = currentPage;
     }
 
-    public Locator getCompanyNameInDropdownOption(String companyName) {
+    public Locator getCompanyInDropdown(String companyName) {
         return dropdownOptionList.filter(new Locator.FilterOptions().setHas(getByTextExact(companyName)));
     }
 
@@ -45,25 +45,26 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
         String lastName = "";
 
-        selectCompanyField.pressSequentially(companyName, new Locator.PressSequentiallyOptions().setDelay(100));
+        selectCompanyField.pressSequentially(
+                companyName,
+                new Locator.PressSequentiallyOptions().setDelay(100));
 
         if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
+            throw new NoSuchElementException("Company '" + companyName + "' not found. Dropdown list is empty.");
         }
 
-        while (getCompanyNameInDropdownOption(companyName).all().isEmpty()) {
+        while (getCompanyInDropdown(companyName).all().isEmpty()) {
             if (dropdownOptionList.last().innerText().equals(lastName)) {
                 throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
             }
             dropdownOptionList.last().scrollIntoViewIfNeeded();
-
             lastName = dropdownOptionList.last().innerText();
         }
 //        .first() - из-за того, что компания "super" отображается в отфильтрованном списке два раза,
 //        это баг(!!), правильно - один раз (или ноль).
 //        На суть теста .first() не влияет и позволяет "не заметить" баг.
 //
-        getCompanyNameInDropdownOption(companyName).first().click();
+        getCompanyInDropdown(companyName).first().click();
 
         return page;
     }

@@ -16,7 +16,6 @@ public class UserTableComponent extends BaseTableComponent<TeamPage> {
 
     @Override
     protected TeamPage getCurrentPage() {
-
         return new TeamPage(getPage());
     }
 

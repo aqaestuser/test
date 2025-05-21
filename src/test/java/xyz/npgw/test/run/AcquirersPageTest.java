@@ -239,7 +239,7 @@ public class AcquirersPageTest extends BaseTest {
                         "Verify: The table contains '%s' rows less than or equal to '%s'", actualRowCount, option));
                 Assert.assertTrue(actualRowCount <= Integer.parseInt(option));
 
-            } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
+            } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
 
             totalRows.add(rowsSum);
         }
@@ -369,7 +369,7 @@ public class AcquirersPageTest extends BaseTest {
                         "The header is not fully visible within the viewport on page '%s' with '%s' pagination!",
                         activePage, option));
 
-            } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
+            } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
         }
     }
 
@@ -408,7 +408,7 @@ public class AcquirersPageTest extends BaseTest {
             if (acquirersPage.getTable().getRow(acquirerName).count() > 0) {
                 break;
             }
-        } while (!acquirersPage.getTable().isLastPage() && acquirersPage.getTable().clickNextPage() != null);
+        } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getCell("Status", acquirerName)).hasText(status);
