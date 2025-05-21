@@ -15,6 +15,7 @@ public final class TestUtils {
         User user = User.newCompanyAdmin(company, email, password);
         User.delete(request, user);
         User.create(request, user);
+        User.passChallenge(request, user.email(), user.password());
     }
 
     public static void deleteUser(APIRequestContext request, String email) {

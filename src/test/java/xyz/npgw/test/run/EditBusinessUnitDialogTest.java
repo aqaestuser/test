@@ -7,12 +7,10 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.Ignore;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.AboutBlankPage;
+import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
@@ -22,19 +20,17 @@ public class EditBusinessUnitDialogTest extends BaseTest {
     private final String companyName = "CompanyForBuEdit";
     private final String buName = "NewBUForEdit";
 
-    @Ignore
     @Test
     @TmsLink("387")
     @Epic("System/Companies and business units")
     @Feature("Edit business unit")
     @Description("Verify that the title of the 'Edit Business Unit' dialog matches the expected result")
-    public void testVerifyTitleEditBusinessUnitDialog(@Optional("UNAUTHORISED") String userRole) {
+    public void testVerifyTitleEditBusinessUnitDialog() {
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
-        Locator dialogTitle = new AboutBlankPage(getPage())
-                .navigate("/login")
-                .loginAs(UserRole.SUPER)
+        Locator dialogTitle = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
@@ -47,19 +43,17 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
-    @Ignore
     @Test
     @TmsLink("501")
     @Epic("System/Companies and business units")
     @Feature("Edit business unit")
     @Description("Verify that the label of each field is correct")
-    public void testVerifyLabelOfEachField(@Optional("UNAUTHORISED") String userRole) {
+    public void testVerifyLabelOfEachField() {
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
-        EditBusinessUnitDialog editBusinessUnitDialog = new AboutBlankPage(getPage())
-                .navigate("/login")
-                .loginAs(UserRole.SUPER)
+        EditBusinessUnitDialog editBusinessUnitDialog = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
@@ -71,19 +65,17 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
-    @Ignore
     @Test
     @TmsLink("515")
     @Epic("System/Companies and business units")
     @Feature("Edit business unit")
     @Description("Verify that company name is pre-filled correctly and read-only")
-    public void testVerifyFieldCompanyNamePreFilledAndReadOnly(@Optional("UNAUTHORISED") String userRole) {
+    public void testVerifyFieldCompanyNamePreFilledAndReadOnly() {
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
-        EditBusinessUnitDialog editBusinessUnitDialog = new AboutBlankPage(getPage())
-                .navigate("/login")
-                .loginAs(UserRole.SUPER)
+        EditBusinessUnitDialog editBusinessUnitDialog = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
@@ -97,19 +89,17 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
-    @Ignore
     @Test
     @TmsLink("528")
     @Epic("System/Companies and business units")
     @Feature("Edit business unit")
     @Description("Verify that the dialog is closed by clicking on the 'Close' button")
-    public void testVerifyDialogClosedByClickButtonClose(@Optional("UNAUTHORISED") String userRole) {
+    public void testVerifyDialogClosedByClickButtonClose() {
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new AboutBlankPage(getPage())
-                .navigate("/login")
-                .loginAs(UserRole.SUPER)
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
@@ -122,19 +112,17 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
-    @Ignore
     @Test
     @TmsLink("544")
     @Epic("System/Companies and business units")
     @Feature("Edit business unit")
     @Description("Verify that the dialog is closed by clicking on the 'Close' icon")
-    public void testVerifyDialogClosedByClickIconClose(@Optional("UNAUTHORISED") String userRole) {
+    public void testVerifyDialogClosedByClickIconClose() {
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createBusinessUnit(getApiRequestContext(), companyName, buName);
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new AboutBlankPage(getPage())
-                .navigate("/login")
-                .loginAs(UserRole.SUPER)
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)

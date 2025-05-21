@@ -238,8 +238,10 @@ public abstract class BaseTest {
                 .findAny()
                 .map(LocalStorage::value)
                 .orElse("");
-        Token token = new Gson().fromJson(tokenData, Token.class);
-        context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken)));
+        if (!tokenData.isEmpty()) {
+            Token token = new Gson().fromJson(tokenData, Token.class);
+            context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken)));
+        }
     }
 
     private record StorageState(Cookie[] cookies, Origin[] origins) {

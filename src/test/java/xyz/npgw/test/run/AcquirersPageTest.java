@@ -334,15 +334,13 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getPaginationItems()).hasText("1");
     }
 
-    @Test(expectedExceptions = {AssertionError.class})
+    @Test
     @TmsLink("487")
     @Epic("System/Acquirers")
     @Feature("Acquirers list")
     @Description("Verifies that table column headers are displayed correctly on each page when navigating"
             + " through paginated results.")
     public void testColumnHeadersDisplayCorrectlyOnAllPages() {
-        Allure.step("Test disabled / Known bug: The column is not visible on the screen!");
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();

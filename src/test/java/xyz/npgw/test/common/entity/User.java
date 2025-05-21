@@ -20,12 +20,21 @@ public record User(
         String email,
         String password) {
 
+    private static final String SUPER_COMPANY = "super";
+    private static final String DEFAULT_COMPANY = "defaultCompany";
+    private static final String DEFAULT_TITLE = "defaultTitle";
+
     public static User newSystemAdmin(String email, String password) {
-        return new User("super", true, UserRole.SUPER, new String[]{}, email, password);
+        return new User(SUPER_COMPANY, true, UserRole.SUPER, new String[]{}, email, password);
     }
 
     public static User newSystemAdmin(String email) {
         return newSystemAdmin(email, ProjectProperties.getUserPassword());
+    }
+
+    public static User newCompanyAdmin(String companyName, boolean enabled, String email) {
+        return new User(companyName, enabled, UserRole.ADMIN, new String[]{}, email,
+                ProjectProperties.getUserPassword());
     }
 
     public static User newCompanyAdmin(String companyName, String email, String password) {
@@ -36,12 +45,24 @@ public record User(
         return newCompanyAdmin(companyName, email, ProjectProperties.getUserPassword());
     }
 
+    public static User newCompanyAdmin(String email) {
+        return newCompanyAdmin(DEFAULT_COMPANY, email);
+    }
+
     public static User newCompanyAnalyst(String companyName, String[] merchantIds, String email, String password) {
         return new User(companyName, true, UserRole.USER, merchantIds, email, password);
     }
 
     public static User newCompanyAnalyst(String companyName, String[] merchantIds, String email) {
         return newCompanyAnalyst(companyName, merchantIds, email, ProjectProperties.getUserPassword());
+    }
+
+    public static User newCompanyAnalyst(String companyName, String email) {
+        return newCompanyAnalyst(companyName, new String[]{DEFAULT_TITLE}, email);
+    }
+
+    public static User newCompanyAnalyst(String email) {
+        return newCompanyAnalyst(DEFAULT_COMPANY, email);
     }
 
     public static void create(APIRequestContext request, User user) {
@@ -70,8 +91,34 @@ public record User(
         log.info("change user '{}' password - {} {}", email, response.status(), response.text());
     }
 
+    private static TokenResponse getTokenResponse(APIRequestContext request, Credentials credentials) {
+        APIResponse response = request.post("/portal-v1/user/token", RequestOptions.create().setData(credentials));
+        log.info("get token '{}' - {} {}", credentials, response.status(), response.text());
+        return new Gson().fromJson(response.text(), TokenResponse.class);
+    }
+
+    public static void passChallenge(APIRequestContext request, String email, String password) {
+        Credentials credentials = new Credentials(email, password);
+        TokenResponse tokenResponse = getTokenResponse(request, credentials);
+        if (tokenResponse.userChallengeType.equals("NEW_PASSWORD_REQUIRED")) {
+            Challenge challenge = new Challenge(tokenResponse.sessionId, credentials, tokenResponse.userChallengeType);
+            APIResponse response = request.post("/portal-v1/user/challenge",
+                    RequestOptions.create().setData(challenge));
+            log.info("pass challenge '{}' - {} {}", credentials, response.status(), response.text());
+        }
+    }
+
     @Override
     public String toString() {
         return "User: %s %s".formatted(email, userRole);
+    }
+
+    private record Credentials(String email, String password) {
+    }
+
+    private record Challenge(String sessionId, Credentials data, String userChallengeType) {
+    }
+
+    private record TokenResponse(String userChallengeType, String sessionId) {
     }
 }

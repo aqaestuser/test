@@ -6,14 +6,12 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.User;
-import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -33,29 +31,15 @@ import static org.testng.Assert.assertTrue;
 
 public class TeamPageTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "Smitham-Johnson";
+    private static final String COMPANY_NAME = "TeamPageTest company";
     private static final String ADMIN_COMPANY_NAME = "Admin company";
     private static final String ADMIN_EMAIL = "admin.email@gmail.com";
     private static final String ADMIN_PASSWORD = "AdminPassword1!";
     private static final String SUCCESS_MESSAGE_USER_CREATED = "SUCCESSUser was created successfully";
     private static final String SUCCESS_MESSAGE_USER_UPDATED = "SUCCESSUser was updated successfully";
 
-    User user = new User(
-            COMPANY_NAME,
-            true,
-            UserRole.USER,
-            new String[]{"MerchantNameTest"},
-            "dummy@email.com",
-            ProjectProperties.getUserPassword());
-
-    User updatedUser = new User(
-            COMPANY_NAME,
-            false,
-            UserRole.ADMIN,
-            new String[]{},
-            "dummy@email.com",
-            ProjectProperties.getAdminPassword()
-    );
+    User user = User.newCompanyAnalyst(COMPANY_NAME, new String[]{"MerchantNameTest"}, "dummy@email.com");
+    User updatedUser = User.newCompanyAdmin(COMPANY_NAME, false, "dummy@email.com");
 
     @Test
     @TmsLink("154")
@@ -74,7 +58,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
-    @Ignore
     @Test(dataProvider = "getUsers", dataProviderClass = TestDataProvider.class)
     @TmsLink("298")
     @Epic("System/Team")
@@ -99,7 +82,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
-    @Ignore()
     @Test
     @TmsLink("330")
     @Epic("System/Team")
@@ -111,6 +93,7 @@ public class TeamPageTest extends BaseTest {
         TestUtils.createBusinessUnitsIfNeeded(getApiRequestContext(), user);
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
+                .reloadDashboard()
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton();
@@ -119,7 +102,12 @@ public class TeamPageTest extends BaseTest {
         assertThat(addUserDialog.getDialogHeader()).hasText("Add user");
 
         TeamPage teamPage = addUserDialog
-                .createUser(user);
+                .fillEmailField(user.email())
+                .fillPasswordField(user.password())
+                .setStatusRadiobutton(user.enabled())
+                .setUserRoleRadiobutton(user.userRole())
+                .setAllowedBusinessUnits(user.merchantIds())
+                .clickCreateButton();
 
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
@@ -139,7 +127,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "ban");
     }
 
-    @Ignore
     @Test
     @TmsLink("331")
     @Epic("System/Team")
@@ -153,7 +140,11 @@ public class TeamPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
-                .createUser(user)
+                .fillEmailField(user.email())
+                .fillPasswordField(user.password())
+                .checkCompanyAnalystRadiobutton()
+                .setAllowedBusinessUnits(user.merchantIds())
+                .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .clickEditUserButton(user.email());
@@ -184,7 +175,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
-    @Ignore
     @Test
     @TmsLink("474")
     @Epic("System/Team")
@@ -198,16 +188,18 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .createCompanyAdmin(email, "Password1!");
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
-    @Ignore
     @Test
     @TmsLink("471")
     @Epic("System/Team")
@@ -222,7 +214,11 @@ public class TeamPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(user.companyName())
                 .clickAddUserButton()
-                .createUser(user)
+                .fillEmailField(user.email())
+                .fillPasswordField(user.password())
+                .checkCompanyAnalystRadiobutton()
+                .setAllowedBusinessUnits(user.merchantIds())
+                .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().deactivateUser(user.email());
@@ -237,7 +233,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
     }
 
-    @Ignore
     @Test
     @TmsLink("475")
     @Epic("System/Team")
@@ -251,10 +246,13 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .createCompanyAdmin(email, "Password1!")
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickEditUserButton(email)
@@ -265,10 +263,9 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Inactive");
     }
 
-    @Ignore
     @Test
     @TmsLink("476")
     @Epic("System/Team")
@@ -282,10 +279,13 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .createCompanyAdmin(email, "Password1!")
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickDeactivateUserButton(email)
@@ -297,7 +297,7 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Inactive");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "check");
@@ -311,13 +311,12 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Active");
+        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Active");
 
         Allure.step("Verify: activate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
     }
 
-    @Ignore
     @Test
     @TmsLink("554")
     @Epic("System/Team")
@@ -331,10 +330,13 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .clickAddUserButton()
-                .createCompanyAdmin(email, "Password1!")
+                .fillEmailField(email)
+                .fillPasswordField("Password1!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
                 .getTable().clickResetUserPasswordButton(email)
@@ -356,7 +358,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword is changed successfully");
     }
 
-    @Ignore
     @Test
     @TmsLink("492")
     @Epic("System/Team")
@@ -374,7 +375,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .loginAndChangePassword(ADMIN_EMAIL, ADMIN_PASSWORD)
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)
@@ -392,7 +393,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getCell("User role", analystEmail)).hasText("USER");
 
         Allure.step("Verify: status of the user");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Active");
+        assertThat(teamPage.getTable().getCell("Status", analystEmail)).hasText("Active");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "ban");
@@ -406,18 +407,20 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell("Status", analystEmail)).hasText("Inactive");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "check");
 
-        LoginPage loginPage = teamPage.clickLogOutButton()
+        LoginPage loginPage = teamPage
+                .clickLogOutButton()
                 .loginAsDisabledUser(analystEmail, analystPassword);
 
         Allure.step("Verify: error message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
-        DashboardPage dashboardPage = loginPage.login(ADMIN_EMAIL, ADMIN_PASSWORD)
+        DashboardPage dashboardPage = loginPage
+                .login(ADMIN_EMAIL, ADMIN_PASSWORD)
                 .clickSystemAdministrationLink()
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()

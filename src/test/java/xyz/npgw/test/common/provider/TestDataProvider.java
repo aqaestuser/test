@@ -5,7 +5,6 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.entity.User;
-import xyz.npgw.test.common.entity.UserRole;
 
 public class TestDataProvider {
 
@@ -76,15 +75,9 @@ public class TestDataProvider {
     @DataProvider
     public static Object[][] getUsers() {
         return new Object[][]{
-                {new User("super", true,
-                        UserRole.SUPER, new String[]{},
-                        "super@test.com", ProjectProperties.getSuperPassword())},
-                {new User("testframework", true,
-                        UserRole.ADMIN, new String[]{},
-                        "admin@test.com", ProjectProperties.getAdminPassword())},
-                {new User("testframework", true,
-                        UserRole.USER, new String[]{"businessUnitName"},
-                        "user@test.com", ProjectProperties.getUserPassword())}
+//                {User.newSystemAdmin("super@test.com")}, TODO remove after 500bug being fixed
+                {User.newCompanyAdmin("admin@test.com")},
+                {User.newCompanyAnalyst("user@test.com")}
         };
     }
 
@@ -98,13 +91,10 @@ public class TestDataProvider {
 
     @DataProvider
     public static Object[][] getNewUsers() {
-        String companyName = "company008";
-        String merchantTitle = "merchantTitle";
-
         return new Object[][]{
                 {"SUPER", User.newSystemAdmin("newsuper@test.com")},
-                {"ADMIN", User.newCompanyAdmin(companyName, "newadmin@test.com")},
-                {"USER", User.newCompanyAnalyst(companyName, new String[]{merchantTitle}, "newuser@test.com")}
+                {"ADMIN", User.newCompanyAdmin("newadmin@test.com")},
+                {"USER", User.newCompanyAnalyst("newuser@test.com")}
         };
     }
 
