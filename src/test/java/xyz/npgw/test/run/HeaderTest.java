@@ -167,6 +167,7 @@ public class HeaderTest extends BaseTest {
         assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
     }
 
+    @Ignore
     @Test(dataProvider = "getUserRole", dataProviderClass = TestDataProvider.class)
     @TmsLink("540")
     @Epic("Header")

@@ -26,6 +26,22 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
     @Getter
     private final Locator currencySelector = getByLabelExact("Currency");
 
+    private final Locator initiatedBlock = getByLabelExact("INITIATED").first();
+    private final Locator pendingBlock = getByLabelExact("PENDING").first();
+    private final Locator successBlock = getByLabelExact("SUCCESS").first();
+    private final Locator failedBlock = getByLabelExact("FAILED").first();
+
+    private final Locator paymentLifecycle = getByTextExact("Payment lifecycle overview").locator("../..");
+    private final Locator lifecycleInitiatedBlock = paymentLifecycle.getByLabel("INITIATED");
+    private final Locator lifecyclePendingBlock = paymentLifecycle.getByLabel("PENDING");
+    private final Locator lifecycleSuccessBlock = paymentLifecycle.getByLabel("SUCCESS");
+    private final Locator lifecycleFailedBlock = paymentLifecycle.getByLabel("FAILED");
+
+    private final Locator amountButton = getByTextExact("Amount");
+    private final Locator countButton = getByTextExact("Count");
+
+
+
     public DashboardPage(Page page) {
         super(page);
     }
@@ -61,6 +77,20 @@ public final class DashboardPage extends HeaderPage implements DateRangePickerTr
     @Step("Select currency from dropdown menu")
     public DashboardPage selectCurrency(String value) {
         getByRole(AriaRole.OPTION, value).click();
+
+        return this;
+    }
+
+    @Step("Click 'Amount' button")
+    public DashboardPage clickAmountButton() {
+        amountButton.click();
+
+        return this;
+    }
+
+    @Step("Click 'Count' button")
+    public DashboardPage clickCountButton() {
+        countButton.click();
 
         return this;
     }
