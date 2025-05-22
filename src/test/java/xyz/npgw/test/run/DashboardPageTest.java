@@ -111,7 +111,7 @@ public class DashboardPageTest extends BaseTest {
         BusinessUnit businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
 
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .reloadDashboard()
+                .refreshDashboard()
                 .getSelectCompany().selectCompany(companyName)
                 .getSelectBusinessUnit().selectBusinessUnit(merchantTitle);
 

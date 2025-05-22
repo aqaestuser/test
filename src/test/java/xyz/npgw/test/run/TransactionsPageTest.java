@@ -10,6 +10,7 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -515,5 +516,78 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
         assertThat(transactionsPage.getCurrencySelector()).containsText("ALL");
+    }
+
+    @Test
+    @TmsLink("620")
+    @Epic("Transactions")
+    @Feature("Refresh data")
+    @Description("Verify the request to server contains all the information from the filter")
+    public void testRequestToServer() {
+        String companyName = "Test Request Server";
+        String merchantTitle = "Test Request Server";
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompany(getApiRequestContext(), companyName);
+        BusinessUnit businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .refreshDashboard()
+                .clickTransactionsLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle)
+                .getDateRangePicker().setDateRangeFields("01-05-2025", "07-05-2025")
+                .clickCurrencySelector()
+                .selectCurrency("USD")
+                .selectPaymentMethod("VISA")
+                .clickAmountButton()
+                .fillAmountFromField("500")
+                .fillAmountToField("10000")
+                .clickAmountApplyButton();
+
+        Allure.step("Verify: merchant ID is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains(businessUnit.merchantId()));
+
+        Allure.step("Verify: dateFrom is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("2025-05-01T00:00:00.000Z"));
+
+        Allure.step("Verify: dateTo is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("2025-05-07T23:59:59.999Z"));
+
+        Allure.step("Verify: currency is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("USD"));
+
+        Allure.step("Verify: paymentMethod is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("VISA"));
+
+        Allure.step("Verify:amountFrom is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("500"));
+
+        Allure.step("Verify: amountTo is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("10000"));
+    }
+
+    @Test(expectedExceptions = AssertionError.class)
+    @TmsLink("621")
+    @Epic("Transactions")
+    @Feature("Refresh data")
+    @Description("Verify the status is sent to the server")
+    public void testStatusRequestServer() {
+        String companyName = "Test Request Server";
+        String merchantTitle = "Test Request Server";
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompany(getApiRequestContext(), companyName);
+        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .refreshDashboard()
+                .clickTransactionsLink()
+                .getSelectCompany().selectCompany(companyName)
+                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle)
+                .selectStatus("SUCCESS");
+
+        Allure.step("Verify: status is sent to the server");
+        assertTrue(transactionsPage.getRequestData().contains("SUCCESS"));
+
+
     }
 }

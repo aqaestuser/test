@@ -33,7 +33,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         TestUtils.createMerchantTitleIfNeeded(getApiRequestContext(), companyName, buName);
 
         EditBusinessUnitDialog editBusinessUnitDialog = new DashboardPage(getPage())
-                .reloadDashboard()
+                .refreshDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
