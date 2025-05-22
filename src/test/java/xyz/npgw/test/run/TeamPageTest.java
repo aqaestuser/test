@@ -101,6 +101,12 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: 'Add user' header is displayed");
         assertThat(addUserDialog.getDialogHeader()).hasText("Add user");
 
+        Allure.step("Verify: company name is pre-filled correctly ");
+        assertThat(addUserDialog.getCompanyNameField()).hasValue(user.companyName());
+
+        Allure.step("Verify: company name field is not editable");
+        assertThat(addUserDialog.getCompanyNameField()).isDisabled();
+
         TeamPage teamPage = addUserDialog
                 .fillEmailField(user.email())
                 .fillPasswordField(user.password())
@@ -151,6 +157,12 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: 'Edit user' header is displayed");
         assertThat(editUserDialog.getDialogHeader()).hasText("Edit user");
+
+        Allure.step("Verify: company name is pre-filled correctly ");
+        assertThat(editUserDialog.getCompanyNameField()).hasValue(user.companyName());
+
+        Allure.step("Verify: company name field is not editable");
+        assertThat(editUserDialog.getCompanyNameField()).isDisabled();
 
         TeamPage teamPage = editUserDialog
                 .setStatusRadiobutton(updatedUser.enabled())
@@ -518,5 +530,34 @@ public class TeamPageTest extends BaseTest {
 
         Assert.assertEquals(sortedUsersReverseAlphabetically, expectedSortedList,
                 "Список пользователей не отсортирован по алфавиту в обратном порядке");
+    }
+
+    @Test
+    @TmsLink("612")
+    @Epic("System/Team")
+    @Feature("Add user")
+    @Description("Adding a user with an existing email address results in an error message.")
+    public void testAddUserWithExistingEmail() {
+        final String companyAdmin = "dummyadmin@email.com";
+        final String companyName = "DummyCompany";
+
+        TestUtils.deleteUser(getApiRequestContext(), companyAdmin);
+        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
+        TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, companyAdmin,
+                ProjectProperties.getAdminPassword());
+
+        AddUserDialog addUserDialog = new DashboardPage(getPage())
+                .refreshDashboard()
+                .clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(companyName)
+                .clickAddUserButton()
+                .fillEmailField(companyAdmin)
+                .fillPasswordField(ProjectProperties.getSuperPassword())
+                .checkActiveRadiobutton()
+                .checkSystemAdminRadiobutton()
+                .clickCreateButtonAndTriggerError();
+
+        Allure.step("Verify: Error message is displayed for existing user");
+        assertThat(addUserDialog.getAlert().getMessage()).hasText("ERRORUser account already exists");
     }
 }

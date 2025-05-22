@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
+import lombok.Getter;
 import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
@@ -17,6 +18,8 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     private final Locator activeRadioButton = getByRoleExact(AriaRole.RADIO, "Active");
     private final Locator inactiveRadioButton = getByRoleExact(AriaRole.RADIO, "Inactive");
     private final Locator allowedBusinessUnitsTitle = getByTextExact("Allowed business units");
+    @Getter
+    private final Locator companyNameField = getByTextExact("Company name");
 
     public UserDialog(Page page) {
         super(page);

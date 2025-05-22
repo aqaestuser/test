@@ -6,11 +6,12 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public class AddUserDialog extends UserDialog<AddUserDialog> {
+public class AddUserDialog extends UserDialog<AddUserDialog> implements AlertTrait<AddUserDialog> {
 
     private final Locator emailField = getByPlaceholder("Enter user email");
     private final Locator passwordField = getByPlaceholder("Enter user password");
@@ -49,5 +50,12 @@ public class AddUserDialog extends UserDialog<AddUserDialog> {
                 .setUserRoleRadiobutton(user.userRole())
                 .setAllowedBusinessUnits(user.merchantIds())
                 .clickCreateButton();
+    }
+
+    @Step("Click on the 'Create' button and trigger an error")
+    public AddUserDialog clickCreateButtonAndTriggerError() {
+        createButton.click();
+
+        return this;
     }
 }
