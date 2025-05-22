@@ -17,6 +17,7 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -174,45 +175,45 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Check password policy validation error messages when changing password in user menu")
     public void testChangePasswordValidationMessages(String userRole) {
-        DashboardPage dashboardPage = new DashboardPage(getPage())
+        ProfileSettingsDialog dialog = new DashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickProfileSettingsButton()
                 .fillPasswordField("QWERTY1!")
                 .fillRepeatPasswordField("QWERTY1!")
-                .clickSaveButton();
+                .clickSaveButtonWhenError();
 
         Allure.step("Verify: error message for missing lowercase");
-        assertThat(dashboardPage.getAlert().getMessage())
+        assertThat(dialog.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have lowercase characters");
 
-        dashboardPage
-                .getAlert().waitUntilSuccessAlertIsHidden()
-                .fillPasswordField("qwerty1!")
+        dialog.getAlert().waitUntilSuccessAlertIsHidden();
+
+        dialog.fillPasswordField("qwerty1!")
                 .fillRepeatPasswordField("qwerty1!")
-                .clickSaveButton();
+                .clickSaveButtonWhenError();
 
         Allure.step("Verify: error message for missing uppercase");
-        assertThat(dashboardPage.getAlert().getMessage())
+        assertThat(dialog.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have uppercase characters");
 
-        dashboardPage
-                .getAlert().waitUntilSuccessAlertIsHidden()
-                .fillPasswordField("Qwertyu!")
+        dialog.getAlert().waitUntilSuccessAlertIsHidden();
+
+        dialog.fillPasswordField("Qwertyu!")
                 .fillRepeatPasswordField("Qwertyu!")
-                .clickSaveButton();
+                .clickSaveButtonWhenError();
 
         Allure.step("Verify: error message for missing numeric");
-        assertThat(dashboardPage.getAlert().getMessage())
+        assertThat(dialog.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have numeric characters");
 
-        dashboardPage
-                .getAlert().waitUntilSuccessAlertIsHidden()
-                .fillPasswordField("Qwertyu1")
+        dialog.getAlert().waitUntilSuccessAlertIsHidden();
+
+        dialog.fillPasswordField("Qwertyu1")
                 .fillRepeatPasswordField("Qwertyu1")
-                .clickSaveButton();
+                .clickSaveButtonWhenError();
 
         Allure.step("Verify: error message for missing symbol");
-        assertThat(dashboardPage.getAlert().getMessage())
+        assertThat(dialog.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have symbol characters");
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
-public class TransactionsPage extends HeaderPage implements TransactionsTableTrait,
+public class TransactionsPage extends HeaderPage<TransactionsPage> implements TransactionsTableTrait,
         DateRangePickerTrait<TransactionsPage>,
         SelectCompanyTrait<TransactionsPage>,
         SelectBusinessUnitTrait<TransactionsPage> {

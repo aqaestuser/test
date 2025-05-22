@@ -64,7 +64,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .clickAddCompanyButton();
 
         Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addCompanyDialog.getAllFieldPlaceholders(), expectedPlaceholders);
+        assertEquals(addCompanyDialog.getAllPlaceholders(), expectedPlaceholders);
     }
 
     @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)

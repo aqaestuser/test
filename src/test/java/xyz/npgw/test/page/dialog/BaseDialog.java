@@ -7,25 +7,23 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseModel;
 import xyz.npgw.test.page.base.BasePage;
+import xyz.npgw.test.page.common.trait.AlertTrait;
 
 import java.util.List;
 
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT extends BaseDialog<?, ?>>
-        extends BaseModel {
+        extends BaseModel implements AlertTrait<CurrentDialogT> {
 
+    private final Locator dialog = getByRole(AriaRole.DIALOG);
     private final Locator dialogHeader = locator("section header");
-    private final Locator banner = getByRole(AriaRole.DIALOG).getByRole(AriaRole.BANNER);
-    private final Locator closeButton = getByRole(AriaRole.DIALOG).getByText("Close");
-    private final Locator closeIcon = getByRole(AriaRole.DIALOG).getByLabel("Close");
-    private final Locator requiredFields = getByRole(AriaRole.DIALOG).locator("[required]");
-    private final Locator allInputFields = getByRole(AriaRole.DIALOG).getByRole(AriaRole.TEXTBOX);
-    private final Locator fieldsWithPlaceholder = getByRole(AriaRole.DIALOG)
-            .locator("input[placeholder], textarea[placeholder], span[data-slot='value']");
-    private final Locator allPlaceholdersWithoutSearch = locator("[data-slot='input']:not([placeholder='Search...'])");
-    private final Locator alertMessage = locator("[role='alert']");
-    private final Locator fieldLabel = getByRole(AriaRole.DIALOG).locator("label[data-slot='label']");
+    private final Locator closeButton = dialog.getByText("Close");
+    private final Locator closeIcon = dialog.getByLabel("Close");
+    private final Locator inputFields = dialog.getByRole(AriaRole.TEXTBOX);
+    private final Locator allPlaceholdersWithoutSearch = dialog.locator(
+            "[data-slot='input']:not([placeholder='Search...'])");
+    private final Locator fieldLabel = dialog.locator("label[data-slot='label']");
 
     public BaseDialog(Page page) {
         super(page);
@@ -33,29 +31,17 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
 
     protected abstract ReturnPageT getReturnPage();
 
-    public List<String> getPlaceholdersOrTextsFromFields() {
-        fieldsWithPlaceholder.last().waitFor();
-
-        return fieldsWithPlaceholder.all().stream().map(locator -> {
-            String placeholder = locator.getAttribute("placeholder");
-            return placeholder != null ? placeholder : locator.innerText();
-        }).toList();
-    }
-
-    public List<String> getAllFieldPlaceholders() {
+    public List<String> getAllPlaceholders() {
         allPlaceholdersWithoutSearch.first().waitFor();
 
         return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
-    @Step("Clear all form input fields")
-    public CurrentDialogT clearInputFields() {
-        allInputFields.last().waitFor();
+    @Step("Clear '{label}' input field")
+    public CurrentDialogT clearInput(String label) {
+        inputFields.last().waitFor();
+        inputFields.getByLabel(label).clear();
 
-        allInputFields.all().forEach(locator -> {
-            locator.clear();
-            banner.click();
-        });
         return (CurrentDialogT) this;
     }
 

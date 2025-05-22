@@ -12,7 +12,9 @@ import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 @Log4j2
-public class TeamPage extends BaseSystemPage<TeamPage> implements UserTableTrait, SelectCompanyTrait<TeamPage>,
+public class TeamPage extends BaseSystemPage<TeamPage> implements
+        UserTableTrait,
+        SelectCompanyTrait<TeamPage>,
         AlertTrait<TeamPage> {
 
     private final Locator statusSelector = getByLabelExact("Status");

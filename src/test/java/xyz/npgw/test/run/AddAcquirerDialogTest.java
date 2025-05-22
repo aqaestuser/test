@@ -54,7 +54,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getDialogHeader()).hasText("Add acquirer");
 
         Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addAcquirerDialog.getAllFieldPlaceholders(), expectedPlaceholders);
+        assertEquals(addAcquirerDialog.getAllPlaceholders(), expectedPlaceholders);
 
         Allure.step("Verify: the Status Switch visible and contains switch Active&Inactive");
         assertThat(addAcquirerDialog.getStatusSwitch()).isVisible();

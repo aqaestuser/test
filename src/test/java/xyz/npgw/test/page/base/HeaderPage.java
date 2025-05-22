@@ -12,24 +12,22 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
 @Getter
-public abstract class HeaderPage extends BasePage {
+@SuppressWarnings("unchecked")
+public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage {
 
     private final Locator img = getPage().getByAltText("logo");
     private final Locator logo = getByRole(AriaRole.LINK).filter(new Locator.FilterOptions().setHas(img));
     private final Locator transactionsButton = getByRole(AriaRole.LINK, "Transactions");
     private final Locator reportsButton = getByRole(AriaRole.LINK, "Reports");
     private final Locator systemAdministrationButton = getByRole(AriaRole.LINK, "System administration");
-    private final Locator logOutButton = getByTextExact("Log out");
+    private final Locator logOutButton = getByRole(AriaRole.BUTTON, "Log out");
     private final Locator userMenuButton = getByTestId("userMenuToggle");
     private final Locator profileSettingsButton = getByTextExact("Profile Settings");
-    private final Locator passwordField = getByPlaceholder("Enter new password");
-    private final Locator repeatPasswordField = getByPlaceholder("Repeat new password");
-    private final Locator saveButton = locator("button:has-text('Save')");
-    private final Locator closeButton = getByTextExact("Close");
-    private final Locator logOutButtonUserMenu = getByRole(AriaRole.MENUITEM, "Log Out");
+    private final Locator logOutButtonInUserMenu = getByRole(AriaRole.MENUITEM, "Log Out");
     private final Locator lightRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Light");
     private final Locator darkRadioButtonInUserMenu = getByRoleExact(AriaRole.RADIO, "Dark");
 
@@ -58,84 +56,56 @@ public abstract class HeaderPage extends BasePage {
         return new TeamPage(getPage());
     }
 
-    @Step("Press 'Log out' button")
+    @Step("Click 'Log out' button")
     public LoginPage clickLogOutButton() {
         logOutButton.click();
 
         return new LoginPage(getPage());
     }
 
-    @Step("Press 'Logo' button")
+    @Step("Click 'Logo' button")
     public DashboardPage clickLogoButton() {
         logo.click();
 
         return new DashboardPage(getPage());
     }
 
-    @Step("Press 'User menu' button")
-    public DashboardPage clickUserMenuButton() {
+    @Step("Click 'User menu' button")
+    public CurrentPageT clickUserMenuButton() {
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
         userMenuButton.click();
 
-        return new DashboardPage(getPage());
+        return (CurrentPageT) this;
     }
 
-    @Step("Press 'Profile Settings' button")
-    public DashboardPage clickProfileSettingsButton() {
+    @Step("Click 'Profile Settings' button")
+    public ProfileSettingsDialog<CurrentPageT> clickProfileSettingsButton() {
         profileSettingsButton.click();
 
-        return new DashboardPage(getPage());
+        return new ProfileSettingsDialog<>(getPage(), (CurrentPageT) this);
     }
 
-    @Step("Enter new password in the 'Password' field")
-    public DashboardPage fillPasswordField(String newPassword) {
-        passwordField.fill(newPassword);
-
-        return new DashboardPage(getPage());
-    }
-
-    @Step("Enter new password in the 'Repeat Password' field")
-    public DashboardPage fillRepeatPasswordField(String newPassword) {
-        repeatPasswordField.fill(newPassword);
-
-        return new DashboardPage(getPage());
-    }
-
-    @Step("Press 'Save' button")
-    public DashboardPage clickSaveButton() {
-        saveButton.click();
-
-        return new DashboardPage(getPage());
-    }
-
-    @Step("Press 'Close' button")
-    public DashboardPage clickCloseButton() {
-        closeButton.click();
-
-        return new DashboardPage(getPage());
-    }
-
-    @Step("Press 'Log out' button in User menu")
+    @Step("Click 'Log out' button in User menu")
     public LoginPage clickLogOutButtonUserMenu() {
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
-        logOutButtonUserMenu.click();
+        logOutButtonInUserMenu.click();
         getPage().waitForURL("**/");
 
         return new LoginPage(getPage());
     }
 
     @Step("Click the 'Light' radio button in the user menu")
-    public DashboardPage clickLightRadioButton() {
+    public CurrentPageT clickLightRadioButton() {
         lightRadioButtonInUserMenu.click();
 
-        return new DashboardPage(getPage());
+        return (CurrentPageT) this;
     }
 
     @Step("Click the 'Dark' radio button in the user menu")
-    public DashboardPage clickDarkRadioButton() {
+    public CurrentPageT clickDarkRadioButton() {
         darkRadioButtonInUserMenu.click();
 
-        return new DashboardPage(getPage());
+        return (CurrentPageT) this;
     }
 
     public boolean isLogoImageLoaded() {

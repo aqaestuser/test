@@ -17,8 +17,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Log4j2
 @Getter
-public final class DashboardPage extends HeaderPage implements DateRangePickerTrait<DashboardPage>,
-        AlertTrait<DashboardPage>, SelectBusinessUnitTrait<DashboardPage>,
+public final class DashboardPage extends HeaderPage<DashboardPage> implements
+        DateRangePickerTrait<DashboardPage>,
+        AlertTrait<DashboardPage>,
+        SelectBusinessUnitTrait<DashboardPage>,
         SelectCompanyTrait<DashboardPage> {
 
     @Getter(AccessLevel.NONE)

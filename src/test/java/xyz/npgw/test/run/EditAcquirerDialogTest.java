@@ -52,7 +52,7 @@ public class EditAcquirerDialogTest extends BaseTest {
 
         List<String> actualPlaceholders = acquirersPage
                 .getTable().clickEditAcquirerButton(row)
-                .getPlaceholdersOrTextsFromFields();
+                .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
         assertEquals(actualPlaceholders, expectedPlaceholders);

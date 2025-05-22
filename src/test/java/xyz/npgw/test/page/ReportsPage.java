@@ -10,7 +10,7 @@ import xyz.npgw.test.page.common.trait.ReportsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.dialog.reports.ReportsParametersDialog;
 
-public class ReportsPage extends HeaderPage implements ReportsTableTrait,
+public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTableTrait,
         DateRangePickerTrait<ReportsPage>,
         SelectBusinessUnitTrait<ReportsPage> {
 
