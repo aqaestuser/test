@@ -21,7 +21,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
     private final Locator statusLabel = getByLabelExact("Status");
-    private final Locator statusValue = locator("div[data-slot='innerWrapper'] span").first();
+    private final Locator statusValue = statusLabel.locator("span");
     private final Locator statusDropdown = locator("div[data-slot='listbox']");
     private final Locator statusOptions = statusDropdown.getByRole(AriaRole.OPTION);
 

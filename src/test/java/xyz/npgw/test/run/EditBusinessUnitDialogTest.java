@@ -29,7 +29,6 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         String buName = "NewBUForEdit";
 
         TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), companyName, buName);
         TestUtils.createMerchantTitleIfNeeded(getApiRequestContext(), companyName, buName);
 
         EditBusinessUnitDialog editBusinessUnitDialog = new DashboardPage(getPage())
@@ -63,7 +62,6 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         Allure.step("Verify: Dialog 'Edit business unit' is not displayed after clicking on the 'Close' icon");
         assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
 
-        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), companyName, buName);
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 }

@@ -27,8 +27,8 @@ public class AcquirersTableComponent extends BaseTableComponent<AcquirersPage> {
     }
 
     @Step("Click 'Edit' button to edit acquirer")
-    public EditAcquirerDialog clickEditAcquirerButton(Locator row) {
-        getEditAcquirerButton(row).click();
+    public EditAcquirerDialog clickEditAcquirerButton(String acquirerName) {
+        getRow(acquirerName).getByTestId("EditAcquirerButton").click();
 
         return new EditAcquirerDialog(getPage());
     }
