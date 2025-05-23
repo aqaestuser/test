@@ -40,9 +40,11 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getSelectCompany().selectCompany(company.companyName());
 
         Allure.step("Verify: 'Add business unit' button is available");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
+                .isEnabled();
         Allure.step("Verify: 'Edit selected company' button is available");
-        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isEnabled();
+        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton())
+                .isEnabled();
 
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
@@ -58,7 +60,8 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled once no destination company is selected");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
+                .isDisabled();
     }
 
     @Test
@@ -81,10 +84,12 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify: Company name field is read-only and prefilled created company");
-        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company.companyName());
+        assertThat(addBusinessUnitDialog.getCompanyNameField())
+                .hasValue(company.companyName());
 
         Allure.step("Verify: 'Company name' field is non-editable");
-        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
+        assertThat(addBusinessUnitDialog.getCompanyNameField())
+                .hasAttribute("aria-readonly", "true");
 
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
@@ -110,7 +115,8 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickCloseButton();
 
         Allure.step("Verify: The table is empty and 'No rows to display.' is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
+        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable())
+                .containsText("No rows to display.");
 
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
@@ -138,10 +144,12 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Verify: New business unit name appears in the list");
-        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(company.companyType());
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit name"))
+                .hasText(company.companyType());
 
         Allure.step("Verify: Merchant ID is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit ID"))
+                .containsText("id.merchant");
 
         TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company.companyName(), company.companyType());
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
@@ -189,23 +197,25 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
+                .isDisabled();
 
         AddBusinessUnitDialog addBusinessUnitDialog = companiesAndBusinessUnitsPage
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify: 'Add business unit' dialog is opened");
-        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader()).hasText("Add business unit");
+        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader())
+                .hasText("Add business unit");
 
         Allure.step("Verify: Company name is pre-filled correctly");
-        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(COMPANY_NAME);
+        assertThat(addBusinessUnitDialog.getCompanyNameField())
+                .hasValue(COMPANY_NAME);
 
         addBusinessUnitDialog.clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: Validation error is shown when merchant name is not filled");
-        assertThat(addBusinessUnitDialog
-                .getAlert().getMessage())
+        assertThat(addBusinessUnitDialog.getAlert().getMessage())
                 .containsText("Enter merchant name");
 
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
@@ -213,18 +223,20 @@ public class AddBusinessUnitTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: Success alert is shown after business unit is added");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage()).hasText(
-                "SUCCESSBusiness unit was created successfully");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was created successfully");
 
         Allure.step("Verify: Selected company is preserved after creation");
-        assertThat(companiesAndBusinessUnitsPage
-                .getSelectCompany().getSelectCompanyField()).hasValue(COMPANY_NAME);
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField())
+                .hasValue(COMPANY_NAME);
 
         Allure.step("Verify: New business unit name appears in the list");
-        assertThat(companiesAndBusinessUnitsPage.getBusinessUnitNameData()).hasText(businessUnit.merchantTitle());
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit name"))
+                .hasText(businessUnit.merchantTitle());
 
         Allure.step("Verify: Merchant ID is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getMerchantIdData()).containsText("id.merchant");
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit ID"))
+                .containsText("id.merchant");
 
         TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);

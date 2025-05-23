@@ -12,7 +12,6 @@ import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
-import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 
 @Getter
 public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> implements
@@ -24,7 +23,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
     private final Locator addCompanyDialog = getByRole(AriaRole.DIALOG);
-    private final Locator companyNameDropdownList = locator("[role='option']");
     private final Locator name = getByLabelExact("Name");
     private final Locator type = getByLabelExact("Type");
     private final Locator description = getByLabelExact("Description");
@@ -41,8 +39,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator apiActive = getByLabelExact("API active");
     private final Locator portalActive = getByLabelExact("Portal active");
     private final Locator editBusinessUnitDialog = getByRole(AriaRole.DIALOG).getByTitle("Edit business unit");
-    private final Locator businessUnitNameData = locator("[role='row'] span").first();
-    private final Locator merchantIdData = locator("[role='row'] span").nth(1);
     private final Locator merchantsTable = getByLabelExact("merchants table");
     private final Locator resetFilterButton = getByTestId("ResetButtonTeamPage");
     private final Locator pageContent = locator("[class='contentBlock']");
@@ -72,7 +68,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Edit company' button")
     public EditCompanyDialog clickEditCompanyButton() {
-        //getPage().waitForLoadState(LoadState.NETWORKIDLE);
         getPage().getByText("Loading").waitFor();
         getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
         editCompanyButton.click();
