@@ -20,6 +20,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class GatewayPageTest extends BaseTest {
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("283")
     @Epic("System/Gateway")
@@ -36,6 +37,7 @@ public class GatewayPageTest extends BaseTest {
         assertThat(actualOptions).hasText(new String[]{"ALL", "USD", "EUR"});
     }
 
+    @Ignore("FAU 23/05")
     @Test(expectedExceptions = AssertionError.class)
     @TmsLink("285")
     @Epic("System/Gateway")

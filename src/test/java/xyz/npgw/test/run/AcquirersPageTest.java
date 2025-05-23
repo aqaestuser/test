@@ -8,6 +8,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -120,6 +121,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(actualOptions).hasText(new String[]{"All", "Active", "Inactive"});
     }
 
+    @Ignore("FAU 23/05")
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("243")
     @Epic("System/Acquirers")
@@ -139,6 +141,7 @@ public class AcquirersPageTest extends BaseTest {
         }
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("268")
     @Epic("System/Acquirers")

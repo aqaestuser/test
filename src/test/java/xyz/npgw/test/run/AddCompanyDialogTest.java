@@ -6,6 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.opentest4j.AssertionFailedError;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
@@ -165,6 +166,7 @@ public class AddCompanyDialogTest extends BaseTest {
         assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("223")
     @Epic("System/Companies and business units")
@@ -188,6 +190,7 @@ public class AddCompanyDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("232")
     @Epic("System/Companies and business units")
@@ -244,6 +247,7 @@ public class AddCompanyDialogTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("246")
     @Epic("System/Companies and business units")

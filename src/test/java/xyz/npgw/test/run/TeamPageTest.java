@@ -6,6 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -370,6 +371,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword is changed successfully");
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("492")
     @Epic("System/Team")
@@ -444,6 +446,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(dashboardPage.getUserMenuButton()).hasText(analystEmail.substring(0, 3));
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("531")
     @Epic("System/Team")

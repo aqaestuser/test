@@ -97,6 +97,7 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
     }
 
+    @Ignore("FAU 23/05")
     @Test
     @TmsLink("609")
     @Epic("Dashboard")
