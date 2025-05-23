@@ -64,6 +64,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator downloadCsvOption = getByRole(AriaRole.MENUITEM, "CSV");
     private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
     private final Locator downloadPdfOption = getByRole(AriaRole.MENUITEM, "PDF");
+    private final Locator paymentMethodButton = getByRole(AriaRole.BUTTON, "Payment method");
 
     public TransactionsPage(Page page) {
         super(page);

@@ -599,4 +599,29 @@ public class TransactionsPageTest extends BaseTest {
 
 
     }
+
+    @Test(dataProvider = "getPaymentMethod", dataProviderClass = TestDataProvider.class)
+    @TmsLink("598")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' button change 'Payment method' to default value ( ALL)")
+    public void testResetPaymentMethod(String paymentMethod) {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: Filter displays 'ALL' by default");
+        assertThat(transactionsPage.getPaymentMethodButton()).containsText("ALL");
+
+        transactionsPage.selectPaymentMethod(paymentMethod);
+
+        Allure.step("Verify: Filter displays the selected payment method");
+        assertThat(transactionsPage.getPaymentMethodButton()).containsText(paymentMethod);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
+        assertThat(transactionsPage.getPaymentMethodButton()).containsText("ALL");
+    }
+
 }

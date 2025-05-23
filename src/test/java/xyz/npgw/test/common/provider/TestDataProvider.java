@@ -195,4 +195,12 @@ systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
                 }
         };
     }
+
+    @DataProvider
+    public static Object[][] getPaymentMethod() {
+        return new Object[][]{
+                {"VISA"},
+                {"MASTERCARD"},
+        };
+    }
 }
