@@ -16,7 +16,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class EditCompanyDialogTest extends BaseTest {
 
-    @Ignore("FAU 23/05")
+    @Ignore("FAU 24/05")
     @Test
     @TmsLink("266")
     @Epic("System/Companies and business units")
@@ -32,16 +32,16 @@ public class EditCompanyDialogTest extends BaseTest {
                 .clickEditCompanyButton()
                 .fillCompanyTypeField("LLC")
                 .fillCompanyDescriptionField("Description of company business model")
-                .fillCompanyWebsiteField("google.com")
+                .fillCompanyWebsiteField("https://google.com")
                 .fillCompanyPrimaryContactField("John Doe")
                 .fillCompanyEmailField("google@gmail.com")
-                .fillCompanyCountryField("France")
+                .fillCompanyCountryField("FR")
                 .fillCompanyStateField("Provence")
                 .fillCompanyZipField("75001")
                 .fillCompanyCityField("Paris")
-                .fillCompanyPhoneField("+1234567890123")
-                .fillCompanyMobileField("+1234567890123")
-                .fillCompanyFaxField("+1234567890123")
+                .fillCompanyPhoneField("+123456789012")
+                .fillCompanyMobileField("+123456789012")
+                .fillCompanyFaxField("+123456789012")
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success message is displayed");

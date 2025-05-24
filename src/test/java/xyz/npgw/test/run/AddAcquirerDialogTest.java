@@ -6,7 +6,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -28,7 +27,6 @@ public class AddAcquirerDialogTest extends BaseTest {
 
     private final SystemConfig defaultConfig = new SystemConfig();
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("249")
     @Epic("System/Acquirers")
@@ -62,9 +60,9 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getStatusSwitch()).isVisible();
         assertThat(addAcquirerDialog.getStatusSwitch()).hasText("StatusActiveInactive");
 
-        Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible and contains USD&EUR");
+        Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).isVisible();
-        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesUSDEUR");
+        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesEURUSDGBP");
 
         addAcquirerDialog.clickCloseButton();
 

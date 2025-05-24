@@ -6,7 +6,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
@@ -22,7 +21,6 @@ public class AddBusinessUnitTest extends BaseTest {
 
     private static final String COMPANY_NAME = "CompanyName";
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("213")
     @Epic("System/Companies and business units")
@@ -66,7 +64,6 @@ public class AddBusinessUnitTest extends BaseTest {
                 .isDisabled();
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("238")
     @Epic("System/Companies and business units")
@@ -97,7 +94,6 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("241")
     @Epic("System/Companies and business units")
@@ -125,7 +121,6 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("218")
     @Epic("Companies and business units")
@@ -160,7 +155,6 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("480")
     @Epic("Companies and business units")
@@ -187,7 +181,6 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("290")
     @Epic("System/Companies and business units")
