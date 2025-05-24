@@ -462,15 +462,13 @@ public class TeamPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(companyName)
                 .getTable().deactivateUser(companyAdmin)
-                .clickStatusSelector()
-                .selectActiveStatus();
+                .getSelectStatus().select("Active");
 
         Allure.step("Verify: All visible users are 'Active' after applying 'Active' filter");
         assertTrue(teamPage.getTable().getColumnValues(statusColumnName)
                 .stream().allMatch(value -> value.equals("Active")));
 
-        teamPage.clickStatusSelector()
-                .selectInactiveStatus();
+        teamPage.getSelectStatus().select("Inactive");
 
         Allure.step("Verify: All visible users are 'Inactive' after applying Inactive filter");
         assertTrue(teamPage.getTable().getColumnValues(statusColumnName)

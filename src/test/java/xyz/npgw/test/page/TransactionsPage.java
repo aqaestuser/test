@@ -14,6 +14,7 @@ import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
+import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
 
 import java.io.IOException;
@@ -25,7 +26,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TransactionsPage extends HeaderPage<TransactionsPage> implements TransactionsTableTrait,
         DateRangePickerTrait<TransactionsPage>,
         SelectCompanyTrait<TransactionsPage>,
-        SelectBusinessUnitTrait<TransactionsPage> {
+        SelectBusinessUnitTrait<TransactionsPage>,
+        SelectStatusTrait<TransactionsPage> {
 
     private final Locator rowsPerPageButton = getByRole(AriaRole.BUTTON, "Rows Per Page");
     private final Locator rowsPerPageOptions = getByRole(AriaRole.DIALOG);
@@ -34,16 +36,13 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator paginationItemTwoActiveButton = getByRole(AriaRole.BUTTON, "pagination item 2 active");
     private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
     private final Locator currencySelector = getByLabelExact("Currency");
-    private final Locator paymentMethodSelector = getByLabelExact("Payment method");
-    private final Locator statusSelector = getByLabelExact("Status");
-    private final Locator amountButton = getByRole(AriaRole.BUTTON, "Amount");
+    private final Locator cardTypeSelector = getByLabelExact("Card type");
+    private final Locator cardTypeValue = getByRole(AriaRole.BUTTON, "Card type");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
-    //TODO this is a strange one
-    private final Locator statusSelectorOptions = getByRole(AriaRole.LISTBOX).locator(getByRole(AriaRole.OPTION));
-    private final Locator activeOption = getByRole(AriaRole.LISTBOX).locator("[aria-selected='true']");
+    private final Locator amountButton = getByRole(AriaRole.BUTTON, "Amount");
     private final Locator amountFromField = getByLabelExact("From").locator("..");
     private final Locator amountToField = getByLabelExact("To").locator("..");
     private final Locator clearAmountFromButton = amountFromField.locator("//button[@aria-label='clear input']");
@@ -58,13 +57,12 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator amountClearButton = getByTextExact("Clear");
     private final Locator amountAppliedClearButton = getByLabelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
-    private final Locator paymentMethodOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
+    private final Locator cardTypeOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
     private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
     private final Locator downloadCsvOption = getByRole(AriaRole.MENUITEM, "CSV");
     private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
     private final Locator downloadPdfOption = getByRole(AriaRole.MENUITEM, "PDF");
-    private final Locator paymentMethodButton = getByRole(AriaRole.BUTTON, "Payment method");
 
     public TransactionsPage(Page page) {
         super(page);
@@ -201,27 +199,15 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    @Step("Click Status Selector")
-    public TransactionsPage clickStatusSelector() {
-        statusSelector.click();
+    @Step("Click 'Card type' selector")
+    public TransactionsPage clickCardTypeSelector() {
+        cardTypeSelector.click();
 
         return this;
     }
 
-    public List<String> getStatusSelectorOptions() {
-
-        return statusSelectorOptions.all().stream().map(Locator::innerText).toList();
-    }
-
-    @Step("Click Payment Method Selector")
-    public TransactionsPage clickPaymentMethodSelector() {
-        paymentMethodSelector.click();
-
-        return this;
-    }
-
-    public List<String> getPaymentMethodOptions() {
-        return paymentMethodOptions.all().stream().map(Locator::innerText).toList();
+    public List<String> getCardTypeOptions() {
+        return cardTypeOptions.all().stream().map(Locator::innerText).toList();
     }
 
     @Step("Click on the Settings button")
@@ -327,9 +313,9 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    @Step("Select Payment method '{value}' from dropdown menu")
-    public TransactionsPage selectPaymentMethod(String value) {
-        paymentMethodSelector.click();
+    @Step("Select Card type '{value}' from dropdown menu")
+    public TransactionsPage selectCardType(String value) {
+        cardTypeSelector.click();
         getByRole(AriaRole.OPTION, value).click();
 
         return this;
@@ -345,12 +331,5 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
             return false;
         }, refreshDataButton::click);
         return data.get();
-    }
-
-    public TransactionsPage selectStatus(String value) {
-        clickStatusSelector();
-        getByRole(AriaRole.OPTION, value).click();
-
-        return this;
     }
 }

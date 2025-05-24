@@ -31,12 +31,12 @@ public class TransactionsPageTest extends BaseTest {
 
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Creation Date",
-            "Merchant ID",
+            "Business unit ID",
             "NPGW Reference",
             "Merchant Reference",
             "Amount",
             "Currency",
-            "Payment Method",
+            "Card type",
             "Status");
 
     @Test
@@ -130,7 +130,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getPaginationItemTwoActiveButton()).isVisible();
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("181")
     @Epic("Transactions")
@@ -152,10 +151,10 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getCurrencySelector()).isVisible();
 
         Allure.step("Verify: Payment method selector is visible");
-        assertThat(transactionsPage.getPaymentMethodSelector()).isVisible();
+        assertThat(transactionsPage.getCardTypeSelector()).isVisible();
 
         Allure.step("Verify: Status selector is visible");
-        assertThat(transactionsPage.getStatusSelector()).isVisible();
+        assertThat(transactionsPage.getSelectStatus().getStatusSelector()).isVisible();
 
         Allure.step("Verify: Amount button is visible");
         assertThat(transactionsPage.getAmountButton()).isVisible();
@@ -179,22 +178,26 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Status")
     @Description("Verify that user can see selector Status Options")
     public void testTheVisibilityOfTheStatusSelectorOptions() {
-        List<String> options = List.of("ALL",
+        String[] options = {
+                "ALL",
                 "INITIATED",
                 "PENDING",
                 "SUCCESS",
                 "FAILED",
                 "CANCELLED",
-                "EXPIRED");
+                "EXPIRED"
+        };
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .clickStatusSelector();
+                .getSelectStatus().clickSelector();
 
         Allure.step("Verify: Selector Status Options are visible");
-        assertEquals(transactionsPage.getStatusSelectorOptions(), options);
+        assertThat(transactionsPage.getSelectStatus().getStatusOptions())
+                .hasText(options);
         Allure.step("Verify: Default selected option in status selector is 'ALL'");
-        assertThat(transactionsPage.getActiveOption()).containsText("ALL");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue())
+                .containsText("ALL");
     }
 
     @Test
@@ -269,25 +272,25 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountErrorMessage()).hasText("\"From\" should be lesser than \"To");
     }
 
-    @Ignore("FAU 23/05")
     @Test
     @TmsLink("342")
     @Epic("Transactions")
     @Feature("Status")
     @Description("Verify that user can see Payment Method Options")
-    public void testTheVisibilityOfThePaymentMethodOptions() {
+    public void testTheVisibilityOfTheCardTypeOptions() {
         List<String> options = List.of("ALL",
                 "VISA",
                 "MASTERCARD");
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .clickPaymentMethodSelector();
+                .clickCardTypeSelector();
 
         Allure.step("Verify: Payment Method Options are visible");
-        assertEquals(transactionsPage.getPaymentMethodOptions(), options);
+        assertEquals(transactionsPage.getCardTypeOptions(), options);
         Allure.step("Verify: Default selected option in Payment Method Options is 'ALL'");
-        assertThat(transactionsPage.getActiveOption()).containsText("ALL");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue())
+                .containsText("ALL");
     }
 
     @Test
@@ -544,7 +547,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getDateRangePicker().setDateRangeFields("01-05-2025", "07-05-2025")
                 .clickCurrencySelector()
                 .selectCurrency("USD")
-                .selectPaymentMethod("VISA")
+                .selectCardType("VISA")
                 .clickAmountButton()
                 .fillAmountFromField("500")
                 .fillAmountToField("10000")
@@ -589,12 +592,12 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .getSelectCompany().selectCompany(companyName)
                 .getSelectBusinessUnit().selectBusinessUnit(merchantTitle)
-                .selectStatus("SUCCESS");
+                .getSelectStatus().clickSelector()
+                .getSelectStatus().clickValue("SUCCESS")
+                .getSelectStatus().clickSelector();
 
         Allure.step("Verify: status is sent to the server");
         assertTrue(transactionsPage.getRequestData().contains("SUCCESS"));
-
-
     }
 
     @Ignore("23/05")
@@ -609,17 +612,16 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
-        assertThat(transactionsPage.getPaymentMethodButton()).containsText("ALL");
+        assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
-        transactionsPage.selectPaymentMethod(paymentMethod);
+        transactionsPage.selectCardType(paymentMethod);
 
         Allure.step("Verify: Filter displays the selected payment method");
-        assertThat(transactionsPage.getPaymentMethodButton()).containsText(paymentMethod);
+        assertThat(transactionsPage.getCardTypeValue()).containsText(paymentMethod);
 
         transactionsPage.clickResetFilterButton();
 
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
-        assertThat(transactionsPage.getPaymentMethodButton()).containsText("ALL");
+        assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
     }
-
 }
