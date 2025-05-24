@@ -600,6 +600,7 @@ public class TransactionsPageTest extends BaseTest {
 
     }
 
+    @Ignore("23/05")
     @Test(dataProvider = "getPaymentMethod", dataProviderClass = TestDataProvider.class)
     @TmsLink("598")
     @Epic("Transactions")

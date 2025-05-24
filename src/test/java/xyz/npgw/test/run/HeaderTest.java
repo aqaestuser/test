@@ -168,7 +168,6 @@ public class HeaderTest extends BaseTest {
         assertThat(getPage().locator("html")).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
     }
 
-    @Ignore
     @Test(dataProvider = "getUserRole", dataProviderClass = TestDataProvider.class)
     @TmsLink("540")
     @Epic("Header")
@@ -215,5 +214,32 @@ public class HeaderTest extends BaseTest {
         Allure.step("Verify: error message for missing symbol");
         assertThat(dialog.getAlert().getMessage())
                 .hasText("ERRORPassword does not conform to policy: Password must have symbol characters");
+    }
+
+    @Test(dataProvider = "getUserRole", dataProviderClass = TestDataProvider.class)
+    @TmsLink("626")
+    @Epic("Header")
+    @Feature("User menu")
+    @Description("Verify Minimum and Maximum Password Length Restrictions (negative)")
+    public void testPasswordLengthRestrictionsOnChange(String userRole) {
+        ProfileSettingsDialog dialog = new DashboardPage(getPage())
+                .clickUserMenuButton()
+                .clickProfileSettingsButton()
+                .fillPasswordField("A".repeat(7))
+                .fillRepeatPasswordField("A".repeat(7));
+
+        Allure.step("Verify: error message for 7 characters short password is displayed");
+        assertThat(getPage().getByText("Password must be at least 8 characters long")).isVisible();
+        Allure.step("Verify: Save button is disabled due 7 characters short password using");
+        assertThat(getPage().getByText("Save")).isDisabled();
+
+        dialog
+                .fillPasswordField("A".repeat(21))
+                .fillRepeatPasswordField("A".repeat(21));
+
+        Allure.step("Verify that the 'Password' field is limited to 20 characters.");
+        Assert.assertEquals(dialog.getPasswordField().inputValue().length(), 20);
+        Allure.step("Verify that the 'RepeatPassword' field is limited to 20 characters.");
+        Assert.assertEquals(dialog.getRepeatPasswordField().inputValue().length(), 20);
     }
 }
