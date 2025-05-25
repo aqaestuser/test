@@ -97,7 +97,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink();
 
         Allure.step("Verify: default row count - 25");
-        assertThat(transactionsPage.getRowsPerPageButton()).containsText("25");
+        assertThat(transactionsPage.getTable().getRowsPerPage()).containsText("25");
     }
 
     @Test
@@ -108,10 +108,10 @@ public class TransactionsPageTest extends BaseTest {
     public void testCountOptionsSelectorRows() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .clickRowsPerPageButton();
+                .getTable().clickRowsPerPageChevron();
 
         Allure.step("Verify: displaying all options when clicking on Selector Rows");
-        assertThat(transactionsPage.getRowsPerPageOptions()).hasText("102550100");
+        assertThat(transactionsPage.getTable().getRowsPerPageOptions()).hasText(new String[]{"10", "25", "50", "100"});
     }
 
     @Test
@@ -123,10 +123,10 @@ public class TransactionsPageTest extends BaseTest {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
-                .clickNextPageButton();
+                .getTable().clickNextPage();
 
         Allure.step("Verify: button 2 is active");
-        assertThat(transactionsPage.getPaginationItemTwoActiveButton()).isVisible();
+        assertThat(transactionsPage.getTable().getActivePaginationPage("2")).isVisible();
     }
 
     @Test
@@ -192,11 +192,9 @@ public class TransactionsPageTest extends BaseTest {
                 .getSelectStatus().clickSelector();
 
         Allure.step("Verify: Selector Status Options are visible");
-        assertThat(transactionsPage.getSelectStatus().getStatusOptions())
-                .hasText(options);
+        assertThat(transactionsPage.getSelectStatus().getStatusOptions()).hasText(options);
         Allure.step("Verify: Default selected option in status selector is 'ALL'");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue())
-                .containsText("ALL");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
     @Test
@@ -288,8 +286,7 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Payment Method Options are visible");
         assertEquals(transactionsPage.getCardTypeOptions(), options);
         Allure.step("Verify: Default selected option in Payment Method Options is 'ALL'");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue())
-                .containsText("ALL");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
     @Test
@@ -304,8 +301,8 @@ public class TransactionsPageTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(transactionsPage.getDateRangePicker().getDataRangePickerErrorMessage()).hasText(
-                "Start date must be before end date.");
+        assertThat(transactionsPage.getDateRangePicker().getDataRangePickerErrorMessage())
+                .hasText("Start date must be before end date.");
     }
 
     @Test

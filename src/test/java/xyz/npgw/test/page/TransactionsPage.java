@@ -5,7 +5,6 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.testng.Assert;
 import xyz.npgw.test.common.Constants;
@@ -29,11 +28,6 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         SelectBusinessUnitTrait<TransactionsPage>,
         SelectStatusTrait<TransactionsPage> {
 
-    private final Locator rowsPerPageButton = getByRole(AriaRole.BUTTON, "Rows Per Page");
-    private final Locator rowsPerPageOptions = getByRole(AriaRole.DIALOG);
-    @Getter(AccessLevel.NONE)
-    private final Locator nextPageButton = getByRole(AriaRole.BUTTON, "next page button");
-    private final Locator paginationItemTwoActiveButton = getByRole(AriaRole.BUTTON, "pagination item 2 active");
     private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
     private final Locator currencySelector = getByLabelExact("Currency");
     private final Locator cardTypeSelector = getByLabelExact("Card type");
@@ -91,20 +85,6 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     @Step("Click 'Refresh Data' button")
     public TransactionsPage clickRefreshDataButton() {
         refreshDataButton.click();
-
-        return this;
-    }
-
-    @Step("Click Button Rows Per Page")
-    public TransactionsPage clickRowsPerPageButton() {
-        rowsPerPageButton.click();
-
-        return this;
-    }
-
-    @Step("Click next Page Button")
-    public TransactionsPage clickNextPageButton() {
-        nextPageButton.click();
 
         return this;
     }
