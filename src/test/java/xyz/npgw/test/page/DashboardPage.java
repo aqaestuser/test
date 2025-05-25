@@ -6,7 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
@@ -15,7 +14,6 @@ import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-@Log4j2
 @Getter
 public final class DashboardPage extends HeaderPage<DashboardPage> implements
         DateRangePickerTrait<DashboardPage>,

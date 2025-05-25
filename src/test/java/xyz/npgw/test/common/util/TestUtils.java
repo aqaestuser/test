@@ -8,8 +8,25 @@ import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public final class TestUtils {
+
+    public static void createUser(APIRequestContext request, User user) {
+        Company.delete(request, user);
+        Company.create(request, user);
+        List<BusinessUnit> businessUnits = BusinessUnit.create(request, user);
+        User newUser = new User(
+                user.companyName(),
+                user.enabled(),
+                user.userRole(),
+                businessUnits.stream().map(BusinessUnit::merchantId).toArray(String[]::new),
+                user.email(),
+                user.password());
+        User.delete(request, newUser);
+        User.create(request, newUser);
+        User.passChallenge(request, user.email(), user.password());
+    }
 
     public static void createCompanyAdmin(APIRequestContext request, String company, String email, String password) {
         User user = User.newCompanyAdmin(company, email, password);

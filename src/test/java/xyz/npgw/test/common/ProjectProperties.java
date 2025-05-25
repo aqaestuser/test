@@ -90,7 +90,7 @@ public final class ProjectProperties {
     }
 
     public static int getViewportHeight() {
-        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "1080"));
+        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "953"));
     }
 
     public static boolean isTracingMode() {

@@ -7,48 +7,41 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.GatewayPage;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class GatewayPageTest extends BaseTest {
 
-    @Ignore("FAU 23/05")
+    String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
+
     @Test
     @TmsLink("283")
     @Epic("System/Gateway")
     @Feature("Currency")
-    @Description("The 'Currency' dropdown toggles and contains options All, USD, EUR.")
+    @Description("The 'Currency' dropdown toggles and contains options")
     public void testOpenCurrencyDropdown() {
-        Locator actualOptions = new DashboardPage(getPage())
+        GatewayPage gatewayPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
-                .clickCurrencyValue()
-                .getCurrencyOptions();
+                .clickCurrencyValue();
 
-        Allure.step("Verify: The 'Currency' dropdown toggles and contains options All, USD, EUR.");
-        assertThat(actualOptions).hasText(new String[]{"ALL", "USD", "EUR"});
+        Allure.step("Verify: The 'Currency' dropdown toggles and contains options");
+        assertThat(gatewayPage.getCurrencyOptions()).hasText(expectedOptions);
     }
 
-    @Ignore("FAU 23/05")
-    @Test(expectedExceptions = AssertionError.class)
+    @Test
     @TmsLink("285")
     @Epic("System/Gateway")
     @Feature("Currency")
     @Description("Verify that re-selecting an already selected currency keeps the selection unchanged.")
     public void testRetainCurrencyWhenReSelectingSameOption() {
-
-        Allure.step("This test is temporarily disabled till bug fixed.");
-
-        List<String> expectedOptions = List.of("ALL", "USD", "EUR");
-
         GatewayPage gatewayPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab();
@@ -73,21 +66,23 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
-    @Ignore
     @Test
     @TmsLink("307")
     @Epic("System/Gateway")
     @Feature("Currency")
-    @Description(
-            "Check that selecting a company populates the 'Business units list',"
-                    + " and when no company is selected, the list is empty with 'No items.'")
+    @Description("Check that selecting a company populates the 'Business units list',"
+            + " and when no company is selected, the list is empty with 'No items.'")
     public void testBusinessUnitsListUpdatesOnCompanySelection() {
-
         String companyName = "Company 112172";
         String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant for C112172"};
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompany(getApiRequestContext(), companyName);
+        Arrays.stream(expectedBusinessUnitsList).forEach(merchantTitle ->
+                TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle));
         int expectedCount = expectedBusinessUnitsList.length;
 
         GatewayPage gatewayPage = new DashboardPage(getPage())
+                .refreshDashboard()
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().clickSelectCompanyPlaceholder()

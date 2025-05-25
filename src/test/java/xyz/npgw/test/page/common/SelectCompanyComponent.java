@@ -12,7 +12,8 @@ import java.util.NoSuchElementException;
 public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
-    private final Locator selectCompanyField = getByPlaceholder("Search...");
+    private final Locator selectCompanyField = getByLabelExact("Select company")
+            .or(getByLabelExact("Company"));
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
     @Getter
     private final Locator selectCompanyPlaceholder = locator("input[aria-label='Select company']");
