@@ -232,6 +232,7 @@ public class TeamPageTest extends BaseTest {
                 .setAllowedBusinessUnits(user.merchantIds())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
+                .clickRefreshDataButton()
                 .getTable().deactivateUser(user.email());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");

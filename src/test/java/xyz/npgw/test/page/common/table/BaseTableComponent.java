@@ -2,10 +2,11 @@ package xyz.npgw.test.page.common.table;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.base.HeaderPage;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
+@Log4j2
 @Getter
 public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> extends BaseComponent {
 
@@ -56,16 +58,14 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public Locator getRow(String rowHeader) {
-        return rows.filter(new Locator.FilterOptions().setHas(getByRole(AriaRole.ROWHEADER, rowHeader)));
-    }
-
-    public Locator getRoweEverywhere(String rowHeader) {
         do {
-            waitForTableToRender();
-            Locator row = rows.filter(new Locator.FilterOptions().setHas(getByRole(AriaRole.ROWHEADER, rowHeader)));
+            Locator header = getByRole(AriaRole.ROWHEADER, rowHeader);
 
-            if (row.first().isVisible()) {
-                return row;
+            try {
+                header.waitFor(new Locator.WaitForOptions().setTimeout(1000));
+                return rows.filter(new Locator.FilterOptions().setHas(header));
+            } catch (PlaywrightException ignored) {
+                log.info("Row header not found on this page, trying next page.");
             }
         } while (goToNextPage());
 
@@ -163,10 +163,6 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         do {
             callback.accept(getActivePage().innerText());
         } while (goToNextPage());
-    }
-
-    private void waitForTableToRender() {
-        rows.last().waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.ATTACHED));
     }
 
     public interface PageCallback {
