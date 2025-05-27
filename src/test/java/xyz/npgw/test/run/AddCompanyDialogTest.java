@@ -27,7 +27,7 @@ public class AddCompanyDialogTest extends BaseTest {
     private static final String COMPANY_TYPE = "CompanyType";
 
     Company company = new Company(
-            "CompanyNameTest", "Company Type Test",
+            "CompanyNameTest", "CompanyNameTest", "Company Type Test",
             new Address("Warwick", "PA",
                     "19876", "US",
                     "+1234567", "+1234567", "+1234567"),
@@ -43,12 +43,13 @@ public class AddCompanyDialogTest extends BaseTest {
     @Description("Verify that the placeholder text for each field is correct.")
     public void testVerifyPlaceholders() {
         List<String> expectedPlaceholders = List.of(
-                "Enter company name",
+                "Enter name",
+                "Enter title",
                 "Enter type",
                 "Enter company description",
-                "Enter company website",
-                "Enter company primary contact",
-                "Enter company email",
+                "Enter website",
+                "Enter primary contact",
+                "Enter email",
                 "Enter country",
                 "Enter state",
                 "Enter ZIP",

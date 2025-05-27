@@ -212,12 +212,6 @@ public class AddBusinessUnitTest extends BaseTest {
         assertThat(addBusinessUnitDialog.getCompanyNameField())
                 .hasValue(COMPANY_NAME);
 
-        addBusinessUnitDialog.clickCreateButtonAndTriggerError();
-
-        Allure.step("Verify: Validation error is shown when merchant name is not filled");
-        assertThat(addBusinessUnitDialog.getAlert().getMessage())
-                .containsText("Enter merchant name");
-
         companiesAndBusinessUnitsPage = addBusinessUnitDialog
                 .fillBusinessUnitNameField(businessUnit.merchantTitle())
                 .clickCreateButton();

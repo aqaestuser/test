@@ -41,7 +41,7 @@ import java.util.Map;
 @Log4j2
 public abstract class BaseTest {
 
-    protected static String runId = new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
+    protected static String runId = new SimpleDateFormat(".MMdd.HHmmss").format(new Date());
 
     private Playwright playwright;
     private Browser browser;
