@@ -21,6 +21,8 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCo
     private final Locator currencyDropdown = locator("div[data-slot='listbox']");
     @Getter
     private final Locator currencyOptions = currencyDropdown.getByRole(AriaRole.OPTION);
+    @Getter
+    private final Locator businessUnitsBlock = locator("div[label='Business units list']");
 
     public GatewayPage(Page page) {
         super(page);

@@ -6,9 +6,11 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import net.datafaker.Faker;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.GatewayPage;
@@ -125,5 +127,44 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify: 'Business units list' has 'No items.'");
         assertThat(gatewayPage.getBusinessUnitsList()).hasText(new String[]{"No items."});
+    }
+
+    @Test
+    @TmsLink("602")
+    @Epic("System/Gateway")
+    @Feature("Currency")
+    @Description("Verify that if company is selected all it's business units are presented in the list")
+    public void testCompaniesBusinessUnitsPresence() {
+        Company company = new Company(new Faker());
+        String businessUnit = new Faker().company().industry();
+
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickOnAddBusinessUnitButton()
+                .fillBusinessUnitNameField(company.companyType())
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .clickOnAddBusinessUnitButton()
+                .fillBusinessUnitNameField(businessUnit)
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().clickSelectCompanyPlaceholder()
+                .getSelectCompany().selectCompany(company.companyName());
+
+        Allure.step("Verify that all the Business units are presented in the list");
+        assertThat(gatewayPage.getBusinessUnitsBlock()).containsText(company.companyType());
+        assertThat(gatewayPage.getBusinessUnitsBlock()).containsText(businessUnit);
+
+        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company.companyName(), company.companyType());
+        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company.companyName(), businessUnit);
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 }
