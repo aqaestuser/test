@@ -232,7 +232,6 @@ public class TeamPageTest extends BaseTest {
                 .setAllowedBusinessUnits(user.merchantIds())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton()
                 .getTable().deactivateUser(user.email());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
@@ -267,7 +266,6 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickRowsPerPageChevron()
                 .getTable().selectRowsPerPageOption("100")
                 .getTable().clickEditUserButton(email)
                 .checkInactiveRadiobutton()
@@ -302,7 +300,6 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickRowsPerPageChevron()
                 .getTable().selectRowsPerPageOption("100")
                 .getTable().clickDeactivateUserButton(email)
                 .clickDeactivateButton();
@@ -355,7 +352,6 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickRowsPerPageChevron()
                 .getTable().selectRowsPerPageOption("100")
                 .getTable().clickResetUserPasswordButton(email)
                 .fillPasswordField("NewPassword1!")

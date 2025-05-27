@@ -198,9 +198,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
-            acquirersPage
-                    .getTable().clickRowsPerPageChevron()
-                    .getTable().selectRowsPerPageOption(option);
+            acquirersPage.getTable().selectRowsPerPageOption(option);
 
             Allure.step(String.format("Verify: The Rows Per Page' value is set to '%s'", option));
             assertThat(acquirersPage.getTable().getRowsPerPage()).hasText(option);
@@ -220,21 +218,14 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : rowsPerPageOptions) {
-            acquirersPage
-                    .getTable().clickRowsPerPageChevron()
-                    .getTable().selectRowsPerPageOption(option);
+            acquirersPage.getTable().selectRowsPerPageOption(option);
 
-            int rowsSum = 0;
+            List<Integer> rowsCountPerPage = acquirersPage.getTable().getRowCountsPerPage();
+            int rowsSum = acquirersPage.getTable().countAllRows(rowsCountPerPage);
+            boolean allValid = rowsCountPerPage.stream().allMatch(count -> count <= Integer.parseInt(option));
 
-            do {
-                int actualRowCount = acquirersPage.getTable().getRows().count();
-                rowsSum += actualRowCount;
-
-                Allure.step(String.format(
-                        "Verify: The table contains '%s' rows less than or equal to '%s'", actualRowCount, option));
-                Assert.assertTrue(actualRowCount <= Integer.parseInt(option));
-
-            } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
+            Allure.step(String.format("Verify: The table contains rows less than or equal to '%s' per page", option));
+            Assert.assertTrue(allValid, "Not all row counts are less than or equal to " + option);
 
             totalRows.add(rowsSum);
         }
@@ -340,31 +331,24 @@ public class AcquirersPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
+        AcquirersTableComponent table = acquirersPage.getTable();
+        double pageWidth = getPage().viewportSize().width;
+
         for (String option : rowsPerPageOptions) {
-            acquirersPage
-                    .getTable().clickRowsPerPageChevron()
-                    .getTable().selectRowsPerPageOption(option);
-            do {
-                String activePage = acquirersPage.getTable().getActivePage().innerText();
+            table.forEachPage(option, activePage -> {
+                BoundingBox box = table.getHeadersRow().boundingBox();
 
-                Allure.step(
-                        String.format("Verify: All table column headers are on page '%s' with '%s' pagination",
-                                activePage, option));
-                Assert.assertEquals(
-                        acquirersPage.getTable().getColumnHeader().allTextContents(),
-                        COLUMNS_HEADERS,
-                        String.format(
-                                "Column headers do not match expected headers on page '%s' with '%s' pagination!",
-                                activePage, option));
+                Allure.step(String.format("Verify headers on page '%s' with '%s' pagination", activePage, option));
+                Assert.assertEquals(table.getColumnHeader().allTextContents(), COLUMNS_HEADERS,
+                        String.format("Headers mismatch on page %s with '%s' rows per page", activePage, option));
 
-                BoundingBox table = acquirersPage.getTable().getHeadersRow().boundingBox();
-                double pageWidth = getPage().viewportSize().width;
+                Assert.assertTrue(box.x >= 0, String.format(
+                        "Headers x-position must be within viewport on page '%s' with '%s'/page", activePage, option));
 
-                Assert.assertTrue(table.x >= 0 && (table.x + table.width) <= pageWidth, String.format(
-                        "The header is not fully visible within the viewport on page '%s' with '%s' pagination!",
-                        activePage, option));
+                Assert.assertTrue((box.x + box.width) <= pageWidth, String.format(
+                        "Headers right edge must be within viewport on page '%s' with '%s'/page", activePage, option));
 
-            } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
+            });
         }
     }
 
@@ -397,13 +381,14 @@ public class AcquirersPageTest extends BaseTest {
                 .clickAddAcquirer()
                 .fillAcquirerName(acquirerName)
                 .fillAcquirerForm(acquirer)
-                .clickCreateButton();
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone();
 
         do {
-            if (acquirersPage.getTable().getRow(acquirerName).count() > 0) {
+            if (acquirersPage.getTable().hasRow(acquirerName)) {
                 break;
             }
-        } while (acquirersPage.getTable().isNotLastPage() && acquirersPage.getTable().clickNextPage() != null);
+        } while (acquirersPage.getTable().goToNextPage());
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getCell("Status", acquirerName)).hasText(status);
