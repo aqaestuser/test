@@ -86,6 +86,7 @@ public class TestDataProvider {
         return new Object[][]{
                 {"EUR"},
                 {"USD"},
+                {"GBP"},
         };
     }
 
@@ -202,10 +203,22 @@ systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
     }
 
     @DataProvider
-    public static Object[][] getPaymentMethod() {
+    public static Object[][] getCardType() {
         return new Object[][]{
                 {"VISA"},
                 {"MASTERCARD"},
+        };
+    }
+
+    @DataProvider
+    public static Object[][] getStatus() {
+        return new Object[][]{
+                {"PENDING"},
+                {"INITIATED"},
+                {"SUCCESS"},
+                {"FAILED"},
+                {"CANCELLED"},
+                {"EXPIRED"},
         };
     }
 }

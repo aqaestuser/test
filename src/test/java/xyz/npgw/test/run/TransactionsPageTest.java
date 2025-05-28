@@ -594,12 +594,12 @@ public class TransactionsPageTest extends BaseTest {
         assertTrue(transactionsPage.getRequestData().contains("SUCCESS"));
     }
 
-    @Test(dataProvider = "getPaymentMethod", dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("598")
     @Epic("Transactions")
     @Feature("Reset filter button")
-    @Description("Verify, that 'Reset filter' button change 'Payment method' to default value ( ALL)")
-    public void testResetPaymentMethod(String paymentMethod) {
+    @Description("Verify, that 'Reset filter' button change 'Card Type' to default value ( ALL)")
+    public void testResetPaymentMethod(String getCardType) {
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
@@ -607,14 +607,38 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
-        transactionsPage.selectCardType(paymentMethod);
+        transactionsPage.selectCardType(getCardType);
 
         Allure.step("Verify: Filter displays the selected payment method");
-        assertThat(transactionsPage.getCardTypeValue()).containsText(paymentMethod);
+        assertThat(transactionsPage.getCardTypeValue()).containsText(getCardType);
 
         transactionsPage.clickResetFilterButton();
 
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
+    }
+
+    @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
+    @TmsLink("639")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' button change 'Status' to default value ( ALL)")
+    public void testResetStatus(String status) {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: Filter displays 'ALL' by default");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+
+        transactionsPage.getSelectStatus().selectStatus(status);
+
+        Allure.step("Verify: Filter displays the selected Status");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 }
