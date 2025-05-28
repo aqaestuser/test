@@ -8,10 +8,12 @@ import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.ReportsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.reports.ReportsParametersDialog;
 
 public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTableTrait,
         DateRangePickerTrait<ReportsPage>,
+        SelectCompanyTrait<ReportsPage>,
         SelectBusinessUnitTrait<ReportsPage> {
 
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");

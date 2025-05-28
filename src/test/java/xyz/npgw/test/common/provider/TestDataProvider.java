@@ -123,6 +123,7 @@ public class TestDataProvider {
                                         "https://resource.example.com",
                                         "notification-queue"),
                                 acquirerName,
+                                acquirerName,
                                 new String[]{},
                                 true),
                         """
@@ -137,6 +138,7 @@ ErrorSelect at least one allowed currency"""
                                         "",
                                         "",
                                         ""),
+                                acquirerName,
                                 acquirerName,
                                 new String[]{"USD"},
                                 true),
@@ -155,6 +157,7 @@ systemConfig.resourceUrl must be defined"""
                                         "",
                                         ""),
                                 acquirerName,
+                                acquirerName,
                                 new String[]{"USD"},
                                 true),
                         """
@@ -171,6 +174,7 @@ systemConfig.resourceUrl must be defined"""
                                         "",
                                         ""),
                                 acquirerName,
+                                acquirerName,
                                 new String[]{"USD"},
                                 true),
                         """
@@ -185,6 +189,7 @@ ERRORsystemConfig.resourceUrl must be defined"""
                                         "//fingerprint.example.com",
                                         "ps://fingerprint.example.com",
                                         "some.text"),
+                                acquirerName,
                                 acquirerName,
                                 new String[]{"USD"},
                                 true),

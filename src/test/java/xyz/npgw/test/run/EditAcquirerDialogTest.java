@@ -32,6 +32,7 @@ public class EditAcquirerDialogTest extends BaseTest {
 
         List<String> expectedPlaceholders = List.of(
                 "Enter acquirer name",
+                "Enter acquirer title",
                 "Enter acquirer code",
                 "Enter challenge URL",
                 "Enter fingerprint URL",

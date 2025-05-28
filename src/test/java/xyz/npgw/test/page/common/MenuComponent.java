@@ -25,7 +25,7 @@ public class MenuComponent extends BaseComponent {
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
         ResponseUtils.clickAndWaitForText(getPage(),
-                getByRole(AriaRole.TAB, "Acquirers"), "Acquirer name");
+                getByRole(AriaRole.TAB, "Acquirers"), "Acquirer title");
 
         return new AcquirersPage(getPage());
     }

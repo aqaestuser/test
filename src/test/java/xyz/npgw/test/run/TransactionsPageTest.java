@@ -122,7 +122,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testPaginationNextButton() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
+                .getDateRangePicker().setDateRangeFields("01-04-2025", "31-05-2025")
                 .getTable().clickNextPageButton();
 
         Allure.step("Verify: button 2 is active");
