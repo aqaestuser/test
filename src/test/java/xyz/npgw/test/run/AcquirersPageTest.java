@@ -349,7 +349,6 @@ public class AcquirersPageTest extends BaseTest {
         }
     }
 
-
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("557")
     @Epic("System/Acquirers")
