@@ -124,10 +124,10 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: new user has the role 'USER'");
-        assertThat(teamPage.getTable().getCell("User role", user.email())).hasText("USER");
+        assertThat(teamPage.getTable().getCell(user.email(), "User role")).hasText("USER");
 
         Allure.step("Verify: new user has status 'Active'");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Active");
+        assertThat(teamPage.getTable().getCell(user.email(), "Status")).hasText("Active");
 
         Allure.step("Verify: 'Deactivate' icon is shown for the new user");
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "ban");
@@ -178,10 +178,10 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: user role was updated to 'ADMIN'");
-        assertThat(teamPage.getTable().getCell("User role", user.email())).hasText("ADMIN");
+        assertThat(teamPage.getTable().getCell(user.email(), "User role")).hasText("ADMIN");
 
         Allure.step("Verify: Verify that user status was updated to 'Inactive'");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell(user.email(), "Status")).hasText("Inactive");
 
         Allure.step("Verify: 'Activate' icon is shown for the user");
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
@@ -239,7 +239,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(user.companyName());
 
         Allure.step("Verify: user status becomes 'Inactive' in the table");
-        assertThat(teamPage.getTable().getCell("Status", user.email())).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell(user.email(), "Status")).hasText("Inactive");
 
         Allure.step("Verify: 'Activate user' icon is shown for the user");
         assertEquals(teamPage.getTable().getUserActivityIcon(user.email()).getAttribute("data-icon"), "check");
@@ -276,7 +276,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
     }
 
     @Test
@@ -311,7 +311,7 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "check");
@@ -325,7 +325,7 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", email)).hasText("Active");
+        assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Active");
 
         Allure.step("Verify: activate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "ban");
@@ -405,10 +405,10 @@ public class TeamPageTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("User role", analystEmail)).hasText("USER");
+        assertThat(teamPage.getTable().getCell(analystEmail, "User role")).hasText("USER");
 
         Allure.step("Verify: status of the user");
-        assertThat(teamPage.getTable().getCell("Status", analystEmail)).hasText("Active");
+        assertThat(teamPage.getTable().getCell(analystEmail, "Status")).hasText("Active");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "ban");
@@ -422,7 +422,7 @@ public class TeamPageTest extends BaseTest {
         teamPage.clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
-        assertThat(teamPage.getTable().getCell("Status", analystEmail)).hasText("Inactive");
+        assertThat(teamPage.getTable().getCell(analystEmail, "Status")).hasText("Inactive");
 
         Allure.step("Verify: deactivate user icon appears");
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "check");

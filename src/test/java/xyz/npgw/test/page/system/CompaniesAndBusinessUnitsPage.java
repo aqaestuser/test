@@ -43,6 +43,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator editBusinessUnitDialog = getByRole(AriaRole.DIALOG).getByTitle("Edit business unit");
     private final Locator merchantsTable = getByLabelExact("merchants table");
     private final Locator resetFilterButton = getByTestId("ResetButtonTeamPage");
+    private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator pageContent = locator("[class='contentBlock']");
 
     public CompaniesAndBusinessUnitsPage(Page page) {
@@ -80,6 +81,13 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     @Step("Click 'Reset filter' button")
     public CompaniesAndBusinessUnitsPage clickOnResetFilterButton() {
         resetFilterButton.click();
+
+        return this;
+    }
+
+    @Step("Click 'Refresh data' button")
+    public CompaniesAndBusinessUnitsPage clickRefreshDataButton() {
+        refreshDataButton.click();
 
         return this;
     }

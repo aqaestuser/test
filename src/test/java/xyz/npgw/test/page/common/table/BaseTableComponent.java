@@ -27,7 +27,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     private final Locator rowsPerPageDropdown = locator("div[data-slot='listbox']");
     private final Locator paginationItems = getPage().getByLabel("pagination item");
     private final Locator nextPageButton = getByRole(AriaRole.BUTTON, "next page button");
-
+    private final Locator previousPageButton = getByRole(AriaRole.BUTTON, "previous page button");
 
     public BaseTableComponent(Page page) {
         super(page);
@@ -35,18 +35,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     protected abstract CurrentPageT getCurrentPage();
 
-    protected int getColumnHeaderIndex(String name) {
-        columnHeader.last().waitFor();
-
-        return ((Number) getColumnHeader(name).evaluate("el => el.cellIndex")).intValue();
-    }
-
     public Locator getColumnHeader(String name) {
         return columnHeader.getByText(name);
-    }
-
-    public String columnSelector(String columnHeader) {
-        return "td:nth-child(" + (getColumnHeaderIndex(columnHeader) + 1) + ")";
     }
 
     public List<String> getColumnValues(String name) {
@@ -72,13 +62,15 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         throw new NoSuchElementException("Row with header '" + rowHeader + "' not found on any page.");
     }
 
-    public Locator getCell(String columnHeader, String rowHeader) {
-        return rows
-                .filter(new Locator.FilterOptions().setHasText(rowHeader))
-                .locator(columnSelector(columnHeader));
+    public Locator getCell(String rowHeader, String columnHeader) {
+        return getCell(getRow(rowHeader), columnHeader);
     }
 
-    public List<Locator> getCells(String columnHeader) {
+    public Locator getCell(Locator row, String columnHeader) {
+        return row.locator(columnSelector(columnHeader));
+    }
+
+    public List<Locator> getColumnCells(String columnHeader) {
         return rows.locator(columnSelector(columnHeader)).all();
     }
 
@@ -110,36 +102,44 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return getCurrentPage();
     }
 
-    public Locator getActivePage() {
+    @Step("Click pagination page button '{pageNumber}'")
+    public CurrentPageT clickPaginationPageButton(String pageNumber) {
+        getByLabelExact("pagination item " + pageNumber).click();
+
+        return getCurrentPage();
+    }
+
+    public Locator getActivePageButton() {
         return getPage().getByLabel(Pattern.compile("pagination item.*active.*", Pattern.CASE_INSENSITIVE));
     }
 
-    @Step("Click next page")
+    @Step("Click next page button")
     public CurrentPageT clickNextPageButton() {
         nextPageButton.click();
 
         return getCurrentPage();
     }
 
-    public boolean hasNextPage() {
-        return nextPageButton.isEnabled();
+    @Step("Click previous page button")
+    public CurrentPageT clickPreviousPageButton() {
+        previousPageButton.click();
+
+        return getCurrentPage();
     }
 
     public Locator getFirstRowCell(String columnHeader) {
-        return getCells(columnHeader).get(0);
+        return getColumnCells(columnHeader).get(0);
     }
 
-    public boolean hasRow(String name) {
-        return getRow(name).count() > 0;
+    public boolean hasRow(String rowHeader) {
+        return getRow(rowHeader).count() > 0;
     }
 
-    public boolean goToNextPage() {
-        if (!hasNextPage()) {
-            return false;
-        }
-        clickNextPageButton();
+    public int countAllRows() {
 
-        return true;
+        return getRowCountsPerPage().stream()
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     public int countAllRows(List<Integer> rowCountsPerPage) {
@@ -151,6 +151,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     public List<Integer> getRowCountsPerPage() {
         List<Integer> rowsPerPage = new ArrayList<>();
+        goToFirstPageIfNeeded();
+
         do {
             rowsPerPage.add(getRows().count());
         } while (goToNextPage());
@@ -158,11 +160,67 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return rowsPerPage;
     }
 
+    public int countValue(String columnHeader, String value) {
+        long count = 0;
+        if (goToFirstPageIfNeeded()) {
+            do {
+                count += getColumnCells(columnHeader).stream()
+                        .filter(locator -> locator.innerText().equals(value))
+                        .count();
+            } while (goToNextPage());
+        }
+        return (int) count;
+    }
+
     public void forEachPage(String rowsPerPageOption, PageCallback callback) {
         selectRowsPerPageOption(rowsPerPageOption);
+        goToFirstPageIfNeeded();
+
         do {
-            callback.accept(getActivePage().innerText());
+            callback.accept(getActivePageButton().innerText());
         } while (goToNextPage());
+    }
+
+    public boolean goToFirstPageIfNeeded() {
+        if (hasNoPagination()) {
+            return false;
+        }
+        if (!isCurrentPage("1")) {
+            clickPaginationPageButton("1");
+        }
+
+        return true;
+    }
+
+    private boolean isCurrentPage(String number) {
+        return getActivePageButton().innerText().equals(number);
+    }
+
+    private boolean goToNextPage() {
+        if (!hasNextPage()) {
+            return false;
+        }
+        clickNextPageButton();
+
+        return true;
+    }
+
+    private int getColumnHeaderIndex(String name) {
+        columnHeader.last().waitFor();
+
+        return ((Number) getColumnHeader(name).evaluate("el => el.cellIndex")).intValue();
+    }
+
+    private String columnSelector(String columnHeader) {
+        return "td:nth-child(" + (getColumnHeaderIndex(columnHeader) + 1) + ")";
+    }
+
+    private boolean hasNextPage() {
+        return nextPageButton.isEnabled();
+    }
+
+    private boolean hasNoPagination() {
+        return !paginationItems.first().isVisible();
     }
 
     public interface PageCallback {

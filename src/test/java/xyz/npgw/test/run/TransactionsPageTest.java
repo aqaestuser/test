@@ -126,7 +126,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getTable().clickNextPageButton();
 
         Allure.step("Verify: button 2 is active");
-        assertThat(transactionsPage.getTable().getActivePage()).hasText(" 2 ");
+        assertThat(transactionsPage.getTable().getActivePageButton()).hasText("2");
     }
 
     @Test

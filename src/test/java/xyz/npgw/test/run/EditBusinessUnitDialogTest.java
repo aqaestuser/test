@@ -36,6 +36,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(companyName)
+                .clickRefreshDataButton()
                 .getTable().clickEditBusinessUnitButton(buName);
 
         Allure.step("Verify: the header contains the expected title text");
