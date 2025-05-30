@@ -202,7 +202,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return getActivePageButton().innerText().equals(number);
     }
 
-    protected boolean goToNextPage() {
+    private boolean goToNextPage() {
         if (!hasNextPage()) {
             return false;
         }

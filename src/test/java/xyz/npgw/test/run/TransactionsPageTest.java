@@ -742,4 +742,29 @@ public class TransactionsPageTest extends BaseTest {
         assertEquals(transactionsPage.getTable().getAllCreationDates(),
                 actualDates.stream().sorted(Comparator.reverseOrder()).toList());
     }
+
+    @Test
+    @TmsLink("659")
+    @Epic("Transactions")
+    @Feature("Amount")
+    @Description("'Amount' column sorts ascending on first click and descending on second click.")
+    public void testSortAmount() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getTable().selectRowsPerPageOption("100")
+                .getTable().clickSortIcon("Amount");
+
+        List<Double> actualAmount = transactionsPage
+                .getTable().getAllAmounts();
+
+        Allure.step("Verify: transactions are sorted by amount in ascending order after first click");
+        assertEquals(actualAmount, actualAmount.stream().sorted().toList());
+
+        transactionsPage
+                .getTable().clickSortIcon("Amount");
+
+        Allure.step("Verify: transactions are sorted by amount in descending order after second click");
+        assertEquals(transactionsPage.getTable().getAllAmounts(),
+                actualAmount.stream().sorted(Comparator.reverseOrder()).toList());
+    }
 }

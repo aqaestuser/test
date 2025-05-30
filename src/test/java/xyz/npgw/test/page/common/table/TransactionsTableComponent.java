@@ -30,4 +30,8 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
         return getColumnValuesFromAllPages("Creation Date", s -> LocalDateTime.parse(s, formatter));
     }
+
+    public List<Double> getAllAmounts() {
+        return getColumnValuesFromAllPages("Amount", s -> Double.parseDouble(s.replaceAll("[^\\d.]", "")));
+    }
 }
