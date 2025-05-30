@@ -641,4 +641,26 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
+
+    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
+    @TmsLink("657")
+    @Epic("Transactions")
+    @Feature("Currency")
+    @Description("Compare number of transactions with same currency in the table before and after filter")
+    public void testDisplayAllFilteredByCurrencyRows(String currency) {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getDateRangePicker().setDateRangeFields("01-05-2025", "31-05-2025");
+
+        int numberBeforeFilter = transactionsPage.getTable().countValue("Currency", currency);
+        transactionsPage.getTable().goToFirstPageIfNeeded();
+
+        int numberAfterFilter = transactionsPage
+                .clickCurrencySelector().selectCurrency(currency)
+                .getTable().countValue("Currency", currency);
+
+        Allure.step("Verify: All transactiones with selected currency are shown after filter.");
+        assertEquals(numberBeforeFilter, numberAfterFilter);
+    }
+
 }

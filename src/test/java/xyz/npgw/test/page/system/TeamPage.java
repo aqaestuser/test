@@ -43,6 +43,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
 //        TODO remove after bugfix
         getPage().waitForTimeout(500);
         getByTestId("ApplyFilterButtonTeamPage").click();
+        getPage().waitForTimeout(500);
 
         return this;
     }

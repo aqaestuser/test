@@ -55,8 +55,13 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
                 header.waitFor(new Locator.WaitForOptions().setTimeout(1000));
                 return rows.filter(new Locator.FilterOptions().setHas(header));
             } catch (PlaywrightException ignored) {
-                log.info("Row header not found on this page, trying next page.");
+                if (hasNoPagination()) {
+                    throw new NoSuchElementException("Row with header '" + rowHeader + "' isn't found! Table is empty");
+                } else {
+                    log.info("Row header not found on this page, trying next page.");
+                }
             }
+
         } while (goToNextPage());
 
         throw new NoSuchElementException("Row with header '" + rowHeader + "' not found on any page.");
