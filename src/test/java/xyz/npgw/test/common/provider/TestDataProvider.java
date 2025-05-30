@@ -221,4 +221,13 @@ systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
                 {"EXPIRED"},
         };
     }
+
+    @DataProvider
+    public static Object[][] getMultiStatus2() {
+        return new Object[][]{
+                {"PENDING", "INITIATED"},
+                {"SUCCESS", "FAILED"},
+                {"CANCELLED", "EXPIRED"},
+        };
+    }
 }

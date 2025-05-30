@@ -11,6 +11,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
@@ -19,9 +20,6 @@ import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
-import static xyz.npgw.test.common.util.TestUtils.createAcquirer;
-import static xyz.npgw.test.common.util.TestUtils.deleteAcquirer;
-import static xyz.npgw.test.common.util.TestUtils.getAcquirer;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
@@ -95,7 +93,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Description("Verify that a new Acquirer can be successfully created and appears in the Acquirers dropdown.")
     public void testAcquirerSuccessfullyCreatedAndAppearsInDropdown() {
         String acquirerName = "Awesome acquirer";
-        deleteAcquirer(getApiRequestContext(), acquirerName);
+        TestUtils.deleteAcquirer(getApiRequestContext(), acquirerName);
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -129,8 +127,8 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Description("Verify error appears when creating an Acquirer with a duplicate name.")
     public void testCreateAcquirerWithDuplicateNameShowsError() {
         String acquirerName = "Awesome acquirer";
-        if (!getAcquirer(getApiRequestContext(), acquirerName)) {
-            createAcquirer(getApiRequestContext(), new Acquirer(acquirerName));
+        if (!TestUtils.getAcquirer(getApiRequestContext(), acquirerName)) {
+            TestUtils.createAcquirer(getApiRequestContext(), new Acquirer(acquirerName));
         }
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
@@ -183,7 +181,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify validation messages when creating Acquirer with invalid input.")
     public void testDisplayValidationErrorsForInvalidAcquirerInput(Acquirer acquirer, String expectedError) {
-        deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
+        TestUtils.deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()

@@ -643,6 +643,32 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
+    @Test(dataProvider = "getMultiStatus2", dataProviderClass = TestDataProvider.class)
+    @TmsLink("655")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' button change 'Status' (two options are checked) to default value ( ALL)")
+    public void testResetMultiStatus(String status1, String status2) {
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: Filter displays 'ALL' by default");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+
+        transactionsPage.getSelectStatus().clickSelector()
+                .getSelectStatus().clickValue(status1)
+                .getSelectStatus().clickValue(status2);
+
+        Allure.step("Verify: Filter displays the selected Status");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status1 + ", " + status2);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+    }
+
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("657")
     @Epic("Transactions")
