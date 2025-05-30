@@ -4,6 +4,10 @@ import com.microsoft.playwright.Page;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
 
     public TransactionsTableComponent(Page page) {
@@ -19,5 +23,11 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         getFirstRowCell("NPGW reference").click();
 
         return new TransactionDetailsDialog(getPage());
+    }
+
+    public List<LocalDateTime> getAllCreationDates() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
+        return getColumnValuesFromAllPages("Creation Date", s -> LocalDateTime.parse(s, formatter));
     }
 }

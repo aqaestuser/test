@@ -13,6 +13,7 @@ import xyz.npgw.test.page.base.HeaderPage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 @Log4j2
@@ -201,7 +202,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return getActivePageButton().innerText().equals(number);
     }
 
-    private boolean goToNextPage() {
+    protected boolean goToNextPage() {
         if (!hasNextPage()) {
             return false;
         }
@@ -230,5 +231,21 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     public interface PageCallback {
         void accept(String pageNumber);
+    }
+
+    public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
+        selectRowsPerPageOption("100");
+        goToFirstPageIfNeeded();
+
+        List<T> allValues = new ArrayList<>();
+        do {
+            List<T> pageValues = getColumnValues(columnName).stream()
+                    .map(String::trim)
+                    .map(parser)
+                    .toList();
+            allValues.addAll(pageValues);
+        } while (goToNextPage());
+
+        return allValues;
     }
 }
