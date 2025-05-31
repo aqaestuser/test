@@ -784,6 +784,40 @@ public class TransactionsPageTest extends BaseTest {
         assertTrue(cardTypeList.stream().allMatch(value -> value.equals(cardType)));
     }
 
+    @Test
+    @TmsLink("668")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' button change 'Amount' to default value ( AMOUNT)")
+    public void testResetAmount() {
+
+        final String amountFrom = "10";
+        final String amountTo = "20";
+        final String chosenAmount = "Amount: " + amountFrom + " - " + amountTo;
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
+        assertThat(transactionsPage.getAmountButton()).isVisible();
+        assertThat(transactionsPage.getAmountButton()).hasText("Amount");
+
+        transactionsPage.clickAmountButton()
+                .fillAmountFromField(amountFrom)
+                .fillAmountToField(amountTo)
+                .clickAmountApplyButton();
+
+        Allure.step("Verify: Filter 'Amount' displays 'Amount: {amountFrom}- {amountTo}'");
+        assertThat(transactionsPage.amountApplied(chosenAmount)).isVisible();
+        assertThat(transactionsPage.amountApplied(chosenAmount)).hasText(chosenAmount);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
+        assertThat(transactionsPage.getAmountButton()).isVisible();
+        assertThat(transactionsPage.getAmountButton()).hasText("Amount");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
