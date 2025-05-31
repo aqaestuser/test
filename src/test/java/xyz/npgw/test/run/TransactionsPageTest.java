@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -95,10 +96,10 @@ public class TransactionsPageTest extends BaseTest {
     public void testFilterTransactionsByCurrency(String currency) {
         List<String> currencyValues = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "30-04-2025")
+                .getDateRangePicker().setDateRangeFields("01-05-2025", "30-05-2025")
                 .clickCurrencySelector()
                 .selectCurrency(currency)
-                .getTable().getColumnValues("Currency");
+                .getTable().getColumnValuesFromAllPages("Currency", Function.identity());
 
         Allure.step("Verify: All values in the Currency column match the selected currency");
         assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
@@ -766,6 +767,21 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: transactions are sorted by amount in descending order after second click");
         assertEquals(transactionsPage.getTable().getAllAmounts(),
                 actualAmount.stream().sorted(Comparator.reverseOrder()).toList());
+    }
+
+    @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
+    @TmsLink("673")
+    @Epic("Transactions")
+    @Feature("Payment method")
+    @Description("Filtering transactions by Card type displays only matching entries in the table.")
+    public void testFilterByCardType(String cardType) {
+        List<String> cardTypeList = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .selectCardType(cardType)
+                .getTable().getColumnValuesFromAllPages("Card type", Function.identity());
+
+        Allure.step("Verify: all entries in the 'Card type' column match the selected filter");
+        assertTrue(cardTypeList.stream().allMatch(value -> value.equals(cardType)));
     }
 
     @AfterClass

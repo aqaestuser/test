@@ -11,6 +11,7 @@ import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.base.HeaderPage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
@@ -234,6 +235,10 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
+        if (!paginationItems.first().isVisible()) {
+            return Collections.emptyList();
+        }
+
         selectRowsPerPageOption("100");
         goToFirstPageIfNeeded();
 
