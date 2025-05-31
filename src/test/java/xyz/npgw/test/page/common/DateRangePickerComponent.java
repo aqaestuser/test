@@ -15,7 +15,8 @@ public class DateRangePickerComponent<CurrentPageT> extends BaseComponent {
     private final Locator dateRangeFields = getByRole(AriaRole.SPINBUTTON);
     private final Locator dataRangePickerErrorMessage = locator("[data-slot='error-message']");
     private final Locator dateRangePickerField = getByRole(AriaRole.GROUP, "DateRange");
-
+    private final Locator dateRangePickerStartDate = locator("//div[@data-slot='start-input']");
+    private final Locator dateRangePickerEndDate = locator("//div[@data-slot='end-input']");
     private final CurrentPageT currentPage;
 
     public DateRangePickerComponent(Page page, CurrentPageT currentPage) {

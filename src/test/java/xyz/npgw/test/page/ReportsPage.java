@@ -18,6 +18,7 @@ public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTable
 
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator generateReportButton = getByRole(AriaRole.BUTTON, "Generate report");
+    private final Locator resetFilterButton = getByTestId("ResetFilterButtonReportsPage");
 
     public ReportsPage(Page page) {
         super(page);
@@ -35,6 +36,20 @@ public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTable
         generateReportButton.click();
 
         return new ReportsParametersDialog(getPage());
+    }
+
+    @Step("Reload Reports page")
+    public ReportsPage refreshReports() {
+        getPage().reload();
+
+        return this;
+    }
+
+    @Step("Click 'Reset filter' button")
+    public ReportsPage clickResetFilterButton() {
+        resetFilterButton.click();
+
+        return this;
     }
 
 }

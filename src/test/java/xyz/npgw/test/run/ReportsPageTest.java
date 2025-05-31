@@ -170,4 +170,39 @@ public class ReportsPageTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         super.afterClass();
     }
+
+    @Test
+    @TmsLink("653")
+    @Epic("Reports")
+    @Feature("Reset filter")
+    @Description("'Reset filter' clears selected options to default")
+    public void testResetFilter() {
+        final String companyName = "testResetFilter";
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        TestUtils.createCompany(getApiRequestContext(), companyName);
+        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, "testResetFilter");
+
+        ReportsPage reportsPage = new ReportsPage(getPage())
+                .clickReportsLink()
+                .refreshReports();
+
+        String defaultStartDate = reportsPage.getDateRangePicker().getDateRangePickerStartDate().textContent();
+        String defaultEndDate = reportsPage.getDateRangePicker().getDateRangePickerEndDate().textContent();
+
+        reportsPage
+                .getSelectCompany().selectCompany(companyName)
+                .getSelectBusinessUnit().selectBusinessUnit(companyName)
+                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
+                .clickResetFilterButton();
+
+        Allure.step("Verify: the selected company field is empty after reset");
+        assertThat(reportsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
+
+        Allure.step("Verify: the selected business unit field is empty after reset");
+        assertThat(reportsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
+
+        Allure.step("Verify: the selected date picker dates are returned to default");
+        assertThat(reportsPage.getDateRangePicker().getDateRangePickerStartDate()).hasText(defaultStartDate);
+        assertThat(reportsPage.getDateRangePicker().getDateRangePickerEndDate()).hasText(defaultEndDate);
+    }
 }
