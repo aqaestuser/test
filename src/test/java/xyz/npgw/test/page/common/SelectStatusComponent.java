@@ -62,5 +62,4 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
 
         return currentPage;
     }
-
 }

@@ -6,7 +6,6 @@ import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,16 +21,15 @@ public record BusinessUnit(
     }
 
     public static List<BusinessUnit> create(APIRequestContext request, User user) {
-        List<BusinessUnit> businessUnits = new ArrayList<>();
-        Arrays.stream(user.merchantIds()).forEach(
-                merchantTitle -> businessUnits.add(create(request, user.companyName(), merchantTitle)));
-        return businessUnits;
+        return Arrays.stream(user.merchantIds())
+                .map(merchantTitle -> create(request, user.companyName(), merchantTitle))
+                .toList();
     }
 
     public static BusinessUnit create(APIRequestContext request, String companyName, String merchantTitle) {
         APIResponse response = request.post("portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(merchantTitle)));
-        log.info("create merchant for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.info("create merchant for company '{}' - {}", companyName, response.status());
         return new Gson().fromJson(response.text(), BusinessUnit.class);
     }
 
@@ -42,14 +40,14 @@ public record BusinessUnit(
 
     public static BusinessUnit[] getAll(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/company/%s/merchant".formatted(encode(companyName)));
-        log.info("get all merchants for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.info("get all merchants for company '{}' - {}", companyName, response.status());
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
 
     public static void delete(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
         APIResponse response = request.delete(
                 "portal-v1/company/%s/merchant/%s".formatted(encode(companyName), businessUnit.merchantId()));
-        log.info("delete merchant '{}' for company '{}':",  businessUnit.merchantId(), companyName);
+        log.info("delete merchant '{}' for company '{}':", businessUnit.merchantId(), companyName);
         log.info("response - {} {}", response.status(), response.text());
     }
 

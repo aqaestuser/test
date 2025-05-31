@@ -11,12 +11,4 @@ public abstract class BaseSystemPage<SystemPageT extends BaseSystemPage<SystemPa
     public BaseSystemPage(Page page) {
         super(page);
     }
-
-//    @Step("Click on the 'System administration' button in the Header")
-//    public SystemPageT clickSystemAdministrationLink() {
-//        getSystemAdministrationButton().click();
-//        getPage().waitForLoadState(LoadState.NETWORKIDLE);
-//
-//        return (SystemPageT) this;
-//    }
 }

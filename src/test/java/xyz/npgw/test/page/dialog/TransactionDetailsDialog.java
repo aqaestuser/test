@@ -5,16 +5,12 @@ import com.microsoft.playwright.Page;
 import lombok.Getter;
 import xyz.npgw.test.page.TransactionsPage;
 
-
+@Getter
 public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, TransactionDetailsDialog> {
 
-    @Getter
     private final Locator statusField = getDialog().getByText("Status");
-    @Getter
     private final Locator amountField = getDialog().getByText("Amount");
-    @Getter
     private final Locator merchantReferenceField = getDialog().getByText("Merchant reference");
-    @Getter
     private final Locator cardDetailsField = getDialog().locator("//div[@aria-label='Card details']");
 
     public TransactionDetailsDialog(Page page) {
@@ -26,5 +22,3 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
         return new TransactionsPage(getPage());
     }
 }
-
-

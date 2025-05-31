@@ -5,23 +5,20 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
+import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 
+@Getter
 public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCompanyTrait<GatewayPage> {
 
-    @Getter
     private final Locator businessUnitsListHeader = getByTextExact("Business units list");
-    @Getter
     private final Locator businessUnitsList = locator("div[data-slot='base'] li");
-    @Getter
     private final Locator companyDropdown = locator("div[data-slot='content']");
-    @Getter
     private final Locator currencyValue = locator("div[data-slot='innerWrapper'] span");
+    @Getter(AccessLevel.NONE)
     private final Locator currencyDropdown = locator("div[data-slot='listbox']");
-    @Getter
     private final Locator currencyOptions = currencyDropdown.getByRole(AriaRole.OPTION);
-    @Getter
     private final Locator businessUnitsBlock = locator("div[label='Business units list']");
 
     public GatewayPage(Page page) {

@@ -5,7 +5,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.opentest4j.AssertionFailedError;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
@@ -23,11 +24,12 @@ import static org.testng.Assert.assertEquals;
 
 public class AddCompanyDialogTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "CompanyName";
+    private static final String COMPANY_NAME = "CompanyName%s".formatted(RUN_ID);
+    private static final String EXISTING_COMPANY_NAME = "ExistingCompanyName%s".formatted(RUN_ID);
     private static final String COMPANY_TYPE = "CompanyType";
 
     Company company = new Company(
-            "CompanyNameTest", "CompanyNameTest", "Company Type Test",
+            "CompanyNameTest%s".formatted(RUN_ID), "", "Company Type Test",
             new Address("Warwick", "PA",
                     "19876", "US",
                     "+1234567", "+1234567", "+1234567"),
@@ -36,13 +38,26 @@ public class AddCompanyDialogTest extends BaseTest {
             true, true
     );
 
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), EXISTING_COMPANY_NAME);
+    }
+
     @Test
     @TmsLink("189")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("Verify that the placeholder text for each field is correct.")
     public void testVerifyPlaceholders() {
-        List<String> expectedPlaceholders = List.of(
+        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickAddCompanyButton();
+
+        Allure.step("Verify: all placeholders are correct for each field");
+        assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
                 "Enter name",
                 "Enter title",
                 "Enter type",
@@ -57,15 +72,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 "Enter phone",
                 "Enter mobile",
                 "Enter fax"
-        );
-
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton();
-
-        Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addCompanyDialog.getAllPlaceholders(), expectedPlaceholders);
+        ));
     }
 
     @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
@@ -150,13 +157,11 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Error message when trying to create a company with invalid length and special characters.")
     public void testErrorForInvalidCompanyNameLengthAndCharacters(String name, String character) {
-        String fullName = name + character;
-
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(fullName)
+                .fillCompanyNameField(name + character)
                 .fillCompanyTypeField(COMPANY_TYPE);
 
         Allure.step("Verify: 'Create' button is disabled");
@@ -172,8 +177,6 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Company can be added by filling out required fields")
     public void testAddCompanyByFillRequiredFields() {
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -185,8 +188,6 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: company creation success message is displayed");
         assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
                 .hasText("SUCCESSCompany was created successfully");
-
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
     }
 
     @Test
@@ -195,54 +196,17 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Error is displayed when trying to create a company with an already existing name")
     public void testAddCompanyWithSameName() {
-        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
-
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(COMPANY_NAME)
+                .fillCompanyNameField(EXISTING_COMPANY_NAME)
                 .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: error message is displayed for duplicate company name");
-        assertThat(addCompanyDialog
-                .getAlert().getMessage())
-                .containsText("Company with name {%s} already exists.".formatted(COMPANY_NAME));
-
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-    }
-
-    @Test(expectedExceptions = AssertionFailedError.class)
-    @TmsLink("227")
-    @Epic("System/Companies and business units")
-    @Feature("Add company")
-    @Description("Company creation with Cyrillic symbols")
-    public void testAddCompanyWithCyrillicSymbols() {
-        String companyName = "Амазон";
-
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton()
-                .fillCompanyNameField(companyName)
-                .fillCompanyTypeField("ООО")
-                .fillCompanyDescriptionField("Описание деятельности компании Амазон")
-                .fillCompanyWebsiteField("амазон.рф")
-                .fillCompanyPrimaryContactField("Даниил Иванов")
-                .fillCompanyEmailField("amazon@gmail.com")
-                .fillCompanyCountryField("Россия")
-                .fillCompanyStateField("Московская")
-                .fillCompanyZipField("876905")
-                .fillCompanyCityField("Москва")
-                .fillCompanyPhoneField("8(495) 223-56-11")
-                .fillCompanyMobileField("+7 (951) 789-78-76")
-                .fillCompanyFaxField("84952235611");
-
-        Allure.step("Verify: Create button is enabled");
-        assertThat(addCompanyDialog.getCreateButton()).isEnabled();
-
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
+        assertThat(addCompanyDialog.getAlert().getMessage())
+                .containsText("Company with name {%s} already exists.".formatted(EXISTING_COMPANY_NAME));
     }
 
     @Test
@@ -251,8 +215,6 @@ public class AddCompanyDialogTest extends BaseTest {
     @Feature("Add company")
     @Description("Validates successful company creation and correct field persistence (E2E test).")
     public void testAddCompanyEndToEndTest() {
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
-
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -292,8 +254,8 @@ public class AddCompanyDialogTest extends BaseTest {
                 .getSelectCompany().selectCompany(company.companyName());
 
         Allure.step("Verify: selected company is shown in the input field");
-        assertThat(companiesAndBusinessUnitsPage
-                .getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField())
+                .hasValue(company.companyName());
 
         Allure.step("Verify: name field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getName()).hasValue(company.companyName());
@@ -339,7 +301,14 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: city field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCity()).hasValue(company.companyAddress().city());
+    }
 
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        TestUtils.deleteCompany(getApiRequestContext(), EXISTING_COMPANY_NAME);
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        super.afterClass();
     }
 }

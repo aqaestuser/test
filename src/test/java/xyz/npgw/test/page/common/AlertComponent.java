@@ -19,21 +19,15 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
         this.currentPage = currentPage;
     }
 
-    public CurrentPageT waitUntilSuccessAlertIsPresent() {
-        successMessage.waitFor();
-
-        return currentPage;
-    }
-
-    public CurrentPageT waitUntilSuccessAlertIsHidden() {
-        successMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+    public CurrentPageT waitUntilAlertIsHidden() {
+        alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return currentPage;
     }
 
     public CurrentPageT waitUntilSuccessAlertIsGone() {
-        waitUntilSuccessAlertIsPresent();
-        waitUntilSuccessAlertIsHidden();
+        successMessage.waitFor();
+        successMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return currentPage;
     }
@@ -44,9 +38,9 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
         return alertMessage;
     }
 
-    @Step("Close 'SUCCESS' alert message")
+    @Step("Close alert message")
     public CurrentPageT clickCloseButton() {
-        successMessage.getByLabel("Close");
+        alertMessage.getByLabel("Close").click();
 
         return currentPage;
     }

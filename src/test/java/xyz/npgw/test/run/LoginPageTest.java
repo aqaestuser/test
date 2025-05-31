@@ -46,7 +46,6 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(ProjectProperties.getSuperPassword())
                 .checkRememberMeCheckbox()
                 .clickLoginButton()
-                
                 .clickLogOutButton();
 
         Allure.step("Verify: The user's email is in the email field");
@@ -65,11 +64,10 @@ public class LoginPageTest extends BaseTest {
                 .fillPasswordField(ProjectProperties.getSuperPassword())
                 .uncheckRememberMeCheckbox()
                 .clickLoginButton()
-                
                 .clickLogOutButton();
 
         Allure.step("Verify: The user's email is not in the email field");
-        assertThat(loginPage.getEmailField()).hasValue("");
+        assertThat(loginPage.getEmailField()).isEmpty();
     }
 
     @Test(dataProvider = "getAuthenticatedEndpoints", dataProviderClass = TestDataProvider.class)

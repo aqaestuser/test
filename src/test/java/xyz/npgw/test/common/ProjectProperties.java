@@ -29,8 +29,8 @@ public final class ProjectProperties {
     private static final String TRACING_MODE = PREFIX_PROP + "tracingMode";
 
     private static final String VIDEO_MODE = PREFIX_PROP + "videoMode";
-    private static final String VIDEO_WIDTH = PREFIX_PROP + "videoHeight";
-    private static final String VIDEO_HEIGHT = PREFIX_PROP + "videoWidth";
+    private static final String VIDEO_WIDTH = PREFIX_PROP + "videoWidth";
+    private static final String VIDEO_HEIGHT = PREFIX_PROP + "videoHeight";
 
     private static final String CLOSE_BROWSER_IF_ERROR = PREFIX_PROP + "closeBrowserIfError";
     private static final String ARTEFACT_DIR = PREFIX_PROP + "artefactDir";
@@ -90,7 +90,7 @@ public final class ProjectProperties {
     }
 
     public static int getViewportHeight() {
-        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "953"));
+        return Integer.parseInt(properties.getProperty(VIEWPORT_HEIGHT, "964"));
     }
 
     public static boolean isTracingMode() {
@@ -110,11 +110,11 @@ public final class ProjectProperties {
     }
 
     public static int getVideoWidth() {
-        return Integer.parseInt(properties.getProperty(VIDEO_WIDTH, "1280"));
+        return Integer.parseInt(properties.getProperty(VIDEO_WIDTH, "1920"));
     }
 
     public static int getVideoHeight() {
-        return Integer.parseInt(properties.getProperty(VIDEO_HEIGHT, "720"));
+        return Integer.parseInt(properties.getProperty(VIDEO_HEIGHT, "957"));
     }
 
     public static boolean closeBrowserIfError() {

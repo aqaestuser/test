@@ -2,19 +2,21 @@ package xyz.npgw.test.page.dialog;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BasePage;
 
-
 @Getter
 public class ProfileSettingsDialog<ReturnPageT extends BasePage> extends
         BaseDialog<ReturnPageT, ProfileSettingsDialog<ReturnPageT>> {
+
     private final ReturnPageT returnPage;
 
     private final Locator passwordField = getByPlaceholder("Enter new password");
     private final Locator repeatPasswordField = getByPlaceholder("Repeat new password");
-    private final Locator saveButton = locator("button:has-text('Save')");
+    private final Locator errorMessage = locator("[data-slot='error-message']");
+    private final Locator saveButton = getByRoleExact(AriaRole.BUTTON, "Save");
 
     public ProfileSettingsDialog(Page page, ReturnPageT returnPage) {
         super(page);
@@ -53,5 +55,4 @@ public class ProfileSettingsDialog<ReturnPageT extends BasePage> extends
 
         return this;
     }
-
 }

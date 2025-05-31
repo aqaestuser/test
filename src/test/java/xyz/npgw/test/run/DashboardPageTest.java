@@ -5,6 +5,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -18,6 +20,18 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertTrue;
 
 public class DashboardPageTest extends BaseTest {
+
+    private static final String COMPANY_NAME = "Dashboard%s".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "Dashboard business unit%s".formatted(RUN_ID);
+    private BusinessUnit businessUnit;
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+    }
 
     @Test
     @TmsLink("151")
@@ -46,8 +60,8 @@ public class DashboardPageTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(dashboardPage.getDateRangePicker().getDataRangePickerErrorMessage()).hasText(
-                "Start date must be before end date.");
+        assertThat(dashboardPage.getDateRangePicker().getDataRangePickerErrorMessage())
+                .hasText("Start date must be before end date.");
     }
 
     @Test
@@ -77,24 +91,18 @@ public class DashboardPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("'Reset filter' clears selected options to default")
     public void testResetFilter() {
-        final String companyName = "testResetFilter";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, "testResetFilter");
-
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .refreshDashboard()
-                .getSelectCompany().selectCompany(companyName)
-                .getSelectBusinessUnit().selectBusinessUnit("testResetFilter")
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .clickCurrencySelector()
                 .selectCurrency("EUR")
                 .clickResetFilterButton();
 
         Allure.step("Verify: the selected company field is empty after reset");
-        assertThat(dashboardPage.getSelectCompany().getSelectCompanyField()).hasValue("");
+        assertThat(dashboardPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
         Allure.step("Verify: the selected business unit field is empty after reset");
-        assertThat(dashboardPage.getSelectBusinessUnit().getSelectBusinessUnitField()).hasValue("");
+        assertThat(dashboardPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
 
         Allure.step("Verify: the currency selector displays 'ALL' after reset");
         assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
@@ -106,16 +114,9 @@ public class DashboardPageTest extends BaseTest {
     @Feature("Refresh data")
     @Description("Correct merchant ID is sent to the server")
     public void testCheckMerchantId() {
-        final String companyName = "Amazon";
-        final String merchantTitle = "Amazon business unit 1";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), companyName);
-        BusinessUnit businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
-
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .refreshDashboard()
-                .getSelectCompany().selectCompany(companyName)
-                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle);
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify: correct merchant ID is sent to the server");
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
@@ -130,8 +131,7 @@ public class DashboardPageTest extends BaseTest {
         Pattern pattern = Pattern.compile("(INITIATED|SUCCESS|FAILED)EUR.*USD.*GBP.*");
         DashboardPage dashboardPage = new DashboardPage(getPage())
                 .getDateRangePicker().setDateRangeFields("01-05-2025", "31-05-2025")
-                .clickRefreshDataButton()
-                .clickCountButton();
+                .clickRefreshDataButton();
 
         Allure.step("Verify: INITIATED main block contents");
         assertThat(dashboardPage.getInitiatedBlock()).containsText(pattern);
@@ -141,6 +141,9 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: FAILED main block contents");
         assertThat(dashboardPage.getFailedBlock()).containsText(pattern);
+
+        dashboardPage
+                .clickCountButton();
 
         Allure.step("Verify: INITIATED count block contents");
         assertThat(dashboardPage.getLifecycleInitiatedBlock()).containsText(pattern);
@@ -162,5 +165,13 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: FAILED amount block contents");
         assertThat(dashboardPage.getLifecycleFailedBlock()).containsText(pattern);
+    }
+
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        super.afterClass();
     }
 }

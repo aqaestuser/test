@@ -6,6 +6,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -23,7 +25,16 @@ import static org.testng.Assert.assertEquals;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
+    private static final String EXISTING_ACQUIRER_NAME = "Existing acquirer%s".formatted(RUN_ID);
+    private static final String ACQUIRER_NAME = "Awesome acquirer%s".formatted(RUN_ID);
     private final SystemConfig defaultConfig = new SystemConfig();
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createAcquirer(getApiRequestContext(), new Acquirer(EXISTING_ACQUIRER_NAME));
+    }
 
     @Test
     @TmsLink("249")
@@ -32,7 +43,18 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Description(
             "Verify that the 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
     public void testAddAcquirerFormOpensWithCorrectHeaderAndFieldsAndClosesCorrectly() {
-        List<String> expectedPlaceholders = List.of(
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab();
+
+        AddAcquirerDialog addAcquirerDialog = acquirersPage
+                .clickAddAcquirer();
+
+        Allure.step("Verify: the header contains the expected title text");
+        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Add acquirer");
+
+        Allure.step("Verify: all placeholders are correct for each field");
+        assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
                 "Enter acquirer name",
                 "Enter acquirer title",
                 "Enter acquirer code",
@@ -41,29 +63,16 @@ public class AddAcquirerDialogTest extends BaseTest {
                 "Enter resource URL",
                 "Enter notification queue",
                 "Enter acquirer config"
-        );
-
-        AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
-
-        AddAcquirerDialog addAcquirerDialog = acquirersPage.clickAddAcquirer();
-
-        Allure.step("Verify: the header contains the expected title text");
-        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Add acquirer");
-
-        Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addAcquirerDialog.getAllPlaceholders(), expectedPlaceholders);
+        ));
 
         Allure.step("Verify: the Status Switch visible and contains switch Active&Inactive");
-        assertThat(addAcquirerDialog.getStatusSwitch()).isVisible();
         assertThat(addAcquirerDialog.getStatusSwitch()).hasText("StatusActiveInactive");
 
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
-        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).isVisible();
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesEURUSDGBP");
 
-        addAcquirerDialog.clickCloseButton();
+        addAcquirerDialog
+                .clickCloseButton();
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
         assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
@@ -82,7 +91,7 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickStatusRadiobutton(status)
                 .getStatusRadiobutton(status);
 
-        Allure.step(String.format("Verify: The radiobutton %s clicked.", status));
+        Allure.step("Verify: The radiobutton is selected");
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
@@ -92,14 +101,11 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify that a new Acquirer can be successfully created and appears in the Acquirers dropdown.")
     public void testAcquirerSuccessfullyCreatedAndAppearsInDropdown() {
-        String acquirerName = "Awesome acquirer";
-        TestUtils.deleteAcquirer(getApiRequestContext(), acquirerName);
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
-                .fillAcquirerName(acquirerName)
+                .fillAcquirerName(ACQUIRER_NAME)
                 .fillChallengeUrl(defaultConfig.challengeUrl())
                 .fillFingerprintUrl(defaultConfig.fingerprintUrl())
                 .fillResourceUrl(defaultConfig.resourceUrl())
@@ -107,17 +113,17 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: Acquirer creation success message is displayed");
-        assertThat(acquirersPage.getAlert().getMessage()).containsText(
-                "SUCCESSAcquirer was created successfully");
+        assertThat(acquirersPage.getAlert().getMessage())
+                .containsText("SUCCESSAcquirer was created successfully");
 
-        Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
+        Allure.step("Verify: The 'Add acquirer' dialog is no longer visible");
         assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
 
         acquirersPage
-                .getSelectAcquirer().typeName(acquirerName);
+                .getSelectAcquirer().typeName(ACQUIRER_NAME);
 
-        Allure.step(String.format("Verify: Dropdown contain '%s' acquirer", acquirerName));
-        assertThat(acquirersPage.getSelectAcquirer().getAcquirerInDropdownOption(acquirerName)).isVisible();
+        Allure.step("Verify: Dropdown contains acquirer name");
+        assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirersDropdownItems()).hasText(ACQUIRER_NAME);
     }
 
     @Test
@@ -126,32 +132,27 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify error appears when creating an Acquirer with a duplicate name.")
     public void testCreateAcquirerWithDuplicateNameShowsError() {
-        String acquirerName = "Awesome acquirer";
-        if (!TestUtils.getAcquirer(getApiRequestContext(), acquirerName)) {
-            TestUtils.createAcquirer(getApiRequestContext(), new Acquirer(acquirerName));
-        }
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
         AddAcquirerDialog acquirerDialog = acquirersPage
                 .clickAddAcquirer()
-                .fillAcquirerName(acquirerName)
+                .fillAcquirerName(EXISTING_ACQUIRER_NAME)
                 .fillChallengeUrl(defaultConfig.challengeUrl())
                 .fillFingerprintUrl(defaultConfig.fingerprintUrl())
                 .fillResourceUrl(defaultConfig.resourceUrl())
                 .clickCheckboxCurrency("USD");
 
-        acquirerDialog.clickCreateButton();
+        acquirerDialog
+                .clickCreateButton();
 
         Allure.step("Verify: Acquirer Error message is displayed");
-        assertThat(acquirerDialog
-                .getAlert().getMessage())
-                .containsText("Acquirer with name {" + acquirerName + "} already exists.");
+        assertThat(acquirerDialog.getAlert().getMessage())
+                .containsText("Acquirer with name {" + EXISTING_ACQUIRER_NAME + "} already exists.");
 
         Allure.step("Verify: the 'Add acquirer' dialog is not closed");
-        assertThat(acquirersPage.getAddAcquirerDialog()).not().isHidden();
+        assertThat(acquirersPage.getAddAcquirerDialog()).isVisible();
     }
 
     @Test
@@ -166,10 +167,11 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickAddAcquirer()
                 .fillAcquirerName("Acquirer name");
 
-        Allure.step("Verify: 'Create' button is not disabled.");
-        assertThat(addAcquirerDialog.getCreateButton()).not().isDisabled();
+        Allure.step("Verify: 'Create' button is enabled.");
+        assertThat(addAcquirerDialog.getCreateButton()).isEnabled();
 
-        addAcquirerDialog.getAcquirerNamePlaceholder().clear();
+        addAcquirerDialog
+                .getAcquirerNamePlaceholder().clear();
 
         Allure.step("Verify: 'Create' button is disabled.");
         assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
@@ -181,8 +183,6 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify validation messages when creating Acquirer with invalid input.")
     public void testDisplayValidationErrorsForInvalidAcquirerInput(Acquirer acquirer, String expectedError) {
-        TestUtils.deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu()
@@ -192,9 +192,15 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .fillAcquirerForm(acquirer)
                 .clickCreateButton();
 
-        assertThat(acquirersPage.getAlert().getMessage()).isVisible();
-
-        Allure.step(String.format("Verify error message is: %s", expectedError));
+        Allure.step("Verify: error message presence and text");
         assertThat(acquirersPage.getAlert().getMessage()).hasText(expectedError);
+    }
+
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteAcquirer(getApiRequestContext(), EXISTING_ACQUIRER_NAME);
+        TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_NAME);
+        super.afterClass();
     }
 }

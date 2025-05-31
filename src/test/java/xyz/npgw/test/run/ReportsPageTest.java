@@ -6,9 +6,12 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.ReportsPage;
@@ -21,20 +24,17 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class ReportsPageTest extends BaseTest {
 
-    private static final List<String> REPORT_COLUMNS = List.of(
-            "Merchant Name",
-            "Business Unit",
-            "Merchant ID",
-            "Creation Date",
-            "TimeZone",
-            "Transaction Type",
-            "Status",
-            "Transaction ID",
-            "External ID",
-            "Gross Currency",
-            "Gross Credit",
-            "Payment Method"
-    );
+    private static final String COMPANY_NAME = "Generate report%s".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "Generate report merchant%s".formatted(RUN_ID);
+    private BusinessUnit businessUnit;
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+    }
 
     @Test
     @TmsLink("153")
@@ -64,8 +64,8 @@ public class ReportsPageTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(reportsPage.getDateRangePicker().getDataRangePickerErrorMessage()).hasText(
-                "Start date must be before end date.");
+        assertThat(reportsPage.getDateRangePicker().getDataRangePickerErrorMessage())
+                .hasText("Start date must be before end date.");
     }
 
     @Test
@@ -74,17 +74,10 @@ public class ReportsPageTest extends BaseTest {
     @Feature("Generate report")
     @Description("Verify content of 'Generation Parameters dialog'")
     public void testContentOfGenerationParametersDialog() {
-        String companyName = "Generate report";
-        String merchantTitle = "Generate report merchant";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
-
         ReportsParametersDialog generationParametersDialog = new DashboardPage(getPage())
-                .refreshDashboard()
                 .clickReportsLink()
-                .getSelectCompany().selectCompany(companyName)
-                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle)
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .clickGenerateReportButton();
 
         Allure.step("Verify: Dialog header text");
@@ -94,8 +87,19 @@ public class ReportsPageTest extends BaseTest {
         assertThat(generationParametersDialog.getGenerateButton()).isEnabled();
 
         Allure.step("Verify: All report column names are listed in the 'Generation Parameters dialog'");
-        Assert.assertEquals(
-                new HashSet<>(generationParametersDialog.getReportColumns()), new HashSet<>(REPORT_COLUMNS));
+        Assert.assertEquals(new HashSet<>(generationParametersDialog.getReportColumns()), new HashSet<>(List.of(
+                "Merchant Name",
+                "Business Unit",
+                "Merchant ID",
+                "Creation Date",
+                "TimeZone",
+                "Transaction Type",
+                "Status",
+                "Transaction ID",
+                "External ID",
+                "Gross Currency",
+                "Gross Credit",
+                "Payment Method")));
     }
 
     @Test
@@ -104,21 +108,14 @@ public class ReportsPageTest extends BaseTest {
     @Feature("Generate report")
     @Description("Check/uncheck reports columns in the 'Generation Parameters dialog'")
     public void testCheckboxesOfGenerationParameters() {
-        String companyName = "Generate report one";
-        String merchantTitle = "Generate report one merchant";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, merchantTitle);
-
         ReportsParametersDialog generationParametersDialog = new DashboardPage(getPage())
-                .refreshDashboard()
                 .clickReportsLink()
-                .getSelectCompany().selectCompany(companyName)
-                .getSelectBusinessUnit().selectBusinessUnit(merchantTitle)
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .clickGenerateReportButton();
 
         Allure.step("Verify: All report columns are checked at first opening the 'Generation Parameters dialog'");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
 
         generationParametersDialog
                 .hoverOnReportColumnsCheckbox();
@@ -130,7 +127,7 @@ public class ReportsPageTest extends BaseTest {
                 .clickReportColumnsCheckbox();
 
         Allure.step("Verify: All report columns are unchecked after click on the 'Report columns' checkbox");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsUnchecked());
 
         generationParametersDialog
                 .clickCloseIcon()
@@ -139,7 +136,7 @@ public class ReportsPageTest extends BaseTest {
                 .clickGenerateReportButton();
 
         Allure.step("Verify: All report columns remained unchecked after exiting the 'Generation Parameters dialog'");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsUnchecked());
 
         generationParametersDialog
                 .hoverOnReportColumnsCheckbox();
@@ -151,18 +148,26 @@ public class ReportsPageTest extends BaseTest {
                 .clickReportColumnsCheckbox();
 
         Allure.step("Verify: All report columns are checked after click on the 'Report columns' checkbox");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
 
         generationParametersDialog
                 .clickAllColumnCheckboxesOneByOne();
 
         Allure.step("Verify: All report columns are unchecked after clicking on them one by one");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsUnchecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsUnchecked());
 
         generationParametersDialog
                 .clickAllColumnCheckboxesOneByOne();
 
         Allure.step("Verify: All report columns are checked after clicking on them one by one");
-        Assert.assertTrue(generationParametersDialog.isAllColumnnsChecked());
+        Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
+    }
+
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        super.afterClass();
     }
 }

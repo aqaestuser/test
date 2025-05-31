@@ -25,12 +25,12 @@ public record Acquirer(
 
     public static void create(APIRequestContext request, Acquirer acquirer) {
         APIResponse response = request.post("portal-v1/acquirer", RequestOptions.create().setData(acquirer));
-        log.info("create acquirer '{}' - {} {}", acquirer.acquirerName(), response.status(), response.text());
+        log.info("create acquirer '{}' - {}", acquirer.acquirerName(), response.status());
     }
 
     public static boolean get(APIRequestContext request, String acquirerName) {
         APIResponse response = request.get("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("get acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+        log.info("get acquirer '{}' - {}", acquirerName, response.status());
 
         return response.ok();
     }
@@ -43,6 +43,6 @@ public record Acquirer(
 
     public static void delete(APIRequestContext request, String acquirerName) {
         APIResponse response = request.delete("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("delete acquirer '{}' - {} {}", acquirerName, response.status(), response.text());
+        log.info("delete acquirer '{}' - {}", acquirerName, response.status());
     }
 }

@@ -21,6 +21,7 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
         SelectBusinessUnitTrait<DashboardPage>,
         SelectCompanyTrait<DashboardPage> {
 
+    private final Locator htmlTag = locator("html");
     @Getter(AccessLevel.NONE)
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator yAxisLabels = locator(".apexcharts-yaxis-label tspan");

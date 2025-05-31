@@ -8,6 +8,7 @@ import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public final class TestUtils {
@@ -45,6 +46,21 @@ public final class TestUtils {
 
     public static BusinessUnit createBusinessUnit(APIRequestContext request, String companyName, String merchantTitle) {
         return BusinessUnit.create(request, companyName, merchantTitle);
+    }
+
+    public static BusinessUnit[] createBusinessUnits(APIRequestContext request, String company, String[] merchants) {
+        return Arrays.stream(merchants)
+                .map(merchantTitle -> BusinessUnit.create(request, company, merchantTitle))
+                .toArray(BusinessUnit[]::new);
+    }
+
+    public static void deleteBusinessUnit(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+        BusinessUnit.delete(request, companyName, businessUnit);
+    }
+
+    public static void deleteBusinessUnits(APIRequestContext request, String company, BusinessUnit[] businessUnits) {
+        Arrays.stream(businessUnits)
+                .forEach(businessUnit -> BusinessUnit.delete(request, company, businessUnit));
     }
 
     public static void createBusinessUnitsIfNeeded(APIRequestContext request, User user) {

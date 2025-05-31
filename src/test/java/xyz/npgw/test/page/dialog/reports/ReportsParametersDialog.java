@@ -49,7 +49,7 @@ public class ReportsParametersDialog extends BaseDialog<ReportsPage, ReportsPara
         return this;
     }
 
-    public boolean isAllColumnnsChecked() {
+    public boolean isAllColumnsChecked() {
         checkboxes.last().waitFor();
 
         int totalColumns = checkboxes.count() - 1;
@@ -62,7 +62,7 @@ public class ReportsParametersDialog extends BaseDialog<ReportsPage, ReportsPara
         return checked == totalColumns;
     }
 
-    public boolean isAllColumnnsUnchecked() {
+    public boolean isAllColumnsUnchecked() {
         checkboxes.last().waitFor();
 
         int totalColumns = checkboxes.count() - 1;

@@ -5,7 +5,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import net.datafaker.Faker;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
@@ -20,6 +21,19 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class AddBusinessUnitTest extends BaseTest {
 
     private static final String COMPANY_NAME = "CompanyName";
+    BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
+    Company company213 = new Company("Company 213%s".formatted(RUN_ID));
+    Company company238 = new Company("Company 238%s".formatted(RUN_ID));
+    Company company241 = new Company("Company 241%s".formatted(RUN_ID));
+    Company company218 = new Company("Company 218%s".formatted(RUN_ID));
+    Company company480 = new Company("Company 480%s".formatted(RUN_ID));
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+    }
 
     @Test
     @TmsLink("213")
@@ -27,26 +41,21 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Verify 'Add business unit' button activation once some company is selected")
     public void testVerifyAvailabilityOfBusinessUnitButton() {
-        Company company = new Company(new Faker());
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(company213.companyName())
+                .fillCompanyTypeField(company213.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName());
+                .getSelectCompany().selectCompany(company213.companyName());
 
         Allure.step("Verify: 'Add business unit' button is available");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
-                .isEnabled();
-        Allure.step("Verify: 'Edit selected company' button is available");
-        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton())
-                .isEnabled();
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isEnabled();
 
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        Allure.step("Verify: 'Edit selected company' button is available");
+        assertThat(companiesAndBusinessUnitsPage.getEditCompanyButton()).isEnabled();
     }
 
     @Test
@@ -60,8 +69,7 @@ public class AddBusinessUnitTest extends BaseTest {
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled once no destination company is selected");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
-                .isDisabled();
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton()).isDisabled();
     }
 
     @Test
@@ -70,28 +78,22 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Verify that 'Company name' field is prefilled and impossible to change")
     public void testCompanyNameFieldDefaultState() {
-        Company company = new Company(new Faker());
-
         AddBusinessUnitDialog addBusinessUnitDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(company238.companyName())
+                .fillCompanyTypeField(company238.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company238.companyName())
                 .clickOnAddBusinessUnitButton();
 
         Allure.step("Verify: Company name field is read-only and prefilled created company");
-        assertThat(addBusinessUnitDialog.getCompanyNameField())
-                .hasValue(company.companyName());
+        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasValue(company238.companyName());
 
         Allure.step("Verify: 'Company name' field is non-editable");
-        assertThat(addBusinessUnitDialog.getCompanyNameField())
-                .hasAttribute("aria-readonly", "true");
-
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
     }
 
     @Test
@@ -100,25 +102,20 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Verify that a new business unit wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
-        Company company = new Company(new Faker());
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(company241.companyName())
+                .fillCompanyTypeField(company241.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company241.companyName())
                 .clickOnAddBusinessUnitButton()
                 .clickCloseButton();
 
         Allure.step("Verify: The table is empty and 'No rows to display.' is displayed");
-        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable())
-                .containsText("No rows to display.");
-
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
     }
 
     @Test
@@ -127,32 +124,27 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Add a new business unit with 'Add business unit' button")
     public void testAddNewMerchants() {
-        Company company = new Company(new Faker());
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(company218.companyName())
+                .fillCompanyTypeField(company218.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company218.companyName())
                 .clickOnAddBusinessUnitButton()
-                .fillBusinessUnitNameField(company.companyType())
+                .fillBusinessUnitNameField(company218.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Verify: New business unit name appears in the list");
         assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit name"))
-                .hasText(company.companyType());
+                .hasText(company218.companyType());
 
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit ID"))
                 .containsText("id.merchant");
-
-        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company.companyName(), company.companyType());
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @Test
@@ -161,24 +153,20 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify default filter state was applied once reset")
     public void testResetAppliedFilter() {
-        Company company = new Company(new Faker());
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(company480.companyName())
+                .fillCompanyTypeField(company480.companyType())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(company480.companyName())
                 .clickOnResetFilterButton();
 
         Allure.step("Verify: Ensure the prompt appears when no company is selected");
         assertThat(companiesAndBusinessUnitsPage.getPageContent())
                 .containsText("Select company name to view merchants");
-
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @Test
@@ -187,10 +175,6 @@ public class AddBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Validates successful business unit addition to company (E2E test).")
     public void testAddBusinessUnitEndToEndTest() {
-        TestUtils.createCompanyIfNeeded(getApiRequestContext(), COMPANY_NAME);
-
-        BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .refreshDashboard()
                 .clickSystemAdministrationLink()
@@ -231,8 +215,19 @@ public class AddBusinessUnitTest extends BaseTest {
         Allure.step("Verify: Merchant ID is displayed");
         assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit ID"))
                 .containsText("id.merchant");
+    }
 
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteCompany(getApiRequestContext(), company213.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), company238.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), company241.companyName());
+        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company218.companyName(), company218.companyType());
+        TestUtils.deleteCompany(getApiRequestContext(), company218.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), company480.companyName());
         TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        super.afterClass();
     }
 }

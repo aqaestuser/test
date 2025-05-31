@@ -21,10 +21,12 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.entity.UserRole;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 
 import java.io.IOException;
@@ -41,7 +43,7 @@ import java.util.Map;
 @Log4j2
 public abstract class BaseTest {
 
-    protected static String runId = new SimpleDateFormat(".MMdd.HHmmss").format(new Date());
+    protected static final String RUN_ID = new SimpleDateFormat(".MMdd.HHmmss").format(new Date());
 
     private Playwright playwright;
     private Browser browser;
@@ -51,15 +53,26 @@ public abstract class BaseTest {
     @Getter(AccessLevel.PROTECTED)
     private APIRequestContext apiRequestContext;
     private LocalTime bestBefore = LocalTime.now();
+    private String testId;
 
     @BeforeClass
     protected void beforeClass() {
         playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
+        initApiRequestContext();
         browser = BrowserFactory.getBrowser(playwright);
     }
 
     @BeforeMethod
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
+        testId = "%s/%s/%s/%s(%d)%s".formatted(
+                ProjectProperties.getArtefactDir(),
+                ProjectProperties.getBrowserType(),
+                method.getDeclaringClass().getSimpleName(),
+                method.getName(),
+                testResult.getMethod().getCurrentInvocationCount(),
+                new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
+        log.info(">>> {}", testId);
+
         if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
             throw new SkipException("Test skipped due to failFast option being true");
         }
@@ -89,46 +102,38 @@ public abstract class BaseTest {
 
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
-
-        log.info("{}", getTestName(method, testResult).replace("(", "_").split("_")[0]);
-        initApiRequestContext();
         openSite(args);
     }
 
     @AfterMethod
-    protected void afterMethod(Method method, ITestResult testResult) {
-        String testName = getTestName(method, testResult);
-
+    protected void afterMethod(Method method, ITestResult testResult) throws IOException {
         if (!testResult.isSuccess() && !ProjectProperties.closeBrowserIfError()) {
             page.pause();
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{}_{}  {} in {} s",
-                testResult.isSuccess() ? "OK" : "FAILURE", testResult.getStatus(),
-                testName.split("/")[1],
-                testDuration);
+        log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
 
-        Path videoFilePath = Paths
-                .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".webm");
         if (page != null) {
             page.close();
             if (ProjectProperties.isVideoMode() && page.video() != null) {
                 if (testResult.getStatus() == ITestResult.FAILURE) {
+                    Path videoFilePath = Paths.get(testId + ".webm");
                     page.video().saveAs(videoFilePath);
-                    addVideoToAllure(videoFilePath);
+                    Allure.getLifecycle().addAttachment(
+                            "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
                 }
                 page.video().delete();
             }
         }
 
-        Path traceFilePath = Paths
-                .get(ProjectProperties.getArtefactDir(), ProjectProperties.getBrowserType(), testName + ".zip");
         if (context != null) {
             if (ProjectProperties.isTracingMode()) {
                 if (testResult.getStatus() == ITestResult.FAILURE) {
+                    Path traceFilePath = Paths.get(testId + ".zip");
                     context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
-                    addTracesToAllure(traceFilePath);
+                    Allure.getLifecycle().addAttachment(
+                            "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
                 } else {
                     context.tracing().stop();
                 }
@@ -152,36 +157,16 @@ public abstract class BaseTest {
             browser.close();
         }
         if (apiRequestContext != null) {
+            String uid = "%s%s".formatted(Thread.currentThread().getId(), RUN_ID);
+            Arrays.stream(UserRole.values()).forEach(userRole -> {
+                User.delete(apiRequestContext, "%s.%s@email.com".formatted(userRole.toString().toLowerCase(), uid));
+            });
+            Company.delete(apiRequestContext, "Company %s".formatted(uid));
+
             apiRequestContext.dispose();
         }
         if (playwright != null) {
             playwright.close();
-        }
-    }
-
-    private String getTestName(Method method, ITestResult testResult) {
-        String testName = method.getDeclaringClass().getSimpleName() + "/" + method.getName();
-        if (!method.getAnnotation(Test.class).dataProvider().isEmpty()) {
-            testName = "%s(%d)".formatted(testName, testResult.getMethod().getCurrentInvocationCount() - 1);
-        }
-        return testName + new SimpleDateFormat("_MMdd_HHmmss").format(new Date());
-    }
-
-    private void addVideoToAllure(Path path) {
-        try {
-            Allure.getLifecycle()
-                    .addAttachment("video", "video/webm", "webm", Files.readAllBytes(path));
-        } catch (IOException e) {
-            log.error("Add video to allure failed: {}", e.getMessage());
-        }
-    }
-
-    private void addTracesToAllure(Path path) {
-        try {
-            Allure.getLifecycle()
-                    .addAttachment("tracing", "archive/zip", "zip", Files.readAllBytes(path));
-        } catch (IOException e) {
-            log.error("Add traces to allure failed: {}", e.getMessage());
         }
     }
 
@@ -194,12 +179,17 @@ public abstract class BaseTest {
                 if (args[0].equals("UNAUTHORISED")) {
                     new AboutBlankPage(page).navigate("/");
                     return;
-                } else {
-                    log.debug("Unknown user role, will use SUPER");
                 }
             }
         }
-        new AboutBlankPage(page).navigate("/").loginAs(userRole);
+
+        String uid = "%s%s".formatted(Thread.currentThread().getId(), RUN_ID);
+        String email = "%s.%s@email.com".formatted(userRole.toString().toLowerCase(), uid);
+        String companyName = "Company %s".formatted(uid);
+        if (!User.exists(apiRequestContext, email)) {
+            TestUtils.createUser(apiRequestContext, User.newUser(userRole, companyName, email));
+        }
+        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getUserPassword());
         initPageRequestContext();
     }
 
@@ -246,6 +236,18 @@ public abstract class BaseTest {
         }
     }
 
+    private String status(int code) {
+        return switch (code) {
+            case -1 -> "CREATED";
+            case 1 -> "SUCCESS";
+            case 2 -> "FAILURE";
+            case 3 -> "SKIP";
+            case 4 -> "SUCCESS_PERCENTAGE_FAILURE";
+            case 16 -> "STARTED";
+            default -> throw new IllegalStateException("Unexpected value: " + code);
+        };
+    }
+
     private record StorageState(Cookie[] cookies, Origin[] origins) {
     }
 
@@ -258,6 +260,6 @@ public abstract class BaseTest {
     private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
     }
 
-    private record TokenResponse(String userChallengeType, Token token) {
+    private record TokenResponse(String userChallengeType, Token token, String sessionId) {
     }
 }

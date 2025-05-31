@@ -19,8 +19,8 @@ import xyz.npgw.test.page.system.TeamPage;
 @SuppressWarnings("unchecked")
 public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage {
 
-    private final Locator img = getPage().getByAltText("logo");
-    private final Locator logo = getByRole(AriaRole.LINK).filter(new Locator.FilterOptions().setHas(img));
+    private final Locator logoImg = getPage().getByAltText("logo");
+    private final Locator logo = getByRole(AriaRole.LINK).filter(new Locator.FilterOptions().setHas(logoImg));
     private final Locator transactionsButton = getByRole(AriaRole.LINK, "Transactions");
     private final Locator reportsButton = getByRole(AriaRole.LINK, "Reports");
     private final Locator systemAdministrationButton = getByRole(AriaRole.LINK, "System administration");
@@ -109,7 +109,7 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     }
 
     public boolean isLogoImageLoaded() {
-        return (boolean) getImg().evaluate(
+        return (boolean) getLogoImg().evaluate(
                 "img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0"
                         + " && !img.src.includes('base64') && !img.src.endsWith('.svg') && !img.src.endsWith('.ico')");
     }
