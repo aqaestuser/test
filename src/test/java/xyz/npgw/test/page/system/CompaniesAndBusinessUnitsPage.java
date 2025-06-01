@@ -9,7 +9,6 @@ import lombok.Getter;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.BusinessUnitsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
-import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
@@ -18,8 +17,7 @@ import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> implements
         SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
         AlertTrait<CompaniesAndBusinessUnitsPage>,
-        BusinessUnitsTableTrait,
-        SelectStatusTrait<CompaniesAndBusinessUnitsPage> {
+        BusinessUnitsTableTrait {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");

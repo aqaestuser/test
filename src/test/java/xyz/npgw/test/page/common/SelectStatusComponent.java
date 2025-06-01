@@ -56,9 +56,12 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
     }
 
     @Step("Select status '{value}' from dropdown menu")
-    public CurrentPageT selectStatus(String value) {
+    public CurrentPageT selectTransactionStatuses(String... statuses) {
         clickSelector();
-        clickValue(value);
+        for (String value : statuses) {
+            clickValue(value);
+        }
+        getPage().keyboard().press("Tab");
 
         return currentPage;
     }

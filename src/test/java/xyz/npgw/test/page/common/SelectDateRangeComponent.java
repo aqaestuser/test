@@ -7,6 +7,8 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
+import java.time.LocalTime;
+
 @Getter
 public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
 
@@ -34,6 +36,8 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         getByRole(AriaRole.SPINBUTTON).nth(3).fill(endParts[0]);
         getByRole(AriaRole.SPINBUTTON).nth(4).fill(endParts[1]);
         getByRole(AriaRole.SPINBUTTON).nth(5).fill(endParts[2]);
+
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
     }
