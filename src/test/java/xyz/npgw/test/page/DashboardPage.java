@@ -8,15 +8,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
-import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
+import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public final class DashboardPage extends HeaderPage<DashboardPage> implements
-        DateRangePickerTrait<DashboardPage>,
+        SelectDateRangeTrait<DashboardPage>,
         AlertTrait<DashboardPage>,
         SelectBusinessUnitTrait<DashboardPage>,
         SelectCompanyTrait<DashboardPage> {
@@ -29,7 +29,7 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
     private final Locator currencyLegendLabels = locator("span.apexcharts-legend-text");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonDashboardPage");
     @Getter
-    private final Locator currencySelector = getByLabelExact("Currency");
+    private final Locator currencySelector = getByRole(AriaRole.BUTTON, "Currency");
 
     private final Locator initiatedBlock = getByLabelExact("INITIATED").first();
     private final Locator pendingBlock = getByLabelExact("PENDING").first();

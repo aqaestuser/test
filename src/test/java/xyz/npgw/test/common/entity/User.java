@@ -80,13 +80,13 @@ public record User(
 
     public static boolean exists(APIRequestContext request, String email) {
         APIResponse response = request.get("portal-v1/user?email=%s".formatted(encode(email)));
-        log.debug("get user '{}' - {} {}", email, response.status(), response.text());
+        log.debug("get user '{}' - {}", email, response.status());
         return response.ok() && response.text().contains(email);
     }
 
     public static User[] getAll(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/user/list/%s".formatted(encode(companyName)));
-        log.debug("get all users for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.debug("get all users for company '{}' - {}", companyName, response.status());
         return new Gson().fromJson(response.text(), User[].class);
     }
 
@@ -96,13 +96,13 @@ public record User(
 
     public static void delete(APIRequestContext request, String email) {
         APIResponse response = request.delete("portal-v1/user?email=%s".formatted(encode(email)));
-        log.info("delete user '{}' - {} {}", email, response.status(), response.text());
+        log.info("delete user '{}' - {}", email, response.status());
     }
 
     public static void changePassword(APIRequestContext request, String email, String newPassword) {
         APIResponse response = request.post("portal-v1/user/password/change",
                 RequestOptions.create().setData(Map.of("email", email, "password", newPassword)));
-        log.info("change user '{}' password - {} {}", email, response.status(), response.text());
+        log.info("change user '{}' password - {}", email, response.status());
     }
 
     private static TokenResponse getTokenResponse(APIRequestContext request, Credentials credentials) {

@@ -59,8 +59,7 @@ public final class TestUtils {
     }
 
     public static void deleteBusinessUnits(APIRequestContext request, String company, BusinessUnit[] businessUnits) {
-        Arrays.stream(businessUnits)
-                .forEach(businessUnit -> BusinessUnit.delete(request, company, businessUnit));
+        Arrays.stream(businessUnits).forEach(businessUnit -> BusinessUnit.delete(request, company, businessUnit));
     }
 
     public static void createBusinessUnitsIfNeeded(APIRequestContext request, User user) {
@@ -93,6 +92,8 @@ public final class TestUtils {
     }
 
     public static void deleteCompany(APIRequestContext request, String companyName) {
+        deleteBusinessUnits(request, companyName, BusinessUnit.getAll(request, companyName));
+        Arrays.stream(User.getAll(request, companyName)).forEach(user -> User.delete(request, user.email()));
         Company.delete(request, companyName);
     }
 

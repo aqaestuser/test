@@ -5,10 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 
+import java.time.LocalTime;
 import java.util.NoSuchElementException;
 
+@Log4j2
 public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
@@ -40,13 +43,10 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Select '{businessUnitName}' business unit using filter")
     public CurrentPageT selectBusinessUnit(String businessUnitName) {
-        selectBusinessUnitField.waitFor();
-        getPage().waitForTimeout(1500);
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
-
-        selectBusinessUnitField.pressSequentially(businessUnitName,
-                new Locator.PressSequentiallyOptions().setDelay(100));
+        selectBusinessUnitField.fill(businessUnitName);
 
         if (dropdownOptionList.all().isEmpty()) {
             throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown.");

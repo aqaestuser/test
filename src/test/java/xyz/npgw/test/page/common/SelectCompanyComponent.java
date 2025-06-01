@@ -5,10 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 
+import java.time.LocalTime;
 import java.util.NoSuchElementException;
 
+@Log4j2
 public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
@@ -38,14 +41,10 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Select '{companyName}' company using filter")
     public CurrentPageT selectCompany(String companyName) {
-        selectCompanyField.waitFor();
-        getPage().waitForTimeout(1500);
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
-
-        selectCompanyField.pressSequentially(
-                companyName,
-                new Locator.PressSequentiallyOptions().setDelay(100));
+        selectCompanyField.fill(companyName);
 
         if (dropdownOptionList.all().isEmpty()) {
             throw new NoSuchElementException("Company '" + companyName + "' not found. Dropdown list is empty.");

@@ -10,9 +10,9 @@ import org.testng.Assert;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
+import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
 
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 public class TransactionsPage extends HeaderPage<TransactionsPage> implements TransactionsTableTrait,
-        DateRangePickerTrait<TransactionsPage>,
+        SelectDateRangeTrait<TransactionsPage>,
         SelectCompanyTrait<TransactionsPage>,
         SelectBusinessUnitTrait<TransactionsPage>,
         SelectStatusTrait<TransactionsPage> {

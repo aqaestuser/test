@@ -61,7 +61,7 @@ public record Company(
             return;
         }
         APIResponse response = request.delete("portal-v1/company/%s".formatted(encode(companyName)));
-        log.info("delete company '{}' - {}", companyName, response.status());
+        log.info("delete company '{}' - {} {}", companyName, response.status(), response.text());
     }
 
     public boolean isEmpty() {

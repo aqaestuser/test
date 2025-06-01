@@ -383,7 +383,6 @@ public class TeamPageTest extends BaseTest {
         String analystPassword = "CompanyAnalyst123!";
         String companyName = "Analyst company";
         TestUtils.deleteUser(getApiRequestContext(), analystEmail);
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
         TestUtils.createCompany(getApiRequestContext(), companyName);
         TestUtils.createMerchantTitleIfNeeded(getApiRequestContext(), companyName, "Business unit 1");
         TestUtils.createCompanyAdmin(getApiRequestContext(), companyName, ADMIN_EMAIL, ADMIN_PASSWORD);

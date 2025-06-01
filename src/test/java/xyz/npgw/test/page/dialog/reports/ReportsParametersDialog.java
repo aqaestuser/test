@@ -6,14 +6,14 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.ReportsPage;
-import xyz.npgw.test.page.common.trait.DateRangePickerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 
 import java.util.List;
 
 public class ReportsParametersDialog extends BaseDialog<ReportsPage, ReportsParametersDialog>
-        implements DateRangePickerTrait<ReportsParametersDialog>, SelectBusinessUnitTrait<ReportsParametersDialog> {
+        implements SelectDateRangeTrait<ReportsParametersDialog>, SelectBusinessUnitTrait<ReportsParametersDialog> {
 
     @Getter
     private final Locator generateButton = getByRole(AriaRole.BUTTON, "Generate");

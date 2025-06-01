@@ -55,12 +55,12 @@ public class DashboardPageTest extends BaseTest {
     @Description("Error message is displayed when start date is after end date.")
     public void testErrorMessageForReversedDateRange() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getDateRangePicker()
+                .getSelectDateRange()
                 .setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(dashboardPage.getDateRangePicker().getDataRangePickerErrorMessage())
+        assertThat(dashboardPage.getSelectDateRange().getErrorMessage())
                 .hasText("Start date must be before end date.");
     }
 
@@ -70,7 +70,8 @@ public class DashboardPageTest extends BaseTest {
     @Feature("Chart Display")
     @Description("All key chart elements are correctly displayed")
     public void testVisibleChartElementsAreDisplayedCorrectly() {
-        DashboardPage dashboardPage = new DashboardPage(getPage());
+        DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025");
 
         Allure.step("Verify: Y-axis percentage labels are correctly displayed");
         assertThat(dashboardPage.getYAxisLabels())
@@ -130,7 +131,7 @@ public class DashboardPageTest extends BaseTest {
     public void testTransactionSummary() {
         Pattern pattern = Pattern.compile("(INITIATED|SUCCESS|FAILED)EUR.*USD.*GBP.*");
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getDateRangePicker().setDateRangeFields("01-05-2025", "31-05-2025")
+                .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: INITIATED main block contents");

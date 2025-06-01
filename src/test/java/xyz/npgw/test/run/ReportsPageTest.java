@@ -60,11 +60,11 @@ public class ReportsPageTest extends BaseTest {
     public void testErrorMessageForReversedDateRange() {
         ReportsPage reportsPage = new DashboardPage(getPage())
                 .clickReportsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-04-2024")
+                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(reportsPage.getDateRangePicker().getDataRangePickerErrorMessage())
+        assertThat(reportsPage.getSelectDateRange().getErrorMessage())
                 .hasText("Start date must be before end date.");
     }
 
@@ -163,36 +163,23 @@ public class ReportsPageTest extends BaseTest {
         Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
     }
 
-    @AfterClass
-    @Override
-    protected void afterClass() {
-        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-        super.afterClass();
-    }
-
     @Test
     @TmsLink("653")
     @Epic("Reports")
     @Feature("Reset filter")
     @Description("'Reset filter' clears selected options to default")
     public void testResetFilter() {
-        final String companyName = "testResetFilter";
-        TestUtils.deleteCompany(getApiRequestContext(), companyName);
-        TestUtils.createCompany(getApiRequestContext(), companyName);
-        TestUtils.createBusinessUnit(getApiRequestContext(), companyName, "testResetFilter");
-
         ReportsPage reportsPage = new ReportsPage(getPage())
                 .clickReportsLink()
                 .refreshReports();
 
-        String defaultStartDate = reportsPage.getDateRangePicker().getDateRangePickerStartDate().textContent();
-        String defaultEndDate = reportsPage.getDateRangePicker().getDateRangePickerEndDate().textContent();
+        String defaultStartDate = reportsPage.getSelectDateRange().getStartDate().textContent();
+        String defaultEndDate = reportsPage.getSelectDateRange().getEndDate().textContent();
 
         reportsPage
-                .getSelectCompany().selectCompany(companyName)
-                .getSelectBusinessUnit().selectBusinessUnit(companyName)
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
+                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-05-2025")
                 .clickResetFilterButton();
 
         Allure.step("Verify: the selected company field is empty after reset");
@@ -202,7 +189,15 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
 
         Allure.step("Verify: the selected date picker dates are returned to default");
-        assertThat(reportsPage.getDateRangePicker().getDateRangePickerStartDate()).hasText(defaultStartDate);
-        assertThat(reportsPage.getDateRangePicker().getDateRangePickerEndDate()).hasText(defaultEndDate);
+        assertThat(reportsPage.getSelectDateRange().getStartDate()).hasText(defaultStartDate);
+        assertThat(reportsPage.getSelectDateRange().getEndDate()).hasText(defaultEndDate);
+    }
+
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        super.afterClass();
     }
 }

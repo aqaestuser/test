@@ -96,7 +96,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testFilterTransactionsByCurrency(String currency) {
         List<String> currencyValues = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-05-2025", "30-05-2025")
+                .getSelectDateRange().setDateRangeFields("01-05-2025", "30-05-2025")
                 .clickCurrencySelector()
                 .selectCurrency(currency)
                 .getTable().getColumnValuesFromAllPages("Currency", Function.identity());
@@ -140,7 +140,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testPaginationNextButton() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "31-05-2025")
+                .getSelectDateRange().setDateRangeFields("01-04-2025", "31-05-2025")
                 .getTable().clickNextPageButton();
 
         Allure.step("Verify: button 2 is active");
@@ -159,7 +159,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink();
 
         Allure.step("Verify: DataRange picker is visible");
-        assertThat(transactionsPage.getDateRangePicker().getDateRangePickerField()).isVisible();
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).isVisible();
 
         Allure.step("Verify: Business Unit selector is visible");
         assertThat(transactionsPage.getBusinessUnitSelector()).isVisible();
@@ -258,7 +258,7 @@ public class TransactionsPageTest extends BaseTest {
 
         List<String> amountValues = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-05-2025")
+                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-05-2025")
                 .clickAmountButton()
                 .fillAmountFromField(String.valueOf(amountFrom))
                 .fillAmountToField(String.valueOf(amountTo))
@@ -312,11 +312,11 @@ public class TransactionsPageTest extends BaseTest {
     public void testErrorMessageForReversedDateRange() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-04-2025", "01-04-2024")
+                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
-        assertThat(transactionsPage.getDateRangePicker().getDataRangePickerErrorMessage())
+        assertThat(transactionsPage.getSelectDateRange().getErrorMessage())
                 .hasText("Start date must be before end date.");
     }
 
@@ -494,7 +494,7 @@ public class TransactionsPageTest extends BaseTest {
         String companyAdminEmail = "companyAdmin@gmail.com";
         String companyAdminPassword = "CompanyAdmin1!";
         TestUtils.deleteUser(getApiRequestContext(), companyAdminEmail);
-        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
+//        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
         TestUtils.createCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
         TestUtils.createCompanyAdmin(
                 getApiRequestContext(), ADMIN_COMPANY_NAME, companyAdminEmail, companyAdminPassword);
@@ -547,7 +547,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
-                .getDateRangePicker().setDateRangeFields("01-05-2025", "07-05-2025")
+                .getSelectDateRange().setDateRangeFields("01-05-2025", "07-05-2025")
                 .clickCurrencySelector()
                 .selectCurrency("USD")
                 .selectCardType("VISA")
@@ -680,7 +680,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testDisplayAllFilteredByCurrencyRows(String currency) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getDateRangePicker().setDateRangeFields("01-05-2025", "31-05-2025");
+                .getSelectDateRange().setDateRangeFields("01-06-2025", "30-06-2025");
 
         int numberBeforeFilter = transactionsPage.getTable().countValue("Currency", currency);
         transactionsPage.getTable().goToFirstPageIfNeeded();
