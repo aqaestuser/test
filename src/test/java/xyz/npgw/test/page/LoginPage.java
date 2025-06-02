@@ -2,15 +2,20 @@ package xyz.npgw.test.page;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.UserRole;
+import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.BasePage;
+
+import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
+import static xyz.npgw.test.common.util.ResponseUtils.clickAndWaitForResponse;
 
 public final class LoginPage extends BasePage {
 
@@ -21,6 +26,9 @@ public final class LoginPage extends BasePage {
     private final Locator rememberMeCheckbox = checkbox("Remember me");
     @Getter
     private final Locator loginFormTitle = locator(".login-form-container h3");
+    private final Locator newPasswordField = locator("input[aria-label='New password']");
+    private final Locator repeatNewPasswordField = locator("input[aria-label='Repeat password']");
+    private final Locator saveButton = buttonByName("Save");
 
     public LoginPage(Page page) {
         super(page);
@@ -40,11 +48,39 @@ public final class LoginPage extends BasePage {
         return this;
     }
 
+    @Step("Enter the user's password in the 'New password' field")
+    public LoginPage fillNewPasswordField(@Param(name = "Password", mode = MASKED) String userPassword) {
+        newPasswordField.fill(userPassword);
+
+        return this;
+    }
+
+    @Step("Enter the user's password in the 'Repeat new password' field")
+    public LoginPage fillRepeatNewPasswordField(@Param(name = "Password", mode = MASKED) String userPassword) {
+        repeatNewPasswordField.fill(userPassword);
+
+        return this;
+    }
+
     @Step("Press 'Login' button")
     public DashboardPage clickLoginButton() {
-        loginButton.click();
+        clickAndWaitForResponse(getPage(), loginButton, Pattern.compile(".*/transaction/summary$"), 5000);
 
         return new DashboardPage(getPage());
+    }
+
+    @Step("Press 'Login' button to change password")
+    public LoginPage clickLoginButtonToChangePassword() {
+        loginButton.click();
+
+        return this;
+    }
+
+    @Step("Press 'Save' button to save changed password")
+    public LoginPage clickSaveButton() {
+        saveButton.click();
+
+        return this;
     }
 
     @Step("Check 'Remember me' checkbox")
@@ -83,5 +119,12 @@ public final class LoginPage extends BasePage {
         assertThat(getPage()).hasURL("/dashboard");
 
         return new DashboardPage(getPage());
+    }
+
+    public LoginPage waitUntilAlertIsGone() {
+        alert("SUCCESS").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+        alert("SUCCESS").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+
+        return this;
     }
 }

@@ -2,7 +2,6 @@ package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
@@ -13,62 +12,38 @@ import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 
+@Getter
 public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage>
         implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage> {
 
     private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
-    @Getter
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
-    @Getter
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
-    @Getter
     private final Locator businessUnitEmptyList = locator("[role='gridcell']");
     private final Locator successAlert = alert("SUCCESS");
-    @Getter
     private final Locator addCompanyDialog = dialog();
     private final Locator companyNameDropdownList = locator("[role='option']");
-    @Getter
     private final Locator selectCompanyInput = placeholder("Search...");
-    @Getter
     private final Locator descriptionFromCompanyInfoSection = labelExact("Description");
-    @Getter
     private final Locator websiteFromCompanyInfoSection = labelExact("Website");
-    @Getter
     private final Locator primaryContactFromCompanyInfoSection = labelExact("Primary contact");
-    @Getter
     private final Locator emailFromCompanyInfoSection = labelExact("Email");
-    @Getter
     private final Locator phoneFromCompanyInfoSection = labelExact("Phone");
-    @Getter
     private final Locator mobileFromCompanyInfoSection = labelExact("Mobile");
-    @Getter
     private final Locator faxFromCompanyInfoSection = labelExact("Fax");
-    @Getter
     private final Locator countryFromCompanyInfoSection = labelExact("Country");
-    @Getter
     private final Locator stateFromCompanyInfoSection = labelExact("State");
-    @Getter
     private final Locator zipFromCompanyInfoSection = labelExact("ZIP");
-    @Getter
     private final Locator cityFromCompanyInfoSection = labelExact("City");
-    @Getter
     private final Locator apiActiveCheckboxFromCompanyInfoSection = labelExact("API active");
-    @Getter
     private final Locator portalActiveCheckboxFromCompanyInfoSection = labelExact("Portal active");
-    @Getter
     private final Locator businessUnitNameData = locator("[role='row'] span").first();
-    @Getter
     private final Locator merchantIdData = locator("[role='row'] span").nth(1);
-    @Getter
     private final Locator editBusinessUnitButton = getByTestId("EditBusinessUnitButton");
-
+    private final Locator merchantsTable = labelExact("merchants table");
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
-    }
-
-    protected Locator alert(String text) {
-        return getPage().getByRole(AriaRole.ALERT, new Page.GetByRoleOptions().setName(text));
     }
 
     @Step("Click 'Add company' button")

@@ -71,8 +71,8 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
         return this;
     }
 
-    @Step("Click Options Currency {value}")
-    public TransactionsPage clickCurrency(String value) {
+    @Step("Select currency {value} from dropdown menu")
+    public TransactionsPage selectCurrency(String value) {
         optionByName(value).waitFor();
         ResponseUtils.clickAndWaitForResponse(getPage(), optionByName(value), Constants.TRANSACTION_HISTORY_ENDPOINT);
 
@@ -215,8 +215,7 @@ public class TransactionsPage extends HeaderPage implements TableTrait, DateRang
 
     @Step("Click on the Settings button")
     public TransactionsPage clickSettingsButton() {
-        settingsButton.click();
-        textExact("Visible columns").waitFor();
+        ResponseUtils.clickAndWaitForText(getPage(), settingsButton, "Visible columns");
 
         return this;
     }
