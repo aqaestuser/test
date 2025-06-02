@@ -852,6 +852,24 @@ public class TransactionsPageTest extends BaseTest {
         assertEquals(totalRowsAfterFilter, numberWithStatusesAfterFilter);
     }
 
+    @Test
+    @TmsLink("677")
+    @Epic("Transactions")
+    @Feature("Date range")
+    @Description("Filtering transactions by date range")
+    public void testFilteringTransactionsByDataRange() {
+        String startDate = "01-06-2025";
+        String endDate = "05-06-2025";
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(startDate, endDate)
+                .clickRefreshDataButton();
+
+        Allure.step("Verify: Transactions can be filtered by date range");
+        Assert.assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
