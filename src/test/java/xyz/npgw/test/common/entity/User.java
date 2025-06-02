@@ -21,8 +21,8 @@ public record User(
         String password) {
 
     private static final String SUPER_COMPANY = "super";
-    private static final String DEFAULT_COMPANY = "defaultCompany";
-    private static final String DEFAULT_TITLE = "defaultTitle";
+    private static final String DEFAULT_COMPANY = "newDefaultCompany";
+    private static final String DEFAULT_TITLE = "newDefaultTitle";
 
     public static User newUser(UserRole userRole, String companyName, String email) {
         return switch (userRole) {

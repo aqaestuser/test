@@ -14,19 +14,30 @@ import java.util.List;
 @Log4j2
 public class CleanupUtils {
 
-    private static final List<String> COMPANY = List.of(
-            "Luke Payments", "CompanyForTestRunOnly Inc.", "super");
-    private static final List<String> ERR_500 = List.of(
-            "A2 info", "Company 112172", "Smitham-Johnson", "new company", "testframework");
+    private static final List<String> COMPANY = List.of("Luke Payments", "CompanyForTestRunOnly Inc.", "super");
     private static final List<String> USER = List.of(
             "test@email.com", "supertest@email.com", "admintest@email.com", "usertest@email.com");
-    private static final List<String> ACQUIRER = List.of(
-            "Luke EUR MID 1");
+    private static final List<String> ACQUIRER = List.of("Luke EUR MID 1");
+
+
+
+    public static void deleteCompanies(APIRequestContext request) {
+        Arrays.stream(Company.getAll(request))
+                .filter(c -> !COMPANY.contains(c.companyName()))
+                .forEach(item -> TestUtils.deleteCompany(request, item.companyName()));
+    }
+
+    public static void clean(APIRequestContext request) {
+        deleteUnprotectedAcquirers(request);
+
+        deleteMerchantsForCompaniesWithoutUsersAndWithDefaultValues(request);
+        deleteUnprotectedUsers(request);
+        deleteCompaniesWithoutUsersAndMerchants(request);
+    }
 
     public static void deleteCompaniesWithoutUsersAndMerchants(APIRequestContext request) {
         Arrays.stream(Company.getAll(request))
                 .filter(c -> !COMPANY.contains(c.companyName()))
-                .filter(c -> !ERR_500.contains(c.companyName()))
                 .forEach(item -> {
                     BusinessUnit[] businessUnits = BusinessUnit.getAll(request, item.companyName());
                     User[] users = User.getAll(request, item.companyName());
@@ -41,7 +52,6 @@ public class CleanupUtils {
     public static void deleteMerchantsForCompaniesWithoutUsersAndWithDefaultValues(APIRequestContext request) {
         Arrays.stream(Company.getAll(request))
                 .filter(c -> !COMPANY.contains(c.companyName()))
-                .filter(c -> !ERR_500.contains(c.companyName()))
                 .forEach(item -> {
                     User[] users = User.getAll(request, item.companyName());
                     if (users.length == 0) {
@@ -58,7 +68,6 @@ public class CleanupUtils {
     public static void deleteUnprotectedUsers(APIRequestContext request) {
         Arrays.stream(Company.getAll(request))
                 .filter(c -> !COMPANY.contains(c.companyName()))
-                .filter(c -> !ERR_500.contains(c.companyName()))
                 .forEach(item -> {
                     log.info("delete users from |{}|", item.companyName());
                     User[] users = User.getAll(request, item.companyName());
