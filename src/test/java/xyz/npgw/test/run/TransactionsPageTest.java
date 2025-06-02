@@ -891,6 +891,34 @@ public class TransactionsPageTest extends BaseTest {
         Assert.assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
     }
 
+    @Test
+    @TmsLink("687")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' clean 'Company' input field")
+    public void testResetCompany() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: the 'Company' input field is empty by default");
+        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
+
+        transactionsPage.getSelectCompany().clickSelectCompanyDropdownChevron()
+                        .getSelectCompany().clickSelectCompanyField()
+                        .getSelectCompany().selectFirstCompany();
+
+        String firstCompanyName = transactionsPage.getSelectCompany().firstCompanyName();
+
+        Allure.step("Verify: selected company is displayed in the 'Company' input field");
+        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).hasValue(firstCompanyName);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: the 'Company' input field is empty after reset");
+        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
+
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

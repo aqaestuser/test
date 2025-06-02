@@ -82,4 +82,20 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
         return page;
     }
+
+    @Step("Select first company in dropdown")
+    public CurrentPageT selectFirstCompany() {
+        if (dropdownOptionList.all().isEmpty()) {
+            throw new NoSuchElementException("Dropdown list is empty.");
+        } else {
+            dropdownOptionList.first().click();
+        }
+
+        return page;
+    }
+
+    public String firstCompanyName() {
+
+        return  dropdownOptionList.first().textContent();
+    }
 }
