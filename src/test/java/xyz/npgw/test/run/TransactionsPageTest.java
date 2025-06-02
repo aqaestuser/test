@@ -680,20 +680,20 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields("28-05-2025", "31-05-2025");
 
-        int numberWithCurrencyBeforeFilter = transactionsPage.getTable().countValues("Currency", currency);
+        int currencyCount = transactionsPage.getTable().countValues("Currency", currency);
         transactionsPage.getTable().goToFirstPageIfNeeded();
 
-        int numberWithCurrencyAfterFilter = transactionsPage
+        int filteredTransactionCount = transactionsPage
                 .clickCurrencySelector().selectCurrency(currency)
                 .getTable().countValues("Currency", currency);
 
-        int totalRowsAfterFilter = transactionsPage.getTable().countAllRows();
+        int totalFilteredRows = transactionsPage.getTable().countAllRows();
 
         Allure.step("Verify: All transactions with selected currency are shown after filter.");
-        assertEquals(numberWithCurrencyBeforeFilter, numberWithCurrencyAfterFilter);
+        assertEquals(currencyCount, filteredTransactionCount);
 
         Allure.step("Verify: Only transactions with selected currency are shown after filter.");
-        assertEquals(totalRowsAfterFilter, numberWithCurrencyAfterFilter);
+        assertEquals(totalFilteredRows, filteredTransactionCount);
 
     }
 
@@ -834,22 +834,43 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields("27-05-2025", "31-05-2025");
 
-        int numberWithStatusesBeforeFilter = transactionsPage
+        int statusesCount = transactionsPage
                 .getTable().countValues("Status", firstStatus, secondStatus);
 
         transactionsPage.getTable().goToFirstPageIfNeeded();
 
-        int numberWithStatusesAfterFilter = transactionsPage
+        int filteredTransactionCount  = transactionsPage
                 .getSelectStatus().selectTransactionStatuses(firstStatus, secondStatus)
                 .getTable().countValues("Status", firstStatus, secondStatus);
 
-        int totalRowsAfterFilter = transactionsPage.getTable().countAllRows();
+        int totalFilteredRows = transactionsPage.getTable().countAllRows();
 
         Allure.step("Verify: All transactions with selected statuses are shown after filter.");
-        assertEquals(numberWithStatusesBeforeFilter, numberWithStatusesAfterFilter);
+        assertEquals(statusesCount, filteredTransactionCount);
 
         Allure.step("Verify: Only transactions with selected statuses are shown after filter.");
-        assertEquals(totalRowsAfterFilter, numberWithStatusesAfterFilter);
+        assertEquals(totalFilteredRows, filteredTransactionCount);
+    }
+
+    // TODO bug - transactions isn't present in the table when a currency filter is applied on the last page
+    @Test(expectedExceptions = AssertionError.class)
+    @TmsLink("682")
+    @Epic("Transactions")
+    @Feature("Pagination")
+    @Description("Verify that transactions are present in the table when a currency filter is applied on the last page")
+    public void testTableDisplayWhenCurrencyFilterAppliedWhileOnLastPage() {
+        String euro = "EUR";
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields("26-05-2025", "31-05-2025");
+
+        int numberWithEuroInTable = transactionsPage.getTable().countValues("Currency", euro);
+        transactionsPage.getTable().goToLastPageIfNeeded();
+        transactionsPage.clickCurrencySelector().selectCurrency(euro);
+
+        Allure.step("Verify: Transactions are present in the table");
+        assertTrue(numberWithEuroInTable > 0 && !transactionsPage.getTable().isTableEmpty());
     }
 
     @Test

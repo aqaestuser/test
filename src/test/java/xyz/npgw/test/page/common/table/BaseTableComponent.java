@@ -208,6 +208,25 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return true;
     }
 
+    public boolean goToLastPageIfNeeded() {
+        if (hasNoPagination()) {
+            return false;
+        }
+        if (!isCurrentPage(getLastPageNumber())) {
+            clickPaginationPageButton(getLastPageNumber());
+        }
+
+        return true;
+    }
+
+    public String getLastPageNumber() {
+        return paginationItems.last().innerText();
+    }
+
+    public boolean isTableEmpty() {
+        return rows.first().isVisible();
+    }
+
     private boolean isCurrentPage(String number) {
         return getActivePageButton().innerText().equals(number);
     }
@@ -235,7 +254,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return nextPageButton.isEnabled();
     }
 
-    private boolean hasNoPagination() {
+    public boolean hasNoPagination() {
         return !paginationItems.first().isVisible();
     }
 
@@ -244,7 +263,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
-        if (!paginationItems.first().isVisible()) {
+        if (hasNoPagination()) {
             return Collections.emptyList();
         }
 
