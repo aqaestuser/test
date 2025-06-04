@@ -128,19 +128,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return getCurrentPage();
     }
 
-    @Step("Click previous page button")
-    public CurrentPageT clickPreviousPageButton() {
-        previousPageButton.click();
-
-        return getCurrentPage();
-    }
-
     public Locator getFirstRowCell(String columnHeader) {
         return getColumnCells(columnHeader).get(0);
-    }
-
-    public boolean hasRow(String rowHeader) {
-        return getRow(rowHeader).count() > 0;
     }
 
     public int countAllRows() {
@@ -170,9 +159,12 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
             rowsPerPage.add(getRows().count());
         } while (goToNextPage());
 
+        goToFirstPageIfNeeded();
+
         return rowsPerPage;
     }
 
+    @Step("Count rows with {columnHeader} = {values}")
     public int countValues(String columnHeader, String... values) {
         long count = 0;
         Set<String> valueSet = Set.of(values);
@@ -185,6 +177,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
                         .count();
             } while (goToNextPage());
         }
+        goToFirstPageIfNeeded();
+
         return (int) count;
     }
 
@@ -201,7 +195,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         if (hasNoPagination()) {
             return false;
         }
-        if (!isCurrentPage("1")) {
+        if (isNotCurrentPage("1")) {
             clickPaginationPageButton("1");
         }
 
@@ -212,7 +206,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         if (hasNoPagination()) {
             return false;
         }
-        if (!isCurrentPage(getLastPageNumber())) {
+        if (isNotCurrentPage(getLastPageNumber())) {
             clickPaginationPageButton(getLastPageNumber());
         }
 
@@ -227,8 +221,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return rows.first().isVisible();
     }
 
-    private boolean isCurrentPage(String number) {
-        return getActivePageButton().innerText().equals(number);
+    private boolean isNotCurrentPage(String number) {
+        return !getActivePageButton().innerText().equals(number);
     }
 
     private boolean goToNextPage() {
@@ -255,7 +249,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public boolean hasNoPagination() {
-        return !paginationItems.first().isVisible();
+        return paginationItems.first().isHidden();
     }
 
     public interface PageCallback {
