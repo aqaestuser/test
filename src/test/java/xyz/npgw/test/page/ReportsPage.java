@@ -51,5 +51,4 @@ public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTable
 
         return this;
     }
-
 }

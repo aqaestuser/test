@@ -17,6 +17,8 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.dialog.reports.ReportsParametersDialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -191,6 +193,36 @@ public class ReportsPageTest extends BaseTest {
         Allure.step("Verify: the selected date picker dates are returned to default");
         assertThat(reportsPage.getSelectDateRange().getStartDate()).hasText(defaultStartDate);
         assertThat(reportsPage.getSelectDateRange().getEndDate()).hasText(defaultEndDate);
+    }
+
+    @Test
+    @TmsLink("699")
+    @Epic("Reports")
+    @Feature("Table entries sorting")
+    @Description("'Filename' column header sorts entries in alphabetical and reverse order")
+    public void testSortingByFilename() {
+        ReportsPage reportsPage = new ReportsPage(getPage())
+                .clickReportsLink()
+                .getTable().clickFilenameColumnHeader();
+
+        List<String> actualFilenameList = reportsPage.getTable().getColumnValues("Filename");
+        List<String> sortedFilenameListAsc = new ArrayList<>(actualFilenameList);
+        Collections.sort(sortedFilenameListAsc);
+
+        Allure.step("Verify that entries are displayed in alphabetical order");
+        Assert.assertEquals(actualFilenameList, sortedFilenameListAsc,
+                "Filenames are not in alphabetical order");
+
+        reportsPage
+                .getTable().clickFilenameColumnHeader();
+
+        actualFilenameList = reportsPage.getTable().getColumnValues("filename");
+        List<String> sortedFilenameListDesc = new ArrayList<>(sortedFilenameListAsc);
+        Collections.reverse(sortedFilenameListDesc);
+
+        Allure.step("Verify that entries are displayed in reverse alphabetical order");
+        Assert.assertEquals(actualFilenameList, sortedFilenameListDesc,
+                "Filenames are not in reverse alphabetical order");
     }
 
     @AfterClass
