@@ -12,9 +12,4 @@ public record Address(
     public Address() {
         this("", "", "", "", "", "", "");
     }
-
-    public boolean isEmpty() {
-        return city.isEmpty() && zip.isEmpty() && country.isEmpty() && phone.isEmpty() && mobile.isEmpty()
-                && fax.isEmpty();
-    }
 }

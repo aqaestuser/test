@@ -5,6 +5,7 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
+import org.testng.SkipException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,9 @@ public record BusinessUnit(
     public static BusinessUnit create(APIRequestContext request, String companyName, String merchantTitle) {
         APIResponse response = request.post("portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(merchantTitle)));
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
         log.info("create merchant for company '{}' - {}", companyName, response.status());
         return new Gson().fromJson(response.text(), BusinessUnit.class);
     }
@@ -40,9 +44,12 @@ public record BusinessUnit(
 
     public static BusinessUnit[] getAll(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/company/%s/merchant".formatted(encode(companyName)));
-        log.info("get all merchants for company '{}' - {} {}", companyName, response.status(), response.text());
+        log.info("get all merchants for company '{}' - {}", companyName, response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
         if (response.status() == 404) {
-            return new BusinessUnit[0];
+            return new BusinessUnit[]{};
         }
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }

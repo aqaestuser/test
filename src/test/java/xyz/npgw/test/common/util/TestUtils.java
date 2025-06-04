@@ -13,8 +13,12 @@ import java.util.List;
 
 public final class TestUtils {
 
+    public static String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+    }
+
     public static void createUser(APIRequestContext request, User user) {
-        Company.delete(request, user);
+        TestUtils.deleteCompany(request, user.companyName());
         Company.create(request, user);
         List<BusinessUnit> businessUnits = BusinessUnit.create(request, user);
         User newUser = new User(
@@ -40,6 +44,10 @@ public final class TestUtils {
         User.delete(request, email);
     }
 
+    public static void deleteUsers(APIRequestContext request, User[] users) {
+        Arrays.stream(users).forEach(user -> User.delete(request, user.email()));
+    }
+
     public static void changeUserPassword(APIRequestContext request, String email, String newPassword) {
         User.changePassword(request, email, newPassword);
     }
@@ -61,6 +69,7 @@ public final class TestUtils {
     public static void deleteBusinessUnits(APIRequestContext request, String company, BusinessUnit[] businessUnits) {
         Arrays.stream(businessUnits).forEach(businessUnit -> BusinessUnit.delete(request, company, businessUnit));
     }
+
 
     public static void createBusinessUnitsIfNeeded(APIRequestContext request, User user) {
         Company.create(request, user.companyName());
@@ -92,21 +101,17 @@ public final class TestUtils {
     }
 
     public static void deleteCompany(APIRequestContext request, String companyName) {
-        deleteBusinessUnits(request, companyName, BusinessUnit.getAll(request, companyName));
-        Arrays.stream(User.getAll(request, companyName)).forEach(user -> User.delete(request, user.email()));
-        Company.delete(request, companyName);
-    }
-
-    public static String encode(String value) {
-        return URLEncoder.encode(value, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+        if (companyName.equals("super")) {
+            return;
+        }
+        while (Company.delete(request, companyName) != 204) {
+            deleteBusinessUnits(request, companyName, BusinessUnit.getAll(request, companyName));
+            deleteUsers(request, User.getAll(request, companyName));
+        }
     }
 
     public static void createAcquirer(APIRequestContext request, Acquirer acquirer) {
         Acquirer.create(request, acquirer);
-    }
-
-    public static boolean getAcquirer(APIRequestContext request, String acquirerName) {
-        return Acquirer.get(request, acquirerName);
     }
 
     public static void deleteAcquirer(APIRequestContext request, String acquirerName) {

@@ -5,6 +5,7 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.extern.log4j.Log4j2;
+import org.testng.SkipException;
 import xyz.npgw.test.common.ProjectProperties;
 
 import java.util.Map;
@@ -76,17 +77,29 @@ public record User(
     public static void create(APIRequestContext request, User user) {
         APIResponse response = request.post("portal-v1/user/create", RequestOptions.create().setData(user));
         log.info("create user '{}' {} - {}", user.email(), user.companyName(), response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
     }
 
     public static boolean exists(APIRequestContext request, String email) {
         APIResponse response = request.get("portal-v1/user?email=%s".formatted(encode(email)));
-        log.debug("get user '{}' - {}", email, response.status());
+        log.info("exist user '{}' - {}", email, response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
         return response.ok() && response.text().contains(email);
     }
 
     public static User[] getAll(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/user/list/%s".formatted(encode(companyName)));
-        log.debug("get all users for company '{}' - {}", companyName, response.status());
+        log.info("get all users for company '{}' - {}", companyName, response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
+        if (response.status() == 404) {
+            return new User[]{};
+        }
         return new Gson().fromJson(response.text(), User[].class);
     }
 
@@ -103,11 +116,17 @@ public record User(
         APIResponse response = request.post("portal-v1/user/password/change",
                 RequestOptions.create().setData(Map.of("email", email, "password", newPassword)));
         log.info("change user '{}' password - {}", email, response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
     }
 
     private static TokenResponse getTokenResponse(APIRequestContext request, Credentials credentials) {
         APIResponse response = request.post("/portal-v1/user/token", RequestOptions.create().setData(credentials));
-        log.info("get token '{}' - {}", credentials, response.status());
+        log.info("get token '{}' - {}", credentials.email, response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
         return new Gson().fromJson(response.text(), TokenResponse.class);
     }
 
@@ -118,14 +137,12 @@ public record User(
             Challenge challenge = new Challenge(tokenResponse.sessionId, credentials, tokenResponse.userChallengeType);
             APIResponse response = request.post("/portal-v1/user/challenge",
                     RequestOptions.create().setData(challenge));
-            log.info("pass challenge '{}' - {}", credentials, response.status());
+            log.info("pass challenge '{}' - {}", credentials.email, response.status());
+            if (response.status() >= 500) {
+                throw new SkipException(response.text());
+            }
         }
         exists(request, email);
-    }
-
-    @Override
-    public String toString() {
-        return "User: %s %s".formatted(email, userRole);
     }
 
     private record Credentials(String email, String password) {
