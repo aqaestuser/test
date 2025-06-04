@@ -22,13 +22,12 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
     private final Locator businessUnitDropdown = locator("div[aria-label='Suggestions']");
     @Getter
     private final Locator dropdownOptionList = getPage().getByRole(AriaRole.OPTION);
-    private final Locator selectBusinessUnitContainer =
-            locator("div[data-slot='input-wrapper']")
-                    .filter(new Locator.FilterOptions().setHas(selectBusinessUnitPlaceholder));
-    private final Locator selectBusinessUnitDropdownChevron =
-            selectBusinessUnitContainer.locator("button[aria-label='Show suggestions']:last-child");
-    private final Locator selectBusinessUnitClearIcon =
-            selectBusinessUnitContainer.locator("button[aria-label='Show suggestions']:first-child");
+    private final Locator selectBusinessUnitContainer = locator("div[data-slot='input-wrapper']")
+            .filter(new Locator.FilterOptions().setHas(selectBusinessUnitPlaceholder));
+    private final Locator selectBusinessUnitDropdownChevron = selectBusinessUnitContainer
+            .locator("button[aria-label='Show suggestions']:last-child");
+    private final Locator selectBusinessUnitClearIcon = selectBusinessUnitContainer
+            .locator("button[aria-label='Show suggestions']:first-child");
 
     private final CurrentPageT page;
 

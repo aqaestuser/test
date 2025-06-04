@@ -24,7 +24,6 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
                     .filter(new Locator.FilterOptions().setHas(selectCompanyField));
     private final Locator selectCompanyDropdownChevron = selectCompanyContainer
             .locator("button[aria-label='Show suggestions']:last-child");
-
     private final Locator selectCompanyClearIcon = selectCompanyContainer
             .locator("button[aria-label='Show suggestions']:first-child");
 

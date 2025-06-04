@@ -19,8 +19,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class EditBusinessUnitDialogTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "CompanyForBuEdit%s".formatted(RUN_ID);
-    private static final String MERCHANT_TITLE = "NewBUForEdit%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s company for bu edit".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "%s new bu for edit".formatted(RUN_ID);
     private BusinessUnit businessUnit;
 
     @BeforeClass

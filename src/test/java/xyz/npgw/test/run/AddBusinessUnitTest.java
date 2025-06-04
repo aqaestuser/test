@@ -22,11 +22,11 @@ public class AddBusinessUnitTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s CompanyName".formatted(RUN_ID);
     BusinessUnit businessUnit = new BusinessUnit("MerchantNameTest");
-    Company company213 = new Company("Company 213%s".formatted(RUN_ID));
-    Company company238 = new Company("Company 238%s".formatted(RUN_ID));
-    Company company241 = new Company("Company 241%s".formatted(RUN_ID));
-    Company company218 = new Company("Company 218%s".formatted(RUN_ID));
-    Company company480 = new Company("Company 480%s".formatted(RUN_ID));
+    Company company213 = new Company("%s company 213".formatted(RUN_ID));
+    Company company238 = new Company("%s company 238".formatted(RUN_ID));
+    Company company241 = new Company("%s company 241".formatted(RUN_ID));
+    Company company218 = new Company("%s company 218".formatted(RUN_ID));
+    Company company480 = new Company("%s company 480".formatted(RUN_ID));
 
     @BeforeClass
     @Override

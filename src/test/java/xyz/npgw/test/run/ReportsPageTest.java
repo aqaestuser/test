@@ -26,8 +26,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class ReportsPageTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "Generate report%s".formatted(RUN_ID);
-    private static final String MERCHANT_TITLE = "Generate report merchant%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s generate report".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "%s generate report merchant".formatted(RUN_ID);
     private BusinessUnit businessUnit;
 
     @BeforeClass
@@ -172,8 +172,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("'Reset filter' clears selected options to default")
     public void testResetFilter() {
         ReportsPage reportsPage = new ReportsPage(getPage())
-                .clickReportsLink()
-                .refreshReports();
+                .clickReportsLink();
 
         String defaultStartDate = reportsPage.getSelectDateRange().getStartDate().textContent();
         String defaultEndDate = reportsPage.getSelectDateRange().getEndDate().textContent();

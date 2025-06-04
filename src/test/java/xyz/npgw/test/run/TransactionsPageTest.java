@@ -32,7 +32,7 @@ import static org.testng.Assert.assertTrue;
 
 public class TransactionsPageTest extends BaseTest {
 
-    private static final String ADMIN_COMPANY_NAME = "A2 Company%s".formatted(RUN_ID);
+    private static final String ADMIN_COMPANY_NAME = "%s A2 Company".formatted(RUN_ID);
 
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Creation Date",
@@ -44,8 +44,8 @@ public class TransactionsPageTest extends BaseTest {
             "Card type",
             "Status");
 
-    private static final String COMPANY_NAME = "Test request company%s".formatted(RUN_ID);
-    private static final String MERCHANT_TITLE = "Test request merchant%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
     private BusinessUnit businessUnit;
 
     @BeforeClass
@@ -819,7 +819,9 @@ public class TransactionsPageTest extends BaseTest {
         int statusesCount = transactionsPage
                 .getTable().countValues("Status", firstStatus, secondStatus);
 
-        int filteredTransactionCount  = transactionsPage
+        transactionsPage.getTable().goToFirstPageIfNeeded();
+
+        int filteredTransactionCount = transactionsPage
                 .getSelectStatus().selectTransactionStatuses(firstStatus, secondStatus)
                 .getTable().countValues("Status", firstStatus, secondStatus);
 
@@ -884,8 +886,8 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
         transactionsPage.getSelectCompany().clickSelectCompanyDropdownChevron()
-                        .getSelectCompany().clickSelectCompanyField()
-                        .getSelectCompany().selectFirstCompany();
+                .getSelectCompany().clickSelectCompanyField()
+                .getSelectCompany().selectFirstCompany();
 
         String firstCompanyName = transactionsPage.getSelectCompany().firstCompanyName();
 
@@ -899,35 +901,40 @@ public class TransactionsPageTest extends BaseTest {
 
     }
 
-    @AfterClass
-    @Override
-    protected void afterClass() {
-        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-        super.afterClass();
-    }
-
     @Test
     @TmsLink("661")
     @Epic("Transactions")
     @Feature("Transaction details")
     @Description("Check the hiding of parameters by pressing the chevron in Card details section")
     public void testCheckTheHidingOfParameters() {
-
         TransactionDetailsDialog transactionDetailsDialog = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getTable().clickOnTransaction()
                 .clickChevronInCardDetailsSection();
 
         Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field ");
-        assertTrue(transactionDetailsDialog.getPaymentMethodParameter().isHidden());
+        assertThat(transactionDetailsDialog.getPaymentMethodParameter()).isHidden();
+
         Allure.step("Verify: Parameter 'Card type' is hidden after click on chevron in Card details field ");
-        assertTrue(transactionDetailsDialog.getCardTypeParameter().isHidden());
+        assertThat(transactionDetailsDialog.getCardTypeParameter()).isHidden();
+
         Allure.step("Verify: Parameter 'Card holder' is hidden after click on chevron in Card details field ");
-        assertTrue(transactionDetailsDialog.getCardHolderParameter().isHidden());
+        assertThat(transactionDetailsDialog.getCardHolderParameter()).isHidden();
+
         Allure.step("Verify: Parameter 'Card number' is hidden after click on chevron in Card details field ");
-        assertTrue(transactionDetailsDialog.getCardNumberParameter().isHidden());
+        assertThat(transactionDetailsDialog.getCardNumberParameter()).isHidden();
+
         Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field ");
-        assertTrue(transactionDetailsDialog.getExpiryDateParameter().isHidden());
+        assertThat(transactionDetailsDialog.getExpiryDateParameter()).isHidden();
+    }
+
+    @AfterClass
+    @Override
+    protected void afterClass() {
+        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+
+        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
+        super.afterClass();
     }
 }

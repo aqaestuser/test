@@ -70,7 +70,6 @@ public final class TestUtils {
         Arrays.stream(businessUnits).forEach(businessUnit -> BusinessUnit.delete(request, company, businessUnit));
     }
 
-
     public static void createBusinessUnitsIfNeeded(APIRequestContext request, User user) {
         Company.create(request, user.companyName());
         for (String merchantTitle : user.merchantIds()) {
@@ -104,7 +103,7 @@ public final class TestUtils {
         if (companyName.equals("super")) {
             return;
         }
-        while (Company.delete(request, companyName) != 204) {
+        while (Company.delete(request, companyName) == 422) {
             deleteBusinessUnits(request, companyName, BusinessUnit.getAll(request, companyName));
             deleteUsers(request, User.getAll(request, companyName));
         }

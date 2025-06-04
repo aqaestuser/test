@@ -21,10 +21,10 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class GatewayPageTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "Company 112172%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
     private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172"};
     private final String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
-    Company company = new Company("Company for 602%s".formatted(RUN_ID));
+    Company company = new Company("%s company for 602".formatted(RUN_ID));
     String merchantTitle = new Faker().company().industry();
     private BusinessUnit[] businessUnits;
 

@@ -6,8 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 
@@ -75,10 +73,10 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     }
 
     @Step("Press 'Save' button to save changed password")
-    public LoginPage clickSaveButton() {
+    public DashboardPage clickSaveButton() {
         saveButton.click();
 
-        return this;
+        return new DashboardPage(getPage());
     }
 
     @Step("Check 'Remember me' checkbox")
@@ -93,29 +91,6 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         rememberMeCheckbox.setChecked(false);
 
         return this;
-    }
-
-    @Step("Login to the site as '{userRole}'")
-    public DashboardPage loginAs(UserRole userRole) {
-        switch (userRole) {
-            case SUPER -> {
-                fillEmailField(ProjectProperties.getSuperEmail());
-                fillPasswordField(ProjectProperties.getSuperPassword());
-            }
-            case ADMIN -> {
-                fillEmailField(ProjectProperties.getAdminEmail());
-                fillPasswordField(ProjectProperties.getAdminPassword());
-            }
-            case USER -> {
-                fillEmailField(ProjectProperties.getUserEmail());
-                fillPasswordField(ProjectProperties.getUserPassword());
-            }
-            default -> throw new IllegalArgumentException("Login as %s not supported".formatted(userRole));
-        }
-        clickLoginButton();
-        getPage().waitForURL("**/dashboard");
-
-        return new DashboardPage(getPage());
     }
 
     @Step("Login to the site as '{email}'")
@@ -141,36 +116,5 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         login(email, password);
 
         return new LoginPage(getPage());
-    }
-
-    @Step("Change password")
-    public LoginPage changePassword(String newPassword) {
-        fillNewPasswordField(newPassword);
-        fillRepeatNewPasswordField(newPassword);
-        clickSaveButton();
-
-//        getAlert().clickCloseButton();
-        return this;
-    }
-
-    public DashboardPage loginAndChangePassword(String email, String password) {
-        return loginAndChangePassword(email, password, password);
-    }
-
-    @Step("Login with '{email}' user and change password")
-    public DashboardPage loginAndChangePassword(String email, String password, String newPassword) {
-        login(email, password);
-        changePassword(newPassword);
-        waitUntilLoginPageIsLoaded();
-        login(email, newPassword);
-
-        return new DashboardPage(getPage());
-    }
-
-    private void waitUntilLoginPageIsLoaded() {
-        getPage().waitForCondition(() ->
-                emailField.isEnabled()
-                        && emailField.inputValue().isEmpty(), new Page.WaitForConditionOptions().setTimeout(5000)
-        );
     }
 }

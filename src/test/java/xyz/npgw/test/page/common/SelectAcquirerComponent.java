@@ -17,13 +17,11 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
     @Getter
     private final Locator selectAcquirerField = getByLabelExact("Select acquirer");
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
-    private final Locator selectAcquirerPlaceholder = getByPlaceholder("Search");
-    private final Locator selectAcquirerContainer =
-            locator("div[data-slot='input-wrapper']");
-    private final Locator selectAcquirerDropdownChevron =
-            selectAcquirerContainer.locator("button[aria-label='Show suggestions']:last-child");
-    private final Locator selectAcquirerClearIcon =
-            selectAcquirerContainer.locator("button[aria-label='Show suggestions']:first-child");
+    private final Locator selectAcquirerContainer = locator("div[data-slot='input-wrapper']");
+    private final Locator selectAcquirerDropdownChevron = selectAcquirerContainer
+            .locator("button[aria-label='Show suggestions']:last-child");
+    private final Locator selectAcquirerClearIcon = selectAcquirerContainer
+            .locator("button[aria-label='Show suggestions']:first-child");
 
     private final CurrentPageT page;
 
@@ -32,16 +30,16 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
         this.page = currentPage;
     }
 
-    @Step("Click 'Select acquirer' placeholder")
-    public CurrentPageT clickSelectAcquirerPlaceholder() {
-        selectAcquirerPlaceholder.click();
+    @Step("Click 'Select acquirer' field")
+    public CurrentPageT clickSelectAcquirerField() {
+        selectAcquirerField.click();
 
         return page;
     }
 
-    @Step("Enter '{acquirerName}' into select acquirer placeholder")
+    @Step("Enter '{acquirerName}' into select acquirer field")
     public CurrentPageT typeName(String acquirerName) {
-        selectAcquirerPlaceholder.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(100));
+        selectAcquirerField.fill(acquirerName);
 
         return page;
     }
@@ -69,7 +67,7 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
-        selectAcquirerPlaceholder.fill(acquirerName);
+        selectAcquirerField.fill(acquirerName);
 
         if (dropdownOptionList.all().isEmpty()) {
             throw new NoSuchElementException("Business unit '" + acquirerName + "' not found in dropdown.");

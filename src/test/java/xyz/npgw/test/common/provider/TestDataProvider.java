@@ -1,10 +1,8 @@
 package xyz.npgw.test.common.provider;
 
 import org.testng.annotations.DataProvider;
-import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.SystemConfig;
-import xyz.npgw.test.common.entity.User;
 
 public class TestDataProvider {
 
@@ -14,15 +12,6 @@ public class TestDataProvider {
                 {"SUPER"},
                 {"ADMIN"},
                 {"USER"}
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getUserRoleAndEmail() {
-        return new Object[][]{
-                {"SUPER", ProjectProperties.getSuperEmail()},
-                {"ADMIN", ProjectProperties.getAdminEmail()},
-                {"USER", ProjectProperties.getUserEmail()}
         };
     }
 
@@ -73,15 +62,6 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public static Object[][] getUsers() {
-        return new Object[][]{
-                {User.newSystemAdmin("super@test.com")},
-                {User.newCompanyAdmin("admin@test.com")},
-                {User.newCompanyAnalyst("user@test.com")}
-        };
-    }
-
-    @DataProvider
     public static Object[][] getCurrency() {
         return new Object[][]{
                 {"EUR"},
@@ -91,11 +71,31 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public static Object[][] getNewUsers() {
+    public static Object[][] getCardType() {
         return new Object[][]{
-                {"UNAUTHORISED", User.newSystemAdmin("newsuper@test.com")},
-                {"UNAUTHORISED", User.newCompanyAdmin("newadmin@test.com")},
-                {"UNAUTHORISED", User.newCompanyAnalyst("newuser@test.com")}
+                {"VISA"},
+                {"MASTERCARD"},
+        };
+    }
+
+    @DataProvider
+    public static Object[][] getStatus() {
+        return new Object[][]{
+                {"PENDING"},
+                {"INITIATED"},
+                {"SUCCESS"},
+                {"FAILED"},
+                {"CANCELLED"},
+                {"EXPIRED"},
+        };
+    }
+
+    @DataProvider
+    public static Object[][] getMultiStatus2() {
+        return new Object[][]{
+                {"PENDING", "INITIATED"},
+                {"SUCCESS", "FAILED"},
+                {"CANCELLED", "EXPIRED"},
         };
     }
 
@@ -199,35 +199,6 @@ ERRORsystemConfig.challengeUrl doesn’t qualify for the URL syntax
 systemConfig.fingerprintUrl doesn’t qualify for the URL syntax
 systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
                 }
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getCardType() {
-        return new Object[][]{
-                {"VISA"},
-                {"MASTERCARD"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getStatus() {
-        return new Object[][]{
-                {"PENDING"},
-                {"INITIATED"},
-                {"SUCCESS"},
-                {"FAILED"},
-                {"CANCELLED"},
-                {"EXPIRED"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getMultiStatus2() {
-        return new Object[][]{
-                {"PENDING", "INITIATED"},
-                {"SUCCESS", "FAILED"},
-                {"CANCELLED", "EXPIRED"},
         };
     }
 }
