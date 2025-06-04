@@ -1,6 +1,7 @@
 package xyz.npgw.test.page.common.table;
 
 import com.microsoft.playwright.Page;
+import io.qameta.allure.Step;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
@@ -20,6 +21,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return new TransactionsPage(getPage());
     }
 
+    @Step("Click on transaction in column 'NPGW reference'")
     public TransactionDetailsDialog clickOnTransaction() {
         getFirstRowCell("NPGW reference").click();
 
