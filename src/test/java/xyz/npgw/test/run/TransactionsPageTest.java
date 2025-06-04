@@ -898,7 +898,6 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: the 'Company' input field is empty after reset");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
-
     }
 
     @Test
@@ -926,6 +925,30 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field ");
         assertThat(transactionDetailsDialog.getExpiryDateParameter()).isHidden();
+    }
+
+    @Test
+    @TmsLink("701")
+    @Epic("Transactions")
+    @Feature("Reset filter button")
+    @Description("Verify, that 'Reset filter' clean 'Business Unit' input field")
+    public void testResetBusinessUnit() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        Allure.step("Verify: the 'Business Unit' input field is empty by default");
+        assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
+
+        transactionsPage.getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
+
+        Allure.step("Verify: selected Business Unit is displayed in the 'Business Unit' input field");
+        assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).hasValue(MERCHANT_TITLE);
+
+        transactionsPage.clickResetFilterButton();
+
+        Allure.step("Verify: the 'Business Unit' input field is empty after reset");
+        assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
     @AfterClass
