@@ -89,7 +89,7 @@ public class HeaderTest extends BaseTest {
 
         dashboardPage
                 .clickLogOutButton()
-                .login("%s.%s@email.com".formatted(getUid(), userRole.toLowerCase()), newPassword);
+                .loginAs("%s.%s@email.com".formatted(getUid(), userRole.toLowerCase()), newPassword);
 
         Allure.step("Verify: Successfully login with changed password");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);

@@ -37,10 +37,6 @@ public record Company(
         this(companyName, new Faker().company().industry());
     }
 
-    public static void create(APIRequestContext request, User user) {
-        create(request, user.companyName());
-    }
-
     public static void create(APIRequestContext request, String companyName) {
         APIResponse response = request.post("portal-v1/company",
                 RequestOptions.create().setData(new Company(companyName)));
@@ -66,14 +62,5 @@ public record Company(
             throw new SkipException(response.text());
         }
         return response.status();
-    }
-
-    public static boolean exists(APIRequestContext request, String companyName) {
-        APIResponse response = request.get("portal-v1/company/%s".formatted(encode(companyName)));
-        log.info("exist company '{}' - {}", companyName, response.status());
-        if (response.status() >= 500) {
-            throw new SkipException(response.text());
-        }
-        return response.ok() && response.text().contains(companyName);
     }
 }

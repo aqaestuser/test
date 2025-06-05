@@ -32,15 +32,6 @@ public record Acquirer(
         }
     }
 
-    public static boolean get(APIRequestContext request, String acquirerName) {
-        APIResponse response = request.get("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("get acquirer '{}' - {}", acquirerName, response.status());
-        if (response.status() >= 500) {
-            throw new SkipException(response.text());
-        }
-        return response.ok();
-    }
-
     public static Acquirer[] getAll(APIRequestContext request) {
         APIResponse response = request.get("portal-v1/acquirer");
         log.info("get all acquirers - {} {}", response.status(), response.text());

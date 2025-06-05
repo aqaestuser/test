@@ -15,12 +15,10 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -29,15 +27,18 @@ import static org.testng.Assert.assertTrue;
 
 public class TransactionsPageTest extends BaseTest {
 
-    private static final String ADMIN_COMPANY_NAME = "%s A2 Company".formatted(RUN_ID);
     private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
+    private final String[] businessUnitNames = new String[]{"Business unit 1", "Business unit 2", "Business unit 3"};
     private BusinessUnit businessUnit;
 
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), getCompanyName());
+        TestUtils.createBusinessUnits(getApiRequestContext(), getCompanyName(), businessUnitNames);
+
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
@@ -312,22 +313,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Business unit")
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
             + "dropdown list")
-    public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("UNAUTHORISED") String userRole) {
-        String[] businessUnitNames = new String[]{"Business unit 1", "Business unit 2", "Business unit 3",
-                "Business unit 4"};
-        String companyAdminEmail = "companyAdmin@gmail.com";
-        String companyAdminPassword = "CompanyAdmin1!";
-        TestUtils.deleteUser(getApiRequestContext(), companyAdminEmail);
-//        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
-        TestUtils.createCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
-        TestUtils.createCompanyAdmin(
-                getApiRequestContext(), ADMIN_COMPANY_NAME, companyAdminEmail, companyAdminPassword);
-        Arrays.stream(businessUnitNames).forEach(businessUnitName -> TestUtils.createBusinessUnit(
-                getApiRequestContext(), ADMIN_COMPANY_NAME, businessUnitName));
-
-        TransactionsPage transactionsPage = new AboutBlankPage((getPage()))
-                .navigate("/login")
-                .login(companyAdminEmail, companyAdminPassword)
+    public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("ADMIN") String userRole) {
+        TransactionsPage transactionsPage = new DashboardPage((getPage()))
                 .clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
@@ -335,13 +322,12 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 
-    @Test
+    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("567")
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Currency' to default value ( ALL)")
-    public void testResetCurrency() {
-        String currency = "USD";
+    public void testResetCurrency(String currency) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
 
@@ -484,12 +470,14 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
 
-        transactionsPage.getSelectStatus().selectTransactionStatuses(status1, status2);
+        transactionsPage
+                .getSelectStatus().selectTransactionStatuses(status1, status2);
 
         Allure.step("Verify: Filter displays the selected Status");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status1 + ", " + status2);
 
-        transactionsPage.clickResetFilterButton();
+        transactionsPage
+                .clickResetFilterButton();
 
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
@@ -507,26 +495,35 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: The dialog box header has text 'Transaction Details'");
         assertThat(transactionDetailsDialog.getDialogHeader()).hasText("Transaction Details");
+
         Allure.step("Verify: The dialog box contains text 'Status' and this text is visible ");
         assertThat(transactionDetailsDialog.getDialog()).containsText("Status");
-        assertTrue(transactionDetailsDialog.getStatusField().isVisible());
+        assertThat(transactionDetailsDialog.getStatusField()).isVisible();
+
         Allure.step("Verify: The dialog box contains text 'Amount' and this text is visible ");
         assertThat(transactionDetailsDialog.getDialog()).containsText("Amount");
-        assertTrue(transactionDetailsDialog.getAmountField().isVisible());
+        assertThat(transactionDetailsDialog.getAmountField()).isVisible();
+
         Allure.step("Verify: The dialog box contains text 'Merchant reference' and this text is visible ");
         assertThat(transactionDetailsDialog.getDialog()).containsText("Merchant reference");
-        assertTrue(transactionDetailsDialog.getMerchantReferenceField().isVisible());
+        assertThat(transactionDetailsDialog.getMerchantReferenceField()).isVisible();
+
         Allure.step("Verify: The dialog box contains text 'Card details' and this text is visible ");
         assertThat(transactionDetailsDialog.getDialog()).containsText("Card details");
-        assertTrue(transactionDetailsDialog.getCardDetailsSection().isVisible());
+        assertThat(transactionDetailsDialog.getCardDetailsSection()).isVisible();
+
         Allure.step("Verify: The Card details section contains text 'Payment method'");
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Payment method");
+
         Allure.step("Verify: The Card details section contains text 'Card type'");
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card type");
+
         Allure.step("Verify: The Card details section contains text 'Card holder'");
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card holder");
+
         Allure.step("Verify: The Card details section contains text 'Card number'");
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card number");
+
         Allure.step("Verify: The Card details section contains text 'Expiry date'");
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Expiry date");
     }
@@ -537,7 +534,6 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Amount' to default value ( AMOUNT)")
     public void testResetAmount() {
-
         final String amountFrom = "10";
         final String amountTo = "20";
         final String chosenAmount = "Amount: " + amountFrom + " - " + amountTo;
@@ -558,7 +554,8 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.amountApplied(chosenAmount)).isVisible();
         assertThat(transactionsPage.amountApplied(chosenAmount)).hasText(chosenAmount);
 
-        transactionsPage.clickResetFilterButton();
+        transactionsPage
+                .clickResetFilterButton();
 
         Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
         assertThat(transactionsPage.getAmountButton()).isVisible();
@@ -581,12 +578,14 @@ public class TransactionsPageTest extends BaseTest {
                 .getSelectCompany().clickSelectCompanyField()
                 .getSelectCompany().selectFirstCompany();
 
-        String firstCompanyName = transactionsPage.getSelectCompany().firstCompanyName();
+        String firstCompanyName = transactionsPage
+                .getSelectCompany().firstCompanyName();
 
         Allure.step("Verify: selected company is displayed in the 'Company' input field");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).hasValue(firstCompanyName);
 
-        transactionsPage.clickResetFilterButton();
+        transactionsPage
+                .clickResetFilterButton();
 
         Allure.step("Verify: the 'Company' input field is empty after reset");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
@@ -638,7 +637,8 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: selected Business Unit is displayed in the 'Business Unit' input field");
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).hasValue(MERCHANT_TITLE);
 
-        transactionsPage.clickResetFilterButton();
+        transactionsPage
+                .clickResetFilterButton();
 
         Allure.step("Verify: the 'Business Unit' input field is empty after reset");
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
@@ -647,10 +647,7 @@ public class TransactionsPageTest extends BaseTest {
     @AfterClass
     @Override
     protected void afterClass() {
-        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-
-        TestUtils.deleteCompany(getApiRequestContext(), ADMIN_COMPANY_NAME);
         super.afterClass();
     }
 }

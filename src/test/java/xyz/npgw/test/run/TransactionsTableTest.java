@@ -13,6 +13,10 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.CardType;
+import xyz.npgw.test.common.entity.Currency;
+import xyz.npgw.test.common.entity.Status;
+import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
@@ -30,11 +34,7 @@ import static org.testng.Assert.assertTrue;
 
 public class TransactionsTableTest extends BaseTest {
 
-    private static final String ADMIN_COMPANY_NAME = "%s A2 Company".formatted(RUN_ID);
-    private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
-    private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
-    private BusinessUnit businessUnit;
-
+    private static final String MERCHANT_TITLE = "%s test transaction table merchant".formatted(RUN_ID);
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Creation Date",
             "Business unit ID",
@@ -45,12 +45,13 @@ public class TransactionsTableTest extends BaseTest {
             "Card type",
             "Status");
 
+    private BusinessUnit businessUnit;
+
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
-        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
-        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
     }
 
     @Test
@@ -346,36 +347,6 @@ public class TransactionsTableTest extends BaseTest {
         });
     }
 
-    public record Transactions(
-            int amount,
-            String currency,
-            String merchantId,
-            String externalTransactionId,
-            String redirectUrlSuccess,
-            String redirectUrlCancel,
-            String redirectUrlFail,
-            String expiresAt,
-            PaymentDetails paymentDetails,
-            String transactionId,
-            String status,
-            Error error,
-            String createdOn,
-            String updatedOn) {
-    }
-
-    public record PaymentDetails(
-            String paymentMethod,
-            String pan,
-            String expMonth,
-            String expYear,
-            String cvv,
-            String cardHolderName,
-            String cardType) {
-    }
-
-    public record Error(String message) {
-    }
-
     @Test
     @TmsLink("712")
     @Epic("Transactions")
@@ -384,13 +355,11 @@ public class TransactionsTableTest extends BaseTest {
     public void testFilterTransactionsByBusinessUnit() {
         getPage().route("**/history*", route -> {
             if (route.request().postData().contains(businessUnit.merchantId())) {
-                List<Transactions> transactions = new ArrayList<>();
-                transactions.add(new Transactions(100, "USD", "",
-                        "External Transaction ID", "", "",
-                        "", "", new PaymentDetails("", "", "",
-                        "", "", "", ""), "12345", "FAIL",
-                        new Error(""), "2025-06-02T04:18:09.047146423Z", ""));
-                route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(transactions)));
+                List<Transaction> transactionList = new ArrayList<>();
+                transactionList.add(new Transaction("2025-06-02T04:18:09.047146423Z",
+                        "12345", "", 100,
+                        CardType.VISA, Currency.USD, Status.FAILED));
+                route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(transactionList)));
                 return;
             }
             route.fallback();
@@ -398,7 +367,7 @@ public class TransactionsTableTest extends BaseTest {
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectCompany().selectCompany(getCompanyName())
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify mock transaction is displayed");
@@ -408,8 +377,6 @@ public class TransactionsTableTest extends BaseTest {
     @AfterClass
     @Override
     protected void afterClass() {
-        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         super.afterClass();
     }
 }

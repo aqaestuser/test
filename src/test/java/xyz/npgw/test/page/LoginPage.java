@@ -73,10 +73,10 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     }
 
     @Step("Press 'Save' button to save changed password")
-    public DashboardPage clickSaveButton() {
+    public LoginPage clickSaveButton() {
         saveButton.click();
 
-        return new DashboardPage(getPage());
+        return this;
     }
 
     @Step("Check 'Remember me' checkbox")

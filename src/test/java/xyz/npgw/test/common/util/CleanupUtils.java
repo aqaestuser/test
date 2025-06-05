@@ -10,9 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @Log4j2
+@SuppressWarnings("unused")
 public class CleanupUtils {
 
-    private static final List<String> COMPANY = List.of("Luke Payments", "CompanyForTestRunOnly Inc.", "super");
+    private static final List<String> COMPANY = List.of("Amazon", "CompanyForTestRunOnly Inc.", "super");
     private static final List<String> USER = List.of("test@email.com", "supertest@email.com");
     private static final List<String> ACQUIRER = List.of("Luke EUR MID 1");
 
@@ -38,6 +39,6 @@ public class CleanupUtils {
     private static void deleteUsersFromSuper(APIRequestContext request) {
         Arrays.stream(User.getAll(request, "super"))
                 .filter(user -> !USER.contains(user.email()))
-                .forEach(user -> User.delete(request, user));
+                .forEach(user -> User.delete(request, user.email()));
     }
 }

@@ -222,10 +222,8 @@ public class AddBusinessUnitTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company213.companyName());
         TestUtils.deleteCompany(getApiRequestContext(), company238.companyName());
         TestUtils.deleteCompany(getApiRequestContext(), company241.companyName());
-        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), company218.companyName(), company218.companyType());
         TestUtils.deleteCompany(getApiRequestContext(), company218.companyName());
         TestUtils.deleteCompany(getApiRequestContext(), company480.companyName());
-        TestUtils.deleteAllByMerchantTitle(getApiRequestContext(), COMPANY_NAME, businessUnit.merchantTitle());
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         super.afterClass();
     }
