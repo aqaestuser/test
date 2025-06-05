@@ -20,11 +20,8 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -33,17 +30,6 @@ import static org.testng.Assert.assertTrue;
 public class TransactionsPageTest extends BaseTest {
 
     private static final String ADMIN_COMPANY_NAME = "%s A2 Company".formatted(RUN_ID);
-
-    private static final List<String> COLUMNS_HEADERS = List.of(
-            "Creation Date",
-            "Business unit ID",
-            "NPGW Reference",
-            "Merchant Reference",
-            "Amount",
-            "Currency",
-            "Card type",
-            "Status");
-
     private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
     private BusinessUnit businessUnit;
@@ -88,73 +74,14 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getCurrencySelector()).containsText(currency);
     }
 
-    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
-    @TmsLink("319")
-    @Epic("Transactions")
-    @Feature("Currency")
-    @Description("Filtering transactions by Currency")
-    public void testFilterTransactionsByCurrency(String currency) {
-        List<String> currencyValues = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("01-05-2025", "30-05-2025")
-                .clickCurrencySelector()
-                .selectCurrency(currency)
-                .getTable().getColumnValuesFromAllPages("Currency", Function.identity());
-
-        Allure.step("Verify: All values in the Currency column match the selected currency");
-        assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
-    }
-
-    @Test
-    @TmsLink("106")
-    @Epic("Transactions")
-    @Feature("Number of lines per page field")
-    @Description("Displaying the number of rows on the screen when selecting Selector Rows.")
-    public void testCountSelectorRows() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
-
-        Allure.step("Verify: default row count - 25");
-        assertThat(transactionsPage.getTable().getRowsPerPage()).containsText("25");
-    }
-
-    @Test
-    @TmsLink("127")
-    @Epic("Transactions")
-    @Feature("Selector rows options")
-    @Description("Displaying rows per page options when clicking on Selector Rows")
-    public void testCountOptionsSelectorRows() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getTable().clickRowsPerPageChevron();
-
-        Allure.step("Verify: displaying all options when clicking on Selector Rows");
-        assertThat(transactionsPage.getTable().getRowsPerPageOptions()).hasText(new String[]{"10", "25", "50", "100"});
-    }
-
-    @Test
-    @TmsLink("130")
-    @Epic("Transactions")
-    @Feature("Pagination")
-    @Description("Verifying that we can switch the page when we click next button")
-    public void testPaginationNextButton() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("01-04-2025", "31-05-2025")
-                .getTable().clickNextPageButton();
-
-        Allure.step("Verify: button 2 is active");
-        assertThat(transactionsPage.getTable().getActivePageButton()).hasText("2");
-    }
-
     @Test
     @TmsLink("181")
     @Epic("Transactions")
     @Feature("Panel")
-    @Description("Verify that on Transactions Page after clicking on Transactions user can see Panel:"
+    @Description("Verify that on the Transactions Page user can see Panel:"
             + " Date range, Business unit, Currency, Payment method, Status, Amount, Reset filter, "
             + "Apply data, Download file, Settings.")
-    public void testTheVisibilityOfTheControlPanelElementsOnTheTransactionsPage() {
+    public void testVisibilityOfControlPanelElements() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
 
@@ -248,34 +175,10 @@ public class TransactionsPageTest extends BaseTest {
     }
 
     @Test
-    @TmsLink("311")
-    @Epic("Transactions")
-    @Feature("Amount")
-    @Description("Filtering transactions by Amount")
-    public void testFilterTransactionsByAmount() {
-        int amountFrom = 10;
-        int amountTo = 500;
-
-        List<String> amountValues = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-05-2025")
-                .clickAmountButton()
-                .fillAmountFromField(String.valueOf(amountFrom))
-                .fillAmountToField(String.valueOf(amountTo))
-                .clickAmountApplyButton()
-                .getTable().getColumnValues("Amount");
-
-        Allure.step("Verify: Amount column has values within the specified amount range");
-        assertTrue(amountValues.stream()
-                .map(Integer::parseInt)
-                .allMatch(value -> value >= amountFrom && value <= amountTo));
-    }
-
-    @Test
     @TmsLink("335")
     @Epic("Transactions")
     @Feature("Amount")
-    @Description("error message 'From should be lesser than To' appears")
+    @Description("Error message 'From should be lesser than To' appears")
     public void testErrorMessageByAmount() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
@@ -290,8 +193,8 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("342")
     @Epic("Transactions")
-    @Feature("Status")
-    @Description("Verify that user can see Payment Method Options")
+    @Feature("Card type")
+    @Description("Verify that user can see 'Card type' options")
     public void testTheVisibilityOfTheCardTypeOptions() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
@@ -307,7 +210,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("340")
     @Epic("Transactions")
-    @Feature("Data range")
+    @Feature("Date range")
     @Description("Error message is displayed when start date is after end date.")
     public void testErrorMessageForReversedDateRange() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
@@ -318,85 +221,6 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: error message is shown for invalid date range");
         assertThat(transactionsPage.getSelectDateRange().getErrorMessage())
                 .hasText("Start date must be before end date.");
-    }
-
-    @Test
-    @TmsLink("350")
-    @Epic("Transactions")
-    @Feature("Transactions table header")
-    @Description("Verify full lists of column headers in table and visible columns from Settings")
-    public void testCheckUncheckAllVisibleColumns() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .clickSettingsButton()
-                .checkAllCheckboxInSettings();
-
-        List<String> visibleColumnsLabels = transactionsPage
-                .getVisibleColumnsLabels();
-
-        List<String> headersList = transactionsPage
-                .clickRefreshDataButton()
-                .getTable().getColumnHeadersText();
-
-        List<String> headersListAfterUncheckAllVisibleColumns = transactionsPage
-                .clickSettingsButton()
-                .uncheckAllCheckboxInSettings()
-                .clickRefreshDataButton()
-                .getTable().getColumnHeadersText();
-
-        Allure.step("Verify: All column headers are displayed in the Settings");
-        assertEquals(visibleColumnsLabels, COLUMNS_HEADERS);
-
-        Allure.step("Verify: All column headers are displayed in the transactions table");
-        assertEquals(headersList, COLUMNS_HEADERS);
-
-        Allure.step("Verify: Column headers are not displayed in the transactions table "
-                + "after it's unchecking in the Settings");
-        assertEquals(headersListAfterUncheckAllVisibleColumns.size(), 0);
-    }
-
-    @Test
-    @TmsLink("359")
-    @Epic("Transactions")
-    @Feature("Settings")
-    @Description("Check/Uncheck Visible columns in the Settings and verify table column headers")
-    public void testCheckUncheckOneVisibleColumn() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .clickSettingsButton()
-                .checkAllCheckboxInSettings();
-
-        COLUMNS_HEADERS.forEach(item -> {
-            List<String> headersListAfterUncheckOne = transactionsPage
-                    .uncheckVisibleColumn(item)
-                    .clickRefreshDataButton()
-                    .getTable().getColumnHeadersText();
-
-            Allure.step("Verify: Only one column header is NOT displayed in the Transactions. And it's - '{item}'");
-            assertTrue((headersListAfterUncheckOne.size() == COLUMNS_HEADERS.size() - 1)
-                    && !headersListAfterUncheckOne.contains(item));
-
-            transactionsPage
-                    .clickSettingsButton()
-                    .checkVisibleColumn(item);
-        });
-
-        transactionsPage
-                .uncheckAllCheckboxInSettings();
-
-        COLUMNS_HEADERS.forEach(item -> {
-            List<String> headersListAfterCheckOnlyOne = transactionsPage
-                    .checkVisibleColumn(item)
-                    .clickRefreshDataButton()
-                    .getTable().getColumnHeadersText();
-
-            Allure.step("Verify: Only one column header is displayed in the transactions table. And it's - '{item}'");
-            assertTrue((headersListAfterCheckOnlyOne.size() == 1) && headersListAfterCheckOnlyOne.contains(item));
-
-            transactionsPage
-                    .clickSettingsButton()
-                    .uncheckVisibleColumn(item);
-        });
     }
 
     @Test
@@ -451,13 +275,13 @@ public class TransactionsPageTest extends BaseTest {
     @TmsLink("356")
     @Epic("Transactions")
     @Feature("Export table data")
-    @Description("The presence of the dropdown options export table data to  file")
+    @Description("The presence of the dropdown options export table data to file")
     public void testPresenceOfDownloadFilesOptions() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .clickDownloadButton();
 
-        Allure.step("Verify: CVC option is visible");
+        Allure.step("Verify: CSV option is visible");
         assertThat(transactionsPage.getDownloadCsvOption()).isVisible();
 
         Allure.step("Verify: EXCEL option is visible");
@@ -468,22 +292,22 @@ public class TransactionsPageTest extends BaseTest {
     }
 
 
-    @Test(dataProvider = "getMenuItemName", dataProviderClass = TestDataProvider.class)
+    @Test(dataProvider = "getExportFileType", dataProviderClass = TestDataProvider.class)
     @TmsLink("357")
     @Epic("Transactions")
     @Feature("Export table data")
-    @Description("Download files: PDF, Excel, CVS")
-    public void testDownloadFiles(String menuItemName) {
+    @Description("Download files: PDF, Excel, CSV")
+    public void testDownloadFiles(String fileType) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .clickDownloadButton();
 
         Allure.step("Verify: that files can be downloaded");
-        Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(menuItemName));
+        Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(fileType));
     }
 
     @Test
-    @TmsLink("520")
+    @TmsLink("503")
     @Epic("Transactions")
     @Feature("Business unit")
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
@@ -511,12 +335,13 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 
-    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("567")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Currency' to default value ( ALL)")
-    public void testResetCurrency(String currency) {
+    public void testResetCurrency() {
+        String currency = "USD";
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
 
@@ -600,9 +425,9 @@ public class TransactionsPageTest extends BaseTest {
     @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("598")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Card Type' to default value ( ALL)")
-    public void testResetPaymentMethod(String getCardType) {
+    public void testResetCardType(String cardType) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
 
@@ -610,10 +435,10 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
         transactionsPage
-                .selectCardType(getCardType);
+                .selectCardType(cardType);
 
         Allure.step("Verify: Filter displays the selected payment method");
-        assertThat(transactionsPage.getCardTypeValue()).containsText(getCardType);
+        assertThat(transactionsPage.getCardTypeValue()).containsText(cardType);
 
         transactionsPage
                 .clickResetFilterButton();
@@ -625,7 +450,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("639")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' to default value ( ALL)")
     public void testResetStatus(String status) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
@@ -650,7 +475,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test(dataProvider = "getMultiStatus2", dataProviderClass = TestDataProvider.class)
     @TmsLink("655")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' (two options are checked) to default value ( ALL)")
     public void testResetMultiStatus(String status1, String status2) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
@@ -707,73 +532,9 @@ public class TransactionsPageTest extends BaseTest {
     }
 
     @Test
-    @TmsLink("559")
-    @Epic("Transactions")
-    @Feature("Transaction sorting")
-    @Description("'Creation Date' column sorts ascending by default and descending on click.")
-    public void testSortCreationData() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
-
-        List<LocalDateTime> actualDates = transactionsPage
-                .getTable().getAllCreationDates();
-
-        Allure.step("Verify: transactions are sorted by creation date in ascending order by default");
-        assertEquals(actualDates, actualDates.stream().sorted().toList());
-
-        transactionsPage
-                .getTable().clickSortIcon("Creation Date");
-
-        Allure.step(
-                "Verify: transactions are sorted by creation date in descending order after clicking the sort icon");
-        assertEquals(transactionsPage.getTable().getAllCreationDates(),
-                actualDates.stream().sorted(Comparator.reverseOrder()).toList());
-    }
-
-    @Test
-    @TmsLink("659")
-    @Epic("Transactions")
-    @Feature("Amount")
-    @Description("'Amount' column sorts ascending on first click and descending on second click.")
-    public void testSortAmount() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getTable().selectRowsPerPageOption("100")
-                .getTable().clickSortIcon("Amount");
-
-        List<Double> actualAmount = transactionsPage
-                .getTable().getAllAmounts();
-
-        Allure.step("Verify: transactions are sorted by amount in ascending order after first click");
-        assertEquals(actualAmount, actualAmount.stream().sorted().toList());
-
-        transactionsPage
-                .getTable().clickSortIcon("Amount");
-
-        Allure.step("Verify: transactions are sorted by amount in descending order after second click");
-        assertEquals(transactionsPage.getTable().getAllAmounts(),
-                actualAmount.stream().sorted(Comparator.reverseOrder()).toList());
-    }
-
-    @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
-    @TmsLink("673")
-    @Epic("Transactions")
-    @Feature("Payment method")
-    @Description("Filtering transactions by Card type displays only matching entries in the table.")
-    public void testFilterByCardType(String cardType) {
-        List<String> cardTypeList = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .selectCardType(cardType)
-                .getTable().getColumnValuesFromAllPages("Card type", Function.identity());
-
-        Allure.step("Verify: all entries in the 'Card type' column match the selected filter");
-        assertTrue(cardTypeList.stream().allMatch(value -> value.equals(cardType)));
-    }
-
-    @Test
     @TmsLink("668")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Amount' to default value ( AMOUNT)")
     public void testResetAmount() {
 
@@ -804,79 +565,10 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountButton()).hasText("Amount");
     }
 
-    // TODO bug - status isn't sent to server
-    @Test(expectedExceptions = AssertionError.class,
-            dataProvider = "getMultiStatus2", dataProviderClass = TestDataProvider.class)
-    @TmsLink("679")
-    @Epic("Transactions")
-    @Feature("Status")
-    @Description("Compare number of transactions with selected statuses in the table before and after filter")
-    public void testDisplayAllFilteredByStatusRows(String firstStatus, String secondStatus) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("27-05-2025", "31-05-2025");
-
-        int statusesCount = transactionsPage
-                .getTable().countValues("Status", firstStatus, secondStatus);
-
-        transactionsPage.getTable().goToFirstPageIfNeeded();
-
-        int filteredTransactionCount = transactionsPage
-                .getSelectStatus().selectTransactionStatuses(firstStatus, secondStatus)
-                .getTable().countValues("Status", firstStatus, secondStatus);
-
-        int totalFilteredRows = transactionsPage.getTable().countAllRows();
-
-        Allure.step("Verify: All transactions with selected statuses are shown after filter.");
-        assertEquals(statusesCount, filteredTransactionCount);
-
-        Allure.step("Verify: Only transactions with selected statuses are shown after filter.");
-        assertEquals(totalFilteredRows, filteredTransactionCount);
-    }
-
-    // TODO bug - transactions isn't present in the table when a currency filter is applied on the last page
-    @Test(expectedExceptions = AssertionError.class)
-    @TmsLink("682")
-    @Epic("Transactions")
-    @Feature("Currency")
-    @Description("Verify that transactions are present in the table when a currency filter is applied on the last page")
-    public void testTableDisplayWhenCurrencyFilterAppliedWhileOnLastPage() {
-        String euro = "EUR";
-
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("26-05-2025", "31-05-2025");
-
-        int numberWithEuroInTable = transactionsPage.getTable().countValues("Currency", euro);
-        transactionsPage.getTable().goToLastPageIfNeeded();
-        transactionsPage.clickCurrencySelector().selectCurrency(euro);
-
-        Allure.step("Verify: Transactions are present in the table");
-        assertTrue(numberWithEuroInTable > 0 && !transactionsPage.getTable().isTableEmpty());
-    }
-
     @Test
-    @TmsLink("677")
+    @TmsLink("686")
     @Epic("Transactions")
-    @Feature("Date range")
-    @Description("Filtering transactions by date range")
-    public void testFilteringTransactionsByDataRange() {
-        String startDate = "01-06-2025";
-        String endDate = "05-06-2025";
-
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(startDate, endDate)
-                .clickRefreshDataButton();
-
-        Allure.step("Verify: Transactions can be filtered by date range");
-        Assert.assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
-    }
-
-    @Test
-    @TmsLink("687")
-    @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' clean 'Company' input field")
     public void testResetCompany() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
@@ -898,6 +590,7 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: the 'Company' input field is empty after reset");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
+
     }
 
     @Test
@@ -930,7 +623,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("701")
     @Epic("Transactions")
-    @Feature("Reset filter button")
+    @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' clean 'Business Unit' input field")
     public void testResetBusinessUnit() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())

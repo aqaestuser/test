@@ -100,7 +100,7 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public Object[][] getMenuItemName() {
+    public Object[][] getExportFileType() {
         return new Object[][]{
                 {"CSV"},
                 {"EXCEL"},

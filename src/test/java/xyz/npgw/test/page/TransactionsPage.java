@@ -275,8 +275,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    public boolean isFileAvailableAndNotEmpty(String menuItemName) {
-        Download download = getPage().waitForDownload(() -> getByRole(AriaRole.MENUITEM, menuItemName).click());
+    public boolean isFileAvailableAndNotEmpty(String fileType) {
+        Download download = getPage().waitForDownload(() -> getByRole(AriaRole.MENUITEM, fileType).click());
 
         int length = 0;
         try (InputStream inputStream = download.createReadStream()) {
