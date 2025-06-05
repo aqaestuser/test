@@ -1,5 +1,7 @@
 package xyz.npgw.test.run;
 
+import com.google.gson.Gson;
+import com.microsoft.playwright.Route;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -17,6 +19,7 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -341,6 +344,65 @@ public class TransactionsTableTest extends BaseTest {
                     .clickSettingsButton()
                     .uncheckVisibleColumn(item);
         });
+    }
+
+    public record Transactions(
+            int amount,
+            String currency,
+            String merchantId,
+            String externalTransactionId,
+            String redirectUrlSuccess,
+            String redirectUrlCancel,
+            String redirectUrlFail,
+            String expiresAt,
+            PaymentDetails paymentDetails,
+            String transactionId,
+            String status,
+            Error error,
+            String createdOn,
+            String updatedOn) {
+    }
+
+    public record PaymentDetails(
+            String paymentMethod,
+            String pan,
+            String expMonth,
+            String expYear,
+            String cvv,
+            String cardHolderName,
+            String cardType) {
+    }
+
+    public record Error(String message) {
+    }
+
+    @Test
+    @TmsLink("712")
+    @Epic("Transactions")
+    @Feature("Filter")
+    @Description("Filter transactions by business unit")
+    public void testFilterTransactionsByBusinessUnit() {
+        getPage().route("**/history*", route -> {
+            if (route.request().postData().contains(businessUnit.merchantId())) {
+                List<Transactions> transactions = new ArrayList<>();
+                transactions.add(new Transactions(100, "USD", "",
+                        "External Transaction ID", "", "",
+                        "", "", new PaymentDetails("", "", "",
+                        "", "", "", ""), "12345", "FAIL",
+                        new Error(""), "2025-06-02T04:18:09.047146423Z", ""));
+                route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(transactions)));
+                return;
+            }
+            route.fallback();
+        });
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
+
+        Allure.step("Verify mock transaction is displayed");
+        assertThat(transactionsPage.getTable().getFirstRowCell("NPGW Reference")).hasText("12345");
     }
 
     @AfterClass
