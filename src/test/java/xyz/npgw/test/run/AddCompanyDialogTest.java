@@ -29,7 +29,7 @@ public class AddCompanyDialogTest extends BaseTest {
     private static final String COMPANY_TYPE = "CompanyType";
 
     Company company = new Company(
-            "%s company name test".formatted(RUN_ID), "", "Company Type Test",
+            "%s company name test".formatted(RUN_ID), "Company Type Test",
             new Address("Warwick", "PA",
                     "19876", "US",
                     "+1234567", "+1234567", "+1234567"),
@@ -59,7 +59,6 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
                 "Enter name",
-                "Enter title",
                 "Enter type",
                 "Enter company description",
                 "Enter website",

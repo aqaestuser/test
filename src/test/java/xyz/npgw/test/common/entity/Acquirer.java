@@ -15,13 +15,12 @@ public record Acquirer(
         String acquirerConfig,
         SystemConfig systemConfig,
         String acquirerName,
-        String acquirerTitle,
         String[] currencyList,
         boolean isActive) {
 
     public Acquirer(String acquirerName) {
         this("NGenius", "et", new SystemConfig(),
-                acquirerName, acquirerName, new String[]{"USD"}, true);
+                acquirerName, new String[]{"USD"}, true);
     }
 
     public static void create(APIRequestContext request, Acquirer acquirer) {

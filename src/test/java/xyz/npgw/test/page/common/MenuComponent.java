@@ -25,7 +25,7 @@ public class MenuComponent extends BaseComponent {
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
         ResponseUtils.clickAndWaitForText(getPage(),
-                getByRole(AriaRole.TAB, "Acquirers"), "Acquirer title");
+                getByRole(AriaRole.TAB, "Acquirers"), "Acquirer name");
 
         return new AcquirersPage(getPage());
     }
@@ -33,7 +33,7 @@ public class MenuComponent extends BaseComponent {
     @Step("Click 'Gateway' tab")
     public GatewayPage clickGatewayTab() {
         ResponseUtils.clickAndWaitForText(getPage(),
-                getByRole(AriaRole.TAB, "Gateway"), "Business units list");
+                getByRole(AriaRole.TAB, "Gateway"), "Priority");
 
         return new GatewayPage(getPage());
     }

@@ -9,6 +9,7 @@ import io.qameta.allure.TmsLink;
 import net.datafaker.Faker;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Company;
@@ -79,6 +80,7 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
+    @Ignore("outdated after update 06/06")
     @Test
     @TmsLink("307")
     @Epic("System/Gateway")
@@ -127,6 +129,7 @@ public class GatewayPageTest extends BaseTest {
         assertThat(gatewayPage.getBusinessUnitsList()).hasText(new String[]{"No items."});
     }
 
+    @Ignore("need refactor to table after update 06/06")
     @Test
     @TmsLink("602")
     @Epic("System/Gateway")

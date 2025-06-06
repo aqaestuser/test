@@ -56,7 +56,6 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
                 "Enter acquirer name",
-                "Enter acquirer title",
                 "Enter acquirer code",
                 "Enter challenge URL",
                 "Enter fingerprint URL",

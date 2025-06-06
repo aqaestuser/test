@@ -29,7 +29,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public class AcquirersPageTest extends BaseTest {
 
     private static final List<String> COLUMNS_HEADERS = List.of(
-            "Acquirer title",
+            "Acquirer name",
             "Acquirer code",
             "Currencies",
             "Acquirer config",
@@ -42,7 +42,6 @@ public class AcquirersPageTest extends BaseTest {
             "default",
             new SystemConfig(),
             "%s acquirer 11.002.01".formatted(RUN_ID),
-            "",
             new String[]{"USD", "EUR"},
             true);
 
@@ -51,7 +50,6 @@ public class AcquirersPageTest extends BaseTest {
             "default",
             new SystemConfig(),
             "%s acquirer activate and deactivate".formatted(RUN_ID),
-            "",
             new String[]{"USD", "EUR"},
             true);
 
@@ -105,9 +103,9 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: Table column header is visible");
-        assertThat(acquirersPage.getTable().getColumnHeader("Acquirer title")).isVisible();
+        assertThat(acquirersPage.getTable().getColumnHeader("Acquirer name")).isVisible();
 
-        List<Locator> acquirersList = acquirersPage.getTable().getColumnCells("Acquirer title");
+        List<Locator> acquirersList = acquirersPage.getTable().getColumnCells("Acquirer name");
 
 //        TODO refactor this
         Allure.step("Verify: Acquirers list is visible and contains elements");
@@ -377,7 +375,6 @@ public class AcquirersPageTest extends BaseTest {
                 "Acquirer Config",
                 new SystemConfig(),
                 acquirerName,
-                "",
                 new String[]{"USD"},
                 status.equals("Active"));
 

@@ -13,7 +13,6 @@ import static xyz.npgw.test.common.util.TestUtils.encode;
 @Log4j2
 public record Company(
         String companyName,
-        String companyTitle,
         String companyType,
         Address companyAddress,
         String description,
@@ -24,7 +23,7 @@ public record Company(
         boolean isApiActive) {
 
     public Company(String companyName, String companyType) {
-        this(companyName, "", companyType, new Address(),
+        this(companyName, companyType, new Address(),
                 "", "", "", "",
                 true, true);
     }

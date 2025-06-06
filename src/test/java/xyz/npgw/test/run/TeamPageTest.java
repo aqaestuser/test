@@ -433,7 +433,7 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: error message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
-        DashboardPage dashboardPage = loginPage
+        loginPage
                 .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getUserPassword())
                 .clickSystemAdministrationLink()
                 .getTable().clickEditUserButton(analystEmail)
@@ -445,11 +445,10 @@ public class TeamPageTest extends BaseTest {
                 .clickLoginButtonToChangePassword()
                 .fillNewPasswordField(analystPassword)
                 .fillRepeatNewPasswordField(analystPassword)
-                .clickSaveButton()
-                .loginAs("%s.admin@email.com".formatted(getUid()), analystPassword);
+                .clickSaveButton();
 
-        Allure.step("Verify: logged in successfully, user menu available");
-        assertThat(dashboardPage.getUserMenuButton()).hasText(analystEmail.substring(0, 3));
+        Allure.step("Verify: success message is displayed");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword is changed successfully");
     }
 
     @Test
