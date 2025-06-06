@@ -85,7 +85,7 @@ public class HeaderTest extends BaseTest {
 
         Allure.step("Verify: success message for changing password");
         assertThat(dashboardPage.getAlert().getMessage())
-                .hasText("SUCCESSPassword was changed successfull"); // TODO bug - typo in message
+                .hasText("SUCCESSPassword was changed successfull");
 
         dashboardPage
                 .clickLogOutButton()

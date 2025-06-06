@@ -545,7 +545,8 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountButton()).isVisible();
         assertThat(transactionsPage.getAmountButton()).hasText("Amount");
 
-        transactionsPage.clickAmountButton()
+        transactionsPage
+                .clickAmountButton()
                 .fillAmountFromField(amountFrom)
                 .fillAmountToField(amountTo)
                 .clickAmountApplyButton();
@@ -574,8 +575,8 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: the 'Company' input field is empty by default");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
-        transactionsPage.getSelectCompany().clickSelectCompanyDropdownChevron()
-                .getSelectCompany().clickSelectCompanyField()
+        transactionsPage
+                .getSelectCompany().clickSelectCompanyDropdownChevron()
                 .getSelectCompany().selectFirstCompany();
 
         String firstCompanyName = transactionsPage
@@ -589,7 +590,6 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: the 'Company' input field is empty after reset");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
-
     }
 
     @Test
