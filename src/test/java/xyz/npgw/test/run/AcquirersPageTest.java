@@ -429,6 +429,26 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("Active");
     }
 
+    @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
+    @TmsLink("708")
+    @Epic("System/Acquirers")
+    @Feature("Reset")
+    @Description("'Reset' button clears selected filter values and resets them to default.")
+    public void testResetFilter(String status) {
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .getSelectStatus().select(status)
+                .clickResetFilterButton();
+
+        Allure.step("Verify: the selected acquirer filter is cleared");
+        assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirerField()).isEmpty();
+
+        Allure.step("Verify: the status filter is reset to 'All'");
+        assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText("All");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

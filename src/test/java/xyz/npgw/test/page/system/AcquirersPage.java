@@ -32,4 +32,11 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
 
         return new AddAcquirerDialog(getPage());
     }
+
+    @Step("Click 'Reset filter' button")
+    public AcquirersPage clickResetFilterButton() {
+        resetFilterButton.click();
+
+        return this;
+    }
 }
