@@ -45,6 +45,8 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
         String lastName = "";
         selectCompanyField.fill(companyName);
 
+        locator("div[aria-label='Suggestions']").waitFor();
+
         if (dropdownOptionList.all().isEmpty()) {
             throw new NoSuchElementException("Company '" + companyName + "' not found. Dropdown list is empty.");
         }
