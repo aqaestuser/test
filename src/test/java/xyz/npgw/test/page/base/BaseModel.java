@@ -18,6 +18,10 @@ public abstract class BaseModel {
     public BaseModel(Page page) {
         this.page = page;
         page.route("**/*", route -> {
+            log.info("{} {} at {}",
+//                    THREAD_LAST_ACTIVITY.get(),
+//                    LocalTime.now().plusNanos(700_000_000),
+                    route.request().method(), route.request().url(), LocalTime.now());
             THREAD_LAST_ACTIVITY.set(LocalTime.now().plusNanos(700_000_000));
             route.fallback();
         });
