@@ -6,6 +6,8 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.common.Constants;
+import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 
@@ -60,13 +62,21 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
 
     @Step("Press 'Login' button")
     public DashboardPage clickLoginButton() {
-        loginButton.click();
+//        loginButton.click();
+        ResponseUtils.clickAndWaitForResponse(getPage(), loginButton, Constants.TRANSACTION_SUMMARY_ENDPOINT);
 
         return new DashboardPage(getPage());
     }
 
     @Step("Press 'Login' button to change password")
     public LoginPage clickLoginButtonToChangePassword() {
+        loginButton.click();
+
+        return this;
+    }
+
+    @Step("Press 'Login' button as disabled user")
+    public LoginPage clickLoginButtonAsDisabledUser() {
         loginButton.click();
 
         return this;
@@ -109,7 +119,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     public LoginPage loginAsDisabledUser(String email, String password) {
         fillEmailField(email);
         fillPasswordField(password);
-        clickLoginButton();
+        clickLoginButtonAsDisabledUser();
 
         return new LoginPage(getPage());
     }

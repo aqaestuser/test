@@ -4,6 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.page.dialog.merchant.DeleteBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
@@ -26,5 +27,14 @@ public class BusinessUnitsTableComponent extends BaseTableComponent<CompaniesAnd
         editButton.click();
 
         return new EditBusinessUnitDialog(getPage());
+    }
+
+    @Step("Click 'Delete Business Unit' button")
+    public DeleteBusinessUnitDialog clickDeleteBusinessUnitButton(String name) {
+        Locator deleteButton = getRow(name).getByTestId("DeleteBusinessUnitButton");
+        deleteButton.waitFor();
+        deleteButton.click();
+
+        return new DeleteBusinessUnitDialog(getPage());
     }
 }

@@ -6,10 +6,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import net.datafaker.Faker;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Company;
@@ -24,8 +22,8 @@ public class GatewayPageTest extends BaseTest {
     private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
     private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172"};
     private final String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
-    Company company = new Company("%s company for 602".formatted(RUN_ID));
-    String merchantTitle = new Faker().company().industry();
+    Company company = new Company("%s company for 602".formatted(RUN_ID), "first");
+    String merchantTitle = "second";
 
     @BeforeClass
     @Override
@@ -80,7 +78,6 @@ public class GatewayPageTest extends BaseTest {
         }
     }
 
-    @Ignore("outdated after update 06/06")
     @Test
     @TmsLink("307")
     @Epic("System/Gateway")
@@ -98,19 +95,10 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().getSelectCompanyField();
 
         Allure.step("Verify: The dropdown is closed.");
-        assertThat(gatewayPage.getSelectCompany().getCompanyDropdown()).not().isVisible();
+        assertThat(gatewayPage.getSelectCompany().getCompanyDropdown()).isHidden();
 
-        Allure.step("Verify: Placeholder value");
+        Allure.step("Verify: Company is selected");
         assertThat(selectCompanyField).hasValue(COMPANY_NAME);
-
-        Allure.step("Verify: 'Business units list' title is visible");
-        assertThat(gatewayPage.getBusinessUnitsListHeader()).isVisible();
-
-        Allure.step("Verify: Business units list length");
-        assertThat(gatewayPage.getBusinessUnitsList()).hasCount(expectedBusinessUnitsList.length);
-
-        Allure.step("Verify: Expected list");
-        assertThat(gatewayPage.getBusinessUnitsList()).hasText(expectedBusinessUnitsList);
 
         gatewayPage
                 .getSelectCompany().clickSelectCompanyClearIcon()
@@ -121,15 +109,8 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify: Field is empty");
         assertThat(selectCompanyField).isEmpty();
-
-        Allure.step("Verify: 'Business units list' title is still visible");
-        assertThat(gatewayPage.getBusinessUnitsListHeader()).isVisible();
-
-        Allure.step("Verify: 'Business units list' has 'No items.'");
-        assertThat(gatewayPage.getBusinessUnitsList()).hasText(new String[]{"No items."});
     }
 
-    @Ignore("need refactor to table after update 06/06")
     @Test
     @TmsLink("602")
     @Epic("System/Gateway")
@@ -155,11 +136,12 @@ public class GatewayPageTest extends BaseTest {
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().clickSelectCompanyField()
-                .getSelectCompany().selectCompany(company.companyName());
+                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
         Allure.step("Verify that all the Business units are presented in the list");
-        assertThat(gatewayPage.getBusinessUnitsBlock()).containsText(company.companyType());
-        assertThat(gatewayPage.getBusinessUnitsBlock()).containsText(merchantTitle);
+        assertThat(gatewayPage.getSelectBusinessUnit().getDropdownOptionList())
+                .hasText(new String[]{"first", "second"});
     }
 
     @AfterClass

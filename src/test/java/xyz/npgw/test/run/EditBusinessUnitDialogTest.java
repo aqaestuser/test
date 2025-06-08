@@ -70,6 +70,24 @@ public class EditBusinessUnitDialogTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
     }
 
+    @Test(priority = 1)
+    @TmsLink("722")
+    @Epic("System/Companies and business units")
+    @Feature("Delete business unit")
+    @Description("Verify that business unit can be deleted")
+    public void testDeleteBusinessUnit() {
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE)
+                .clickDeleteButton();
+
+        Allure.step("Verify: the header contains the expected title text");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was deleted successfully");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
