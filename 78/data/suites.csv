@@ -1,3 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","27","testNavigateToLoginPage","Surefire suite","Wed Mar 26 01:48:24 GMT 2025","passed","Wed Mar 26 01:48:24 GMT 2025","LoginPageTest","Surefire test","LoginPageTest","testNavigateToLoginPage"
-"","2430","testLogin","Surefire suite","Wed Mar 26 01:48:20 GMT 2025","passed","Wed Mar 26 01:48:23 GMT 2025","LoginPageTest","Surefire test","LoginPageTest","testLogin"
