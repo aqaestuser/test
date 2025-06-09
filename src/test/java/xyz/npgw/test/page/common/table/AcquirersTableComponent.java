@@ -23,7 +23,7 @@ public class AcquirersTableComponent extends BaseTableComponent<AcquirersPage> {
     }
 
     public Locator getChangeActivityButton(Locator row) {
-        return row.getByTestId("ChangeBusinessUnitActivityButton");
+        return row.getByTestId("ChangeAcquirerActivityButton");
     }
 
     @Step("Click 'Edit' button to edit acquirer")

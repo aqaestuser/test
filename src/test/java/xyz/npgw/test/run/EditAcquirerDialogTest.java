@@ -19,7 +19,7 @@ import static org.testng.Assert.assertEquals;
 
 public class EditAcquirerDialogTest extends BaseTest {
 
-    private static final String ACQUIRER_NAME = "Acquirer for edit form%s".formatted(RUN_ID);
+    private static final String ACQUIRER_NAME = "%s acquirer for edit form".formatted(RUN_ID);
 
     @BeforeClass
     @Override
@@ -36,7 +36,6 @@ public class EditAcquirerDialogTest extends BaseTest {
     public void testVerifyPlaceholdersEditForm() {
         List<String> expectedPlaceholders = List.of(
                 "Enter acquirer name",
-                "Enter acquirer title",
                 "Enter acquirer code",
                 "Enter challenge URL",
                 "Enter fingerprint URL",

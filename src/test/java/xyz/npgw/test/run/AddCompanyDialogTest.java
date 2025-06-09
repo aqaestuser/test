@@ -24,12 +24,12 @@ import static org.testng.Assert.assertEquals;
 
 public class AddCompanyDialogTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "CompanyName%s".formatted(RUN_ID);
-    private static final String EXISTING_COMPANY_NAME = "ExistingCompanyName%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s company name".formatted(RUN_ID);
+    private static final String EXISTING_COMPANY_NAME = "%s existing company name".formatted(RUN_ID);
     private static final String COMPANY_TYPE = "CompanyType";
 
     Company company = new Company(
-            "CompanyNameTest%s".formatted(RUN_ID), "", "Company Type Test",
+            "%s company name test".formatted(RUN_ID), "Company Type Test",
             new Address("Warwick", "PA",
                     "19876", "US",
                     "+1234567", "+1234567", "+1234567"),
@@ -59,7 +59,6 @@ public class AddCompanyDialogTest extends BaseTest {
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
                 "Enter name",
-                "Enter title",
                 "Enter type",
                 "Enter company description",
                 "Enter website",

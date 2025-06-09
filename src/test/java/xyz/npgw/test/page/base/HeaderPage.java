@@ -44,7 +44,7 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
 
     @Step("Click on 'Reports' menu in Header")
     public ReportsPage clickReportsLink() {
-        reportsButton.click();
+        ResponseUtils.clickAndWaitForText(getPage(), reportsButton, "Accounts");
 
         return new ReportsPage(getPage());
     }

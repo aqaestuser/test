@@ -10,6 +10,7 @@ import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.base.HeaderPage;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,6 +52,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public Locator getRow(String rowHeader) {
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+
         do {
             Locator header = getByRole(AriaRole.ROWHEADER, rowHeader);
 
@@ -128,19 +131,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return getCurrentPage();
     }
 
-    @Step("Click previous page button")
-    public CurrentPageT clickPreviousPageButton() {
-        previousPageButton.click();
-
-        return getCurrentPage();
-    }
-
     public Locator getFirstRowCell(String columnHeader) {
         return getColumnCells(columnHeader).get(0);
-    }
-
-    public boolean hasRow(String rowHeader) {
-        return getRow(rowHeader).count() > 0;
     }
 
     public int countAllRows() {
@@ -170,9 +162,12 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
             rowsPerPage.add(getRows().count());
         } while (goToNextPage());
 
+        goToFirstPageIfNeeded();
+
         return rowsPerPage;
     }
 
+    @Step("Count rows with {columnHeader} = {values}")
     public int countValues(String columnHeader, String... values) {
         long count = 0;
         Set<String> valueSet = Set.of(values);
@@ -185,6 +180,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
                         .count();
             } while (goToNextPage());
         }
+        goToFirstPageIfNeeded();
+
         return (int) count;
     }
 
@@ -201,15 +198,34 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         if (hasNoPagination()) {
             return false;
         }
-        if (!isCurrentPage("1")) {
+        if (isNotCurrentPage("1")) {
             clickPaginationPageButton("1");
         }
 
         return true;
     }
 
-    private boolean isCurrentPage(String number) {
-        return getActivePageButton().innerText().equals(number);
+    public boolean goToLastPageIfNeeded() {
+        if (hasNoPagination()) {
+            return false;
+        }
+        if (isNotCurrentPage(getLastPageNumber())) {
+            clickPaginationPageButton(getLastPageNumber());
+        }
+
+        return true;
+    }
+
+    public String getLastPageNumber() {
+        return paginationItems.last().innerText();
+    }
+
+    public boolean isTableEmpty() {
+        return rows.first().isVisible();
+    }
+
+    private boolean isNotCurrentPage(String number) {
+        return !getActivePageButton().innerText().equals(number);
     }
 
     private boolean goToNextPage() {
@@ -235,8 +251,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return nextPageButton.isEnabled();
     }
 
-    private boolean hasNoPagination() {
-        return !paginationItems.first().isVisible();
+    public boolean hasNoPagination() {
+        return paginationItems.first().isHidden();
     }
 
     public interface PageCallback {
@@ -244,7 +260,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
-        if (!paginationItems.first().isVisible()) {
+        if (hasNoPagination()) {
             return Collections.emptyList();
         }
 

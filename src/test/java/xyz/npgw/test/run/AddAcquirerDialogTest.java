@@ -25,8 +25,8 @@ import static org.testng.Assert.assertEquals;
 
 public class AddAcquirerDialogTest extends BaseTest {
 
-    private static final String EXISTING_ACQUIRER_NAME = "Existing acquirer%s".formatted(RUN_ID);
-    private static final String ACQUIRER_NAME = "Awesome acquirer%s".formatted(RUN_ID);
+    private static final String EXISTING_ACQUIRER_NAME = "%s existing acquirer".formatted(RUN_ID);
+    private static final String ACQUIRER_NAME = "%s awesome acquirer".formatted(RUN_ID);
     private final SystemConfig defaultConfig = new SystemConfig();
 
     @BeforeClass
@@ -56,7 +56,6 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
                 "Enter acquirer name",
-                "Enter acquirer title",
                 "Enter acquirer code",
                 "Enter challenge URL",
                 "Enter fingerprint URL",

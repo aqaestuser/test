@@ -17,7 +17,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class EditCompanyDialogTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "Kate%s".formatted(RUN_ID);
+    private static final String COMPANY_NAME = "%s Kate".formatted(RUN_ID);
 
     @BeforeClass
     @Override

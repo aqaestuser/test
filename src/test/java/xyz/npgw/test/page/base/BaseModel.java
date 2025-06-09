@@ -19,7 +19,7 @@ public abstract class BaseModel {
         this.page = page;
         page.route("**/*", route -> {
             THREAD_LAST_ACTIVITY.set(LocalTime.now().plusNanos(700_000_000));
-            route.resume();
+            route.fallback();
         });
     }
 

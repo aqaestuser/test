@@ -36,7 +36,7 @@ public class EditUserDialog extends UserDialog<EditUserDialog> {
                 },
                 getPage().getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save changes"))::click
         );
-
+        getPage().unroute("**/*/list/*");
 
         return new TeamPage(getPage());
     }

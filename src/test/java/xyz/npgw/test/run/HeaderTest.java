@@ -10,10 +10,7 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.provider.TestDataProvider;
-import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.TransactionsPage;
@@ -71,18 +68,15 @@ public class HeaderTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
     }
 
-    @Test(dataProvider = "getNewUsers", dataProviderClass = TestDataProvider.class, priority = 1)
+    @Test(dataProvider = "getUserRole", dataProviderClass = TestDataProvider.class, priority = 1)
     @TmsLink("289")
     @Epic("Header")
     @Feature("User menu")
     @Description("Check if the user can change the password through the profile settings in the user menu")
-    public void testChangePassword(String userRole, User user) {
-        TestUtils.createUser(getApiRequestContext(), user);
+    public void testChangePassword(String userRole) {
         String newPassword = "QWEdsa123@";
 
-        DashboardPage dashboardPage = new AboutBlankPage(getPage())
-                .navigate("/")
-                .login(user.email(), user.password())
+        DashboardPage dashboardPage = new DashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickProfileSettingsButton()
                 .fillPasswordField(newPassword)
@@ -91,11 +85,11 @@ public class HeaderTest extends BaseTest {
 
         Allure.step("Verify: success message for changing password");
         assertThat(dashboardPage.getAlert().getMessage())
-                .hasText("SUCCESSPassword was changed successfull"); // TODO bug - typo in message
+                .hasText("SUCCESSPassword was changed successfully");
 
         dashboardPage
                 .clickLogOutButton()
-                .login(user.email(), newPassword);
+                .loginAs("%s.%s@email.com".formatted(getUid(), userRole.toLowerCase()), newPassword);
 
         Allure.step("Verify: Successfully login with changed password");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);

@@ -11,12 +11,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.dialog.reports.ReportsParametersDialog;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,16 +25,15 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 
 public class ReportsPageTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "Generate report%s".formatted(RUN_ID);
-    private static final String MERCHANT_TITLE = "Generate report merchant%s".formatted(RUN_ID);
-    private BusinessUnit businessUnit;
+    private static final String COMPANY_NAME = "%s generate report".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "%s generate report merchant".formatted(RUN_ID);
 
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
-        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+        TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
 
     @Test
@@ -170,8 +170,7 @@ public class ReportsPageTest extends BaseTest {
     @Description("'Reset filter' clears selected options to default")
     public void testResetFilter() {
         ReportsPage reportsPage = new ReportsPage(getPage())
-                .clickReportsLink()
-                .refreshReports();
+                .clickReportsLink();
 
         String defaultStartDate = reportsPage.getSelectDateRange().getStartDate().textContent();
         String defaultEndDate = reportsPage.getSelectDateRange().getEndDate().textContent();
@@ -193,10 +192,39 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getSelectDateRange().getEndDate()).hasText(defaultEndDate);
     }
 
+    @Test
+    @TmsLink("699")
+    @Epic("Reports")
+    @Feature("Table entries sorting")
+    @Description("'Filename' column header sorts entries in alphabetical and reverse order")
+    public void testSortingByFilename() {
+        ReportsPage reportsPage = new ReportsPage(getPage())
+                .clickReportsLink()
+                .getTable().clickFilenameColumnHeader();
+
+        List<String> actualFilenameList = reportsPage.getTable().getColumnValues("Filename");
+        List<String> sortedFilenameListAsc = new ArrayList<>(actualFilenameList);
+        Collections.sort(sortedFilenameListAsc);
+
+        Allure.step("Verify that entries are displayed in alphabetical order");
+        Assert.assertEquals(actualFilenameList, sortedFilenameListAsc,
+                "Filenames are not in alphabetical order");
+
+        reportsPage
+                .getTable().clickFilenameColumnHeader();
+
+        actualFilenameList = reportsPage.getTable().getColumnValues("filename");
+        List<String> sortedFilenameListDesc = new ArrayList<>(sortedFilenameListAsc);
+        Collections.reverse(sortedFilenameListDesc);
+
+        Allure.step("Verify that entries are displayed in reverse alphabetical order");
+        Assert.assertEquals(actualFilenameList, sortedFilenameListDesc,
+                "Filenames are not in reverse alphabetical order");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
-        TestUtils.deleteBusinessUnit(getApiRequestContext(), COMPANY_NAME, businessUnit);
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         super.afterClass();
     }
