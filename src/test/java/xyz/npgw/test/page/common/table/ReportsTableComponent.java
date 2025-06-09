@@ -12,6 +12,7 @@ public class ReportsTableComponent extends BaseTableComponent<ReportsPage> {
     }
 
     private final Locator filenameColumnHeader = getByRole(AriaRole.COLUMNHEADER, "Filename");
+    private final Locator sizeColumnHeader = getByRole(AriaRole.COLUMNHEADER, "Size");
 
     @Override
     protected ReportsPage getCurrentPage() {
@@ -21,6 +22,13 @@ public class ReportsTableComponent extends BaseTableComponent<ReportsPage> {
     @Step("Click the 'Filename' column header")
     public ReportsPage clickFilenameColumnHeader() {
         filenameColumnHeader.click();
+
+        return new ReportsPage(getPage());
+    }
+
+    @Step("Click the 'Size' column header")
+    public ReportsPage clickSizeColumnHeader() {
+        sizeColumnHeader. click();
 
         return new ReportsPage(getPage());
     }

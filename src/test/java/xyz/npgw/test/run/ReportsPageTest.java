@@ -222,6 +222,36 @@ public class ReportsPageTest extends BaseTest {
                 "Filenames are not in reverse alphabetical order");
     }
 
+    @Test
+    @TmsLink("718")
+    @Epic("Reports")
+    @Feature("Table entries sorting")
+    @Description("'Size' column header sorts entries in ascending and descending order")
+    public void testSortingBySize() {
+        ReportsPage reportsPage = new ReportsPage(getPage())
+                .clickReportsLink()
+                .getTable().clickSizeColumnHeader();
+
+        List<String> actualSizeList = reportsPage.getTable().getColumnValues("Size");
+        List<String> sortedSizeListAsc = new ArrayList<String>(actualSizeList);
+        Collections.sort(sortedSizeListAsc);
+
+        Allure.step("Verify that entries are displayed in ascending order by Size");
+        Assert.assertEquals(actualSizeList, sortedSizeListAsc,
+                "Filenames are not in alphabetical order");
+
+        reportsPage
+                .getTable().clickSizeColumnHeader();
+
+        actualSizeList = reportsPage.getTable().getColumnValues("Size");
+        List<String> sortedSizeListDesc = new ArrayList<String>(sortedSizeListAsc);
+        Collections.reverse(sortedSizeListDesc);
+
+        Allure.step("Verify that entries are displayed in descending order by Size");
+        Assert.assertEquals(actualSizeList, sortedSizeListDesc,
+                "Filenames are not in alphabetical order");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
