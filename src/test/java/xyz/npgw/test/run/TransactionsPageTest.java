@@ -644,6 +644,38 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
+    @Test
+    @TmsLink("")
+    @Epic("Transactions")
+    @Feature("Reset filter")
+    @Description("Verify, that ")
+    public void testResetData() {
+
+        final String startDate = "01-04-2025";
+        final String endDate = "30-04-2025";
+        final String dataFrom = startDate.replaceAll("-", "/");
+        final String dataTo = endDate.replaceAll("-", "/");
+        final String selectedRange = "Date range" + dataFrom + "-" + dataTo;
+        final String currentRange = TestUtils.getCurrentRange();
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+        Allure.step("Verify: the 'Data' input field value is current month by default");
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
+
+        transactionsPage
+                .getSelectDateRange().setDateRangeFields(startDate, endDate);
+
+        Allure.step("Verify: the 'Data' input field value is checked period");
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(selectedRange);
+
+        transactionsPage
+                .clickResetFilterButton();
+
+        Allure.step("Verify: the 'Data' input field value is current month after reset");
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

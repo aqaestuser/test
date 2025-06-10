@@ -47,4 +47,13 @@ public final class TestUtils {
     public static void deleteAcquirer(APIRequestContext request, String acquirerName) {
         Acquirer.delete(request, acquirerName);
     }
+
+    public static String getCurrentRange() {
+        final java.time.LocalDate currentDate = java.time.LocalDate.now();
+        final String[] dataNow = currentDate.toString().split("-");
+        final int lastDay = currentDate.lengthOfMonth();
+        final String monthYear = "/" + dataNow[1] + "/" + dataNow[0];
+
+        return "Date range01" + monthYear + "-" + lastDay + monthYear;
+    }
 }
