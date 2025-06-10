@@ -6,6 +6,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import net.datafaker.Faker;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -14,6 +15,9 @@ import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.GatewayPage;
+
+import java.util.List;
+import java.util.Random;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -142,6 +146,54 @@ public class GatewayPageTest extends BaseTest {
         Allure.step("Verify that all the Business units are presented in the list");
         assertThat(gatewayPage.getSelectBusinessUnit().getDropdownOptionList())
                 .hasText(new String[]{"first", "second"});
+    }
+
+    @Test
+    @TmsLink("693")
+    @Epic("System/Gateway")
+    @Feature("Currency")
+    @Description("Verify Reset filter cleans all the filters applied")
+    public void testResetAllTheFilters() {
+        List<String> expectedCurrency = List.of("All", "EUR", "USD", "GBP");
+        String selectedCurrency = expectedCurrency.get(new Random().nextInt(expectedCurrency.size() - 1) + 1);
+        Company company = new Company(new Faker().company().name(), new Faker().company().industry());
+
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickAddCompanyButton()
+                .fillCompanyNameField(company.companyName())
+                .fillCompanyTypeField(company.companyType())
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickOnAddBusinessUnitButton()
+                .fillBusinessUnitNameField(company.companyType())
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().clickSelectCompanyField()
+                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectBusinessUnit().selectBusinessUnit(company.companyType())
+                .clickCurrencyValue()
+                .selectCurrency(selectedCurrency);
+
+        Allure.step("Verify that all the values are presented in filter's filter");
+        assertThat(gatewayPage.getCurrencyValue()).containsText(selectedCurrency);
+        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).hasAttribute("value", company.companyType());
+        assertThat(gatewayPage.getCompanyDropdownTrigger()).hasAttribute("value", company.companyName());
+
+        gatewayPage
+                .clickResetFilterButton();
+
+        Allure.step("Verify that all the filter are cleaned");
+        assertThat(gatewayPage.getCurrencyValue()).containsText("ALL");
+        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).hasAttribute("placeholder", "Select business unit");
+        assertThat(gatewayPage.getCompanyDropdownTrigger()).hasAttribute("placeholder", "Search...");
+        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).isEmpty();
+        assertThat(gatewayPage.getCompanyDropdownTrigger()).isEmpty();
+
+        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
     @AfterClass
