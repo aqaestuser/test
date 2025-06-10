@@ -21,7 +21,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
     @Getter
     private final Locator companyDropdown = locator("div[data-slot='content']");
     private final Locator selectCompanyContainer = locator("div[data-slot='input-wrapper']")
-                    .filter(new Locator.FilterOptions().setHas(selectCompanyField));
+            .filter(new Locator.FilterOptions().setHas(selectCompanyField));
     private final Locator selectCompanyDropdownChevron = selectCompanyContainer
             .locator("button[aria-label='Show suggestions']:last-child");
     private final Locator selectCompanyClearIcon = selectCompanyContainer
@@ -95,6 +95,15 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     public String firstCompanyName() {
 
-        return  dropdownOptionList.first().textContent();
+        return dropdownOptionList.first().textContent();
+    }
+
+    public boolean isCompanyAbsentInDropdown(String companyName) {
+        try {
+            selectCompany(companyName);
+            return false;
+        } catch (NoSuchElementException e) {
+            return true;
+        }
     }
 }

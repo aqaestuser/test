@@ -10,6 +10,7 @@ import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.BusinessUnitsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
+import xyz.npgw.test.page.dialog.company.DeleteCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 
@@ -49,6 +50,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     private final Locator showRadiobutton = locator("[value='show']");
     private final Locator hideRadiobutton = locator("[value='hide']");
     private final Locator companyInfoBlock = locator("//div[text()='Company info']/..");
+    private final Locator deleteSelectedCompany = getByTestId("DeleteCompanyButton");
 
     public CompaniesAndBusinessUnitsPage(Page page) {
         super(page);
@@ -117,5 +119,12 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         hideRadiobutton.check();
 
         return this;
+    }
+
+    @Step("Click 'Delete selected company' button")
+    public DeleteCompanyDialog clickDeleteSelectedCompany() {
+        deleteSelectedCompany.click();
+
+        return new DeleteCompanyDialog(getPage());
     }
 }

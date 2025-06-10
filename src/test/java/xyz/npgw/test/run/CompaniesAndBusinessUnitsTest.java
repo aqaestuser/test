@@ -11,6 +11,7 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertTrue;
 
 public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
@@ -35,5 +36,29 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
         Allure.step("Verify: company info block is visible again after selecting 'Show' in settings");
         assertThat(companiesAndBusinessUnitsPage.getCompanyInfoBlock()).isVisible();
+    }
+
+
+    @Test
+    @TmsLink("723")
+    @Epic("System/Companies and business units")
+    @Feature("Delete Company")
+    @Description("Verify that company can be deleted")
+    public void testDeleteCompany() {
+        String companyName = getCompanyName();
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(companyName)
+                .clickDeleteSelectedCompany()
+                .clickDeleteButton();
+
+        Allure.step("Verify: the success alert appears after deleting the company");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSCompany was deleted successfully");
+
+        Allure.step("Verify: the deleted company is no longer present in the dropdown list");
+        assertTrue(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyAbsentInDropdown(companyName));
     }
 }
