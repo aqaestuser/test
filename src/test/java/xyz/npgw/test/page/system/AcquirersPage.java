@@ -10,6 +10,7 @@ import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.DeleteAcquirerDialog;
 
 @Getter
 public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements AcquirersTableTrait,
@@ -21,6 +22,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
     private final Locator addAcquirerDialog = getByRole(AriaRole.DIALOG);
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
+    private final Locator deleteAcquirerButton = getByTestId("DeleteAcquirerButton");
 
     public AcquirersPage(Page page) {
         super(page);
@@ -38,5 +40,12 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
         resetFilterButton.click();
 
         return this;
+    }
+
+    @Step("Click 'Delete acquirer' button")
+    public DeleteAcquirerDialog clickDeleteAcquirer() {
+        deleteAcquirerButton.click();
+
+        return new DeleteAcquirerDialog(getPage());
     }
 }

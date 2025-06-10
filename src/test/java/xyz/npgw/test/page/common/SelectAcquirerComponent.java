@@ -100,4 +100,14 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
 
         return page;
     }
+
+    public boolean isAcquirerAbsent(String acquirerName) {
+        getPage().waitForCondition(() -> selectAcquirerField.inputValue().isEmpty());
+        try {
+            selectAcquirer(acquirerName);
+            return false;
+        } catch (NoSuchElementException e) {
+            return true;
+        }
+    }
 }
