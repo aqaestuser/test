@@ -79,7 +79,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
     @Step("Click currency '{currency}'")
     public CurrentDialogT clickCheckboxCurrency(String currency) {
-        getPage().getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(currency)).check();
+        getByRole(AriaRole.CHECKBOX, currency).check();
 
         return (CurrentDialogT) this;
     }

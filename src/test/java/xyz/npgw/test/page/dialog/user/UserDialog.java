@@ -5,7 +5,6 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
@@ -43,42 +42,42 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
 
     @Step("Check 'Active' status radiobutton")
     public CurrentDialogT checkActiveRadiobutton() {
-        getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setExact(true).setName("Active")).check();
+        getByRoleExact(AriaRole.RADIO, "Active").check();
 
         return (CurrentDialogT) this;
     }
 
     @Step("Check 'Inactive' status radiobutton")
     public CurrentDialogT checkInactiveRadiobutton() {
-        getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Inactive")).check();
+        getByRole(AriaRole.RADIO, "Inactive").check();
 
         return (CurrentDialogT) this;
     }
 
-    @Step("Set 'User role' radiobutton checked for '{userRole}'")
-    public CurrentDialogT setUserRoleRadiobutton(UserRole userRole) {
-        getByRoleExact(AriaRole.RADIO, userRole.getName()).check();
-
-        return (CurrentDialogT) this;
-    }
+//    @Step("Set 'User role' radiobutton checked for '{userRole}'")
+//    public CurrentDialogT setUserRoleRadiobutton(UserRole userRole) {
+//        getByRoleExact(AriaRole.RADIO, userRole.getName()).check();
+//
+//        return (CurrentDialogT) this;
+//    }
 
     @Step("Check 'System admin' user role radiobutton")
     public CurrentDialogT checkSystemAdminRadiobutton() {
-        getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("System admin")).check();
+        getByRole(AriaRole.RADIO, "System admin").check();
 
         return (CurrentDialogT) this;
     }
 
     @Step("Check 'Company admin' user role radiobutton")
     public CurrentDialogT checkCompanyAdminRadiobutton() {
-        getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Company admin")).check();
+        getByRole(AriaRole.RADIO, "Company admin").check();
 
         return (CurrentDialogT) this;
     }
 
     @Step("Check 'Company analyst' user role radiobutton")
     public CurrentDialogT checkCompanyAnalystRadiobutton() {
-        getPage().getByRole(AriaRole.RADIO, new Page.GetByRoleOptions().setName("Company analyst")).check();
+        getByRole(AriaRole.RADIO, "Company analyst").check();
 
         return (CurrentDialogT) this;
     }
@@ -105,8 +104,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Unset checked 'Allowed business units' checkboxes by business units names")
     public CurrentDialogT unsetAllowedBusinessUnits(String[] businessUnits) {
         for (String businessUnit : businessUnits) {
-            Locator businessUnitLocator = getPage()
-                    .getByRole(AriaRole.CHECKBOX, new Page.GetByRoleOptions().setName(businessUnit));
+            Locator businessUnitLocator = getByRole(AriaRole.CHECKBOX, businessUnit);
 
             businessUnitLocator.last().waitFor();
             businessUnitLocator.all().forEach(item -> item.setChecked(false));

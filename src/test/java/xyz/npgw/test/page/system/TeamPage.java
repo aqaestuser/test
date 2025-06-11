@@ -18,8 +18,6 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
         AlertTrait<TeamPage>,
         SelectStatusTrait<TeamPage> {
 
-    private final Locator resetFilterButton = getByTestId("ResetFilterButtonTeamPage");
-
     public TeamPage(Page page) {
         super(page);
     }
@@ -33,9 +31,9 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
 
     @Step("Click 'Edit user' button")
     public EditUserDialog clickEditUserButton(String username) {
-        Locator editButton = getTable().getRow(username).getByTestId("EditUserButton");
-        editButton.waitFor();
-        editButton.click();
+//        Locator editButton = getTable().getRow(username).getByTestId("EditUserButton");
+//        editButton.waitFor();
+        getTable().getRow(username).getByTestId("EditUserButton").click();
 
         return new EditUserDialog(getPage());
     }
@@ -43,16 +41,16 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
 //        TODO remove after bugfix
-        getPage().waitForTimeout(500);
+//        getPage().waitForTimeout(500);
         getByTestId("ApplyFilterButtonTeamPage").click();
-        getPage().waitForTimeout(500);
+//        getPage().waitForTimeout(500);
 
         return this;
     }
 
     @Step("Click 'Reset filter' button")
     public TeamPage clickResetFilterButton() {
-        resetFilterButton.click();
+        getByTestId("ResetFilterButtonTeamPage").click();
 
         return this;
     }

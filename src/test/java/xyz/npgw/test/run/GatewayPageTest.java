@@ -180,18 +180,20 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify that all the values are presented in filter's filter");
         assertThat(gatewayPage.getCurrencyValue()).containsText(selectedCurrency);
-        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).hasAttribute("value", company.companyType());
-        assertThat(gatewayPage.getCompanyDropdownTrigger()).hasAttribute("value", company.companyName());
+        assertThat(gatewayPage.getSelectBusinessUnit().getSelectBusinessUnitField()).hasValue(company.companyType());
+        assertThat(gatewayPage.getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
 
         gatewayPage
                 .clickResetFilterButton();
 
         Allure.step("Verify that all the filter are cleaned");
         assertThat(gatewayPage.getCurrencyValue()).containsText("ALL");
-        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).hasAttribute("placeholder", "Select business unit");
-        assertThat(gatewayPage.getCompanyDropdownTrigger()).hasAttribute("placeholder", "Search...");
-        assertThat(gatewayPage.getBusinessUnitDropdownTrigger()).isEmpty();
-        assertThat(gatewayPage.getCompanyDropdownTrigger()).isEmpty();
+        assertThat(gatewayPage.getSelectBusinessUnit().getSelectBusinessUnitField())
+                .hasAttribute("placeholder", "Select business unit");
+        assertThat(gatewayPage.getSelectCompany().getSelectCompanyField())
+                .hasAttribute("placeholder", "Search...");
+        assertThat(gatewayPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
+        assertThat(gatewayPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }

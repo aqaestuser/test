@@ -187,8 +187,8 @@ public class TeamPageTest extends BaseTest {
                 .setStatusRadiobutton(false)
                 .unsetAllowedBusinessUnits(new String[]{MERCHANT_TITLE})
                 .checkCompanyAdminRadiobutton()
-                .clickSaveChangesButton()
-                .clickRefreshDataButton();
+                .clickSaveChangesButton();
+//                .clickRefreshDataButton();
 
         Allure.step("Verify: success alert appears after user update");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
@@ -434,7 +434,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
         loginPage
-                .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getUserPassword())
+                .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getSuperPassword())
                 .clickSystemAdministrationLink()
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()

@@ -13,8 +13,8 @@ import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public class AddUserDialog extends UserDialog<AddUserDialog> implements AlertTrait<AddUserDialog> {
 
-    private final Locator emailField = getByPlaceholder("Enter user email");
-    private final Locator passwordField = getByPlaceholder("Enter user password");
+//    private final Locator emailField = getByPlaceholder("Enter user email");
+//    private final Locator passwordField = getByPlaceholder("Enter user password");
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
     public AddUserDialog(Page page) {
@@ -23,14 +23,14 @@ public class AddUserDialog extends UserDialog<AddUserDialog> implements AlertTra
 
     @Step("Enter user email")
     public AddUserDialog fillEmailField(String email) {
-        emailField.fill(email);
+        getByPlaceholder("Enter user email").fill(email);
 
         return this;
     }
 
     @Step("Enter user password")
     public AddUserDialog fillPasswordField(@Param(name = "Password", mode = MASKED) String password) {
-        passwordField.fill(password);
+        getByPlaceholder("Enter user password").fill(password);
 
         return this;
     }
@@ -42,15 +42,15 @@ public class AddUserDialog extends UserDialog<AddUserDialog> implements AlertTra
         return new TeamPage(getPage());
     }
 
-    @Step("Create user '{user}'")
-    public TeamPage createUser(User user) {
-        return fillEmailField(user.email())
-                .fillPasswordField(user.password())
-                .setStatusRadiobutton(user.enabled())
-                .setUserRoleRadiobutton(user.userRole())
-                .setAllowedBusinessUnits(user.merchantIds())
-                .clickCreateButton();
-    }
+//    @Step("Create user '{user}'")
+//    public TeamPage createUser(User user) {
+//        return fillEmailField(user.email())
+//                .fillPasswordField(user.password())
+//                .setStatusRadiobutton(user.enabled())
+//                .setUserRoleRadiobutton(user.userRole())
+//                .setAllowedBusinessUnits(user.merchantIds())
+//                .clickCreateButton();
+//    }
 
     @Step("Click on the 'Create' button and trigger an error")
     public AddUserDialog clickCreateButtonAndTriggerError() {

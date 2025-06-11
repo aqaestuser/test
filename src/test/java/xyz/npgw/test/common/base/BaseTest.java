@@ -140,12 +140,12 @@ public abstract class BaseTest {
                     userRole,
                     (userRole == UserRole.USER) ? new String[]{businessUnit.merchantId()} : new String[]{},
                     email,
-                    ProjectProperties.getUserPassword());
+                    ProjectProperties.getSuperPassword());
             User.create(apiRequestContext, user);
             User.passChallenge(apiRequestContext, user.email(), user.password());
         }
 
-        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getUserPassword());
+        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getSuperPassword());
 //        initPageRequestContext();
     }
 

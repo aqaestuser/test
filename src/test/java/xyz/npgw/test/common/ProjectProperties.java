@@ -2,7 +2,6 @@ package xyz.npgw.test.common;
 
 import com.microsoft.playwright.options.ColorScheme;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.common.entity.UserRole;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +14,8 @@ import java.util.Properties;
 public final class ProjectProperties {
 
     private static final String PREFIX_PROP = "local.";
-    private static final String EMAIL = ".email";
-    private static final String PASSWORD = ".password";
+    private static final String EMAIL = "SUPER.email";
+    private static final String PASSWORD = "SUPER.password";
 
     private static final String CI_RUN = "CI_RUN";
 
@@ -130,27 +129,11 @@ public final class ProjectProperties {
     }
 
     public static String getSuperEmail() {
-        return properties.getProperty(PREFIX_PROP + UserRole.SUPER + EMAIL, "");
+        return properties.getProperty(PREFIX_PROP + EMAIL, "");
     }
 
     public static String getSuperPassword() {
-        return properties.getProperty(PREFIX_PROP + UserRole.SUPER + PASSWORD, "");
-    }
-
-    public static String getAdminEmail() {
-        return properties.getProperty(PREFIX_PROP + UserRole.ADMIN + EMAIL, "");
-    }
-
-    public static String getAdminPassword() {
-        return properties.getProperty(PREFIX_PROP + UserRole.ADMIN + PASSWORD, "");
-    }
-
-    public static String getUserEmail() {
-        return properties.getProperty(PREFIX_PROP + UserRole.USER + EMAIL, "");
-    }
-
-    public static String getUserPassword() {
-        return properties.getProperty(PREFIX_PROP + UserRole.USER + PASSWORD, "");
+        return properties.getProperty(PREFIX_PROP + PASSWORD, "");
     }
 
     public static boolean isFailFast() {

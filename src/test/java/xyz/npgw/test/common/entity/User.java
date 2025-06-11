@@ -28,7 +28,7 @@ public record User(
 
     public static boolean exists(APIRequestContext request, String email) {
         APIResponse response = request.get("portal-v1/user?email=%s".formatted(encode(email)));
-        log.info("exist user '{}' - {}", email, response.status());
+//        log.info("exist user '{}' - {}", email, response.status());
         if (response.status() >= 500) {
             throw new SkipException(response.text());
         }
@@ -64,7 +64,8 @@ public record User(
     public static void passChallenge(APIRequestContext request, String email, String password) {
         Credentials credentials = new Credentials(email, password);
         TokenResponse tokenResponse = getTokenResponse(request, credentials);
-        if (tokenResponse.userChallengeType.equals("NEW_PASSWORD_REQUIRED")) {
+        if (tokenResponse.userChallengeType != null
+                && tokenResponse.userChallengeType.equals("NEW_PASSWORD_REQUIRED")) {
             Challenge challenge = new Challenge(tokenResponse.sessionId, credentials, tokenResponse.userChallengeType);
             APIResponse response = request.post("/portal-v1/user/challenge",
                     RequestOptions.create().setData(challenge));

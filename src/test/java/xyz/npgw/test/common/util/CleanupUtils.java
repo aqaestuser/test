@@ -26,12 +26,14 @@ public class CleanupUtils {
     public static void deleteCompanies(APIRequestContext request) {
         Arrays.stream(Company.getAll(request))
                 .filter(c -> !COMPANY.contains(c.companyName()))
+                .filter(c -> c.companyName().matches("^\\d{4}\\.\\d{6}.*$"))
                 .forEach(item -> TestUtils.deleteCompany(request, item.companyName()));
     }
 
     public static void deleteAcquirers(APIRequestContext request) {
         Arrays.stream(Acquirer.getAll(request))
                 .filter(acquirer -> !ACQUIRER.contains(acquirer.acquirerName()))
+                .filter(acquirer -> acquirer.acquirerName().matches("^\\d{4}\\.\\d{6}.*$"))
                 .filter(acquirer -> !acquirer.acquirerName().startsWith("acquirerName "))
                 .forEach(item -> Acquirer.delete(request, item.acquirerName()));
     }
@@ -39,6 +41,7 @@ public class CleanupUtils {
     private static void deleteUsersFromSuper(APIRequestContext request) {
         Arrays.stream(User.getAll(request, "super"))
                 .filter(user -> !USER.contains(user.email()))
+                .filter(user -> user.email().matches("^\\d{4}\\.\\d{6}.*$"))
                 .forEach(user -> User.delete(request, user.email()));
     }
 }

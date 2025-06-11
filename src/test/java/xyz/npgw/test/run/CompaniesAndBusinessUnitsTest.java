@@ -5,8 +5,10 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
@@ -14,6 +16,15 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertTrue;
 
 public class CompaniesAndBusinessUnitsTest extends BaseTest {
+
+    private static final String COMPANY_NAME = "%s company to delete".formatted(RUN_ID);
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+    }
 
     @Test
     @TmsLink("691")
@@ -24,7 +35,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany("super")
+                .getSelectCompany().selectCompany(COMPANY_NAME)
                 .clickSettings()
                 .checkHideCompanyInfo();
 
@@ -38,19 +49,16 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getCompanyInfoBlock()).isVisible();
     }
 
-
-    @Test
+    @Test(priority = 1)
     @TmsLink("723")
     @Epic("System/Companies and business units")
     @Feature("Delete Company")
     @Description("Verify that company can be deleted")
     public void testDeleteCompany() {
-        String companyName = getCompanyName();
-
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany(companyName)
+                .getSelectCompany().selectCompany(COMPANY_NAME)
                 .clickDeleteSelectedCompany()
                 .clickDeleteButton();
 
@@ -59,6 +67,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .hasText("SUCCESSCompany was deleted successfully");
 
         Allure.step("Verify: the deleted company is no longer present in the dropdown list");
-        assertTrue(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyAbsentInDropdown(companyName));
+        assertTrue(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyAbsentInDropdown(COMPANY_NAME));
     }
 }

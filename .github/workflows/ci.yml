@@ -44,14 +44,9 @@ jobs:
             baseURL=${{ secrets.BASE_URL }};
             SUPER.email=${{ secrets.USER_EMAIL }};
             SUPER.password=${{ secrets.USER_PASSWORD }};
-            ADMIN.email=${{ secrets.COMPANY_ADMIN_EMAIL }};
-            ADMIN.password=${{ secrets.USER_PASSWORD }};
-            USER.email=${{ secrets.COMPANY_ANALYST_EMAIL }};
-            USER.password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             headlessMode=true;
             tracingMode=false;
-            defaultTimeout=10000;
             failFast=false;
             videoMode=false
           CI_RUN: true

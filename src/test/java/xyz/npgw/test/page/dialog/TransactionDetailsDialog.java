@@ -33,7 +33,7 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
     @Step("Click on chevron in Card details section")
     public TransactionDetailsDialog clickChevronInCardDetailsSection() {
         chevron.click();
-        getPage().waitForTimeout(500);
+//        getPage().waitForTimeout(500);
         return new TransactionDetailsDialog(getPage());
     }
 

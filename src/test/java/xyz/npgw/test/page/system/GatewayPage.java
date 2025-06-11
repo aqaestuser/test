@@ -14,14 +14,14 @@ import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCompanyTrait<GatewayPage>,
         SelectBusinessUnitTrait<GatewayPage> {
 
-    private final Locator companyDropdown = locator("div[data-slot='content']");
+//    private final Locator companyDropdown = locator("div[data-slot='content']");
     private final Locator currencyValue = locator("div[data-slot='innerWrapper'] span");
-    private final Locator businessUnitDropdownTrigger = locator("input[aria-label='Business unit']");
-    private final Locator companyDropdownTrigger = locator("input[aria-label='Select company']");
+//    private final Locator businessUnitDropdownTrigger = locator("input[aria-label='Business unit']");
+//    private final Locator companyDropdownTrigger = locator("input[aria-label='Select company']");
     @Getter(AccessLevel.NONE)
     private final Locator currencyDropdown = locator("div[data-slot='listbox']");
     private final Locator currencyOptions = currencyDropdown.getByRole(AriaRole.OPTION);
-    private final Locator businessUnitsBlock = locator("div[label='Business units list']");
+//    private final Locator businessUnitsBlock = locator("div[label='Business units list']");
     private final Locator resetFilterButton = locator("[data-icon='xmark']");
 
     public GatewayPage(Page page) {
@@ -43,10 +43,10 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCo
         return this;
     }
 
-    @Step("Click 'Refresh filter' button")
+    @Step("Click 'Reset filter' button")
     public GatewayPage clickResetFilterButton() {
         resetFilterButton.click();
-        getPage().waitForTimeout(500);
+//        getPage().waitForTimeout(500);
 
         return this;
     }
