@@ -13,13 +13,17 @@ import java.util.Properties;
 @Log4j2
 public final class ProjectProperties {
 
-    private static final String PREFIX_PROP = "local.";
-    private static final String EMAIL = "SUPER.email";
-    private static final String PASSWORD = "SUPER.password";
+    private static final Properties properties;
 
     private static final String CI_RUN = "CI_RUN";
+    private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
+
+    private static final String PREFIX_PROP = "local.";
 
     private static final String BASE_URL = PREFIX_PROP + "baseURL";
+    private static final String EMAIL = PREFIX_PROP + "email";
+    private static final String PASSWORD = PREFIX_PROP + "password";
+
     private static final String BROWSER_TYPE = PREFIX_PROP + "browserType";
     private static final String HEADLESS_MODE = PREFIX_PROP + "headlessMode";
     private static final String SLOW_MO_MODE = PREFIX_PROP + "slowMoMode";
@@ -39,10 +43,6 @@ public final class ProjectProperties {
     private static final String ADDITIONAL_RETRIES = PREFIX_PROP + "additionalRetries";
     private static final String COLOR_SCHEME = PREFIX_PROP + "colorScheme";
     private static final String DEBUG = PREFIX_PROP + "DEBUG";
-
-    private static final String ENV_APP_OPTIONS = "APP_OPTIONS";
-
-    private static final Properties properties;
 
     static {
         properties = new Properties();
@@ -128,12 +128,12 @@ public final class ProjectProperties {
         return Double.parseDouble(properties.getProperty(DEFAULT_TIMEOUT, "5000"));
     }
 
-    public static String getSuperEmail() {
-        return properties.getProperty(PREFIX_PROP + EMAIL, "");
+    public static String getEmail() {
+        return properties.getProperty(EMAIL, "");
     }
 
-    public static String getSuperPassword() {
-        return properties.getProperty(PREFIX_PROP + PASSWORD, "");
+    public static String getPassword() {
+        return properties.getProperty(PASSWORD, "");
     }
 
     public static boolean isFailFast() {

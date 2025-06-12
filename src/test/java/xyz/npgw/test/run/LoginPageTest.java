@@ -42,14 +42,14 @@ public class LoginPageTest extends BaseTest {
     public void testRememberMeCheckedSavesUserEmail(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/login")
-                .fillEmailField(ProjectProperties.getSuperEmail())
-                .fillPasswordField(ProjectProperties.getSuperPassword())
+                .fillEmailField(ProjectProperties.getEmail())
+                .fillPasswordField(ProjectProperties.getPassword())
                 .checkRememberMeCheckbox()
                 .clickLoginButton()
                 .clickLogOutButton();
 
         Allure.step("Verify: The user's email is in the email field");
-        assertThat(loginPage.getEmailField()).hasValue(ProjectProperties.getSuperEmail());
+        assertThat(loginPage.getEmailField()).hasValue(ProjectProperties.getEmail());
     }
 
     @Test
@@ -60,8 +60,8 @@ public class LoginPageTest extends BaseTest {
     public void testRememberMeUncheckedDontSaveUserEmail(@Optional("UNAUTHORISED") String userRole) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/")
-                .fillEmailField(ProjectProperties.getSuperEmail())
-                .fillPasswordField(ProjectProperties.getSuperPassword())
+                .fillEmailField(ProjectProperties.getEmail())
+                .fillPasswordField(ProjectProperties.getPassword())
                 .uncheckRememberMeCheckbox()
                 .clickLoginButton()
                 .clickLogOutButton();

@@ -52,9 +52,9 @@ public record User(
         log.info("delete user '{}' - {}", email, response.status());
     }
 
-    private static TokenResponse getTokenResponse(APIRequestContext request, Credentials credentials) {
+    public static TokenResponse getTokenResponse(APIRequestContext request, Credentials credentials) {
         APIResponse response = request.post("/portal-v1/user/token", RequestOptions.create().setData(credentials));
-        log.info("get token '{}' - {}", credentials.email, response.status());
+        log.info("get token '{}' - {}", credentials.email(), response.status());
         if (response.status() >= 500) {
             throw new SkipException(response.text());
         }
@@ -64,25 +64,19 @@ public record User(
     public static void passChallenge(APIRequestContext request, String email, String password) {
         Credentials credentials = new Credentials(email, password);
         TokenResponse tokenResponse = getTokenResponse(request, credentials);
-        if (tokenResponse.userChallengeType != null
-                && tokenResponse.userChallengeType.equals("NEW_PASSWORD_REQUIRED")) {
-            Challenge challenge = new Challenge(tokenResponse.sessionId, credentials, tokenResponse.userChallengeType);
+        String challengeType = tokenResponse.userChallengeType();
+        if (challengeType != null && challengeType.equals("NEW_PASSWORD_REQUIRED")) {
             APIResponse response = request.post("/portal-v1/user/challenge",
-                    RequestOptions.create().setData(challenge));
-            log.info("pass challenge '{}' - {}", credentials.email, response.status());
+                    RequestOptions.create().setData(new Challenge(
+                            tokenResponse.sessionId(),
+                            credentials,
+                            tokenResponse.userChallengeType())));
+
+            log.info("pass challenge '{}' - {}", email, response.status());
             if (response.status() >= 500) {
                 throw new SkipException(response.text());
             }
         }
         exists(request, email);
-    }
-
-    private record Credentials(String email, String password) {
-    }
-
-    private record Challenge(String sessionId, Credentials data, String userChallengeType) {
-    }
-
-    private record TokenResponse(String userChallengeType, String sessionId) {
     }
 }

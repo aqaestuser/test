@@ -9,6 +9,8 @@ import xyz.npgw.test.page.system.AcquirersPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.GatewayPage;
 
+import java.time.LocalTime;
+
 public class MenuComponent extends BaseComponent {
 
     public MenuComponent(Page page) {
@@ -18,6 +20,7 @@ public class MenuComponent extends BaseComponent {
     @Step("Click 'Companies and business units' tab")
     public CompaniesAndBusinessUnitsPage clickCompaniesAndBusinessUnitsTab() {
         getByRole(AriaRole.TAB, "Companies and business units").click();
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }

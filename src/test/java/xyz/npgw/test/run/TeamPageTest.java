@@ -20,10 +20,8 @@ import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -65,8 +63,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add new system admin under super admin")
     public void testAddSystemAdmin() {
-        String email = "%s.newsuper@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.newsuper@email.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -87,8 +84,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add new company admin under super admin")
     public void testAddCompanyAdmin() {
-        String email = "%s.newadmin@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.newadmin@email.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -109,8 +105,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
     public void testAddCompanyAnalyst() {
-        String email = "%s.newuser@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.newuser@email.com".formatted(TestUtils.now());
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -158,8 +153,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Edits the user's role and status, verifies the updates, and reactivates the user(e2e).")
     public void testEditUser() {
-        String email = "%s.edit.analyst@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.edit.analyst@email.com".formatted(TestUtils.now());
 
         EditUserDialog editUserDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -212,8 +206,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Create new company admin user under admin")
     public void testCreateCompanyAdminUser(@Optional("ADMIN") String userRole) {
-        String email = "%s.email@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.email@gmail.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -233,8 +226,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Deactivate user by 'Change user activity button' and verify status change")
     public void testDeactivateUserViaChangeUserActivityButton() {
-        String email = "%s.change@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.change@gmail.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -265,8 +257,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Edit user under company admin")
     public void testEditCompanyUser(@Optional("ADMIN") String userRole) {
-        String email = "%s.edit@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.edit@gmail.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -294,8 +285,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Deactivate and activate user under company admin")
     public void testDeactivateAndActivateCompanyUser(@Optional("ADMIN") String userRole) {
-        String email = "%s.deactivate.and.activate@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.deactivate.and.activate@gmail.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -344,8 +334,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Reset company analyst password under company admin")
     public void testResetPasswordForCompanyAnalyst(@Optional("ADMIN") String userRole) {
-        String email = "%s.reset.password@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String email = "%s.reset.password@gmail.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -382,8 +371,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Edit user")
     @Description("Create company analyst under admin")
     public void testCreateCompanyAnalystAndDeactivate(@Optional("ADMIN") String userRole) {
-        String analystEmail = "%s.company.analyst@gmail.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        String analystEmail = "%s.company.analyst@gmail.com".formatted(TestUtils.now());
         String analystPassword = "CompanyAnalyst123!";
 
         TeamPage teamPage = new DashboardPage(getPage())
@@ -434,7 +422,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("ERRORUser is disabled.");
 
         loginPage
-                .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getSuperPassword())
+                .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getPassword())
                 .clickSystemAdministrationLink()
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()
@@ -458,8 +446,7 @@ public class TeamPageTest extends BaseTest {
     @Description("Status filter correctly displays users with 'Active' or 'Inactive' status")
     public void testStatusFilterDisplaysCorrectUsers() {
         final String statusColumnName = "Status";
-        final String email = "%s.filter@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        final String email = "%s.filter@email.com".formatted(TestUtils.now());
 
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
@@ -529,8 +516,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Add user")
     @Description("Adding a user with an existing email address results in an error message.")
     public void testAddUserWithExistingEmail() {
-        final String companyAdmin = "%s.companydmin@email.com"
-                .formatted(new SimpleDateFormat("MMdd.HHmmss").format(new Date()));
+        final String companyAdmin = "%s.companydmin@email.com".formatted(TestUtils.now());
 
         AddUserDialog addUserDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()

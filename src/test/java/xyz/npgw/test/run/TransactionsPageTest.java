@@ -36,7 +36,6 @@ public class TransactionsPageTest extends BaseTest {
     @Override
     protected void beforeClass() {
         super.beforeClass();
-        TestUtils.createCompany(getApiRequestContext(), getCompanyName());
         TestUtils.createBusinessUnits(getApiRequestContext(), getCompanyName(), businessUnitNames);
 
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
@@ -705,6 +704,7 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: Transaction details dialog is closed ");
         assertThat(transactionsPage.getDialog()).not().isAttached();
     }
+
     @AfterClass
     @Override
     protected void afterClass() {

@@ -8,12 +8,25 @@ import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 
 public final class TestUtils {
 
     public static String encode(String value) {
         return URLEncoder.encode(value, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
+    }
+
+    public static String now() {
+        return DateTimeFormatter.ofPattern("MMdd.HHmmss").format(ZonedDateTime.now(ZoneOffset.UTC));
+    }
+
+    public static boolean isOneHourOld(String date) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(date.substring(0, 11) + ".2025",
+                DateTimeFormatter.ofPattern("MMdd.HHmmss.yyyy").withZone(ZoneOffset.UTC));
+        return zonedDateTime.isBefore(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1));
     }
 
     public static BusinessUnit createBusinessUnit(APIRequestContext request, String companyName, String merchantTitle) {

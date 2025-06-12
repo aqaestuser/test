@@ -33,7 +33,7 @@ public record Acquirer(
 
     public static Acquirer[] getAll(APIRequestContext request) {
         APIResponse response = request.get("portal-v1/acquirer");
-        log.info("get all acquirers - {} {}", response.status(), response.text());
+        log.info("get all acquirers - {}", response.status());
         if (response.status() >= 500) {
             throw new SkipException(response.text());
         }

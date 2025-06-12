@@ -12,7 +12,7 @@ public record Transaction(
         PaymentDetails paymentDetails,
         String transactionId,
         Status status,
-        Error error,
+        xyz.npgw.test.common.entity.Error error,
         String createdOn,
         String updatedOn) {
 

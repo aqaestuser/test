@@ -3,14 +3,12 @@ package xyz.npgw.test.common.base;
 import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
-import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.options.Cookie;
-import com.microsoft.playwright.options.RequestOptions;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,11 +19,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.Credentials;
+import xyz.npgw.test.common.entity.Token;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.entity.UserRole;
+import xyz.npgw.test.common.util.CleanupUtils;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
 
@@ -43,7 +45,7 @@ import java.util.Map;
 @Log4j2
 public abstract class BaseTest {
 
-    protected static final String RUN_ID = new SimpleDateFormat("MMdd.HHmmss").format(new Date());
+    protected static final String RUN_ID = TestUtils.now();
 
     private Playwright playwright;
     private Browser browser;
@@ -60,6 +62,26 @@ public abstract class BaseTest {
     @Getter(AccessLevel.PROTECTED)
     private String companyName;
     private BusinessUnit businessUnit;
+
+    @BeforeSuite
+    protected void beforeSuite() {
+        Playwright playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
+        APIRequestContext apiRequestContext = playwright.request()
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseUrl()));
+        Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
+        Token token = User.getTokenResponse(apiRequestContext, credentials).token();
+        apiRequestContext.dispose();
+
+        if (token != null && !token.idToken().isEmpty()) {
+            apiRequestContext = playwright.request()
+                    .newContext(new APIRequest.NewContextOptions()
+                            .setBaseURL(ProjectProperties.getBaseUrl())
+                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+            CleanupUtils.clean(apiRequestContext);
+            apiRequestContext.dispose();
+        }
+        playwright.close();
+    }
 
     @BeforeClass
     protected void beforeClass() {
@@ -140,12 +162,12 @@ public abstract class BaseTest {
                     userRole,
                     (userRole == UserRole.USER) ? new String[]{businessUnit.merchantId()} : new String[]{},
                     email,
-                    ProjectProperties.getSuperPassword());
+                    ProjectProperties.getPassword());
             User.create(apiRequestContext, user);
             User.passChallenge(apiRequestContext, user.email(), user.password());
         }
 
-        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getSuperPassword());
+        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getPassword());
 //        initPageRequestContext();
     }
 
@@ -216,27 +238,18 @@ public abstract class BaseTest {
             return;
         }
 
-        APIResponse tokenResponse = playwright
-                .request()
-                .newContext()
-                .post(ProjectProperties.getBaseUrl() + "/portal-v1/user/token",
-                        RequestOptions.create().setData(Map.of(
-                                "email", ProjectProperties.getSuperEmail(),
-                                "password", ProjectProperties.getSuperPassword())));
+        APIRequestContext request = playwright.request()
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseUrl()));
+        Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
+        Token token = User.getTokenResponse(request, credentials).token();
+        request.dispose();
 
-        if (tokenResponse.ok()) {
-            Token token = new Gson().fromJson(tokenResponse.text(), TokenResponse.class).token();
-            apiRequestContext = playwright
-                    .request()
-                    .newContext(new APIRequest
-                            .NewContextOptions()
+        if (token != null && !token.idToken().isEmpty()) {
+            apiRequestContext = playwright.request()
+                    .newContext(new APIRequest.NewContextOptions()
                             .setBaseURL(ProjectProperties.getBaseUrl())
-                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken))));
-            bestBefore = LocalTime.now().plusSeconds(token.expiresIn).minusMinutes(1);
-        } else {
-            String message = "Retrieve API idToken failed: %s".formatted(tokenResponse.statusText());
-            log.error(message);
-            throw new SkipException(message);
+                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+            bestBefore = LocalTime.now().plusSeconds(token.expiresIn()).minusMinutes(1);
         }
     }
 
@@ -250,7 +263,7 @@ public abstract class BaseTest {
                 .orElse("");
         if (!tokenData.isEmpty()) {
             Token token = new Gson().fromJson(tokenData, Token.class);
-            context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken)));
+            context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken())));
         }
     }
 
@@ -273,11 +286,5 @@ public abstract class BaseTest {
     }
 
     private record LocalStorage(String name, String value) {
-    }
-
-    private record Token(String accessToken, int expiresIn, String idToken, String refreshToken, String tokenType) {
-    }
-
-    private record TokenResponse(String userChallengeType, Token token, String sessionId) {
     }
 }

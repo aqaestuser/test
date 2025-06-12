@@ -15,28 +15,6 @@ public class EditUserDialog extends UserDialog<EditUserDialog> {
 
     @Step("Click 'Save changes' button")
     public TeamPage clickSaveChangesButton() {
-//        getPage().route("**/*/list/*", route -> {
-//            log.info("current route {}", route.request().url());
-//            if (route.request().url().contains("list")) {
-//                log.info("list on hold for 1000");
-//                getPage().waitForTimeout(1000);
-//            }
-//            log.info("current route fallback");
-//            route.fallback();
-//        });
-//
-//        getPage().waitForResponse(
-//                response -> {
-//                    log.info("response for {} - {}", response.request().url(), response.statusText());
-//                    if (response.request().url().contains("/portal-v1/user") && response.ok()) {
-//                        log.info("create done");
-//                        return true;
-//                    }
-//                    return false;
-//                },
-//                getPage().getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Save changes"))::click
-//        );
-//        getPage().unroute("**/*/list/*");
         getByRole(AriaRole.BUTTON, "Save changes").click();
 
         return new TeamPage(getPage());

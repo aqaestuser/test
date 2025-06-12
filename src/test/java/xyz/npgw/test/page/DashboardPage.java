@@ -57,13 +57,6 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
         return this;
     }
 
-//    @Step("Reload dashboard page")
-//    public DashboardPage refreshDashboard() {
-//        getPage().reload();
-//
-//        return this;
-//    }
-
     @Step("Click 'Reset filter' button")
     public DashboardPage clickResetFilterButton() {
         resetFilterButton.click();

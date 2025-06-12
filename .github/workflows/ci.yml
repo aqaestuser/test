@@ -42,12 +42,11 @@ jobs:
         env:
           APP_OPTIONS:
             baseURL=${{ secrets.BASE_URL }};
-            SUPER.email=${{ secrets.USER_EMAIL }};
-            SUPER.password=${{ secrets.USER_PASSWORD }};
+            email=${{ secrets.USER_EMAIL }};
+            password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             headlessMode=true;
             tracingMode=false;
-            failFast=false;
             videoMode=false
           CI_RUN: true
 

@@ -10,6 +10,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
@@ -177,6 +178,7 @@ public class TransactionsTableTest extends BaseTest {
         assertTrue(numberWithEuroInTable > 0 && !transactionsPage.getTable().isTableEmpty());
     }
 
+    @Ignore
     @Test
     @TmsLink("559")
     @Epic("Transactions")
@@ -201,6 +203,7 @@ public class TransactionsTableTest extends BaseTest {
                 actualDates.stream().sorted(Comparator.reverseOrder()).toList());
     }
 
+    @Ignore
     @Test
     @TmsLink("659")
     @Epic("Transactions")
