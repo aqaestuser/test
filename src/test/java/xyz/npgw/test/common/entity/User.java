@@ -4,8 +4,11 @@ import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.testng.SkipException;
+
+import java.util.concurrent.TimeUnit;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
@@ -61,11 +64,15 @@ public record User(
         return new Gson().fromJson(response.text(), TokenResponse.class);
     }
 
+    @SneakyThrows
     public static void passChallenge(APIRequestContext request, String email, String password) {
         Credentials credentials = new Credentials(email, password);
-        TokenResponse tokenResponse = getTokenResponse(request, credentials);
-        String challengeType = tokenResponse.userChallengeType();
-        if (challengeType != null && challengeType.equals("NEW_PASSWORD_REQUIRED")) {
+        TokenResponse tokenResponse;
+        do {
+            TimeUnit.SECONDS.sleep(1);
+            tokenResponse = getTokenResponse(request, credentials);
+        } while (tokenResponse.userChallengeType() == null);
+        if (tokenResponse.userChallengeType().equals("NEW_PASSWORD_REQUIRED")) {
             APIResponse response = request.post("/portal-v1/user/challenge",
                     RequestOptions.create().setData(new Challenge(
                             tokenResponse.sessionId(),

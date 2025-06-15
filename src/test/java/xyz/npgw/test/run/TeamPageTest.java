@@ -8,6 +8,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -57,6 +58,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
+    @Ignore("no woy to add SUPER atm")
     @Test
     @TmsLink("298")
     @Epic("System/Team")
@@ -510,6 +512,7 @@ public class TeamPageTest extends BaseTest {
                 "Список пользователей не отсортирован по алфавиту в обратном порядке");
     }
 
+    @Ignore("due to slow creation user is created[UI message] successfully twice")
     @Test
     @TmsLink("612")
     @Epic("System/Team")
@@ -525,12 +528,12 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")
                 .checkActiveRadiobutton()
-                .checkSystemAdminRadiobutton()
+                .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")
-                .checkSystemAdminRadiobutton()
+                .checkCompanyAdminRadiobutton()
                 .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: Error message is displayed for existing user");

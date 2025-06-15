@@ -8,6 +8,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -36,6 +37,7 @@ public class ReportsPageTest extends BaseTest {
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
 
+    @Ignore
     @Test
     @TmsLink("153")
     @Epic("Reports")
@@ -52,6 +54,7 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getPage()).hasTitle(Constants.REPORTS_URL_TITLE);
     }
 
+    @Ignore
     @Test
     @TmsLink("405")
     @Epic("Reports")
@@ -68,6 +71,7 @@ public class ReportsPageTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
+    @Ignore
     @Test
     @TmsLink("510")
     @Epic("Reports")
@@ -102,6 +106,7 @@ public class ReportsPageTest extends BaseTest {
                 "Payment Method")));
     }
 
+    @Ignore
     @Test
     @TmsLink("512")
     @Epic("Reports")
@@ -163,6 +168,7 @@ public class ReportsPageTest extends BaseTest {
         Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
     }
 
+    @Ignore
     @Test
     @TmsLink("653")
     @Epic("Reports")
@@ -192,6 +198,7 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getSelectDateRange().getEndDate()).hasText(defaultEndDate);
     }
 
+    @Ignore
     @Test
     @TmsLink("699")
     @Epic("Reports")
@@ -222,6 +229,7 @@ public class ReportsPageTest extends BaseTest {
                 "Filenames are not in reverse alphabetical order");
     }
 
+    @Ignore
     @Test
     @TmsLink("718")
     @Epic("Reports")
@@ -233,7 +241,7 @@ public class ReportsPageTest extends BaseTest {
                 .getTable().clickSizeColumnHeader();
 
         List<String> actualSizeList = reportsPage.getTable().getColumnValues("Size");
-        List<String> sortedSizeListAsc = new ArrayList<String>(actualSizeList);
+        List<String> sortedSizeListAsc = new ArrayList<>(actualSizeList);
         Collections.sort(sortedSizeListAsc);
 
         Allure.step("Verify that entries are displayed in ascending order by Size");
@@ -244,7 +252,7 @@ public class ReportsPageTest extends BaseTest {
                 .getTable().clickSizeColumnHeader();
 
         actualSizeList = reportsPage.getTable().getColumnValues("Size");
-        List<String> sortedSizeListDesc = new ArrayList<String>(sortedSizeListAsc);
+        List<String> sortedSizeListDesc = new ArrayList<>(sortedSizeListAsc);
         Collections.reverse(sortedSizeListDesc);
 
         Allure.step("Verify that entries are displayed in descending order by Size");

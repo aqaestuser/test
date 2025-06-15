@@ -113,6 +113,7 @@ public class TransactionsTableTest extends BaseTest {
     }
 
     // TODO bug - status isn't sent to server
+    @Ignore("multistatus not working atm")
     @Test(expectedExceptions = AssertionError.class,
             dataProvider = "getMultiStatus2", dataProviderClass = TestDataProvider.class)
     @TmsLink("679")

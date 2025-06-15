@@ -52,6 +52,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getCompanyInfoBlock()).isVisible();
     }
 
+    // TODO unstable - company not found sometimes
     @Test(priority = 1)
     @TmsLink("723")
     @Epic("System/Companies and business units")

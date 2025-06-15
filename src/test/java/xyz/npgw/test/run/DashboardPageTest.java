@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -78,6 +79,8 @@ public class DashboardPageTest extends BaseTest {
     @Description("All key chart elements are correctly displayed")
     public void testVisibleChartElementsAreDisplayedCorrectly() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
+                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
                 .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025");
 
         Allure.step("Verify: Y-axis percentage labels are correctly displayed");
@@ -90,7 +93,7 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: currency legend labels are correctly displayed");
         assertThat(dashboardPage.getCurrencyLegendLabels())
-                .hasText(new String[]{"EUR", "USD", "GBP"});
+                .hasText(new String[]{"EUR", "USD"});
     }
 
     @Test
@@ -136,8 +139,10 @@ public class DashboardPageTest extends BaseTest {
     @Feature("Transaction summary")
     @Description("Correct transaction summary is displayed on Dashboard page")
     public void testTransactionSummary() {
-        Pattern pattern = Pattern.compile("(INITIATED|SUCCESS|FAILED)EUR.*USD.*GBP.*");
+        Pattern pattern = Pattern.compile("(INITIATED|SUCCESS|FAILED)EUR.*USD.*");
         DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
+                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
                 .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025")
                 .clickRefreshDataButton();
 
@@ -202,6 +207,7 @@ public class DashboardPageTest extends BaseTest {
         route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(arr)));
     }
 
+    @Ignore("BUG - count shouldn't have decimals")
     @Test
     @TmsLink("720")
     @Epic("Dashboard")

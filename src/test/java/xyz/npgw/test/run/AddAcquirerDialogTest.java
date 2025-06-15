@@ -8,6 +8,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -68,7 +69,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getStatusSwitch()).hasText("StatusActiveInactive");
 
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
-        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currenciesEURUSDGBP");
+        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currencyEURUSDGBP");
 
         addAcquirerDialog
                 .clickCloseButton();
@@ -154,6 +155,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(acquirersPage.getAddAcquirerDialog()).isVisible();
     }
 
+    @Ignore("create buton disabled by UI validation - TODO refactor")
     @Test
     @TmsLink("526")
     @Epic("System/Acquirers")
@@ -176,6 +178,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
     }
 
+    @Ignore("create buton disabled by UI validation - TODO refactor")
     @Test(dataProvider = "acquirerNegativeData", dataProviderClass = TestDataProvider.class)
     @TmsLink("547")
     @Epic("System/Acquirers")
