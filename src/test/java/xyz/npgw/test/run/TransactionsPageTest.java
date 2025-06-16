@@ -706,6 +706,52 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getDialog()).not().isAttached();
     }
 
+    @Test
+    @TmsLink("749")
+    @Epic("Transactions")
+    @Feature("Transaction details")
+    @Description("Verify, that the data in Transaction Details Dialog corresponds to the data in Transactions table")
+    public void testDataMatching() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink();
+
+        String checkedCurrency = transactionsPage
+                .getTable().getFirstRowCell("Currency")
+                .textContent();
+        String checkedStatus = transactionsPage
+                .getTable().getFirstRowCell("Status")
+                .textContent();
+        String checkedAmount = transactionsPage
+                .getTable().getFirstRowCell("Amount")
+                .textContent();
+        String checkedMerchantRef = transactionsPage
+                .getTable().getFirstRowCell("Merchant reference")
+                .textContent();
+
+        transactionsPage.getTable().hoverCardLogo();
+
+        String checkedCardType = transactionsPage
+                .getTable()
+                .getCardTypeModal()
+                .textContent();
+
+        TransactionDetailsDialog transactionDetails = transactionsPage.getTable().clickOnTransaction();
+
+        String amountValueExpected = checkedAmount.replace(",", "").replace(".00", "") + " " + checkedCurrency;
+
+        Allure.step("Verify: 'Status' value is the same as in the table ");
+        assertThat(transactionDetails.getStatusValue()).hasText(checkedStatus);
+
+        Allure.step("Verify: Merchant Reference  is the same as in the table ");
+        assertThat(transactionDetails.getMerchantReferenceValue()).hasText(checkedMerchantRef);
+
+        Allure.step("Verify: Amount value and Currency are the same as in the table ");
+        assertThat(transactionDetails.getAmountValue()).hasText(amountValueExpected);
+
+        Allure.step("Verify: Card type is the same as in table ");
+        assertThat(transactionDetails.getCardTypeParameter()).hasText(checkedCardType);
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
