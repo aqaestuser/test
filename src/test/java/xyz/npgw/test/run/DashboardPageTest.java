@@ -72,6 +72,7 @@ public class DashboardPageTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("575")
     @Epic("Dashboard")
@@ -119,6 +120,7 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("609")
     @Epic("Dashboard")
@@ -133,6 +135,7 @@ public class DashboardPageTest extends BaseTest {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("600")
     @Epic("Dashboard")

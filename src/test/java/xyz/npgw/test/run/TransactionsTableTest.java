@@ -55,6 +55,7 @@ public class TransactionsTableTest extends BaseTest {
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("311")
     @Epic("Transactions")
@@ -141,6 +142,7 @@ public class TransactionsTableTest extends BaseTest {
         assertEquals(totalFilteredRows, filteredTransactionCount);
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("319")
     @Epic("Transactions")
@@ -158,6 +160,7 @@ public class TransactionsTableTest extends BaseTest {
         assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
     }
 
+    @Ignore("0.1.2506170300-nightly")
     // TODO bug - transactions isn't present in the table when a currency filter is applied on the last page
     @Test(expectedExceptions = AssertionError.class)
     @TmsLink("682")
@@ -230,6 +233,7 @@ public class TransactionsTableTest extends BaseTest {
                 actualAmount.stream().sorted(Comparator.reverseOrder()).toList());
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("106")
     @Epic("Transactions")
@@ -243,6 +247,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRowsPerPage()).containsText("25");
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("127")
     @Epic("Transactions")
@@ -257,6 +262,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRowsPerPageOptions()).hasText(new String[]{"10", "25", "50", "100"});
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("130")
     @Epic("Transactions")

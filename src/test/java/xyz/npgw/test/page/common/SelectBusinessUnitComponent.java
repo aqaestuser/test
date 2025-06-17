@@ -62,6 +62,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
         getBusinessUnitInDropdownOption(businessUnitName).first().click();
 
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         return page;
     }
 

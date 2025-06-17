@@ -39,7 +39,8 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
 
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
-        ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        transactionsButton.click();
+//        ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
 
         return new TransactionsPage(getPage());
     }

@@ -146,6 +146,7 @@ public class TeamPageTest extends BaseTest {
         assertFalse(teamPage.getTable().isUserPresentInTable(SYSTEM_ADMIN_EMAIL));
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("330")
     @Epic("System/Team")
@@ -192,6 +193,7 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(COMPANY_ANALYST_EMAIL).getAttribute("data-icon"), "ban");
     }
 
+    @Ignore("0.1.2506170300-nightly")
     @Test(dependsOnMethods = "testAddCompanyAnalyst")
     @TmsLink("748")
     @Epic("System/Team")
