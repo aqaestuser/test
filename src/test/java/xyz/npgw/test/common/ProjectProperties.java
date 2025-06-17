@@ -54,7 +54,8 @@ public final class ProjectProperties {
                 }
             }
         } else {
-            try (InputStream inputStream = Files.newInputStream(Paths.get("./config/.env"))) {
+            String configPath = System.getProperty("configPath", "./config/.env");
+            try (InputStream inputStream = Files.newInputStream(Paths.get(configPath))) {
                 properties.load(inputStream);
             } catch (IOException e) {
                 log.error("The '.env' file not found in ./config/ directory.");
