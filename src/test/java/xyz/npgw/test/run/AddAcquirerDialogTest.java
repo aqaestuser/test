@@ -8,7 +8,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -41,14 +40,11 @@ public class AddAcquirerDialogTest extends BaseTest {
     @TmsLink("249")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")
-    @Description(
-            "Verify that the 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
+    @Description("Verify 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
     public void testAddAcquirerFormOpensWithCorrectHeaderAndFieldsAndClosesCorrectly() {
-        AcquirersPage acquirersPage = new DashboardPage(getPage())
+        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
-
-        AddAcquirerDialog addAcquirerDialog = acquirersPage
+                .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer();
 
         Allure.step("Verify: the header contains the expected title text");
@@ -71,7 +67,7 @@ public class AddAcquirerDialogTest extends BaseTest {
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
         assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currencyEURUSDGBP");
 
-        addAcquirerDialog
+        AcquirersPage acquirersPage = addAcquirerDialog
                 .clickCloseButton();
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
@@ -105,10 +101,10 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
-                .fillAcquirerName(ACQUIRER_NAME)
-                .fillChallengeUrl(defaultConfig.challengeUrl())
-                .fillFingerprintUrl(defaultConfig.fingerprintUrl())
-                .fillResourceUrl(defaultConfig.resourceUrl())
+                .fillAcquirerNameField(ACQUIRER_NAME)
+                .fillChallengeUrlField(defaultConfig.challengeUrl())
+                .fillFingerprintUrlField(defaultConfig.fingerprintUrl())
+                .fillResourceUrlField(defaultConfig.resourceUrl())
                 .clickCheckboxCurrency("USD")
                 .clickCreateButton();
 
@@ -138,10 +134,10 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         AddAcquirerDialog acquirerDialog = acquirersPage
                 .clickAddAcquirer()
-                .fillAcquirerName(EXISTING_ACQUIRER_NAME)
-                .fillChallengeUrl(defaultConfig.challengeUrl())
-                .fillFingerprintUrl(defaultConfig.fingerprintUrl())
-                .fillResourceUrl(defaultConfig.resourceUrl())
+                .fillAcquirerNameField(EXISTING_ACQUIRER_NAME)
+                .fillChallengeUrlField(defaultConfig.challengeUrl())
+                .fillFingerprintUrlField(defaultConfig.fingerprintUrl())
+                .fillResourceUrlField(defaultConfig.resourceUrl())
                 .clickCheckboxCurrency("USD");
 
         acquirerDialog
@@ -155,47 +151,37 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertThat(acquirersPage.getAddAcquirerDialog()).isVisible();
     }
 
-    @Ignore("create buton disabled by UI validation - TODO refactor")
     @Test
     @TmsLink("526")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")
-    @Description("Verify that 'Create' button is disabled when Acquirer name is empty.")
-    public void testDisableCreateButtonWhenAcquirerNameIsEmpty() {
+    @Description("Verify default state of the 'Add Acquirer' dialog")
+    public void testDefaultStateOfAddAcquirerDialog() {
         AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .clickAddAcquirer()
-                .fillAcquirerName("Acquirer name");
+                .clickAddAcquirer();
 
-        Allure.step("Verify: 'Create' button is enabled.");
-        assertThat(addAcquirerDialog.getCreateButton()).isEnabled();
+        Allure.step("Verify: Acquirer code field is read-only");
+        assertThat(addAcquirerDialog.getAcquirerCodeField()).hasAttribute("aria-readonly", "true");
 
-        addAcquirerDialog
-                .getAcquirerNamePlaceholder().clear();
+        Allure.step("Verify: Challenge URL field is marked as invalid");
+        assertThat(addAcquirerDialog.getChallengeURLField()).hasAttribute("aria-invalid", "true");
 
-        Allure.step("Verify: 'Create' button is disabled.");
+        Allure.step("Verify: Fingerprint URL field is marked as invalid");
+        assertThat(addAcquirerDialog.getFingerprintUrlField()).hasAttribute("aria-invalid", "true");
+
+        Allure.step("Verify: Resource URL field is marked as invalid");
+        assertThat(addAcquirerDialog.getResourceUrlField()).hasAttribute("aria-invalid", "true");
+
+        Allure.step("Verify: 'Active' status is selected by default");
+        assertThat(addAcquirerDialog.getStatusRadiobutton("Active")).isChecked();
+
+        Allure.step("Verify: 'EUR' is selected as the default allowed currency");
+        assertThat(addAcquirerDialog.getAllowedCurrencyRadio("EUR")).isChecked();
+
+        Allure.step("Verify: 'Create' button is disabled when required fields are not filled");
         assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
-    }
-
-    @Ignore("create buton disabled by UI validation - TODO refactor")
-    @Test(dataProvider = "acquirerNegativeData", dataProviderClass = TestDataProvider.class)
-    @TmsLink("547")
-    @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("Verify validation messages when creating Acquirer with invalid input.")
-    public void testDisplayValidationErrorsForInvalidAcquirerInput(Acquirer acquirer, String expectedError) {
-        AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu()
-                .clickAcquirersTab()
-                .clickAddAcquirer()
-                .fillAcquirerName(acquirer.acquirerName())
-                .fillAcquirerForm(acquirer)
-                .clickCreateButton();
-
-        Allure.step("Verify: error message presence and text");
-        assertThat(acquirersPage.getAlert().getMessage()).hasText(expectedError);
     }
 
     @AfterClass

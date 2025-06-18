@@ -16,9 +16,15 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         extends BaseDialog<AcquirersPage, CurrentDialogT>
         implements AlertTrait<CurrentDialogT> {
 
-    private final Locator acquirerNamePlaceholder = getByPlaceholder("Enter acquirer name");
+    private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
     private final Locator statusSwitch = getByRole(AriaRole.RADIOGROUP, "Status");
     private final Locator allowedCurrenciesCheckboxes = getByRole(AriaRole.RADIOGROUP, "Allowed currency");
+    private final Locator challengeURLField = getByPlaceholder("Enter challenge URL");
+    private final Locator fingerprintUrlField = getByPlaceholder("Enter fingerprint URL");
+    private final Locator resourceUrlField = getByPlaceholder("Enter resource URL");
+    private final Locator notificationQueueField = getByPlaceholder("Enter notification queue");
+    private final Locator acquirerConfigField = getByPlaceholder("Enter acquirer config");
+    private final Locator acquirerCodeField = getByPlaceholder("Enter acquirer code");
 
     public AcquirerDialog(Page page) {
         super(page);
@@ -26,7 +32,6 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
     @Override
     protected AcquirersPage getReturnPage() {
-
         return new AcquirersPage(getPage());
     }
 
@@ -41,38 +46,42 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         return statusSwitch.locator("label:has(input[value='" + value.toUpperCase() + "'])");
     }
 
+    public Locator getAllowedCurrencyRadio(String value) {
+        return allowedCurrenciesCheckboxes.locator("label:has(input[value='" + value.toUpperCase() + "']) input");
+    }
+
     @Step("Enter acquirer name '{name}'")
-    public CurrentDialogT fillAcquirerName(String name) {
+    public CurrentDialogT fillAcquirerNameField(String name) {
         getDialogHeader().waitFor();
-        getByPlaceholder("Enter acquirer name").fill(name);
+        acquirerNameField.fill(name);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter challenge URL '{url}'")
-    public CurrentDialogT fillChallengeUrl(String url) {
-        getByPlaceholder("Enter challenge URL").fill(url);
+    public CurrentDialogT fillChallengeUrlField(String url) {
+        challengeURLField.fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter fingerprint URL '{url}'")
-    public CurrentDialogT fillFingerprintUrl(String url) {
-        getByPlaceholder("Enter fingerprint URL").fill(url);
+    public CurrentDialogT fillFingerprintUrlField(String url) {
+        fingerprintUrlField.fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter resource URL '{url}'")
-    public CurrentDialogT fillResourceUrl(String url) {
-        getByPlaceholder("Enter resource URL").fill(url);
+    public CurrentDialogT fillResourceUrlField(String url) {
+        resourceUrlField.fill(url);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Enter notification queue '{queue}'")
-    public CurrentDialogT fillNotificationQueue(String queue) {
-        getByPlaceholder("Enter notification queue").fill(queue);
+    public CurrentDialogT fillNotificationQueueField(String queue) {
+        notificationQueueField.fill(queue);
 
         return (CurrentDialogT) this;
     }
@@ -85,19 +94,19 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     }
 
     @Step("Click acquirer config '{acquirerConfig}'")
-    public CurrentDialogT fillAcquirerConfig(String acquirerConfig) {
-        getByPlaceholder("Enter acquirer config").fill(acquirerConfig);
+    public CurrentDialogT fillAcquirerConfigField(String acquirerConfig) {
+        acquirerConfigField.fill(acquirerConfig);
 
         return (CurrentDialogT) this;
     }
 
     @Step("Fill acquirer form")
     public CurrentDialogT fillAcquirerForm(Acquirer acquirer) {
-        fillChallengeUrl(acquirer.systemConfig().challengeUrl())
-                .fillFingerprintUrl(acquirer.systemConfig().fingerprintUrl())
-                .fillResourceUrl(acquirer.systemConfig().resourceUrl())
-                .fillNotificationQueue(acquirer.systemConfig().notificationQueue())
-                .fillAcquirerConfig(acquirer.acquirerConfig());
+        fillChallengeUrlField(acquirer.systemConfig().challengeUrl())
+                .fillFingerprintUrlField(acquirer.systemConfig().fingerprintUrl())
+                .fillResourceUrlField(acquirer.systemConfig().resourceUrl())
+                .fillNotificationQueueField(acquirer.systemConfig().notificationQueue())
+                .fillAcquirerConfigField(acquirer.acquirerConfig());
 
         clickStatusRadiobutton(acquirer.isActive() ? "Active" : "Inactive");
 

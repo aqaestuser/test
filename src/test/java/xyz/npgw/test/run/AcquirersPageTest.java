@@ -385,7 +385,7 @@ public class AcquirersPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
-                .fillAcquirerName(acquirerName)
+                .fillAcquirerNameField(acquirerName)
                 .fillAcquirerForm(acquirer)
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();

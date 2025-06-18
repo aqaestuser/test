@@ -1,8 +1,6 @@
 package xyz.npgw.test.common.provider;
 
 import org.testng.annotations.DataProvider;
-import xyz.npgw.test.common.entity.Acquirer;
-import xyz.npgw.test.common.entity.SystemConfig;
 
 public class TestDataProvider {
 
@@ -105,95 +103,6 @@ public class TestDataProvider {
                 {"CSV"},
                 {"EXCEL"},
                 //{"PDF"},
-        };
-    }
-
-    @DataProvider
-    public Object[][] acquirerNegativeData() {
-        String acquirerName = "Acquirer with Error Message";
-        String acquirerCode = "NGenius";
-
-        return new Object[][]{
-                {
-                        new Acquirer(
-                                acquirerCode,
-                                "Acquirer Config",
-                                new SystemConfig(
-                                        "https://challenge.example.com",
-                                        "https://fingerprint.example.com",
-                                        "https://resource.example.com",
-                                        "notification-queue"),
-                                acquirerName,
-                                new String[]{},
-                                true),
-                        """
-ErrorSelect at least one allowed currency"""
-                },
-                {
-                        new Acquirer(
-                                acquirerCode,
-                                "",
-                                new SystemConfig(
-                                        "",
-                                        "",
-                                        "",
-                                        ""),
-                                acquirerName,
-                                new String[]{"USD"},
-                                true),
-                        """
-ERRORsystemConfig.challengeUrl must be defined
-systemConfig.fingerprintUrl must be defined
-systemConfig.resourceUrl must be defined"""
-                },
-                {
-                        new Acquirer(
-                                acquirerCode,
-                                "",
-                                new SystemConfig(
-                                        "https://challenge.example.com",
-                                        "",
-                                        "",
-                                        ""),
-                                acquirerName,
-                                new String[]{"USD"},
-                                true),
-                        """
-ERRORsystemConfig.fingerprintUrl must be defined
-systemConfig.resourceUrl must be defined"""
-                },
-                {
-                        new Acquirer(
-                                acquirerCode,
-                                "",
-                                new SystemConfig(
-                                        "https://challenge.example.com",
-                                        "https://fingerprint.example.com",
-                                        "",
-                                        ""),
-                                acquirerName,
-                                new String[]{"USD"},
-                                true),
-                        """
-ERRORsystemConfig.resourceUrl must be defined"""
-                },
-                {
-                        new Acquirer(
-                                acquirerCode,
-                                "",
-                                new SystemConfig(
-                                        "//challenge.example.com",
-                                        "//fingerprint.example.com",
-                                        "ps://fingerprint.example.com",
-                                        "some.text"),
-                                acquirerName,
-                                new String[]{"USD"},
-                                true),
-                        """
-ERRORsystemConfig.challengeUrl doesn’t qualify for the URL syntax
-systemConfig.fingerprintUrl doesn’t qualify for the URL syntax
-systemConfig.resourceUrl doesn’t qualify for the URL syntax"""
-                }
         };
     }
 }
