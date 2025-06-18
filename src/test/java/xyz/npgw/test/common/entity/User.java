@@ -84,6 +84,8 @@ public record User(
                 throw new SkipException(response.text());
             }
         }
-        exists(request, email);
+        while (!exists(request, email)) {
+            TimeUnit.SECONDS.sleep(1);
+        }
     }
 }

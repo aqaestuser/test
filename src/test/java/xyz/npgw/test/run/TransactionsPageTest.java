@@ -644,7 +644,8 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: the 'Business Unit' input field is empty by default");
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
 
-        transactionsPage.getSelectCompany().selectCompany(COMPANY_NAME)
+        transactionsPage
+                .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify: selected Business Unit is displayed in the 'Business Unit' input field");

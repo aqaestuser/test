@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import net.datafaker.Faker;
 import org.testng.SkipException;
+
+import java.util.concurrent.TimeUnit;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
@@ -36,6 +39,7 @@ public record Company(
         this(companyName, new Faker().company().industry());
     }
 
+    @SneakyThrows
     public static void create(APIRequestContext request, String companyName) {
         APIResponse response = request.post("portal-v1/company",
                 RequestOptions.create().setData(new Company(companyName)));
@@ -46,6 +50,18 @@ public record Company(
         if (response.status() >= 500) {
             throw new SkipException(response.text());
         }
+        while (!exists(request, companyName)) {
+            TimeUnit.SECONDS.sleep(1);
+        }
+    }
+
+    public static boolean exists(APIRequestContext request, String companyName) {
+        APIResponse response = request.get("portal-v1/company");
+        log.info("exists via all companies - {}", response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
+        return response.ok() && response.text().contains(companyName);
     }
 
     public static Company[] getAll(APIRequestContext request) {
