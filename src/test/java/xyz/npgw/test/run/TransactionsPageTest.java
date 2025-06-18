@@ -603,7 +603,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("661")
     @Epic("Transactions")
@@ -612,8 +611,10 @@ public class TransactionsPageTest extends BaseTest {
     public void testCheckTheHidingOfParameters() {
         TransactionDetailsDialog transactionDetailsDialog = new DashboardPage(getPage())
                 .clickTransactionsLink()
+                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
+                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
                 .getTable().clickOnTransaction()
-                .clickChevronInCardDetailsSection();
+                .clickChevronInSection("Card details");
 
         Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field ");
         assertThat(transactionDetailsDialog.getPaymentMethodParameter()).isHidden();
