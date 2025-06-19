@@ -573,7 +573,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountButton()).hasText("Amount");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("686")
     @Epic("Transactions")
@@ -587,14 +586,10 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
         transactionsPage
-                .getSelectCompany().clickSelectCompanyDropdownChevron()
-                .getSelectCompany().selectFirstCompany();
-
-        String firstCompanyName = transactionsPage
-                .getSelectCompany().firstCompanyName();
+                .getSelectCompany().selectCompany(COMPANY_NAME);
 
         Allure.step("Verify: selected company is displayed in the 'Company' input field");
-        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).hasValue(firstCompanyName);
+        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).hasValue(COMPANY_NAME);
 
         transactionsPage
                 .clickResetFilterButton();
