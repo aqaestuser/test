@@ -82,6 +82,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         option.waitFor();
         option.click();
         dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return this;
     }

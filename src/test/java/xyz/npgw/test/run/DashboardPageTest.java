@@ -9,7 +9,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -29,6 +28,8 @@ import static org.testng.Assert.assertTrue;
 
 public class DashboardPageTest extends BaseTest {
 
+    private static final String COMPANY_NAME_FOR_TEST_RUN = "CompanyForTestRunOnly Inc.";
+    private static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantInCompany";
     private static final String COMPANY_NAME = "%s dashboard company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s dashboard business unit".formatted(RUN_ID);
     private BusinessUnit businessUnit;
@@ -72,7 +73,6 @@ public class DashboardPageTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("575")
     @Epic("Dashboard")
@@ -80,9 +80,9 @@ public class DashboardPageTest extends BaseTest {
     @Description("All key chart elements are correctly displayed")
     public void testVisibleChartElementsAreDisplayedCorrectly() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
-                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
-                .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025");
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()));
 
         Allure.step("Verify: Y-axis percentage labels are correctly displayed");
         assertThat(dashboardPage.getYAxisLabels())
@@ -90,7 +90,7 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: status chart legend labels are correctly displayed");
         assertThat(dashboardPage.getXAxisTexts())
-                .hasText(new String[]{"INITIATED", "SUCCESS", "FAILED"});
+                .hasText(new String[]{"INITIATED", "PENDING", "SUCCESS", "FAILED"});
 
         Allure.step("Verify: currency legend labels are correctly displayed");
         assertThat(dashboardPage.getCurrencyLegendLabels())
@@ -120,7 +120,6 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getCurrencySelector()).containsText("ALL");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("609")
     @Epic("Dashboard")
@@ -135,22 +134,23 @@ public class DashboardPageTest extends BaseTest {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("600")
     @Epic("Dashboard")
     @Feature("Transaction summary")
     @Description("Correct transaction summary is displayed on Dashboard page")
     public void testTransactionSummary() {
-        Pattern pattern = Pattern.compile("(INITIATED|SUCCESS|FAILED)EUR.*USD.*");
+        Pattern pattern = Pattern.compile("(INITIATED|PENDING|SUCCESS|FAILED)EUR.*USD.*");
         DashboardPage dashboardPage = new DashboardPage(getPage())
-                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
-                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
-                .getSelectDateRange().setDateRangeFields("01-05-2025", "31-05-2025")
-                .clickRefreshDataButton();
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()));
 
         Allure.step("Verify: INITIATED main block contents");
         assertThat(dashboardPage.getInitiatedBlock()).containsText(pattern);
+
+        Allure.step("Verify: PENDING main block contents");
+        assertThat(dashboardPage.getPendingBlock()).containsText(pattern);
 
         Allure.step("Verify: SUCCESS main block contents");
         assertThat(dashboardPage.getSuccessBlock()).containsText(pattern);
@@ -158,11 +158,11 @@ public class DashboardPageTest extends BaseTest {
         Allure.step("Verify: FAILED main block contents");
         assertThat(dashboardPage.getFailedBlock()).containsText(pattern);
 
-        dashboardPage
-                .clickCountButton();
-
         Allure.step("Verify: INITIATED count block contents");
         assertThat(dashboardPage.getLifecycleInitiatedBlock()).containsText(pattern);
+
+        Allure.step("Verify: PENDING count block contents");
+        assertThat(dashboardPage.getLifecyclePendingBlock()).containsText(pattern);
 
         Allure.step("Verify: SUCCESS count block contents");
         assertThat(dashboardPage.getLifecycleSuccessBlock()).containsText(pattern);
@@ -175,6 +175,9 @@ public class DashboardPageTest extends BaseTest {
 
         Allure.step("Verify: INITIATED amount block contents");
         assertThat(dashboardPage.getLifecycleInitiatedBlock()).containsText(pattern);
+
+        Allure.step("Verify: PENDING count block contents");
+        assertThat(dashboardPage.getLifecyclePendingBlock()).containsText(pattern);
 
         Allure.step("Verify: SUCCESS amount block contents");
         assertThat(dashboardPage.getLifecycleSuccessBlock()).containsText(pattern);

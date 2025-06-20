@@ -10,6 +10,8 @@ import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.base.HeaderPage;
 
+import java.time.LocalTime;
+
 @Getter
 public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends BaseComponent {
     @Getter(AccessLevel.NONE)
@@ -51,6 +53,7 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
         clickSelector();
         clickValue(value);
         waitUntilDropdownGone();
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
     }

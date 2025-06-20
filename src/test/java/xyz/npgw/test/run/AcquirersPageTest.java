@@ -10,7 +10,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -398,7 +397,6 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getCell(acquirerName, "Status")).hasText(status);
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("588")
     @Epic("System/Acquirers")

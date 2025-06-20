@@ -9,6 +9,7 @@ import xyz.npgw.test.page.base.BaseComponent;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 
@@ -43,6 +44,11 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
+    }
+
+    public CurrentPageT setDateRangeFields(ZonedDateTime startDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return setDateRangeFields(startDate.format(formatter), startDate.format(formatter));
     }
 
     public CurrentPageT setCurrentMonthRange() {

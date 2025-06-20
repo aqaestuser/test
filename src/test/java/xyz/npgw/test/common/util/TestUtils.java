@@ -4,6 +4,7 @@ import com.microsoft.playwright.APIRequestContext;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.Info;
 import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.User;
 
@@ -28,6 +29,11 @@ public final class TestUtils {
         ZonedDateTime zonedDateTime = ZonedDateTime.parse(date.substring(0, 11) + ".2025",
                 DateTimeFormatter.ofPattern("MMdd.HHmmss.yyyy").withZone(ZoneOffset.UTC));
         return zonedDateTime.isBefore(ZonedDateTime.now(ZoneOffset.UTC).minusHours(1));
+    }
+
+    public static ZonedDateTime lastBuildDate(APIRequestContext request) {
+        String lastBuildDate = Info.get(request).app().version().replaceAll("^.*\\.|-.*$", "");
+        return ZonedDateTime.parse(lastBuildDate, DateTimeFormatter.ofPattern("yyMMddHHmm").withZone(ZoneOffset.UTC));
     }
 
     public static BusinessUnit createBusinessUnit(APIRequestContext request, String companyName, String merchantTitle) {
