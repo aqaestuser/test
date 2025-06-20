@@ -40,9 +40,13 @@ public record BusinessUnit(
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
 
-    public static void delete(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+    public static int delete(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
         APIResponse response = request.delete(
                 "portal-v1/company/%s/merchant/%s".formatted(encode(companyName), businessUnit.merchantId()));
         log.info("delete merchant '{}' - {}", businessUnit.merchantId(), response.status());
+        if (response.status() >= 500) {
+            throw new SkipException(response.text());
+        }
+        return response.status();
     }
 }

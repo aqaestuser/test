@@ -210,7 +210,6 @@ public class DashboardPageTest extends BaseTest {
         route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(arr)));
     }
 
-    @Ignore("BUG - count shouldn't have decimals")
     @Test
     @TmsLink("720")
     @Epic("Dashboard")

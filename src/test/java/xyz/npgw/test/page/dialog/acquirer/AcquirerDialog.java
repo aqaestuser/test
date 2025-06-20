@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
@@ -110,8 +111,8 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
         clickStatusRadiobutton(acquirer.isActive() ? "Active" : "Inactive");
 
-        for (String currency : acquirer.currencyList()) {
-            clickCheckboxCurrency(currency);
+        for (Currency currency : acquirer.currencyList()) {
+            clickCheckboxCurrency(currency.name());
         }
 
         return (CurrentDialogT) this;

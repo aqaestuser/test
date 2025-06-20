@@ -7,7 +7,10 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 
 @Getter
 public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
@@ -40,5 +43,21 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
+    }
+
+    public CurrentPageT setCurrentMonthRange() {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return setDateRangeFields(
+                now.with(TemporalAdjusters.firstDayOfMonth()).format(formatter),
+                now.with(TemporalAdjusters.lastDayOfMonth()).format(formatter));
+    }
+
+    public CurrentPageT setOneWeekBeforeNowRange() {
+        LocalDate now = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return setDateRangeFields(
+                now.with(TemporalAdjusters.previous(now.getDayOfWeek())).format(formatter),
+                now.format(formatter));
     }
 }

@@ -14,6 +14,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
@@ -22,6 +23,7 @@ import xyz.npgw.test.page.common.table.AcquirersTableComponent;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ public class AcquirersPageTest extends BaseTest {
             "default",
             new SystemConfig(),
             "%s acquirer 11.002.01".formatted(RUN_ID),
-            new String[]{"USD", "EUR"},
+            new Currency[]{Currency.USD, Currency.EUR},
             true);
 
     private static final Acquirer CHANGE_STATE_ACQUIRER = new Acquirer(
@@ -52,7 +54,7 @@ public class AcquirersPageTest extends BaseTest {
             "default",
             new SystemConfig(),
             "%s acquirer activate and deactivate".formatted(RUN_ID),
-            new String[]{"USD", "EUR"},
+            new Currency[]{Currency.USD, Currency.EUR},
             true);
 
     private static final String ACTIVE_ACQUIRER_NAME = "%s active acquirer".formatted(RUN_ID);
@@ -288,7 +290,9 @@ public class AcquirersPageTest extends BaseTest {
         Map<String, String> expectedColumnValues = Map.of(
                 COLUMNS_HEADERS.get(0), ACQUIRER.acquirerName(),
                 COLUMNS_HEADERS.get(1), ACQUIRER.acquirerCode(),
-                COLUMNS_HEADERS.get(2), String.join(", ", ACQUIRER.currencyList()),
+                COLUMNS_HEADERS.get(2), String.join(", ", Arrays.stream(ACQUIRER.currencyList())
+                        .map(Enum::name)
+                        .toList()),
                 COLUMNS_HEADERS.get(3), ACQUIRER.acquirerConfig(),
                 COLUMNS_HEADERS.get(4), String.join("\n",
                         "Challenge URL\n" + ACQUIRER.systemConfig().challengeUrl(),
@@ -378,7 +382,7 @@ public class AcquirersPageTest extends BaseTest {
                 "Acquirer Config",
                 new SystemConfig(),
                 acquirerName,
-                new String[]{"USD"},
+                new Currency[]{Currency.USD},
                 status.equals("Active"));
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())

@@ -6,9 +6,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -62,7 +60,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(systemAdministrationPage.getPage()).hasTitle(Constants.SYSTEM_URL_TITLE);
     }
 
-    @Ignore("no way to add SUPER atm")
     @Test
     @TmsLink("298")
     @Epic("System/Team")
@@ -71,7 +68,7 @@ public class TeamPageTest extends BaseTest {
     public void testAddSystemAdmin() {
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
-                .getSelectCompany().selectCompany("super")
+                .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(SYSTEM_ADMIN_EMAIL)
                 .fillPasswordField("Qwerty123!")
@@ -82,7 +79,6 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
-    @Ignore("until Create Super bug fixed")
     @Test(dependsOnMethods = "testAddSystemAdmin")
     @TmsLink("745")
     @Epic("System/Team")
@@ -146,7 +142,6 @@ public class TeamPageTest extends BaseTest {
         assertFalse(teamPage.getTable().isUserPresentInTable(SYSTEM_ADMIN_EMAIL));
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("330")
     @Epic("System/Team")
@@ -193,7 +188,6 @@ public class TeamPageTest extends BaseTest {
         assertEquals(teamPage.getTable().getUserActivityIcon(COMPANY_ANALYST_EMAIL).getAttribute("data-icon"), "ban");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test(dependsOnMethods = "testAddCompanyAnalyst")
     @TmsLink("748")
     @Epic("System/Team")
@@ -251,7 +245,6 @@ public class TeamPageTest extends BaseTest {
                 .unsetAllowedBusinessUnits(new String[]{MERCHANT_TITLE})
                 .checkCompanyAdminRadiobutton()
                 .clickSaveChangesButton();
-//                .clickRefreshDataButton();
 
         Allure.step("Verify: success alert appears after user update");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
@@ -579,7 +572,6 @@ public class TeamPageTest extends BaseTest {
                 "Список пользователей не отсортирован по алфавиту в обратном порядке");
     }
 
-    @Ignore("due to slow creation user is created[UI message] successfully twice")
     @Test
     @TmsLink("612")
     @Epic("System/Team")
@@ -588,7 +580,7 @@ public class TeamPageTest extends BaseTest {
     public void testAddUserWithExistingEmail() {
         final String companyAdmin = "%s.companydmin@email.com".formatted(TestUtils.now());
 
-        AddUserDialog addUserDialog = new DashboardPage(getPage())
+        TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
@@ -596,7 +588,12 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Qwerty123!")
                 .checkActiveRadiobutton()
                 .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
+                .clickCreateButton();
+
+        // TODO replace with adequate wait for getAll users returning the recently created user
+        getPage().waitForTimeout(6000);
+
+        AddUserDialog addUserDialog = teamPage
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")
@@ -634,11 +631,5 @@ public class TeamPageTest extends BaseTest {
             Allure.step("Verify: 'Select company' filter is empty after reset");
             assertThat(teamPage.getSelectCompany().getSelectCompanyField()).isEmpty();
         });
-    }
-
-    @AfterClass
-    @Override
-    protected void afterClass() {
-        super.afterClass();
     }
 }
