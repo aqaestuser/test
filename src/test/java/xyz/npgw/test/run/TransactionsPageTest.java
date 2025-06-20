@@ -30,6 +30,8 @@ public class TransactionsPageTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
+    private static final String COMPANY_NAME_FOR_TEST_RUN = "CompanyForTestRunOnly Inc.";
+    private static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantInCompany";
     private final String[] businessUnitNames = new String[]{"Business unit 1", "Business unit 2", "Business unit 3"};
     private BusinessUnit businessUnit;
 
@@ -38,7 +40,6 @@ public class TransactionsPageTest extends BaseTest {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createBusinessUnits(getApiRequestContext(), getCompanyName(), businessUnitNames);
-
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
@@ -59,7 +60,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getPage()).hasTitle(Constants.TRANSACTIONS_URL_TITLE);
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("128")
     @Epic("Transactions")
@@ -143,7 +143,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("263")
     @Epic("Transactions")
@@ -210,7 +209,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("340")
     @Epic("Transactions")
@@ -227,7 +225,6 @@ public class TransactionsPageTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("354")
     @Epic("Transactions")
@@ -248,7 +245,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.amountApplied("Amount: 500 - 10300")).isVisible();
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("355")
     @Epic("Transactions")
@@ -327,7 +323,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("567")
     @Epic("Transactions")
@@ -498,9 +493,9 @@ public class TransactionsPageTest extends BaseTest {
     public void testCheckTransactionDetails() {
         TransactionDetailsDialog transactionDetailsDialog = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
-                .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
-                .getTable().clickOnTransaction();
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getTable().clickOnFirstTransaction();
 
         Allure.step("Verify: The dialog box header has text 'Transaction Details'");
         assertThat(transactionDetailsDialog.getDialogHeader()).hasText("Transaction Details");
@@ -537,7 +532,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Expiry date");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("668")
     @Epic("Transactions")
@@ -608,7 +602,7 @@ public class TransactionsPageTest extends BaseTest {
                 .clickTransactionsLink()
                 .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
                 .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
-                .getTable().clickOnTransaction()
+                .getTable().clickOnFirstTransaction()
                 .clickChevronInSection("Card details");
 
         Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field ");
@@ -653,14 +647,12 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("736")
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that ")
     public void testResetData() {
-
         final String startDate = "01-04-2025";
         final String endDate = "30-04-2025";
         final String dataFrom = startDate.replaceAll("-", "/");
@@ -670,6 +662,7 @@ public class TransactionsPageTest extends BaseTest {
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
+
         Allure.step("Verify: the 'Data' input field value is current month by default");
         assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
 
@@ -686,32 +679,24 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("738")
     @Epic("Transactions")
     @Feature("Transaction details")
-    @Description("Check the Transaction details dialog is closed after clicking on 'Close' button")
-    public void testCloseButton() {
+    @Description("Closes the transaction details dialog using both the button and the icon.")
+    public void testCloseTransactionDetailsDialog() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getTable().clickOnTransaction()
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getTable().clickOnFirstTransaction()
                 .clickCloseButton();
 
         Allure.step("Verify: Transaction details dialog is closed ");
         assertThat(transactionsPage.getDialog()).not().isAttached();
-    }
 
-    @Ignore("0.1.2506170300-nightly")
-    @Test
-    @TmsLink("740")
-    @Epic("Transactions")
-    @Feature("Transaction details")
-    @Description("Check the Transaction details dialog is closed after clicking on 'x' icon")
-    public void testCloseXIcon() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .getTable().clickOnTransaction()
+        transactionsPage
+                .getTable().clickOnFirstTransaction()
                 .clickCloseIcon();
 
         Allure.step("Verify: Transaction details dialog is closed ");
@@ -748,7 +733,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getCardTypeModal()
                 .textContent();
 
-        TransactionDetailsDialog transactionDetails = transactionsPage.getTable().clickOnTransaction();
+        TransactionDetailsDialog transactionDetails = transactionsPage.getTable().clickOnFirstTransaction();
 
         String amountValueExpected = checkedAmount.replace(",", "").replace(".00", "") + " " + checkedCurrency;
 

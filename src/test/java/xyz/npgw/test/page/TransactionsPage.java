@@ -4,10 +4,10 @@ import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
-import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
@@ -59,6 +59,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
     private final Locator downloadPdfOption = getByRole(AriaRole.MENUITEM, "PDF");
     private final Locator dialog = locator("[role='dialog']");
+    private final Locator dropdownMenuContent = locator("[data-slot='content'][data-open='true']");
 
     public TransactionsPage(Page page) {
         super(page);
@@ -79,7 +80,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     public TransactionsPage selectCurrency(String value) {
         Locator option = getByRole(AriaRole.OPTION, value);
         option.waitFor();
-        ResponseUtils.clickAndWaitForResponse(getPage(), option, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        option.click();
+        dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return this;
     }
@@ -162,7 +164,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Click 'Apply' amount button")
     public TransactionsPage clickAmountApplyButton() {
-        ResponseUtils.clickAndWaitForResponse(getPage(), amountApplyButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        amountApplyButton.click();
+        dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return this;
     }
