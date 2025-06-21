@@ -484,7 +484,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("638")
     @Epic("Transactions")
@@ -497,39 +496,22 @@ public class TransactionsPageTest extends BaseTest {
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().clickOnFirstTransaction();
 
-        Allure.step("Verify: The dialog box header has text 'Transaction Details'");
-        assertThat(transactionDetailsDialog.getDialogHeader()).hasText("Transaction Details");
+        Allure.step("Verify: The dialog box header has text 'Transaction details'");
+        assertThat(transactionDetailsDialog.getTransactionDialogHeader()).hasText("Transaction details");
 
-        Allure.step("Verify: The dialog box contains text 'Status' and this text is visible ");
-        assertThat(transactionDetailsDialog.getDialog()).containsText("Status");
-        assertThat(transactionDetailsDialog.getStatusField()).isVisible();
+        Allure.step("Verify: The dialog box section names");
+        assertThat(transactionDetailsDialog.getSectionNames())
+                .hasText(new String[]{"Amount", "Updated on", "NPGW reference", "Merchant reference",
+                        "Payment lifecycle", "Card details", "Customer details"});
 
-        Allure.step("Verify: The dialog box contains text 'Amount' and this text is visible ");
-        assertThat(transactionDetailsDialog.getDialog()).containsText("Amount");
-        assertThat(transactionDetailsDialog.getAmountField()).isVisible();
+        Allure.step("Verify: The Card details labels");
+        assertThat(transactionDetailsDialog.getCardDetailsLabels())
+                .hasText(new String[]{"Payment method", "Card type", "Card holder", "Card number", "Expiry date"});
 
-        Allure.step("Verify: The dialog box contains text 'Merchant reference' and this text is visible ");
-        assertThat(transactionDetailsDialog.getDialog()).containsText("Merchant reference");
-        assertThat(transactionDetailsDialog.getMerchantReferenceField()).isVisible();
-
-        Allure.step("Verify: The dialog box contains text 'Card details' and this text is visible ");
-        assertThat(transactionDetailsDialog.getDialog()).containsText("Card details");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).isVisible();
-
-        Allure.step("Verify: The Card details section contains text 'Payment method'");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Payment method");
-
-        Allure.step("Verify: The Card details section contains text 'Card type'");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card type");
-
-        Allure.step("Verify: The Card details section contains text 'Card holder'");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card holder");
-
-        Allure.step("Verify: The Card details section contains text 'Card number'");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Card number");
-
-        Allure.step("Verify: The Card details section contains text 'Expiry date'");
-        assertThat(transactionDetailsDialog.getCardDetailsSection()).containsText("Expiry date");
+        Allure.step("Verify: The Customer details labels");
+        assertThat(transactionDetailsDialog.getCustomerDetailsLabels())
+                .hasText(new String[]{"Name", "Date of birth", "E-Mail", "Phone",
+                        "Country", "State", "City", "ZIP", "Address"});
     }
 
     @Test
@@ -603,22 +585,19 @@ public class TransactionsPageTest extends BaseTest {
                 .getSelectCompany().selectCompany("CompanyForTestRunOnly Inc.")
                 .getSelectBusinessUnit().selectBusinessUnit("MerchantInCompany")
                 .getTable().clickOnFirstTransaction()
-                .clickChevronInSection("Card details");
+                .clickSection("Card details");
 
         Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field ");
-        assertThat(transactionDetailsDialog.getPaymentMethodParameter()).isHidden();
-
-        Allure.step("Verify: Parameter 'Card type' is hidden after click on chevron in Card details field ");
-        assertThat(transactionDetailsDialog.getCardTypeParameter()).isHidden();
+        assertThat(transactionDetailsDialog.getPaymentMethodValue()).isHidden();
 
         Allure.step("Verify: Parameter 'Card holder' is hidden after click on chevron in Card details field ");
-        assertThat(transactionDetailsDialog.getCardHolderParameter()).isHidden();
+        assertThat(transactionDetailsDialog.getCardHolderValue()).isHidden();
 
         Allure.step("Verify: Parameter 'Card number' is hidden after click on chevron in Card details field ");
-        assertThat(transactionDetailsDialog.getCardNumberParameter()).isHidden();
+        assertThat(transactionDetailsDialog.getCardNumberValue()).isHidden();
 
         Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field ");
-        assertThat(transactionDetailsDialog.getExpiryDateParameter()).isHidden();
+        assertThat(transactionDetailsDialog.getExpiryDateValue()).isHidden();
     }
 
     @Test
@@ -703,7 +682,6 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getDialog()).not().isAttached();
     }
 
-    @Ignore("0.1.2506170300-nightly")
     @Test
     @TmsLink("749")
     @Epic("Transactions")
@@ -711,43 +689,39 @@ public class TransactionsPageTest extends BaseTest {
     @Description("Verify, that the data in Transaction Details Dialog corresponds to the data in Transactions table")
     public void testDataMatching() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+                .clickTransactionsLink()
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
-        String checkedCurrency = transactionsPage
-                .getTable().getFirstRowCell("Currency")
-                .textContent();
-        String checkedStatus = transactionsPage
-                .getTable().getFirstRowCell("Status")
-                .textContent();
-        String checkedAmount = transactionsPage
-                .getTable().getFirstRowCell("Amount")
-                .textContent();
-        String checkedMerchantRef = transactionsPage
-                .getTable().getFirstRowCell("Merchant reference")
-                .textContent();
+        String currency = transactionsPage
+                .getTable().getFirstRowCell("Currency").textContent();
 
-        transactionsPage.getTable().hoverCardLogo();
+        String status = transactionsPage
+                .getTable().getFirstRowCell("Status").textContent();
 
-        String checkedCardType = transactionsPage
-                .getTable()
-                .getCardTypeModal()
-                .textContent();
+        String amount = transactionsPage
+                .getTable().getFirstRowCell("Amount").textContent();
 
-        TransactionDetailsDialog transactionDetails = transactionsPage.getTable().clickOnFirstTransaction();
+        String merchantReference = transactionsPage
+                .getTable().getFirstRowCell("Merchant reference").textContent();
 
-        String amountValueExpected = checkedAmount.replace(",", "").replace(".00", "") + " " + checkedCurrency;
+        String cardType = transactionsPage
+                .getTable().getFirstRowCardType();
 
-        Allure.step("Verify: 'Status' value is the same as in the table ");
-        assertThat(transactionDetails.getStatusValue()).hasText(checkedStatus);
+        TransactionDetailsDialog transactionDetails = transactionsPage
+                .getTable().clickOnFirstTransaction();
 
-        Allure.step("Verify: Merchant Reference  is the same as in the table ");
-        assertThat(transactionDetails.getMerchantReferenceValue()).hasText(checkedMerchantRef);
+        Allure.step("Verify: 'Status' value is the same as in the table");
+        assertThat(transactionDetails.getStatusValue()).hasText(status);
 
-        Allure.step("Verify: Amount value and Currency are the same as in the table ");
-        assertThat(transactionDetails.getAmountValue()).hasText(amountValueExpected);
+        Allure.step("Verify: Merchant Reference  is the same as in the table");
+        assertThat(transactionDetails.getMerchantReferenceValue()).hasText(merchantReference);
 
-        Allure.step("Verify: Card type is the same as in table ");
-        assertThat(transactionDetails.getCardTypeParameter()).hasText(checkedCardType);
+        Allure.step("Verify: Amount value and Currency are the same as in the table");
+        assertThat(transactionDetails.getAmountValue()).hasText(amount + " " + currency);
+
+        Allure.step("Verify: Card type is the same as in table");
+        assertThat(transactionDetails.getCardTypeValue()).hasText(cardType);
     }
 
     @AfterClass

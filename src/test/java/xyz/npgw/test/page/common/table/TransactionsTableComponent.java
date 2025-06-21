@@ -1,10 +1,8 @@
 package xyz.npgw.test.page.common.table;
 
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import lombok.Getter;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
@@ -14,9 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
-    private final Locator cardLogo = locator("td").getByRole(AriaRole.IMG);
-    @Getter
-    private final Locator cardTypeModal = locator("[data-slot='content']");
 
     public TransactionsTableComponent(Page page) {
         super(page);
@@ -53,11 +48,8 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
                 .allMatch(date -> date.isAfter(dateTimeFrom) && date.isBefore(dateTimeTo));
     }
 
-    private Locator getCardLogo() {
-        return cardLogo;
-    }
-
-    public void hoverCardLogo() {
-        getCardLogo().nth(0).hover();
+    public String getFirstRowCardType() {
+        getFirstRowCell("Card type").getByRole(AriaRole.IMG).hover();
+        return locator("[data-slot='content']").textContent();
     }
 }
