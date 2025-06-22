@@ -14,7 +14,6 @@ public class AddBusinessUnitDialog extends BusinessUnitDialog<AddBusinessUnitDia
     @Getter
     private final Locator addMerchantDialog = getByRole(AriaRole.DIALOG);
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
-    private final Locator businessUnitNameField = getByPlaceholder("Enter business unit name");
 
     @Getter
     private final Locator getAddMerchantDialogHeader = addMerchantDialog.locator("header");
@@ -26,13 +25,6 @@ public class AddBusinessUnitDialog extends BusinessUnitDialog<AddBusinessUnitDia
     @Step("Click on the 'Create' button and trigger an error")
     public AddBusinessUnitDialog clickCreateButtonAndTriggerError() {
         createButton.click();
-
-        return this;
-    }
-
-    @Step("Fill in merchant name: {merchantName}")
-    public AddBusinessUnitDialog fillBusinessUnitNameField(String merchantName) {
-        businessUnitNameField.fill(merchantName);
 
         return this;
     }

@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -9,6 +10,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
@@ -20,13 +22,15 @@ public class EditBusinessUnitDialogTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s company for bu edit".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s new bu for edit".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE_EDITED = "%s edited bu".formatted(RUN_ID);
+    private BusinessUnit businessUnit;
 
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
-        TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
 
     @Test
@@ -71,6 +75,33 @@ public class EditBusinessUnitDialogTest extends BaseTest {
     }
 
     @Test(priority = 1)
+    @TmsLink("794")
+    @Epic("System/Companies and business units")
+    @Feature("Edit Business unit")
+    @Description("Editing a business unit updates its name while preserving the same ID")
+    public void testEditBusinessUnit() {
+        String originalBusinessUnitId = businessUnit.merchantId();
+
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getTable().clickEditBusinessUnitButton(MERCHANT_TITLE)
+                .fillBusinessUnitNameField(MERCHANT_TITLE_EDITED)
+                .clickSaveChangesButton();
+
+        Allure.step("Verify: the success alert is displayed with correct message");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was updated successfully");
+
+        Locator editedBusinessUnitIdLocator = companiesAndBusinessUnitsPage.getTable()
+                .getCell(MERCHANT_TITLE_EDITED, "Business unit ID");
+
+        Allure.step("Verify: the Business Unit ID remains the same after editing name");
+        assertThat(editedBusinessUnitIdLocator).hasText(originalBusinessUnitId);
+    }
+
+    @Test(priority = 2)
     @TmsLink("722")
     @Epic("System/Companies and business units")
     @Feature("Delete business unit")
@@ -80,7 +111,7 @@ public class EditBusinessUnitDialogTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE)
+                .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE_EDITED)
                 .clickDeleteButton();
 
         Allure.step("Verify: the header contains the expected title text");
