@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertTrue;
@@ -163,17 +164,14 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Status")
     @Description("Filter acquirers by status.")
     public void testFilterAcquirersByStatus(String status) {
-        List<Locator> statuses = new DashboardPage(getPage())
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectStatus().select(status)
-                .getTable().getColumnCells("Status");
+                .getSelectStatus().select(status);
 
-//        TODO refactor this
         Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
-        for (Locator actualStatus : statuses) {
-            assertThat(actualStatus).containsText(status);
-        }
+        assertTrue(acquirersPage.getTable().getColumnValuesFromAllPages("Status", Function.identity())
+                .stream().allMatch(value -> value.equals(status)));
     }
 
     @Test
@@ -203,7 +201,7 @@ public class AcquirersPageTest extends BaseTest {
         }
     }
 
-    @Test()
+    @Test
     @TmsLink("380")
     @Epic("System/Acquirers")
     @Feature("Rows Per Page")
