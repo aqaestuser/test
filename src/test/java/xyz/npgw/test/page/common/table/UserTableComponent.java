@@ -23,29 +23,29 @@ public class UserTableComponent extends BaseTableComponent<TeamPage> {
         return new TeamPage(getPage());
     }
 
-    @Step("Click 'Edit user'")
-    public EditUserDialog clickEditUserButton(String email) {
+    @Step("Click 'Edit user' icon")
+    public EditUserDialog clickEditUserIcon(String email) {
         getRow(email).getByTestId("EditUserButton").click();
 
         return new EditUserDialog(getPage());
     }
 
     @Step("Click 'Deactivate user' button")
-    public ChangeUserActivityDialog clickDeactivateUserButton(String email) {
+    public ChangeUserActivityDialog clickDeactivateUserIcon(String email) {
         getRow(email).locator("//*[@data-icon='ban']/..").click();
 
         return new ChangeUserActivityDialog(getPage());
     }
 
     @Step("Click 'Activate user' button")
-    public ChangeUserActivityDialog clickActivateUserButton(String email) {
+    public ChangeUserActivityDialog clickActivateUserIcon(String email) {
         getRow(email).locator("//*[@data-icon='check']/..").click();
 
         return new ChangeUserActivityDialog(getPage());
     }
 
     @Step("Click 'Reset user password' button")
-    public ResetUserPasswordDialog clickResetUserPasswordButton(String email) {
+    public ResetUserPasswordDialog clickResetUserPasswordIcon(String email) {
         getRow(email).getByTestId("ResetUserPasswordButton").click();
 
         return new ResetUserPasswordDialog(getPage());
@@ -57,14 +57,14 @@ public class UserTableComponent extends BaseTableComponent<TeamPage> {
 
     @Step("Deactivate user")
     public TeamPage deactivateUser(String email) {
-        return clickDeactivateUserButton(email)
+        return clickDeactivateUserIcon(email)
                 .clickDeactivateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton();
     }
 
     @Step("Click 'Delete user' button")
-    public DeleteUserDialog clickDeleteUserButton(String email) {
+    public DeleteUserDialog clickDeleteUserIcon(String email) {
         getRow(email).getByTestId("DeleteUserButton").click();
 
         return new DeleteUserDialog(getPage());

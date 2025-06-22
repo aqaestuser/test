@@ -37,6 +37,9 @@ public class EditAcquirerDialogTest extends BaseTest {
         List<String> expectedPlaceholders = List.of(
                 "Enter acquirer name",
                 "Enter acquirer code",
+                "Enter acquirer display name",
+                "Enter acquirer MID",
+                "Enter acquirer MID MCC",
                 "Enter challenge URL",
                 "Enter fingerprint URL",
                 "Enter resource URL",
@@ -53,6 +56,7 @@ public class EditAcquirerDialogTest extends BaseTest {
                 .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
+        System.out.println(actualPlaceholders);
         assertEquals(actualPlaceholders, expectedPlaceholders);
     }
 

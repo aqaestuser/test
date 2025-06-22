@@ -25,13 +25,13 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
+import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 
 public class TransactionsPageTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s test request merchant".formatted(RUN_ID);
-    private static final String COMPANY_NAME_FOR_TEST_RUN = "CompanyForTestRunOnly Inc.";
-    private static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantInCompany";
     private final String[] businessUnitNames = new String[]{"Business unit 1", "Business unit 2", "Business unit 3"};
     private BusinessUnit businessUnit;
 
@@ -497,12 +497,12 @@ public class TransactionsPageTest extends BaseTest {
                 .getTable().clickOnFirstTransaction();
 
         Allure.step("Verify: The dialog box header has text 'Transaction details'");
-        assertThat(transactionDetailsDialog.getTransactionDialogHeader()).hasText("Transaction details");
+        assertThat(transactionDetailsDialog.getDialogHeader()).containsText("Transaction details");
 
         Allure.step("Verify: The dialog box section names");
         assertThat(transactionDetailsDialog.getSectionNames())
                 .hasText(new String[]{"Amount", "Updated on", "NPGW reference", "Merchant reference",
-                        "Payment lifecycle", "Card details", "Customer details"});
+                        "Payment lifecycle", "Card details", "Customer details", "3D Secure"});
 
         Allure.step("Verify: The Card details labels");
         assertThat(transactionDetailsDialog.getCardDetailsLabels())
@@ -703,7 +703,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getTable().getFirstRowCell("Amount").textContent();
 
         String merchantReference = transactionsPage
-                .getTable().getFirstRowCell("Merchant reference").textContent();
+                .getTable().getFirstRowCell("Merchant Reference").textContent();
 
         String cardType = transactionsPage
                 .getTable().getFirstRowCardType();
@@ -718,7 +718,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionDetails.getMerchantReferenceValue()).hasText(merchantReference);
 
         Allure.step("Verify: Amount value and Currency are the same as in the table");
-        assertThat(transactionDetails.getAmountValue()).hasText(amount + " " + currency);
+        assertThat(transactionDetails.getAmountValue()).hasText(currency + " " + amount);
 
         Allure.step("Verify: Card type is the same as in table");
         assertThat(transactionDetails.getCardTypeValue()).hasText(cardType);

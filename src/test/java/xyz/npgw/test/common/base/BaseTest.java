@@ -134,6 +134,14 @@ public abstract class BaseTest {
 
         page = context.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
+//        page.addLocatorHandler(page.locator("body"), locator -> {
+//            log.info("------ action check ------");
+////            page.evaluate("window.removeObstructionsForTestIfNeeded()");
+//        }, new Page.AddLocatorHandlerOptions().setNoWaitAfter(true));
+
+        page.addLocatorHandler(page.getByText("Loading..."), locator -> {
+//            log.info("------ Loader triggered ------");
+        });
         openSite(args);
     }
 

@@ -77,8 +77,8 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Edit company' button")
     public EditCompanyDialog clickEditCompanyButton() {
-        getPage().getByText("Loading").waitFor();
-        getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+//        getPage().getByText("Loading").waitFor();
+//        getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
         editCompanyButton.click();
 
         return new EditCompanyDialog(getPage());

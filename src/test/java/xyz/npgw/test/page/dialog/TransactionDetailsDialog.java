@@ -10,7 +10,7 @@ import xyz.npgw.test.page.TransactionsPage;
 @Getter
 public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, TransactionDetailsDialog> {
 
-    private final Locator transactionDialogHeader = getDialogHeader().locator("div:first-child");
+//    private final Locator transactionDialogHeader = getDialogHeader().locator("div:first-child");
 
     private final Locator sectionNames = getByRole(AriaRole.DIALOG).locator(".text-primary");
 
@@ -34,7 +34,7 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
 
     private final Locator nameValue = parameter("Name", "Customer details");
 
-    private final Locator statusValue = getDialogHeader().locator("div:last-child");
+    private final Locator statusValue = getDialogHeader().locator("div > div");
     private final Locator amountValue = amount.locator("+div");
     private final Locator updatedOnValue = updatedOn.locator("+div");
     private final Locator npgwReferenceValue = npgwReference.locator("+div");

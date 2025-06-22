@@ -11,16 +11,19 @@ import static xyz.npgw.test.common.util.TestUtils.encode;
 
 @Log4j2
 public record Acquirer(
+        String acquirerDisplayName,
+        String acquirerMid,
         String acquirerCode,
         String acquirerConfig,
-        SystemConfig systemConfig,
-        String acquirerName,
         Currency[] currencyList,
-        boolean isActive) {
+        SystemConfig systemConfig,
+        boolean isActive,
+        String acquirerName,
+        String acquirerMidMcc) {
 
     public Acquirer(String acquirerName) {
-        this("NGenius", "et", new SystemConfig(),
-                acquirerName, new Currency[]{Currency.USD}, true);
+        this("", "mid", "NGenius", "config",
+                new Currency[]{Currency.USD}, new SystemConfig(), true, acquirerName, "mcc");
     }
 
     public static void create(APIRequestContext request, Acquirer acquirer) {

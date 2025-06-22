@@ -33,7 +33,10 @@ public class AcquirersPageTest extends BaseTest {
 
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Acquirer name",
+            "Acquirer display name",
             "Acquirer code",
+            "Acquirer MID",
+            "Acquirer MID MCC",
             "Currencies",
             "Acquirer config",
             "System config",
@@ -41,20 +44,26 @@ public class AcquirersPageTest extends BaseTest {
             "Actions");
 
     private static final Acquirer ACQUIRER = new Acquirer(
+            "display name",
+            "acquirer mid",
             "NGenius",
             "default",
-            new SystemConfig(),
-            "%s acquirer 11.002.01".formatted(RUN_ID),
             new Currency[]{Currency.USD, Currency.EUR},
-            true);
+            new SystemConfig(),
+            true,
+            "%s acquirer 11.002.01".formatted(RUN_ID),
+            "mcc");
 
     private static final Acquirer CHANGE_STATE_ACQUIRER = new Acquirer(
+            "display name",
+            "acquirer mid",
             "NGenius",
             "default",
-            new SystemConfig(),
-            "%s acquirer activate and deactivate".formatted(RUN_ID),
             new Currency[]{Currency.USD, Currency.EUR},
-            true);
+            new SystemConfig(),
+            true,
+            "%s acquirer activate and deactivate".formatted(RUN_ID),
+            "mcc");
 
     private static final String ACTIVE_ACQUIRER_NAME = "%s active acquirer".formatted(RUN_ID);
     private static final String INACTIVE_ACQUIRER_NAME = "%s inactive acquirer".formatted(RUN_ID);
@@ -288,17 +297,21 @@ public class AcquirersPageTest extends BaseTest {
     public void testDisplaySingleRowWhenAcquirerIsSelected() {
         Map<String, String> expectedColumnValues = Map.of(
                 COLUMNS_HEADERS.get(0), ACQUIRER.acquirerName(),
-                COLUMNS_HEADERS.get(1), ACQUIRER.acquirerCode(),
-                COLUMNS_HEADERS.get(2), String.join(", ", Arrays.stream(ACQUIRER.currencyList())
+                COLUMNS_HEADERS.get(1), ACQUIRER.acquirerDisplayName(),
+                COLUMNS_HEADERS.get(2), ACQUIRER.acquirerCode(),
+                COLUMNS_HEADERS.get(3), ACQUIRER.acquirerMid(),
+                COLUMNS_HEADERS.get(4), ACQUIRER.acquirerMidMcc(),
+
+                COLUMNS_HEADERS.get(5), String.join(", ", Arrays.stream(ACQUIRER.currencyList())
                         .map(Enum::name)
                         .toList()),
-                COLUMNS_HEADERS.get(3), ACQUIRER.acquirerConfig(),
-                COLUMNS_HEADERS.get(4), String.join("\n",
+                COLUMNS_HEADERS.get(6), ACQUIRER.acquirerConfig(),
+                COLUMNS_HEADERS.get(7), String.join("\n",
                         "Challenge URL\n" + ACQUIRER.systemConfig().challengeUrl(),
                         "Fingerprint URL\n" + ACQUIRER.systemConfig().fingerprintUrl(),
                         "Resource URL\n" + ACQUIRER.systemConfig().resourceUrl(),
                         "Notification queue\n" + ACQUIRER.systemConfig().notificationQueue()),
-                COLUMNS_HEADERS.get(5), ACQUIRER.isActive() ? "Active" : "Inactive"
+                COLUMNS_HEADERS.get(8), ACQUIRER.isActive() ? "Active" : "Inactive"
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
@@ -311,6 +324,12 @@ public class AcquirersPageTest extends BaseTest {
 
         Allure.step("Verify: List of acquirers has only 1 row in the table");
         assertThat(row).hasCount(1);
+
+//        assertThat(acquirersPage.getTable().getFirstRowCell("Acquirer name"))
+//                .hasText(ACQUIRER.acquirerName());
+//
+//        assertThat(acquirersPage.getTable().getFirstRowCell("Acquirer display name"))
+//                .hasText(ACQUIRER.acquirerDisplayName());
 
         for (int i = 0; i < COLUMNS_HEADERS.size() - 1; i++) {
             String header = COLUMNS_HEADERS.get(i);
@@ -375,21 +394,18 @@ public class AcquirersPageTest extends BaseTest {
     @Description("Verify Acquirer status 'Active/Inactive' is displayed in column 'Status'")
     public void testVerifyAcquirerStatus(String status) {
         String acquirerName = status.equals("Active") ? ACTIVE_ACQUIRER_NAME : INACTIVE_ACQUIRER_NAME;
-
-        Acquirer acquirer = new Acquirer(
-                "",
-                "Acquirer Config",
-                new SystemConfig(),
-                acquirerName,
-                new Currency[]{Currency.USD},
-                status.equals("Active"));
+        SystemConfig systemConfig = new SystemConfig();
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .fillAcquirerNameField(acquirerName)
-                .fillAcquirerForm(acquirer)
+                .fillChallengeUrlField(systemConfig.challengeUrl())
+                .fillFingerprintUrlField(systemConfig.fingerprintUrl())
+                .fillResourceUrlField(systemConfig.resourceUrl())
+                .clickStatusRadiobutton(status)
+                .clickCheckboxCurrency("USD")
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
@@ -416,7 +432,11 @@ public class AcquirersPageTest extends BaseTest {
                 .clickDeactivateButton();
 
         Allure.step("Verify: Successful message");
-        assertThat(acquirersPage.getAlert().getMessage()).hasText("SUCCESSAcquirer was deactivated successfully");
+        assertThat(acquirersPage.getAlert().getMessage())
+                .hasText("SUCCESSAcquirer was deactivated successfully");
+
+        acquirersPage
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: Acquirer status changed to Inactive");
         assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.acquirerName(), "Status"))
@@ -428,7 +448,10 @@ public class AcquirersPageTest extends BaseTest {
 
         Allure.step("Verify: Successful message");
         assertThat(acquirersPage.getAlert().getMessage())
-                .hasText("SUCCESSAcquirer was deactivated successfully");
+                .hasText("SUCCESSAcquirer was activated successfully");
+
+        acquirersPage
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: Acquirer status changed back to Active");
         assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.acquirerName(), "Status"))

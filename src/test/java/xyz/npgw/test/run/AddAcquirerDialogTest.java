@@ -54,6 +54,9 @@ public class AddAcquirerDialogTest extends BaseTest {
         assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
                 "Enter acquirer name",
                 "Enter acquirer code",
+                "Enter acquirer display name",
+                "Enter acquirer MID",
+                "Enter acquirer MID MCC",
                 "Enter challenge URL",
                 "Enter fingerprint URL",
                 "Enter resource URL",

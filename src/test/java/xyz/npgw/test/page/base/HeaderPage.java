@@ -6,16 +6,12 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.util.ResponseUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 import xyz.npgw.test.page.system.TeamPage;
-
-import java.time.LocalTime;
 
 @Getter
 @SuppressWarnings("unchecked")
@@ -40,16 +36,22 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     @Step("Click on 'Transactions' menu in Header")
     public TransactionsPage clickTransactionsLink() {
         transactionsButton.click();
-        getPage().waitForURL("**/transactions");
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-//        ResponseUtils.clickAndWaitForResponse(getPage(), transactionsButton, Constants.TRANSACTION_HISTORY_ENDPOINT);
+        getByRole(AriaRole.GRIDCELL, "No rows to display.")
+                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
+
+//        assertThat(transactionsButton.locator("..")).hasAttribute("data-active", "true");
 
         return new TransactionsPage(getPage());
     }
 
     @Step("Click on 'Reports' menu in Header")
     public ReportsPage clickReportsLink() {
-        ResponseUtils.clickAndWaitForText(getPage(), reportsButton, "Accounts");
+        reportsButton.click();
+        getByRole(AriaRole.GRIDCELL, "No rows to display.")
+                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
+
+//        assertThat(reportsButton.locator("..")).hasAttribute("data-active", "true");
+//        ResponseUtils.clickAndWaitForText(getPage(), reportsButton, "Accounts");
 
         return new ReportsPage(getPage());
     }
@@ -58,7 +60,13 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     public TeamPage clickSystemAdministrationLink() {
 //        ResponseUtils.clickAndWaitForResponse(getPage(), systemAdministrationButton, Constants.ASSETS_TEAM);
         systemAdministrationButton.click();
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        assertThat(systemAdministrationButton.locator(".."))
+//                .hasAttribute("data-active", "true");
+
+        getByRole(AriaRole.GRIDCELL, "No rows to display.")
+                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
+
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return new TeamPage(getPage());
     }

@@ -27,6 +27,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
+import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 
 public class TeamPageTest extends BaseTest {
 
@@ -88,7 +89,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany("super")
-                .getTable().clickDeleteUserButton(SYSTEM_ADMIN_EMAIL)
+                .getTable().clickDeleteUserIcon(SYSTEM_ADMIN_EMAIL)
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the system admin");
@@ -129,7 +130,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
-                .getTable().clickDeleteUserButton(COMPANY_ADMIN_EMAIL)
+                .getTable().clickDeleteUserIcon(COMPANY_ADMIN_EMAIL)
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the company admin");
@@ -197,7 +198,7 @@ public class TeamPageTest extends BaseTest {
         TeamPage teamPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
-                .getTable().clickDeleteUserButton(COMPANY_ANALYST_EMAIL)
+                .getTable().clickDeleteUserIcon(COMPANY_ANALYST_EMAIL)
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the company analyst");
@@ -330,7 +331,7 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickEditUserButton(email)
+                .getTable().clickEditUserIcon(email)
                 .checkInactiveRadiobutton()
                 .clickSaveChangesButton();
 
@@ -358,14 +359,14 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickDeactivateUserButton(email)
+                .getTable().clickDeactivateUserIcon(email)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
         teamPage
-                .clickRefreshDataButton();
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
@@ -374,14 +375,14 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "check");
 
         teamPage
-                .getTable().clickActivateUserButton(email)
+                .getTable().clickActivateUserIcon(email)
                 .clickActivateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was activated successfully");
 
         teamPage
-                .clickRefreshDataButton();
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Active");
@@ -407,12 +408,12 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton()
-                .getTable().clickResetUserPasswordButton(email)
+                .getTable().clickResetUserPasswordIcon(email)
                 .fillPasswordField("NewPassword1!")
                 .clickResetButton();
 
         Allure.step("Verify: success message is displayed");
-        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword was reseted successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword was reset successfully");
 
         teamPage.clickLogOutButton()
                 .fillEmailField(email)
@@ -460,14 +461,14 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "ban");
 
         teamPage
-                .getTable().clickDeactivateUserButton(analystEmail)
+                .getTable().clickDeactivateUserIcon(analystEmail)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
-        teamPage
-                .clickRefreshDataButton();
+//        teamPage
+//                .clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(analystEmail, "Status")).hasText("Inactive");
@@ -485,7 +486,7 @@ public class TeamPageTest extends BaseTest {
         loginPage
                 .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getPassword())
                 .clickSystemAdministrationLink()
-                .getTable().clickEditUserButton(analystEmail)
+                .getTable().clickEditUserIcon(analystEmail)
                 .checkActiveRadiobutton()
                 .clickSaveChangesButton()
                 .clickLogOutButton()
@@ -540,7 +541,7 @@ public class TeamPageTest extends BaseTest {
     public void testCheckSortingListOfUsersAlphabetically() {
         List<String> sortedUsersAlphabetically = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
-                .getSelectCompany().selectCompany(getCompanyName())
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getTable().clickSortIcon("Username")
                 .getTable().getColumnValues("Username");
 
@@ -559,7 +560,7 @@ public class TeamPageTest extends BaseTest {
     public void testCheckSortingListOfUsersReverse() {
         List<String> sortedUsersReverseAlphabetically = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
-                .getSelectCompany().selectCompany(getCompanyName())
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getTable().clickSortIcon("Username")
                 .getTable().clickSortIcon("Username")
                 .getTable().getColumnValues("Username");
