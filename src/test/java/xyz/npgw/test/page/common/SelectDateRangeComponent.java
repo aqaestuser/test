@@ -51,6 +51,11 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         return setDateRangeFields(startDate.format(formatter), startDate.format(formatter));
     }
 
+    public CurrentPageT setOneDayBeforeBuildRange(ZonedDateTime endDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return setDateRangeFields(endDate.minusDays(1).format(formatter), endDate.format(formatter));
+    }
+
     public CurrentPageT setCurrentMonthRange() {
         LocalDate now = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

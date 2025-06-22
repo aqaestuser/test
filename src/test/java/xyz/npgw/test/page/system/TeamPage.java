@@ -42,11 +42,8 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-//        TODO remove after bugfix
-//        getPage().waitForTimeout(500);
         getByTestId("ApplyFilterButtonTeamPage").click();
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-//        getPage().waitForTimeout(500);
 
         return this;
     }

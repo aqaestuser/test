@@ -94,7 +94,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
     @Step("Click 'Refresh data' button")
     public CompaniesAndBusinessUnitsPage clickRefreshDataButton() {
         refreshDataButton.click();
-//        getPage().waitForTimeout(500);
 
         return this;
     }

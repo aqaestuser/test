@@ -413,7 +413,6 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword was reseted successfully");
-//        TODO bug - correct past form of 'reseted' is reset
 
         teamPage.clickLogOutButton()
                 .fillEmailField(email)
