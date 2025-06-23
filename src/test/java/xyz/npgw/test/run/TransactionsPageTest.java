@@ -598,6 +598,36 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field ");
         assertThat(transactionDetailsDialog.getExpiryDateValue()).isHidden();
+
+        transactionDetailsDialog
+                .clickSection("Customer details");
+
+        Allure.step("Verify: Parameter 'Name' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getNameValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'Date of birth' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getDateOfBirthValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'E-Mail' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getEmailValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'Phone' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getPhoneValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'Country' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getCountryValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'State' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getStateValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'City' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getCityValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'ZIP' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getZipValue()).isHidden();
+
+        Allure.step("Verify: Parameter 'Address' is hidden after click on chevron in Customer details field ");
+        assertThat(transactionDetailsDialog.getAddressValue()).isHidden();
     }
 
     @Test

@@ -33,6 +33,14 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
     private final Locator expiryDateValue = parameter("Expiry date", "Card details");
 
     private final Locator nameValue = parameter("Name", "Customer details");
+    private final Locator dateOfBirthValue = parameter("Date of birth", "Customer details");
+    private final Locator emailValue = parameter("E-Mail", "Customer details");
+    private final Locator phoneValue = parameter("Phone", "Customer details");
+    private final Locator countryValue = parameter("Country", "Customer details");
+    private final Locator stateValue = parameter("State", "Customer details");
+    private final Locator cityValue = parameter("City", "Customer details");
+    private final Locator zipValue = parameter("ZIP", "Customer details");
+    private final Locator addressValue = parameter("Address", "Customer details");
 
     private final Locator statusValue = getDialogHeader().locator("div > div");
     private final Locator amountValue = amount.locator("+div");
