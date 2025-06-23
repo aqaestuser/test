@@ -26,6 +26,9 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     private final Locator notificationQueueField = getByPlaceholder("Enter notification queue");
     private final Locator acquirerConfigField = getByPlaceholder("Enter acquirer config");
     private final Locator acquirerCodeField = getByPlaceholder("Enter acquirer code");
+    private final Locator acquirerDisplayNameField = getByPlaceholder("Enter acquirer display name");
+    private final Locator acquirerMidField = getByLabelExact("Acquirer MID");
+    private final Locator acquirerMidMccField = getByLabelExact("Acquirer MID MCC");
 
     public AcquirerDialog(Page page) {
         super(page);
@@ -94,7 +97,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         return (CurrentDialogT) this;
     }
 
-    @Step("Click acquirer config '{acquirerConfig}'")
+    @Step("Enter acquirer config '{acquirerConfig}'")
     public CurrentDialogT fillAcquirerConfigField(String acquirerConfig) {
         acquirerConfigField.fill(acquirerConfig);
 
@@ -114,6 +117,27 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         for (Currency currency : acquirer.currencyList()) {
             clickCheckboxCurrency(currency.name());
         }
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter 'Acquirer display name'")
+    public CurrentDialogT fillAcquirerDisplayNameField(String displayName) {
+        acquirerDisplayNameField.fill(displayName);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter 'Acquirer MID'")
+    public CurrentDialogT fillAcquirerMidField(String acquirerMid) {
+        acquirerMidField.fill(acquirerMid);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Enter 'Acquirer MID MCC'")
+    public CurrentDialogT fillAcquirerMidMccField(String acquirerMid) {
+        acquirerMidMccField.fill(acquirerMid);
 
         return (CurrentDialogT) this;
     }

@@ -11,6 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
@@ -28,6 +29,16 @@ public class AddAcquirerDialogTest extends BaseTest {
     private static final String EXISTING_ACQUIRER_NAME = "%s existing acquirer".formatted(RUN_ID);
     private static final String ACQUIRER_NAME = "%s awesome acquirer".formatted(RUN_ID);
     private final SystemConfig defaultConfig = new SystemConfig();
+
+    Acquirer acquirer = new Acquirer(ACQUIRER_NAME,
+            "123456",
+            "ACQ001",
+            "default",
+            new Currency[]{Currency.USD},
+            new SystemConfig(),
+            true,
+            "my-acquirer",
+            "5411");
 
     @BeforeClass
     @Override
@@ -98,31 +109,70 @@ public class AddAcquirerDialogTest extends BaseTest {
     @TmsLink("412")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")
-    @Description("Verify that a new Acquirer can be successfully created and appears in the Acquirers dropdown.")
-    public void testAcquirerSuccessfullyCreatedAndAppearsInDropdown() {
+    @Description("New Acquirer can be successfully created and its details appear correctly in the acquirers table")
+    public void testAddAcquirer() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
-                .fillAcquirerNameField(ACQUIRER_NAME)
+                .fillAcquirerNameField(acquirer.acquirerName())
+                .fillAcquirerDisplayNameField(acquirer.acquirerDisplayName())
+                .fillAcquirerMidField(acquirer.acquirerMid())
+                .fillAcquirerMidMccField(acquirer.acquirerMidMcc())
                 .fillChallengeUrlField(defaultConfig.challengeUrl())
                 .fillFingerprintUrlField(defaultConfig.fingerprintUrl())
                 .fillResourceUrlField(defaultConfig.resourceUrl())
-                .clickCheckboxCurrency("USD")
+                .fillNotificationQueueField(defaultConfig.notificationQueue())
+                .clickCheckboxCurrency(acquirer.currencyList()[0].name())
+                .fillAcquirerConfigField(acquirer.acquirerConfig())
                 .clickCreateButton();
+
+        Allure.step("Verify: The 'Add acquirer' dialog is no longer visible");
+        assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
 
         Allure.step("Verify: Acquirer creation success message is displayed");
         assertThat(acquirersPage.getAlert().getMessage())
                 .containsText("SUCCESSAcquirer was created successfully");
 
-        Allure.step("Verify: The 'Add acquirer' dialog is no longer visible");
-        assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
-
         acquirersPage
-                .getSelectAcquirer().typeName(ACQUIRER_NAME);
+                .getSelectAcquirer().selectAcquirer(acquirer.acquirerName());
 
-        Allure.step("Verify: Dropdown contains acquirer name");
-        assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirersDropdownItems()).hasText(ACQUIRER_NAME);
+        Allure.step("Verify: Acquirer display name matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer display name"))
+                .hasText(acquirer.acquirerDisplayName());
+
+        Allure.step("Verify: Acquirer code is 'NGenius' by default");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer code"))
+                .hasText("NGenius");
+
+        Allure.step("Verify: Acquirer MID matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer MID"))
+                .hasText(acquirer.acquirerMid());
+
+        Allure.step("Verify: Acquirer MID MCC matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer MID MCC"))
+                .hasText(acquirer.acquirerMidMcc());
+
+        Allure.step("Verify: Currencies column contains expected currency");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Currencies"))
+                .hasText(acquirer.currencyList()[0].name());
+
+        Allure.step("Verify: Acquirer config matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer config"))
+                .hasText(acquirer.acquirerConfig());
+
+        Allure.step("Verify: 'System config' cell contains all values in correct order");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "System config"))
+                .hasText(
+                        "Challenge URL" + acquirer.systemConfig().challengeUrl()
+                                + "Fingerprint URL" + acquirer.systemConfig().fingerprintUrl()
+                                + "Resource URL" + acquirer.systemConfig().resourceUrl()
+                                + "Notification queue" + acquirer.systemConfig().notificationQueue()
+                );
+
+        Allure.step("Verify: Status matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Status"))
+                .hasText("Active");
     }
 
     @Test
@@ -165,6 +215,9 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer();
 
+        Allure.step("Verify: Acquirer name field is marked as invalid");
+        assertThat(addAcquirerDialog.getAcquirerNameField()).hasAttribute("aria-invalid", "true");
+
         Allure.step("Verify: Acquirer code field is read-only");
         assertThat(addAcquirerDialog.getAcquirerCodeField()).hasAttribute("aria-readonly", "true");
 
@@ -191,7 +244,7 @@ public class AddAcquirerDialogTest extends BaseTest {
     @Override
     protected void afterClass() {
         TestUtils.deleteAcquirer(getApiRequestContext(), EXISTING_ACQUIRER_NAME);
-        TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_NAME);
+        TestUtils.deleteAcquirer(getApiRequestContext(), acquirer.acquirerName());
         super.afterClass();
     }
 }
