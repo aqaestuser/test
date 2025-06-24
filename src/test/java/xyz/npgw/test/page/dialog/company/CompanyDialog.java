@@ -92,7 +92,9 @@ public abstract class CompanyDialog<CurrentDialogT extends CompanyDialog<Current
 
     @Step("Fill company country field")
     public CurrentDialogT fillCompanyCountryField(String companyCountry) {
+        companyCountryField.click();
         companyCountryField.fill(companyCountry);
+        getByRole(AriaRole.OPTION).filter(new Locator.FilterOptions().setHasText(companyCountry)).click();
 
         return (CurrentDialogT) this;
     }

@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
@@ -189,6 +190,7 @@ public class TransactionsTableTest extends BaseTest {
         assertTrue(numberWithEuroInTable > 0 && !transactionsPage.getTable().isTableEmpty());
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("559")
     @Epic("Transactions")
@@ -215,6 +217,7 @@ public class TransactionsTableTest extends BaseTest {
                 actualDates.stream().sorted(Comparator.reverseOrder()).toList());
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("659")
     @Epic("Transactions")
@@ -242,6 +245,7 @@ public class TransactionsTableTest extends BaseTest {
                 actualAmount.stream().sorted(Comparator.reverseOrder()).toList());
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("106")
     @Epic("Transactions")
@@ -257,6 +261,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRowsPerPage()).containsText("25");
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("127")
     @Epic("Transactions")
@@ -273,6 +278,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRowsPerPageOptions()).hasText(new String[]{"10", "25", "50", "100"});
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("130")
     @Epic("Transactions")

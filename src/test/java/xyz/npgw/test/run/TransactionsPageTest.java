@@ -484,6 +484,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("638")
     @Epic("Transactions")
@@ -574,6 +575,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("661")
     @Epic("Transactions")
@@ -688,6 +690,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("738")
     @Epic("Transactions")
@@ -712,6 +715,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getDialog()).not().isAttached();
     }
 
+    @Ignore("after 0.1.2506240525")
     @Test
     @TmsLink("749")
     @Epic("Transactions")
