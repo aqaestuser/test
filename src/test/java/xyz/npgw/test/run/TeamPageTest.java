@@ -179,8 +179,11 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
-//        teamPage
-//                .clickRefreshDataButton();
+        // TODO add a long wait until getAll user returns the recently created one
+        getPage().waitForTimeout(3000);
+
+        teamPage
+                .clickRefreshDataButton();
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(getCompanyName());
@@ -362,9 +365,13 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-//                .clickRefreshDataButton()
+                .clickCreateButton();
+
+        // TODO add a long wait until getAll user returns the recently created one
+        getPage().waitForTimeout(3000);
+
+        teamPage
+                .clickRefreshDataButton()
                 .getTable().clickDeactivateUserIcon(email)
                 .clickDeactivateButton();
 
@@ -453,8 +460,10 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
+        // TODO add a long wait until getAll user returns the recently created one
+        getPage().waitForTimeout(3000);
+
         teamPage
-                .getAlert().waitUntilSuccessAlertIsGone()
                 .clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
@@ -597,7 +606,7 @@ public class TeamPageTest extends BaseTest {
                 .clickCreateButton();
 
         // TODO replace with adequate wait for getAll users returning the recently created user
-        getPage().waitForTimeout(6000);
+        getPage().waitForTimeout(3000);
 
         AddUserDialog addUserDialog = teamPage
                 .clickAddUserButton()

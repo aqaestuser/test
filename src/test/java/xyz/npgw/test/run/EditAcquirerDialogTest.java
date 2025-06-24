@@ -56,7 +56,6 @@ public class EditAcquirerDialogTest extends BaseTest {
                 .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
-        System.out.println(actualPlaceholders);
         assertEquals(actualPlaceholders, expectedPlaceholders);
     }
 

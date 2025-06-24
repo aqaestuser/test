@@ -46,8 +46,8 @@ jobs:
             password=${{ secrets.USER_PASSWORD }};
             browserType=chromium;
             headlessMode=true;
-            tracingMode=false;
-            videoMode=false
+            tracingMode=true;
+            videoMode=true
           CI_RUN: true
 
       - name: Create test report
