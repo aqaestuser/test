@@ -20,6 +20,7 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
 
     private final Locator addAcquirerButton = getByTestId("AddAcquirerButton");
     private final Locator addAcquirerDialog = getByRole(AriaRole.DIALOG);
+    private final Locator editAcquirerDialog = getByRole(AriaRole.DIALOG);
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
     private final Locator deleteAcquirerButton = getByTestId("DeleteAcquirerButton");
