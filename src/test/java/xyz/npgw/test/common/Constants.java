@@ -15,5 +15,5 @@ public class Constants {
     public static final String SYSTEM_URL_TITLE = "NPGW";
 
     public static final String COMPANY_NAME_FOR_TEST_RUN = "CompanyForTestRunOnly Inc.";
-    public static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantInCompany";
+    public static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantCompanyForTestRunOnly Inc.";
 }

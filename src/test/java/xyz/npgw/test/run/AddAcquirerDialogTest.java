@@ -37,7 +37,7 @@ public class AddAcquirerDialogTest extends BaseTest {
             new Currency[]{Currency.USD},
             new SystemConfig(),
             true,
-            "my-acquirer",
+            "%s my-acquirer".formatted(TestUtils.now()),
             "5411");
 
     @BeforeClass

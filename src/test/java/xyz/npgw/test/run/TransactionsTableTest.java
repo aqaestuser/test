@@ -56,6 +56,7 @@ public class TransactionsTableTest extends BaseTest {
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
     }
 
+    @Ignore("enable after BR-227 being done")
     @Test
     @TmsLink("311")
     @Epic("Transactions")
@@ -162,32 +163,29 @@ public class TransactionsTableTest extends BaseTest {
         assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
     }
 
-    // TODO bug - transactions isn't present in the table when a currency filter is applied on the last page
-    @Test(expectedExceptions = AssertionError.class)
+    @Test
     @TmsLink("682")
     @Epic("Transactions")
     @Feature("Filter")
     @Description("Verify that transactions are present in the table when a currency filter is applied on the last page")
     public void testTableDisplayWhenCurrencyFilterAppliedWhileOnLastPage() {
-        String euro = "EUR";
-
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()));
 
-        int numberWithEuroInTable = transactionsPage
-                .getTable().countValues("Currency", euro);
+        Allure.step("Verify: Transactions are present in the table");
+        assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
 
         transactionsPage
                 .getTable().goToLastPageIfNeeded();
 
         transactionsPage
-                .clickCurrencySelector().selectCurrency("USD");
+                .clickCurrencySelector().selectCurrency("EUR");
 
-        Allure.step("Verify: Transactions are present in the table");
-        assertTrue(numberWithEuroInTable > 0 && !transactionsPage.getTable().isTableEmpty());
+        Allure.step("Verify: Transactions are still present then filter is applied on the last page");
+        assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
     }
 
     @Ignore("after 0.1.2506240525")
@@ -386,7 +384,7 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Filter")
     @Description("Filter transactions by business unit")
     public void testFilterTransactionsByBusinessUnit() {
-        getPage().route("**/history*", route -> {
+        getPage().route("**/status*", route -> {
             if (route.request().postData().contains(businessUnit.merchantId())) {
                 List<Transaction> transactionList = new ArrayList<>();
                 transactionList.add(new Transaction("2025-06-02T04:18:09.047146423Z",

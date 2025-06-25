@@ -102,7 +102,7 @@ public class TestDataProvider {
         return new Object[][]{
                 {"CSV"},
                 {"EXCEL"},
-                //{"PDF"},
+                {"PDF"},
         };
     }
 }

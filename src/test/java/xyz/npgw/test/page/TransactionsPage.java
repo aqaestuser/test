@@ -311,7 +311,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     public String getRequestData() {
         AtomicReference<String> data = new AtomicReference<>("");
         getPage().waitForResponse(response -> {
-            if (response.url().contains("/transaction/history")) {
+            if (response.url().contains("/transaction/status")) {
                 data.set(response.request().postData());
                 return true;
             }
