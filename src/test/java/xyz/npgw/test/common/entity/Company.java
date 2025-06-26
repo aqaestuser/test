@@ -45,7 +45,7 @@ public record Company(
                 RequestOptions.create().setData(new Company(companyName)));
         log.info("create company '{}' - {}", companyName, response.status());
         if (response.status() >= 400) {
-            log.info("response - {}", response.text());
+            log.info("create response - {}", response.text());
         }
         if (response.status() >= 500) {
             throw new SkipException(response.text());
@@ -76,6 +76,9 @@ public record Company(
     public static int delete(APIRequestContext request, String companyName) {
         APIResponse response = request.delete("portal-v1/company/%s".formatted(encode(companyName)));
         log.info("delete company '{}' - {}", companyName, response.status());
+        if (response.status() >= 400) {
+            log.info("delete response - {}", response.text());
+        }
         if (response.status() >= 500) {
             throw new SkipException(response.text());
         }

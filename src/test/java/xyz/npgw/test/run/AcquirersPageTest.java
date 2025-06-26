@@ -33,11 +33,11 @@ import static org.testng.Assert.assertTrue;
 public class AcquirersPageTest extends BaseTest {
 
     private static final List<String> COLUMNS_HEADERS = List.of(
-            "Acquirer name",
-            "Acquirer display name",
+            "Entity name",
+            "Display name",
             "Acquirer code",
-            "Acquirer MID",
-            "Acquirer MID MCC",
+            "MID",
+            "MCC",
             "Currencies",
             "Acquirer config",
             "System config",
@@ -53,7 +53,7 @@ public class AcquirersPageTest extends BaseTest {
             new SystemConfig(),
             true,
             "%s acquirer 11.002.01".formatted(RUN_ID),
-            "mcc");
+            "4321");
 
     private static final Acquirer CHANGE_STATE_ACQUIRER = new Acquirer(
             "display name",
@@ -64,7 +64,7 @@ public class AcquirersPageTest extends BaseTest {
             new SystemConfig(),
             true,
             "%s acquirer activate and deactivate".formatted(RUN_ID),
-            "mcc");
+            "1234");
 
     private static final String ACTIVE_ACQUIRER_NAME = "%s active acquirer".formatted(RUN_ID);
     private static final String INACTIVE_ACQUIRER_NAME = "%s inactive acquirer".formatted(RUN_ID);
@@ -116,9 +116,9 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         Allure.step("Verify: Table column header is visible");
-        assertThat(acquirersPage.getTable().getColumnHeader("Acquirer name")).isVisible();
+        assertThat(acquirersPage.getTable().getColumnHeader("Entity name")).isVisible();
 
-        List<Locator> acquirersList = acquirersPage.getTable().getColumnCells("Acquirer name");
+        List<Locator> acquirersList = acquirersPage.getTable().getColumnCells("Entity name");
 
 //        TODO refactor this
         Allure.step("Verify: Acquirers list is visible and contains elements");

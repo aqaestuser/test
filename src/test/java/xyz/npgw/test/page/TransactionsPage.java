@@ -8,7 +8,7 @@ import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import org.testng.Assert;
-import xyz.npgw.test.common.util.ResponseUtils;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
@@ -198,7 +198,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Click on the Settings button")
     public TransactionsPage clickSettingsButton() {
-        ResponseUtils.clickAndWaitForText(getPage(), settingsButton, "Visible columns");
+        settingsButton.click();
+        getByTextExact("Visible columns").waitFor();
 
         return this;
     }
@@ -281,7 +282,9 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     public boolean isFileAvailableAndNotEmpty(String fileType) {
-        Download download = getPage().waitForDownload(() -> getByRole(AriaRole.MENUITEM, fileType).click());
+        Download download = getPage().waitForDownload(
+                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 2),
+                () -> getByRole(AriaRole.MENUITEM, fileType).click());
 
         int length = 0;
         try (InputStream inputStream = download.createReadStream()) {

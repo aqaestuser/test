@@ -63,11 +63,11 @@ public class AddAcquirerDialogTest extends BaseTest {
 
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
-                "Enter acquirer name",
+                "Enter entity name",
                 "Enter acquirer code",
-                "Enter acquirer display name",
-                "Enter acquirer MID",
-                "Enter acquirer MID MCC",
+                "Enter display name",
+                "Enter MID",
+                "Enter MCC",
                 "Enter challenge URL",
                 "Enter fingerprint URL",
                 "Enter resource URL",
@@ -137,8 +137,12 @@ public class AddAcquirerDialogTest extends BaseTest {
         acquirersPage
                 .getSelectAcquirer().selectAcquirer(acquirer.acquirerName());
 
-        Allure.step("Verify: Acquirer display name matches expected");
-        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer display name"))
+        Allure.step("Verify: Entity name matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Entity name"))
+                .hasText(acquirer.acquirerName());
+
+        Allure.step("Verify: Display name matches expected");
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Display name"))
                 .hasText(acquirer.acquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
@@ -146,11 +150,11 @@ public class AddAcquirerDialogTest extends BaseTest {
                 .hasText("NGenius");
 
         Allure.step("Verify: Acquirer MID matches expected");
-        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer MID"))
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "MID"))
                 .hasText(acquirer.acquirerMid());
 
         Allure.step("Verify: Acquirer MID MCC matches expected");
-        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "Acquirer MID MCC"))
+        assertThat(acquirersPage.getTable().getCell(acquirer.acquirerName(), "MCC"))
                 .hasText(acquirer.acquirerMidMcc());
 
         Allure.step("Verify: Currencies column contains expected currency");

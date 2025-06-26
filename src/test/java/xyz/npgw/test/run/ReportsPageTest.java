@@ -37,7 +37,7 @@ public class ReportsPageTest extends BaseTest {
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("153")
     @Epic("Reports")
@@ -54,7 +54,7 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getPage()).hasTitle(Constants.REPORTS_URL_TITLE);
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("405")
     @Epic("Reports")
@@ -71,7 +71,7 @@ public class ReportsPageTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("510")
     @Epic("Reports")
@@ -106,7 +106,7 @@ public class ReportsPageTest extends BaseTest {
                 "Payment Method")));
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("512")
     @Epic("Reports")
@@ -168,7 +168,7 @@ public class ReportsPageTest extends BaseTest {
         Assert.assertTrue(generationParametersDialog.isAllColumnsChecked());
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("653")
     @Epic("Reports")
@@ -198,7 +198,7 @@ public class ReportsPageTest extends BaseTest {
         assertThat(reportsPage.getSelectDateRange().getEndDate()).hasText(defaultEndDate);
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("699")
     @Epic("Reports")
@@ -229,7 +229,7 @@ public class ReportsPageTest extends BaseTest {
                 "Filenames are not in reverse alphabetical order");
     }
 
-    @Ignore
+    @Ignore("Reports")
     @Test
     @TmsLink("718")
     @Epic("Reports")

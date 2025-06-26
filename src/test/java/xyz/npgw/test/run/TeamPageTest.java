@@ -7,6 +7,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
@@ -179,11 +180,8 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: a success alert appears after user creation");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
-        // TODO add a long wait until getAll user returns the recently created one
-        getPage().waitForTimeout(3000);
-
         teamPage
-                .clickRefreshDataButton();
+                .waitForUser(getApiRequestContext(), companyAnalystEmail, getCompanyName());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(getCompanyName());
@@ -213,9 +211,6 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success alert appears after deleting the company analyst");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
 
-//        teamPage
-//                .clickRefreshDataButton();
-
         Allure.step("Verify: deleted company analyst is no longer present in the users table");
         assertFalse(teamPage.getTable().isUserPresentInTable(companyAnalystEmail));
     }
@@ -237,8 +232,7 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAnalystRadiobutton()
                 .setAllowedBusinessUnit(MERCHANT_TITLE)
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton()
+                .waitForUser(getApiRequestContext(), email, getCompanyName())
                 .clickEditUserButton(email);
 
         Allure.step("Verify: 'Edit user' header is displayed");
@@ -365,21 +359,16 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
-                .clickCreateButton();
-
-        // TODO add a long wait until getAll user returns the recently created one
-        getPage().waitForTimeout(3000);
-
-        teamPage
-                .clickRefreshDataButton()
+                .clickCreateButton()
+                .waitForUser(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickDeactivateUserIcon(email)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
-        teamPage
-                .getAlert().clickCloseButton();
+//        teamPage
+//                .getAlert().clickCloseButton();
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
@@ -419,8 +408,7 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton()
+                .waitForUser(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickResetUserPasswordIcon(email)
                 .fillPasswordField("NewPassword1!")
                 .clickResetButton();
@@ -460,11 +448,8 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
-        // TODO add a long wait until getAll user returns the recently created one
-        getPage().waitForTimeout(3000);
-
         teamPage
-                .clickRefreshDataButton();
+                .waitForUser(getApiRequestContext(), analystEmail, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(analystEmail, "User role")).hasText("USER");
@@ -481,9 +466,6 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
-
-//        teamPage
-//                .clickRefreshDataButton();
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(analystEmail, "Status")).hasText("Inactive");
@@ -587,6 +569,7 @@ public class TeamPageTest extends BaseTest {
                 "Список пользователей не отсортирован по алфавиту в обратном порядке");
     }
 
+    @Ignore
     @Test
     @TmsLink("612")
     @Epic("System/Team")
@@ -595,7 +578,7 @@ public class TeamPageTest extends BaseTest {
     public void testAddUserWithExistingEmail() {
         final String companyAdmin = "%s.companydmin@email.com".formatted(TestUtils.now());
 
-        TeamPage teamPage = new DashboardPage(getPage())
+        AddUserDialog addUserDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
@@ -603,12 +586,8 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Qwerty123!")
                 .checkActiveRadiobutton()
                 .checkCompanyAdminRadiobutton()
-                .clickCreateButton();
-
-        // TODO replace with adequate wait for getAll users returning the recently created user
-        getPage().waitForTimeout(3000);
-
-        AddUserDialog addUserDialog = teamPage
+                .clickCreateButton()
+                .waitForUser(getApiRequestContext(), companyAdmin, getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")

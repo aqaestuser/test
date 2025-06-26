@@ -52,12 +52,12 @@ public final class TestUtils {
         if (companyName.equals("super")) {
             return;
         }
-        while (Company.delete(request, companyName) == 422) {
+        while (Company.delete(request, companyName) == 409) {
             Arrays.stream(User.getAll(request, companyName))
                     .forEach(user -> User.delete(request, user.email()));
             Arrays.stream(BusinessUnit.getAll(request, companyName))
                     .forEach(businessUnit -> {
-                        while (BusinessUnit.delete(request, companyName, businessUnit) == 422) {
+                        while (BusinessUnit.delete(request, companyName, businessUnit) == 409) {
                             MerchantAcquirer.delete(request, businessUnit.merchantId());
                         }
                     });

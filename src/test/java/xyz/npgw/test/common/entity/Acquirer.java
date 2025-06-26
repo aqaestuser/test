@@ -23,7 +23,7 @@ public record Acquirer(
 
     public Acquirer(String acquirerName) {
         this("", "mid", "NGenius", "config",
-                new Currency[]{Currency.USD}, new SystemConfig(), true, acquirerName, "mcc");
+                new Currency[]{Currency.USD}, new SystemConfig(), true, acquirerName, "1111");
     }
 
     public static void create(APIRequestContext request, Acquirer acquirer) {

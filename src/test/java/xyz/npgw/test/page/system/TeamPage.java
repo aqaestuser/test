@@ -1,8 +1,13 @@
 package xyz.npgw.test.page.system;
 
+import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Step;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
@@ -11,6 +16,8 @@ import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements
@@ -53,5 +60,21 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
         getByTestId("ResetFilterButtonTeamPage").click();
 
         return this;
+    }
+
+    @SneakyThrows
+    public TeamPage waitForUser(APIRequestContext request, String email, String companyName) {
+        int timeout = (int) ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Timeout %dms exceeded waiting for user %s presence".formatted(timeout, email));
+            }
+        }
+
+        clickRefreshDataButton();
+
+        return new TeamPage(getPage());
     }
 }

@@ -17,7 +17,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         extends BaseDialog<AcquirersPage, CurrentDialogT>
         implements AlertTrait<CurrentDialogT> {
 
-    private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
+    private final Locator acquirerNameField = getByPlaceholder("Enter entity name");
     private final Locator statusSwitch = getByRole(AriaRole.RADIOGROUP, "Status");
     private final Locator allowedCurrenciesCheckboxes = getByRole(AriaRole.RADIOGROUP, "Allowed currency");
     private final Locator challengeURLField = getByPlaceholder("Enter challenge URL");
@@ -26,9 +26,9 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     private final Locator notificationQueueField = getByPlaceholder("Enter notification queue");
     private final Locator acquirerConfigField = getByPlaceholder("Enter acquirer config");
     private final Locator acquirerCodeField = getByPlaceholder("Enter acquirer code");
-    private final Locator acquirerDisplayNameField = getByPlaceholder("Enter acquirer display name");
-    private final Locator acquirerMidField = getByLabelExact("Acquirer MID");
-    private final Locator acquirerMidMccField = getByLabelExact("Acquirer MID MCC");
+    private final Locator acquirerDisplayNameField = getByPlaceholder("Enter display name");
+    private final Locator acquirerMidField = getByPlaceholder("Enter MID");
+    private final Locator acquirerMidMccField = getByPlaceholder("Enter MCC");
 
     public AcquirerDialog(Page page) {
         super(page);
