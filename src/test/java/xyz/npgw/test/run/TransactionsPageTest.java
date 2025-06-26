@@ -301,9 +301,9 @@ public class TransactionsPageTest extends BaseTest {
     public void testDownloadFiles(String fileType) {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
-                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .clickDownloadButton();
 
         Allure.step("Verify: that files can be downloaded");
@@ -359,9 +359,9 @@ public class TransactionsPageTest extends BaseTest {
     public void testRequestToServer() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields("01-05-2025", "07-05-2025")
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
-                .getSelectDateRange().setDateRangeFields("01-05-2025", "07-05-2025")
                 .clickCurrencySelector()
                 .selectCurrency("USD")
                 .selectCardType("VISA")
