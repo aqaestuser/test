@@ -20,14 +20,15 @@ import java.util.List;
 import java.util.Random;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static xyz.npgw.test.run.AcquirersPageTest.ACQUIRER;
 
 public class GatewayPageTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
-    private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172"};
+    private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172",
+            "MerchantAcquirer"};
     private final String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
-    Company company = new Company("%s company for 602".formatted(RUN_ID), "first");
-    String merchantTitle = "second";
+    private final Company company = new Company("%s company for 602".formatted(RUN_ID), "first");
 
     @BeforeClass
     @Override
@@ -35,6 +36,7 @@ public class GatewayPageTest extends BaseTest {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.createBusinessUnits(getApiRequestContext(), COMPANY_NAME, expectedBusinessUnitsList);
+        TestUtils.createAcquirer(getApiRequestContext(), ACQUIRER);
     }
 
     @Test
@@ -121,6 +123,8 @@ public class GatewayPageTest extends BaseTest {
     @Feature("Currency")
     @Description("Verify that if company is selected all it's business units are presented in the list")
     public void testCompaniesBusinessUnitsPresence() {
+        String merchantTitle = "second";
+
         GatewayPage gatewayPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -198,11 +202,37 @@ public class GatewayPageTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
+    @Test
+    @TmsLink("806")
+    @Epic("System/Gateway")
+    @Feature("Currency")
+    @Description("Check possibility to select an appropriate acquirer to merchant")
+    public void testSelectAcquirer() {
+        GatewayPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
+                .clickAddMerchantAcquirer()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .clickOnCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        Allure.step("Verify the result of adding Acquirer within Gateway page table");
+        assertThat(page.getMerchantValue()).hasText(expectedBusinessUnitsList[2]);
+        assertThat(page.getAcquirerValue()).hasText(ACQUIRER.acquirerCode());
+        assertThat(page.getAcquirerConfigValue()).hasText(ACQUIRER.acquirerConfig());
+        assertThat(page.getAcquirerStatusValue()).hasText("Active");
+        assertThat(page.getAcquirerCurrencyValue()).hasText("USD, EUR");
+        assertThat(page.getAcquirerPriorityValue()).hasText("0");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER.acquirerName());
         super.afterClass();
     }
 }

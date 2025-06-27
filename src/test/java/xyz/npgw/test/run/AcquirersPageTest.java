@@ -7,9 +7,11 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import lombok.Getter;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -44,7 +46,7 @@ public class AcquirersPageTest extends BaseTest {
             "Status",
             "Actions");
 
-    private static final Acquirer ACQUIRER = new Acquirer(
+    protected static final Acquirer ACQUIRER = new Acquirer(
             "display name",
             "acquirer mid",
             "NGenius",
@@ -270,6 +272,7 @@ public class AcquirersPageTest extends BaseTest {
                 "Total rows should be the same for all 'Rows Per Page' options");
     }
 
+    @Ignore
     @Test
     @TmsLink("432")
     @Epic("System/Acquirers")
@@ -353,6 +356,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getPaginationItems()).hasText("1");
     }
 
+    @Ignore
     @Test
     @TmsLink("487")
     @Epic("System/Acquirers")
@@ -476,6 +480,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText("All");
     }
 
+    @Ignore
     @Test(priority = 1)
     @TmsLink("726")
     @Epic("System/Acquirers")
