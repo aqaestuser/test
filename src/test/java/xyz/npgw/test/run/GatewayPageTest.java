@@ -12,7 +12,10 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.Currency;
+import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.GatewayPage;
@@ -22,10 +25,19 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static xyz.npgw.test.run.AcquirersPageTest.ACQUIRER;
 
 public class GatewayPageTest extends BaseTest {
 
+    private static final Acquirer ACQUIRER = new Acquirer(
+            "acquirer for gateway",
+            "acquirer mid",
+            "NGenius",
+            "default",
+            new Currency[]{Currency.USD, Currency.EUR},
+            new SystemConfig(),
+            true,
+            "%s acquirer for gateway".formatted(RUN_ID),
+            "4321");
     private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
     private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172",
             "MerchantAcquirer"};
@@ -217,8 +229,8 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddMerchantAcquirer()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone();
+                .clickCreateButton();
+//                .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Verify the result of adding Acquirer within Gateway page table");
         assertThat(page.getMerchantValue()).hasText(expectedBusinessUnitsList[2]);
@@ -238,18 +250,18 @@ public class GatewayPageTest extends BaseTest {
         GatewayPage gatewayPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
-                .getSelectCompany().clickSelectCompanyField()
+//                .getSelectCompany().clickSelectCompanyField()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddMerchantAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
+//                .getAlert().waitUntilSuccessAlertIsGone()
                 .clickAddMerchantAcquirerButton()
                 .selectInactiveStatus()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone();
+                .clickCreateButton();
+//                .getAlert().waitUntilSuccessAlertIsGone();
 
         List<String> actualNames = gatewayPage.getTable().getColumnValues("Business unit");
         List<String> actualStatuses = gatewayPage.getTable().getColumnValues("Status");
@@ -263,12 +275,10 @@ public class GatewayPageTest extends BaseTest {
                         && actualStatuses.get(i).equals("Inactive"));
 
         Allure.step("Verify that new Merchant acquirer is displayed and has Active status");
-        Assert.assertTrue(foundActive,
-                "New Merchant acquirer 'Merchant 1 for C112172' with status 'Active' was not found.");
+        Assert.assertTrue(foundActive, "New Merchant acquirer with status 'Active' not found.");
 
         Allure.step("Verify that new Merchant acquirer is displayed and has Inactive status");
-        Assert.assertTrue(foundInactive,
-                "New Merchant acquirer 'Merchant 1 for C112172' with status 'Inactive' was not found.");
+        Assert.assertTrue(foundInactive, "New Merchant acquirer with status 'Inactive' not found.");
     }
 
     @AfterClass

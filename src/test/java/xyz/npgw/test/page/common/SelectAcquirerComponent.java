@@ -70,12 +70,12 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
         selectAcquirerField.fill(acquirerName);
 
         if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Business unit '" + acquirerName + "' not found in dropdown.");
+            throw new NoSuchElementException("Acquirer '" + acquirerName + "' not found in dropdown.");
         }
 
         while (getAcquirerInDropdownOption(acquirerName).all().isEmpty()) {
             if (dropdownOptionList.last().innerText().equals(lastName)) {
-                throw new NoSuchElementException("Business unit '" + acquirerName + "' not found in dropdown.");
+                throw new NoSuchElementException("Acquirer '" + acquirerName + "' not found in dropdown.");
             }
             dropdownOptionList.last().scrollIntoViewIfNeeded();
 

@@ -256,11 +256,13 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         if (hasNoPagination()) {
             return Collections.emptyList();
         }
 
         selectRowsPerPageOption("100");
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         goToFirstPageIfNeeded();
 
         List<T> allValues = new ArrayList<>();

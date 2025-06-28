@@ -30,6 +30,7 @@ import java.util.function.Function;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
@@ -56,15 +57,14 @@ public class TransactionsTableTest extends BaseTest {
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
     }
 
-    @Ignore("enable after BR-227 being done")
     @Test
     @TmsLink("311")
     @Epic("Transactions")
     @Feature("Amount")
     @Description("Filtering transactions by Amount")
     public void testFilterTransactionsByAmount() {
-        int amountFrom = 10;
-        int amountTo = 500;
+        String amountFrom = "10.12";
+        String amountTo = "500.34";
 
         List<String> amountValues = new DashboardPage(getPage())
                 .clickTransactionsLink()
@@ -72,17 +72,19 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .clickAmountButton()
-                .fillAmountFromField(String.valueOf(amountFrom))
-                .fillAmountToField(String.valueOf(amountTo))
+                .fillAmountFromField(amountFrom)
+                .fillAmountToField(amountTo)
                 .clickAmountApplyButton()
                 .getTable().getColumnValues("Amount");
 
         Allure.step("Verify: Amount column has values within the specified amount range");
+        assertFalse(amountValues.isEmpty());
         assertTrue(amountValues.stream()
                 .map(Double::parseDouble)
-                .allMatch(value -> value >= amountFrom && value <= amountTo));
+                .allMatch(value -> value >= Double.parseDouble(amountFrom) && value <= Double.parseDouble(amountTo)));
     }
 
+    @Ignore("TODO refactor this - Function.identity() isn't the proper solution for card type retrieval")
     @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("673")
     @Epic("Transactions")
@@ -204,7 +206,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
     }
 
-    @Ignore
+    @Ignore("BUG - sort by date not working correctly 0.1.2506281212")
     @Test
     @TmsLink("559")
     @Epic("Transactions")
@@ -307,7 +309,6 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getActivePageButton()).hasText("2");
     }
 
-    @Ignore
     @Test
     @TmsLink("350")
     @Epic("Transactions")
@@ -347,7 +348,6 @@ public class TransactionsTableTest extends BaseTest {
         assertEquals(headersListAfterUncheckAllVisibleColumns.get(0), "Actions");
     }
 
-    @Ignore
     @Test
     @TmsLink("358")
     @Epic("Transactions")

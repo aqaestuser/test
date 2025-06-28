@@ -9,6 +9,8 @@ import xyz.npgw.test.page.system.AcquirersPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.GatewayPage;
 
+import java.time.LocalTime;
+
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class MenuComponent extends BaseComponent {
@@ -32,6 +34,9 @@ public class MenuComponent extends BaseComponent {
 
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+        getPage().waitForTimeout(3000);
+
         acquirersTab.click();
         assertThat(acquirersTab).hasAttribute("data-selected", "true");
 //        ResponseUtils.clickAndWaitForText(getPage(),

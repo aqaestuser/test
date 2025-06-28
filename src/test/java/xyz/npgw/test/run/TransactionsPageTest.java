@@ -294,7 +294,6 @@ public class TransactionsPageTest extends BaseTest {
         Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(fileType));
     }
 
-    @Ignore
     @Test
     @TmsLink("503")
     @Epic("Transactions")

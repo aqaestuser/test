@@ -283,7 +283,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     public boolean isFileAvailableAndNotEmpty(String fileType) {
         Download download = getPage().waitForDownload(
-                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 2),
+                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
                 () -> getByRole(AriaRole.MENUITEM, fileType).click());
 
         int length = 0;

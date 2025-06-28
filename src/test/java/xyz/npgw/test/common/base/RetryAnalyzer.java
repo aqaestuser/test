@@ -18,8 +18,8 @@ public final class RetryAnalyzer implements IRetryAnalyzer {
             throw new SkipException("Retry skipped due to failFast option being true");
         }
         if (testResult.getStatus() == ITestResult.FAILURE && retryCount++ <= MAX_RETRY_COUNT) {
-            ProjectProperties.setTracingMode(true);
-            ProjectProperties.setVideoMode(true);
+//            ProjectProperties.setTracingMode(true);
+//            ProjectProperties.setVideoMode(true);
             log.info("Retry {} in debug mode for {} time.", testResult.getName(), retryCount);
             return true;
         }

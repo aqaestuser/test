@@ -13,6 +13,8 @@ import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
+import java.time.LocalTime;
+
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage {
@@ -55,6 +57,7 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     public TeamPage clickSystemAdministrationLink() {
         systemAdministrationButton.click();
 
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         getByRole(AriaRole.GRIDCELL, "No rows to display.")
                 .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
 
