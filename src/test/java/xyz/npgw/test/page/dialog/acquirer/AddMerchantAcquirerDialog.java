@@ -16,6 +16,7 @@ public class AddMerchantAcquirerDialog extends BaseDialog<GatewayPage, AddMercha
 
     private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
+    private final Locator inactiveStatusRadioButton = locator("(//input[@value='INACTIVE'])[1]");
     private final SelectAcquirerComponent<AddMerchantAcquirerDialog> selectAcquirerComponent;
 
     public AddMerchantAcquirerDialog(Page page) {
@@ -28,9 +29,15 @@ public class AddMerchantAcquirerDialog extends BaseDialog<GatewayPage, AddMercha
         return new GatewayPage(getPage());
     }
 
-    public GatewayPage clickOnCreateButton() {
+    public GatewayPage clickCreateButton() {
         createButton.click();
 
         return new GatewayPage(getPage());
+    }
+
+    public AddMerchantAcquirerDialog selectInactiveStatus() {
+        inactiveStatusRadioButton.click();
+
+        return this;
     }
 }
