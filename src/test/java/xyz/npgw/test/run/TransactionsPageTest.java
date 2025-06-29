@@ -740,6 +740,45 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionDetails.getCardTypeValue()).hasText(cardType);
     }
 
+    @Test
+    @TmsLink("828")
+    @Epic("Transactions")
+    @Feature("Transaction details")
+    @Description("Check that the 'Pending' occurs at most once in the Payment lifecycle section")
+    public void testPendingOccursAtMostOnceInLifecycle() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getTable().selectRowsPerPageOption("50");
+
+        int numberOfTransactions = transactionsPage.getTable().getNumberOfTransactionOnCurrentPage();
+
+        for (int i = 0; i < numberOfTransactions; i++) {
+            TransactionDetailsDialog transactionDetails = transactionsPage
+                    .getTable().clickOnTransaction(i);
+
+            String statusInHeader = transactionDetails.getStatusValue().innerText();
+            String lastTypeInLifecycle = transactionDetails.getLastPaymentLifecycleType().innerText();
+
+            Allure.step("Verify: Statuses in the dialog header and lifecycle are the same");
+            assertEquals(statusInHeader, lastTypeInLifecycle, "Statuses should match!");
+
+            Allure.step("Verify: The Payment lifecycle begins with 'INITIATED'");
+            assertThat(transactionDetails.getFirstPaymentLifecycleType()).hasText("INITIATED");
+
+            Allure.step("Verify: The 'INITIATED' occurs exactly once in the lifecycle");
+            assertThat(transactionDetails.getPaymentLifecycleType("INITIATED")).hasCount(1);
+
+            Allure.step("Verify: the 'PENDING' occurs at most once");
+            assertTrue(transactionDetails.countPaymentLifecycleType("PENDING") <= 1, String.format(
+                    "The 'PENDING' occurs several times in the transaction details (#%d on the page)", i + 1));
+
+            transactionDetails.clickCloseIcon();
+        }
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

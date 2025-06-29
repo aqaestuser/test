@@ -1,5 +1,6 @@
 package xyz.npgw.test.page.common.table;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
@@ -17,16 +18,29 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         super(page);
     }
 
+    private final Locator npgwReference = getRows().getByRole(AriaRole.LINK);
+
     @Override
     protected TransactionsPage getCurrentPage() {
         return new TransactionsPage(getPage());
     }
 
-    @Step("Click on transaction in column 'NPGW reference'")
+    @Step("Click on the first transaction from the table")
     public TransactionDetailsDialog clickOnFirstTransaction() {
         getFirstRowCell("NPGW Reference").click();
 
         return new TransactionDetailsDialog(getPage());
+    }
+
+    @Step("Click on the transaction NPGW Reference")
+    public TransactionDetailsDialog clickOnTransaction(int index) {
+        npgwReference.nth(index).click();
+
+        return new TransactionDetailsDialog(getPage());
+    }
+
+    public int getNumberOfTransactionOnCurrentPage() {
+        return npgwReference.count();
     }
 
     public List<LocalDateTime> getAllCreationDates() {
