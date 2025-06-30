@@ -419,4 +419,38 @@ public class TransactionsTableTest extends BaseTest {
         Allure.step("Verify mock transaction is displayed");
         assertThat(transactionsPage.getTable().getFirstRowCell("NPGW Reference")).hasText("12345");
     }
+
+    @Test
+    @TmsLink("818")
+    @Epic("Transactions")
+    @Feature("Actions")
+    @Description("Refund button is visible only for transactions with status 'SUCCESS'")
+    public void testRefundButtonVisibility() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        List<String> statuses = transactionsPage
+                .getTable().getAllTransactionsStatusList();
+
+        List<Boolean> refundVisible = transactionsPage
+                .getTable().getRefundButtonVisibilityFromAllPages();
+
+        assertFalse(statuses.isEmpty(), "Statuses list should not be empty");
+
+        for (int i = 0; i < statuses.size(); i++) {
+            String status = statuses.get(i).trim();
+            boolean isVisible = refundVisible.get(i);
+
+            if ("SUCCESS".equals(status)) {
+                Allure.step("Verify: refund button is visible at row " + i + " with status: " + status);
+                assertTrue(isVisible);
+            } else {
+                Allure.step("Verify: refund button is NOT visible at row " + i + " with status: " + status);
+                assertFalse(isVisible);
+            }
+        }
+    }
 }
