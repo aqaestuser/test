@@ -7,22 +7,25 @@ import io.qameta.allure.Step;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
 
     private final Locator refundTransactionButton = getByTestId("RefundTransactionButton");
 
+    private final Locator npgwReference = getRows().getByRole(AriaRole.LINK);
+
     public TransactionsTableComponent(Page page) {
         super(page);
     }
-
-    private final Locator npgwReference = getRows().getByRole(AriaRole.LINK);
 
     @Override
     protected TransactionsPage getCurrentPage() {
@@ -93,6 +96,29 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         } while (goToNextPage());
 
         return results;
+    }
+
+
+    public List<String> getCardTypeColumnValues() {
+        Locator imgs = getRows()
+                .locator(columnSelector("Card type"))
+                .locator("img[alt='logo']");
+
+        return IntStream.range(0, imgs.count())
+                .mapToObj(i -> detectCardName(imgs.nth(i).getAttribute("src")))
+                .toList();
+    }
+
+    private String detectCardName(String src) {
+        String decodedSrc = URLDecoder.decode(src, StandardCharsets.UTF_8);
+
+        return decodedSrc.contains("fill:#224DBA") ? "VISA"
+                : decodedSrc.contains("fill:#EB001B") ? "MASTERCARD"
+                : "UNKNOWN";
+    }
+
+    public List<String> getCardTypeColumnValuesAllPages() {
+        return collectAllPages(this::getCardTypeColumnValues);
     }
 
 }

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 @Log4j2
@@ -243,7 +244,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return ((Number) getColumnHeader(name).evaluate("el => el.cellIndex")).intValue();
     }
 
-    private String columnSelector(String columnHeader) {
+    protected String columnSelector(String columnHeader) {
         return "td:nth-child(" + (getColumnHeaderIndex(columnHeader) + 1) + ")";
     }
 
@@ -256,6 +257,15 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {
+        return collectAllPages(() ->
+                getColumnValues(columnName).stream()
+                        .map(String::trim)
+                        .map(parser)
+                        .toList()
+        );
+    }
+
+    protected <T> List<T> collectAllPages(Supplier<List<T>> currentPageExtractor) {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         if (hasNoPagination()) {
             return Collections.emptyList();
@@ -267,11 +277,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
         List<T> allValues = new ArrayList<>();
         do {
-            List<T> pageValues = getColumnValues(columnName).stream()
-                    .map(String::trim)
-                    .map(parser)
-                    .toList();
-            allValues.addAll(pageValues);
+            allValues.addAll(currentPageExtractor.get());
         } while (goToNextPage());
 
         return allValues;

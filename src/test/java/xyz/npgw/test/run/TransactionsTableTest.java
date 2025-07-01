@@ -84,7 +84,6 @@ public class TransactionsTableTest extends BaseTest {
                 .allMatch(value -> value >= Double.parseDouble(amountFrom) && value <= Double.parseDouble(amountTo)));
     }
 
-    @Ignore("TODO refactor this - Function.identity() isn't the proper solution for card type retrieval")
     @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("673")
     @Epic("Transactions")
@@ -100,7 +99,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getNoRowsToDisplayMessage()).isHidden();
 
         List<String> cardTypeList = transactionsPage.selectCardType(cardType)
-                .getTable().getColumnValuesFromAllPages("Card type", Function.identity());
+                .getTable().getCardTypeColumnValuesAllPages();
 
         Allure.step("Verify: all entries in the 'Card type' column match the selected filter");
         assertTrue(cardTypeList.stream().allMatch(value -> value.equals(cardType)));
