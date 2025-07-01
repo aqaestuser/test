@@ -782,6 +782,23 @@ public class TransactionsPageTest extends BaseTest {
         }
     }
 
+    @Test
+    @TmsLink("851")
+    @Epic("Transactions")
+    @Feature("Transactions Search")
+    @Description("Verify that 'NPGW reference' and 'Merchant reference' fields appear when clicking on 'Trx IDs'.")
+    public void testSearchOptionsVisibleAfterClickingTrxIds() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .clickSearchTrxIdsButton();
+
+        Allure.step("Verify: 'NPGW reference' is visible ");
+        assertThat(transactionsPage.getNpgwReference()).isVisible();
+
+        Allure.step("Verify: 'Merchant reference' is visible ");
+        assertThat(transactionsPage.getMerchantReference()).isVisible();
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

@@ -35,6 +35,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator cardTypeValue = getByRole(AriaRole.BUTTON, "Card type");
     private final Locator searchTrxIds = getByRole(AriaRole.BUTTON, "Trx IDs");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
+    private final Locator npgwReference = getByLabelExact("NPGW reference");
+    private final Locator merchantReference = getByLabelExact("Merchant reference");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
@@ -300,6 +302,13 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     public TransactionsPage clickResetFilterButton() {
         resetFilterButton.click();
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+
+        return this;
+    }
+
+    @Step("Click Search 'Trx IDs' button")
+    public TransactionsPage clickSearchTrxIdsButton() {
+        searchTrxIds.click();
 
         return this;
     }
