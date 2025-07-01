@@ -44,10 +44,23 @@ jobs:
             baseURL=${{ secrets.BASE_URL }};
             email=${{ secrets.USER_EMAIL }};
             password=${{ secrets.USER_PASSWORD }};
-            browserType=chromium;
+            browserType=CHROMIUM;
             headlessMode=true;
+            slowMoMode=0;
+            viewportWidth=1920;
+            viewportHeight=964;
             tracingMode=true;
-            videoMode=true
+            videoMode=true;
+            videoWidth=1920;
+            videoHeight=957;
+            closeBrowserIfError=true;
+            artefactDir=target/artefact;
+            defaultTimeout=5000;
+            failFast=false;
+            skipMode=false;
+            additionalRetries=0;
+            colorScheme=DARK;
+            DEBUG='';
           CI_RUN: true
 
       - name: Create test report

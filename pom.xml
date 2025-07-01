@@ -62,7 +62,7 @@
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
                     </argLine>
                     <suiteXmlFiles>
-                        <suiteXmlFile>config/testng.xml</suiteXmlFile>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
                 <dependencies>
@@ -133,13 +133,6 @@
                                     <fileSets>
                                         <fileSet>
                                             <directory>${project.build.directory}/../src/test/resources</directory>
-                                            <outputDirectory>/</outputDirectory>
-                                            <includes>
-                                                <include>**</include>
-                                            </includes>
-                                        </fileSet>
-                                        <fileSet>
-                                            <directory>${project.build.directory}/../config</directory>
                                             <outputDirectory>/</outputDirectory>
                                             <includes>
                                                 <include>**</include>

@@ -9,7 +9,7 @@ import java.util.List;
 public class Run {
 
     public static void main(String[] args) {
-        String suiteXml = System.getProperty("testng.suiteXml", "config/testng.xml");
+        String suiteXml = System.getProperty("testng.suiteXml", "testng.xml");
 
         TestNG testng = new TestNG();
         testng.setTestSuites(List.of(suiteXml));
