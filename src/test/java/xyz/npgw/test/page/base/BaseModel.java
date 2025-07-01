@@ -4,11 +4,9 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 import java.time.LocalTime;
 
-@Log4j2
 @Getter
 public abstract class BaseModel {
 

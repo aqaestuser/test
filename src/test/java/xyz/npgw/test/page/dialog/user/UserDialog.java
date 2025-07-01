@@ -14,9 +14,6 @@ import java.util.Arrays;
 public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialogT>>
         extends BaseDialog<TeamPage, CurrentDialogT> {
 
-    private final Locator activeRadioButton = getByRoleExact(AriaRole.RADIO, "Active");
-    private final Locator inactiveRadioButton = getByRoleExact(AriaRole.RADIO, "Inactive");
-    private final Locator allowedBusinessUnitsTitle = getByTextExact("Allowed business units");
     @Getter
     private final Locator companyNameField = getByTextExact("Company name");
 
@@ -27,17 +24,6 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Override
     protected TeamPage getReturnPage() {
         return new TeamPage(getPage());
-    }
-
-    @Step("Set user status to {isActive}")
-    public CurrentDialogT setStatusRadiobutton(boolean isActive) {
-        if (isActive) {
-            activeRadioButton.check();
-        } else {
-            inactiveRadioButton.check();
-        }
-
-        return (CurrentDialogT) this;
     }
 
     @Step("Check 'Active' status radiobutton")
@@ -53,13 +39,6 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
 
         return (CurrentDialogT) this;
     }
-
-//    @Step("Set 'User role' radiobutton checked for '{userRole}'")
-//    public CurrentDialogT setUserRoleRadiobutton(UserRole userRole) {
-//        getByRoleExact(AriaRole.RADIO, userRole.getName()).check();
-//
-//        return (CurrentDialogT) this;
-//    }
 
     @Step("Check 'System admin' user role radiobutton")
     public CurrentDialogT checkSystemAdminRadiobutton() {
@@ -91,7 +70,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
 
     @Step("Set checked all '{businessUnit}' checkboxes")
     public CurrentDialogT setAllowedBusinessUnit(String businessUnit) {
-        allowedBusinessUnitsTitle.waitFor();
+        getByTextExact("Allowed business units").waitFor();
         getByRole(AriaRole.CHECKBOX, businessUnit).all()
                 .forEach(item -> {
                     item.waitFor();

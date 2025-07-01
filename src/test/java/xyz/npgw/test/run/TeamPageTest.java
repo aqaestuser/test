@@ -98,7 +98,8 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
 
         teamPage
-                .clickRefreshDataButton();
+                .getAlert().clickCloseButton()
+                .waitForUserAbsence(getApiRequestContext(), systemAdminEmail, "super");
 
         Allure.step("Verify: deleted system admin is no longer present in the users table");
         assertFalse(teamPage.getTable().isUserPresentInTable(systemAdminEmail));
@@ -141,7 +142,8 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
 
         teamPage
-                .clickRefreshDataButton();
+                .getAlert().clickCloseButton()
+                .waitForUserAbsence(getApiRequestContext(), companyAdminEmail, getCompanyName());
 
         Allure.step("Verify: deleted company admin is no longer present in the users table");
         assertFalse(teamPage.getTable().isUserPresentInTable(companyAdminEmail));
@@ -180,7 +182,8 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
         teamPage
-                .waitForUser(getApiRequestContext(), companyAnalystEmail, getCompanyName());
+                .getAlert().clickCloseButton()
+                .waitForUserPresence(getApiRequestContext(), companyAnalystEmail, getCompanyName());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(getCompanyName());
@@ -210,8 +213,12 @@ public class TeamPageTest extends BaseTest {
         Allure.step("Verify: success alert appears after deleting the company analyst");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
 
-//        Allure.step("Verify: deleted company analyst is no longer present in the users table");
-//        assertFalse(teamPage.getTable().isUserPresentInTable(companyAnalystEmail));
+        teamPage
+                .getAlert().clickCloseButton()
+                .waitForUserAbsence(getApiRequestContext(), companyAnalystEmail, getCompanyName());
+
+        Allure.step("Verify: deleted company analyst is no longer present in the users table");
+        assertFalse(teamPage.getTable().isUserPresentInTable(companyAnalystEmail));
     }
 
     @Test
@@ -231,8 +238,8 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAnalystRadiobutton()
                 .setAllowedBusinessUnit(MERCHANT_TITLE)
                 .clickCreateButton()
-                .waitForUser(getApiRequestContext(), email, getCompanyName())
-                .clickEditUserButton(email);
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
+                .getTable().clickEditUserIcon(email);
 
         Allure.step("Verify: 'Edit user' header is displayed");
         assertThat(editUserDialog.getDialogHeader()).hasText("Edit user");
@@ -244,13 +251,17 @@ public class TeamPageTest extends BaseTest {
         assertThat(editUserDialog.getCompanyNameField()).isDisabled();
 
         TeamPage teamPage = editUserDialog
-                .setStatusRadiobutton(false)
+                .checkInactiveRadiobutton()
                 .unsetAllowedBusinessUnits(new String[]{MERCHANT_TITLE})
                 .checkCompanyAdminRadiobutton()
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success alert appears after user update");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
+
+        teamPage
+                .getAlert().clickCloseButton()
+                .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(getCompanyName());
@@ -302,9 +313,10 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAnalystRadiobutton()
                 .setAllowedBusinessUnit(MERCHANT_TITLE)
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton()
-                .getTable().deactivateUser(email);
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
+                .getTable().clickDeactivateUserIcon(email)
+                .clickDeactivateButton()
+                .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
 
         Allure.step("Verify: selected company is displayed in the 'Select company' field");
         assertThat(teamPage.getSelectCompany().getSelectCompanyField()).hasValue(getCompanyName());
@@ -331,14 +343,16 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton()
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickEditUserIcon(email)
                 .checkInactiveRadiobutton()
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_UPDATED);
+
+        teamPage
+                .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
@@ -359,15 +373,16 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .waitForUser(getApiRequestContext(), email, getCompanyName())
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickDeactivateUserIcon(email)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
 
-//        teamPage
-//                .getAlert().clickCloseButton();
+        teamPage
+                .getAlert().clickCloseButton()
+                .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
@@ -383,7 +398,8 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was activated successfully");
 
         teamPage
-                .getAlert().clickCloseButton();
+                .getAlert().clickCloseButton()
+                .waitForUserActivation(getApiRequestContext(), email, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Active");
@@ -407,7 +423,7 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .waitForUser(getApiRequestContext(), email, getCompanyName())
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickResetUserPasswordIcon(email)
                 .fillPasswordField("NewPassword1!")
                 .clickResetButton();
@@ -448,7 +464,8 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
 
         teamPage
-                .waitForUser(getApiRequestContext(), analystEmail, getCompanyName());
+                .getAlert().clickCloseButton()
+                .waitForUserPresence(getApiRequestContext(), analystEmail, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(analystEmail, "User role")).hasText("USER");
@@ -465,6 +482,10 @@ public class TeamPageTest extends BaseTest {
 
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deactivated successfully");
+
+        teamPage
+                .getAlert().clickCloseButton()
+                .waitForUserDeactivation(getApiRequestContext(), analystEmail, getCompanyName());
 
         Allure.step("Verify: status of the user was changed");
         assertThat(teamPage.getTable().getCell(analystEmail, "Status")).hasText("Inactive");
@@ -514,15 +535,18 @@ public class TeamPageTest extends BaseTest {
                 .fillPasswordField("Password1!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .clickRefreshDataButton()
-                .getTable().deactivateUser(email)
+                .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
+                .getTable().clickDeactivateUserIcon(email)
+                .clickDeactivateButton()
+                .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName())
                 .getSelectStatus().select("Active");
 
         Allure.step("Verify: All visible users are 'Active' after applying 'Active' filter");
         assertTrue(teamPage.getTable().getColumnValues(statusColumnName)
                 .stream().allMatch(value -> value.equals("Active")));
 
-        teamPage.getSelectStatus().select("Inactive");
+        teamPage
+                .getSelectStatus().select("Inactive");
 
         Allure.step("Verify: All visible users are 'Inactive' after applying Inactive filter");
         assertTrue(teamPage.getTable().getColumnValues(statusColumnName)
@@ -585,7 +609,9 @@ public class TeamPageTest extends BaseTest {
                 .checkActiveRadiobutton()
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .waitForUser(getApiRequestContext(), companyAdmin, getCompanyName())
+                .getAlert().clickCloseButton()
+                .getAlert().waitUntilAlertIsHidden()
+                .waitForUserPresence(getApiRequestContext(), companyAdmin, getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")

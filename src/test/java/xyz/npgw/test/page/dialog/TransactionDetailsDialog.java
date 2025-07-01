@@ -10,8 +10,6 @@ import xyz.npgw.test.page.TransactionsPage;
 @Getter
 public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, TransactionDetailsDialog> {
 
-//    private final Locator transactionDialogHeader = getDialogHeader().locator("div:first-child");
-
     private static final String CARD_DETAILS_SECTION = "Card details";
     private static final String CUSTOMER_DETAILS_SECTION = "Customer details";
 

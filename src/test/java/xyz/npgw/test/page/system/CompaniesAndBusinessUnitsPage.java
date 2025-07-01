@@ -3,7 +3,6 @@ package xyz.npgw.test.page.system;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.common.trait.AlertTrait;
@@ -22,7 +21,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
         AlertTrait<CompaniesAndBusinessUnitsPage>,
         BusinessUnitsTableTrait {
 
-    private final Locator addCompanyButton = locator("button[data-testid='AddCompanyButton']");
+    private final Locator addCompanyButton = getByTestId("AddCompanyButton");
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");
     private final Locator addCompanyDialog = getByRole(AriaRole.DIALOG);
@@ -58,7 +57,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Add company' button")
     public AddCompanyDialog clickAddCompanyButton() {
-        addCompanyButton.waitFor();
         addCompanyButton.click();
 
         return new AddCompanyDialog(getPage());
@@ -66,10 +64,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Add business unit' button (+)")
     public AddBusinessUnitDialog clickOnAddBusinessUnitButton() {
-        addBusinessUnitButton.waitFor(new Locator.WaitForOptions()
-                .setState(WaitForSelectorState.ATTACHED));
-        getPage().waitForCondition(addBusinessUnitButton::isEnabled);
-
         addBusinessUnitButton.click();
 
         return new AddBusinessUnitDialog(getPage());
@@ -77,8 +71,6 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Edit company' button")
     public EditCompanyDialog clickEditCompanyButton() {
-//        getPage().getByText("Loading").waitFor();
-//        getPage().getByText("Loading").waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
         editCompanyButton.click();
 
         return new EditCompanyDialog(getPage());

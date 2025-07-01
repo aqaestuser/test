@@ -5,11 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
+import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
 public class AlertComponent<CurrentPageT> extends BaseComponent {
 
     private final Locator alertMessage = locator("[role='alert']");
+    @Getter
     private final Locator successMessage = getByRole(AriaRole.ALERT, "SUCCESS");
 
     private final CurrentPageT currentPage;
@@ -21,6 +23,12 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
 
     public CurrentPageT waitUntilAlertIsHidden() {
         alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
+
+        return currentPage;
+    }
+
+    public CurrentPageT waitUntilAlertIsDetached() {
+        alertMessage.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.DETACHED));
 
         return currentPage;
     }

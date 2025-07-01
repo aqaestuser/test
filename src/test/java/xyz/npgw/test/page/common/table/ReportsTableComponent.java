@@ -7,6 +7,7 @@ import io.qameta.allure.Step;
 import xyz.npgw.test.page.ReportsPage;
 
 public class ReportsTableComponent extends BaseTableComponent<ReportsPage> {
+
     public ReportsTableComponent(Page page) {
         super(page);
     }

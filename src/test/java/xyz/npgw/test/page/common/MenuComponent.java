@@ -3,6 +3,7 @@ package xyz.npgw.test.page.common;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.system.AcquirersPage;
@@ -27,20 +28,16 @@ public class MenuComponent extends BaseComponent {
     public CompaniesAndBusinessUnitsPage clickCompaniesAndBusinessUnitsTab() {
         companiesAndBusinessUnitsTab.click();
         assertThat(companiesAndBusinessUnitsTab).hasAttribute("data-selected", "true");
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
+        getPage().waitForLoadState(LoadState.NETWORKIDLE);
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-        getPage().waitForTimeout(3000);
-
         acquirersTab.click();
         assertThat(acquirersTab).hasAttribute("data-selected", "true");
-//        ResponseUtils.clickAndWaitForText(getPage(),
-//                getByRole(AriaRole.TAB, "Acquirers"), "Acquirer name");
 
         return new AcquirersPage(getPage());
     }
@@ -49,8 +46,6 @@ public class MenuComponent extends BaseComponent {
     public GatewayPage clickGatewayTab() {
         gatewayTab.click();
         assertThat(gatewayTab).hasAttribute("data-selected", "true");
-//        ResponseUtils.clickAndWaitForText(getPage(),
-//                getByRole(AriaRole.TAB, "Gateway"), "Priority");
 
         return new GatewayPage(getPage());
     }

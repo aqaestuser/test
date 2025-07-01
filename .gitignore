@@ -39,6 +39,7 @@ build/
 access.properties
 browser.properties
 /.allure/
+/test-output/
 *.puml
 .env
 .properties

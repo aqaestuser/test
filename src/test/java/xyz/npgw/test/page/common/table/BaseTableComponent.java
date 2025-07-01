@@ -39,6 +39,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     public BaseTableComponent(Page page) {
         super(page);
+        getByRole(AriaRole.GRIDCELL, "No rows to display.")
+                .or(locator("tr[data-first='true']")).waitFor();
     }
 
     protected abstract CurrentPageT getCurrentPage();

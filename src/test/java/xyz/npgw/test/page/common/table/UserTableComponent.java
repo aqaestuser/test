@@ -30,21 +30,21 @@ public class UserTableComponent extends BaseTableComponent<TeamPage> {
         return new EditUserDialog(getPage());
     }
 
-    @Step("Click 'Deactivate user' button")
+    @Step("Click 'Deactivate user' icon")
     public ChangeUserActivityDialog clickDeactivateUserIcon(String email) {
         getRow(email).locator("//*[@data-icon='ban']/..").click();
 
         return new ChangeUserActivityDialog(getPage());
     }
 
-    @Step("Click 'Activate user' button")
+    @Step("Click 'Activate user' icon")
     public ChangeUserActivityDialog clickActivateUserIcon(String email) {
         getRow(email).locator("//*[@data-icon='check']/..").click();
 
         return new ChangeUserActivityDialog(getPage());
     }
 
-    @Step("Click 'Reset user password' button")
+    @Step("Click 'Reset user password' icon")
     public ResetUserPasswordDialog clickResetUserPasswordIcon(String email) {
         getRow(email).getByTestId("ResetUserPasswordButton").click();
 
@@ -53,14 +53,6 @@ public class UserTableComponent extends BaseTableComponent<TeamPage> {
 
     public Locator getUserActivityIcon(String email) {
         return getRow(email).getByTestId("ChangeUserActivityButton").locator("svg");
-    }
-
-    @Step("Deactivate user")
-    public TeamPage deactivateUser(String email) {
-        return clickDeactivateUserIcon(email)
-                .clickDeactivateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickRefreshDataButton();
     }
 
     @Step("Click 'Delete user' button")

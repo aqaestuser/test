@@ -17,7 +17,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.testng.ITestResult;
-import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
@@ -107,10 +106,6 @@ public abstract class BaseTest {
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
         log.info(">>> {}", testId);
-
-        if (ProjectProperties.isSkipMode() && ProjectProperties.isFailFast()) {
-            throw new SkipException("Test skipped due to failFast option being true");
-        }
 
         Browser.NewContextOptions options = new Browser
                 .NewContextOptions()
@@ -216,15 +211,6 @@ public abstract class BaseTest {
                 }
             }
             context.close();
-        }
-
-        if (testResult.getStatus() == ITestResult.FAILURE) {
-//            ProjectProperties.setTracingMode(false);
-//            ProjectProperties.setVideoMode(false);
-
-            if (ProjectProperties.isFailFast()) {
-                ProjectProperties.setSkipMode(true);
-            }
         }
     }
 

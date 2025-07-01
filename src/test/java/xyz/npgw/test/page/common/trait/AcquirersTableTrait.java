@@ -8,5 +8,4 @@ public interface AcquirersTableTrait extends BaseTrait {
     default AcquirersTableComponent getTable() {
         return new AcquirersTableComponent(getPage());
     }
-
 }

@@ -14,6 +14,7 @@ import java.time.LocalTime;
 
 @Getter
 public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends BaseComponent {
+
     @Getter(AccessLevel.NONE)
     private final CurrentPageT currentPage;
     private final Locator statusSelector = getByLabelExact("Status");
@@ -35,12 +36,6 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
         return currentPage;
     }
 
-    public CurrentPageT waitUntilDropdownGone() {
-        statusDropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-
-        return currentPage;
-    }
-
     @Step("Click 'Status' Selector")
     public CurrentPageT clickSelector() {
         statusValue.click();
@@ -52,8 +47,6 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
     public CurrentPageT select(String value) {
         clickSelector();
         clickValue(value);
-        waitUntilDropdownGone();
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
     }

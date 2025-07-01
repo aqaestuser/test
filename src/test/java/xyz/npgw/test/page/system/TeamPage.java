@@ -13,9 +13,7 @@ import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.UserTableTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
-import xyz.npgw.test.page.dialog.user.EditUserDialog;
 
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
@@ -37,20 +35,9 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
         return new AddUserDialog(getPage());
     }
 
-    @Step("Click 'Edit user' button")
-    public EditUserDialog clickEditUserButton(String username) {
-//        Locator editButton = getTable().getRow(username).getByTestId("EditUserButton");
-//        editButton.waitFor();
-        getTable().getRow(username).getByTestId("EditUserButton").click();
-
-        return new EditUserDialog(getPage());
-    }
-
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         getByTestId("ApplyFilterButtonTeamPage").click();
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return this;
     }
@@ -63,18 +50,68 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     }
 
     @SneakyThrows
-    public TeamPage waitForUser(APIRequestContext request, String email, String companyName) {
-        int timeout = (int) ProjectProperties.getDefaultTimeout();
+    public TeamPage waitForUserPresence(APIRequestContext request, String email, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {
-                throw new TimeoutError("Timeout %dms exceeded waiting for user %s presence".formatted(timeout, email));
+                throw new TimeoutError("Waiting for user '%s' presence".formatted(email));
             }
         }
-
+        log.info("Presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
 
-        return new TeamPage(getPage());
+        return this;
+    }
+
+    @SneakyThrows
+    public TeamPage waitForUserAbsence(APIRequestContext request, String email, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(User.getAll(request, companyName)).anyMatch(user -> user.email().equals(email))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for user '%s' absence".formatted(email));
+            }
+        }
+        log.info("Absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        clickRefreshDataButton();
+
+        return this;
+    }
+
+    @SneakyThrows
+    public TeamPage waitForUserActivation(APIRequestContext request, String email, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(User.getAll(request, companyName))
+                .noneMatch(user -> user.email().equals(email) && user.enabled())) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for user '%s' activation".formatted(email));
+            }
+        }
+        log.info("Activation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        clickRefreshDataButton();
+
+        return this;
+    }
+
+    @SneakyThrows
+    public TeamPage waitForUserDeactivation(APIRequestContext request, String email, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(User.getAll(request, companyName))
+                .noneMatch(user -> user.email().equals(email) && !user.enabled())) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for user '%s' deactivation".formatted(email));
+            }
+        }
+        log.info("Deactivation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        clickRefreshDataButton();
+
+        return this;
     }
 }

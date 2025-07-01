@@ -88,7 +88,7 @@ public class AddCompanyDialogTest extends BaseTest {
                 .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButtonAndTriggerError();
 
-        Allure.step("Verify: error message for invalid company name: '{name}' is displayed");
+        Allure.step("Verify: error message for invalid company name is displayed");
         assertThat(addCompanyDialog.getAlert().getMessage()).containsText(
                 "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
