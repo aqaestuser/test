@@ -33,10 +33,20 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator currencySelector = getByLabelExact("Currency");
     private final Locator cardTypeSelector = getByLabelExact("Card type");
     private final Locator cardTypeValue = getByRole(AriaRole.BUTTON, "Card type");
-    private final Locator searchTrxIds = getByRole(AriaRole.BUTTON, "Trx IDs");
+
+    private final Locator searchTrxIdsButton = getByRole(AriaRole.BUTTON, "Trx IDs");
+    private final Locator trxIdAppliedButton =
+            locator("button").filter(new Locator.FilterOptions().setHasText("Trx Id"));
+    private final Locator trxIdPencil = getByRole(AriaRole.BUTTON, "Trx Id").locator("svg[data-icon='pencil']");
+    private final Locator trxIdClearIcon = getByRoleExact(AriaRole.BUTTON, "close chip");
+
+    private final Locator npgwReferenceField = getByLabelExact("NPGW reference");
+    private final Locator npgwReferenceFieldClearIcon = getByRole(AriaRole.BUTTON, "clear input").first();
+
+    private final Locator merchantReferenceField = getByLabelExact("Merchant reference");
+    private final Locator merchantReferenceClear = getByRole(AriaRole.BUTTON, "clear input").last();
+
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
-    private final Locator npgwReference = getByLabelExact("NPGW reference");
-    private final Locator merchantReference = getByLabelExact("Merchant reference");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator settingsButton = getByTestId("SettingsButtonTransactionsPage");
     private final Locator downloadButton = getByTestId("ExportToFileuttonTransactionsPage");
@@ -308,7 +318,41 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Click Search 'Trx IDs' button")
     public TransactionsPage clickSearchTrxIdsButton() {
-        searchTrxIds.click();
+        searchTrxIdsButton.click();
+
+        return this;
+    }
+
+    @Step("Fill '{value}' into 'NPGW reference' field")
+    public TransactionsPage fillNpgwReference(String value) {
+        npgwReferenceField.fill(value);
+        return this;
+    }
+
+    @Step("Click 'Trx Id' button")
+    public TransactionsPage clickTrxIdAppliedButton() {
+        trxIdAppliedButton.click();
+
+        return this;
+    }
+
+    @Step("Click TrxId Clear Icon")
+    public TransactionsPage clickTrxIdClearIcon() {
+        trxIdClearIcon.click();
+
+        return this;
+    }
+
+    @Step("Click TrxId Pencil Icon")
+    public TransactionsPage clickTrxIdPencilIcon() {
+        trxIdPencil.click();
+
+        return this;
+    }
+
+    @Step("Click 'Npgw Reference' Clear Icon")
+    public TransactionsPage clickNpgwReferenceClearIcon() {
+        npgwReferenceFieldClearIcon.click();
 
         return this;
     }

@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -21,6 +22,7 @@ import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
 
 import java.util.List;
+import java.util.Random;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -87,7 +89,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusSelector()).isVisible();
 
         Allure.step("Verify: Search 'Trx Ids'  is visible");
-        assertThat(transactionsPage.getSearchTrxIds()).isVisible();
+        assertThat(transactionsPage.getSearchTrxIdsButton()).isVisible();
 
         Allure.step("Verify: Amount button is visible");
         assertThat(transactionsPage.getAmountButton()).isVisible();
@@ -793,10 +795,61 @@ public class TransactionsPageTest extends BaseTest {
                 .clickSearchTrxIdsButton();
 
         Allure.step("Verify: 'NPGW reference' is visible ");
-        assertThat(transactionsPage.getNpgwReference()).isVisible();
+        assertThat(transactionsPage.getNpgwReferenceField()).isVisible();
 
         Allure.step("Verify: 'Merchant reference' is visible ");
-        assertThat(transactionsPage.getMerchantReference()).isVisible();
+        assertThat(transactionsPage.getMerchantReferenceField()).isVisible();
+    }
+
+    @Test
+    @TmsLink("853")
+    @Epic("Transactions")
+    @Feature("Transactions Search")
+    @Description("Verify that 'NPGW reference' and 'Merchant reference' fields appear when clicking on 'Trx IDs'.")
+    public void testTransactionSearchByNpgwReference() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        List<Locator> npgwReference = transactionsPage.getTable().getColumnCells("NPGW Reference");
+
+        int index1 = new Random().nextInt(npgwReference.size());
+        int index2;
+        do {
+            index2 = new Random().nextInt(npgwReference.size());
+        } while (index2 == index1);
+
+        String npgwReferenceText1 = npgwReference.get(index1).innerText();
+        String npgwReferenceText2 = npgwReference.get(index2).innerText();
+
+        Locator filteredRows1 = transactionsPage
+                .clickSearchTrxIdsButton()
+                .fillNpgwReference(npgwReferenceText1)
+                .clickTrxIdAppliedButton()
+                .getTable().getRows();
+
+        Allure.step("Verify: Table has only one row with the N1 NPGW reference");
+        assertThat(filteredRows1).hasCount(1);
+        assertThat(filteredRows1).containsText(npgwReferenceText1);
+
+        Locator filteredRows2 = transactionsPage
+                .clickTrxIdPencilIcon()
+                .clickNpgwReferenceClearIcon()
+                .fillNpgwReference(npgwReferenceText2)
+                .clickTrxIdAppliedButton()
+                .getTable().getRows();
+
+        Allure.step("Verify: Table has only one row with the N2 NPGW reference");
+        assertThat(filteredRows2).hasCount(1);
+        assertThat(filteredRows2).containsText(npgwReferenceText2);
+
+        Locator tableTransactionNotFiltered = transactionsPage
+                .clickTrxIdClearIcon()
+                .getTable().getRows();
+
+        Allure.step("Verify: Table contains more than one row");
+        assertTrue(tableTransactionNotFiltered.count() > 1, "Expected more than one transaction row");
     }
 
     @AfterClass
