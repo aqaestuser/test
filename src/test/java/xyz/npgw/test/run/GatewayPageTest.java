@@ -252,11 +252,12 @@ public class GatewayPageTest extends BaseTest {
     }
 
     @Test
-    @TmsLink("835")
+    @TmsLink("835/847")
     @Epic("System/Gateway")
     @Feature("Merchant acquirer")
-    @Description("Move merchant-acquirer down to reduce their priority")
-    public void testMoveMerchantAcquirerDownButton() {
+    @Description("Move merchant-acquirer down to reduce their priority,"
+            + " Move merchant-acquirer up to increase their priority")
+    public void testMoveMerchantAcquirerDownAndUpButtons() {
         GatewayPage page = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
@@ -278,6 +279,12 @@ public class GatewayPageTest extends BaseTest {
         Allure.step("Check that the second created acquirer priority is 0 now");
         assertThat(page.getAcquirerPriorityFirstRowValue()).hasText("0");
         assertThat(page.getAcquirerNameFirstRowValue()).hasText(ACQUIRER_MOVE.acquirerDisplayName());
+
+        page.clickMoveMerchantAcquirerUpButton(1);
+
+        Allure.step("Check that the first created acquirer priority is 0 again");
+        assertThat(page.getAcquirerPriorityFirstRowValue()).hasText("0");
+        assertThat(page.getAcquirerNameFirstRowValue()).hasText(ACQUIRER.acquirerDisplayName());
     }
 
     @Test

@@ -34,6 +34,7 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCo
     private final Locator addMerchantAcquirer = locator("[data-icon='circle-plus']");
     private final Locator addMerchantAcquirerButton = getByTestId("AddMerchantAcquirerButton");
     private final Locator moveMerchantAcquirerDownButton = getByTestId("MoveMerchantAcquirerDownButton");
+    private final Locator moveMerchantAcquirerUpButton = getByTestId("MoveMerchantAcquirerUpButton");
 
     public GatewayPage(Page page) {
         super(page);
@@ -78,6 +79,13 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCo
     @Step("Click on MoveMerchantAcquirerDownButton to move them down with less priority")
     public GatewayPage clickMoveMerchantAcquirerDownButton(int row) {
         moveMerchantAcquirerDownButton.nth(row).click();
+
+        return this;
+    }
+
+    @Step("Click on MoveMerchantAcquirerUpButton to move them up with more  priority")
+    public GatewayPage clickMoveMerchantAcquirerUpButton(int row) {
+        moveMerchantAcquirerUpButton.nth(row).click();
 
         return this;
     }
