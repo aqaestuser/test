@@ -12,7 +12,7 @@ import xyz.npgw.test.page.common.trait.GatewayTableTrait;
 import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
-import xyz.npgw.test.page.dialog.acquirer.AddMerchantAcquirerDialog;
+import xyz.npgw.test.page.dialog.gateway.AddMerchantAcquirerDialog;
 
 @Getter
 public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCompanyTrait<GatewayPage>,
@@ -34,6 +34,10 @@ public class GatewayPage extends BaseSystemPage<GatewayPage> implements SelectCo
     private final Locator addBusinessUnitAcquirerButton = getByTestId("AddMerchantAcquirerButton");
     private final Locator moveBusinessUnitAcquirerDownButton = getByTestId("MoveMerchantAcquirerDownButton");
     private final Locator moveBusinessUnitAcquirerUpButton = getByTestId("MoveMerchantAcquirerUpButton");
+    private final Locator addMerchantAcquirer = locator("[data-icon='circle-plus']");
+    private final Locator addMerchantAcquirerButton = getByTestId("AddMerchantAcquirerButton");
+    private final Locator moveMerchantAcquirerDownButton = getByTestId("MoveMerchantAcquirerDownButton");
+    private final Locator moveMerchantAcquirerUpButton = getByTestId("MoveMerchantAcquirerUpButton");
 
     public GatewayPage(Page page) {
         super(page);

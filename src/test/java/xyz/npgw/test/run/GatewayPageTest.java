@@ -352,6 +352,32 @@ public class GatewayPageTest extends BaseTest {
                 .hasText("SUCCESSBusiness unit acquirer was deleted successfully");
     }
 
+    @Test
+    @TmsLink("845")
+    @Epic("System/Gateway")
+    @Feature("Merchant acquirer")
+    @Description("Verify that merchant acquirer can be activated and deactivated by Super")
+    public void testActivateDeactivateMerchantAcquirer() {
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .clickCreateButton()
+                .getTable().clickChangeMerchantAcquirerActivityButton()
+                .clickSubmitButton();
+
+        assertThat(gatewayPage.getTable().getAcquirerStatus()).hasText("Inactive");
+
+        gatewayPage
+                .getTable().clickChangeMerchantAcquirerActivityButton()
+                .clickSubmitButton();
+
+        assertThat(gatewayPage.getTable().getAcquirerStatus()).hasText("Active");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
