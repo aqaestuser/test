@@ -48,7 +48,10 @@ public class GatewayPageTest extends BaseTest {
             true,
             "%s acquirer for gateway Movable".formatted(RUN_ID),
             "4321");
+
     private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
+    private static final String COMPANY_NAME_DELETION_TEST = "%s company 112173".formatted(RUN_ID);
+    private static final String BUSINESS_UNIT_NAME_DELETION_TEST = "BU-1";
     private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172",
             "MerchantAcquirer"};
     private final String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
@@ -62,6 +65,9 @@ public class GatewayPageTest extends BaseTest {
         TestUtils.createBusinessUnits(getApiRequestContext(), COMPANY_NAME, expectedBusinessUnitsList);
         TestUtils.createAcquirer(getApiRequestContext(), ACQUIRER);
         TestUtils.createAcquirer(getApiRequestContext(), ACQUIRER_MOVE);
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME_DELETION_TEST);
+        TestUtils.createBusinessUnit(
+                getApiRequestContext(), COMPANY_NAME_DELETION_TEST, BUSINESS_UNIT_NAME_DELETION_TEST);
     }
 
     @Test
@@ -238,7 +244,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
-                .clickAddMerchantAcquirer()
+                .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
                 .clickCreateButton();
 
@@ -263,10 +269,10 @@ public class GatewayPageTest extends BaseTest {
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
-                .clickAddMerchantAcquirer()
+                .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
                 .clickCreateButton()
-                .clickAddMerchantAcquirer()
+                .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER_MOVE.acquirerName())
                 .clickCreateButton();
 
@@ -274,13 +280,13 @@ public class GatewayPageTest extends BaseTest {
         assertThat(page.getAcquirerPriorityFirstRowValue()).hasText("0");
         assertThat(page.getAcquirerNameFirstRowValue()).hasText(ACQUIRER.acquirerDisplayName());
 
-        page.clickMoveMerchantAcquirerDownButton(0);
+        page.clickMoveBusinessUnitAcquirerDownButton(0);
 
         Allure.step("Check that the second created acquirer priority is 0 now");
         assertThat(page.getAcquirerPriorityFirstRowValue()).hasText("0");
         assertThat(page.getAcquirerNameFirstRowValue()).hasText(ACQUIRER_MOVE.acquirerDisplayName());
 
-        page.clickMoveMerchantAcquirerUpButton(1);
+        page.clickMoveBusinessUnitAcquirerUpButton(1);
 
         Allure.step("Check that the first created acquirer priority is 0 again");
         assertThat(page.getAcquirerPriorityFirstRowValue()).hasText("0");
@@ -298,10 +304,10 @@ public class GatewayPageTest extends BaseTest {
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
-                .clickAddMerchantAcquirerButton()
+                .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
                 .clickCreateButton()
-                .clickAddMerchantAcquirerButton()
+                .clickAddBusinessUnitAcquirerButton()
                 .selectInactiveStatus()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
                 .clickCreateButton();
@@ -324,11 +330,34 @@ public class GatewayPageTest extends BaseTest {
         Assert.assertTrue(foundInactive, "New Merchant acquirer with status 'Inactive' not found.");
     }
 
+    @Test
+    @TmsLink("763")
+    @Epic("System/Gateway")
+    @Feature("Merchant acquirer")
+    @Description("Merchant acquirer can be successfully deleted")
+    public void testDeleteMerchantAcquirer() {
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME_DELETION_TEST)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME_DELETION_TEST)
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .clickCreateButton()
+                .getTable().clickDeleteBusinessUnitAcquirer(ACQUIRER.acquirerDisplayName())
+                .clickDeleteButton();
+
+        Allure.step("Verify: Success deletion alert message is shown");
+        assertThat(gatewayPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit acquirer was deleted successfully");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME_DELETION_TEST);
         TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER.acquirerName());
         TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_MOVE.acquirerName());
         super.afterClass();

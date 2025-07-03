@@ -285,6 +285,20 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return allValues;
     }
 
+    public Locator getRowByText(String text) {
+        locator("tr[data-first='true']").waitFor();
+        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+
+        do {
+            Locator row = getRows().filter(new Locator.FilterOptions().setHasText(text));
+            if (row.count() > 0) {
+                return row;
+            }
+        } while (goToNextPage());
+
+        throw new NoSuchElementException("Row with text '" + text + "' not found on any page.");
+    }
+
     public interface PageCallback {
         void accept(String pageNumber);
     }
