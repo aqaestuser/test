@@ -42,7 +42,7 @@ public class EditAcquirerDialogTest extends BaseTest {
     @Override
     protected void beforeClass() {
         super.beforeClass();
-        TestUtils.createAcquirer(getApiRequestContext(), new Acquirer(ACQUIRER_NAME));
+        TestUtils.createAcquirer(getApiRequestContext(), Acquirer.builder().acquirerName(ACQUIRER_NAME).build());
     }
 
     @Test

@@ -106,15 +106,15 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
 
     @Step("Fill acquirer form")
     public CurrentDialogT fillAcquirerForm(Acquirer acquirer) {
-        fillChallengeUrlField(acquirer.systemConfig().challengeUrl())
-                .fillFingerprintUrlField(acquirer.systemConfig().fingerprintUrl())
-                .fillResourceUrlField(acquirer.systemConfig().resourceUrl())
-                .fillNotificationQueueField(acquirer.systemConfig().notificationQueue())
-                .fillAcquirerConfigField(acquirer.acquirerConfig());
+        fillChallengeUrlField(acquirer.getSystemConfig().challengeUrl())
+                .fillFingerprintUrlField(acquirer.getSystemConfig().fingerprintUrl())
+                .fillResourceUrlField(acquirer.getSystemConfig().resourceUrl())
+                .fillNotificationQueueField(acquirer.getSystemConfig().notificationQueue())
+                .fillAcquirerConfigField(acquirer.getAcquirerConfig());
 
         clickStatusRadiobutton(acquirer.isActive() ? "Active" : "Inactive");
 
-        for (Currency currency : acquirer.currencyList()) {
+        for (Currency currency : acquirer.getCurrencyList()) {
             clickCheckboxCurrency(currency.name());
         }
 

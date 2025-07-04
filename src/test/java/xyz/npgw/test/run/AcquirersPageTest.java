@@ -13,7 +13,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
-import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
@@ -43,29 +42,14 @@ public class AcquirersPageTest extends BaseTest {
             "System config",
             "Status",
             "Actions");
-
-    private static final Acquirer ACQUIRER = new Acquirer(
-            "display name",
-            "acquirer mid",
-            "NGenius",
-            "default",
-            new Currency[]{Currency.USD, Currency.EUR},
-            new SystemConfig(),
-            true,
-            "%s acquirer 11.002.01".formatted(RUN_ID),
-            "4321");
-
-    private static final Acquirer CHANGE_STATE_ACQUIRER = new Acquirer(
-            "display name",
-            "acquirer mid",
-            "NGenius",
-            "default",
-            new Currency[]{Currency.USD, Currency.EUR},
-            new SystemConfig(),
-            true,
-            "%s acquirer activate and deactivate".formatted(RUN_ID),
-            "1234");
-
+    private static final Acquirer ACQUIRER = Acquirer.builder()
+            .acquirerName("%s acquirer 11.002.01".formatted(RUN_ID))
+            .acquirerMidMcc("4321")
+            .build();
+    private static final Acquirer CHANGE_STATE_ACQUIRER = Acquirer.builder()
+            .acquirerName("%s acquirer activate and deactivate".formatted(RUN_ID))
+            .acquirerMidMcc("4321")
+            .build();
     private static final String ACTIVE_ACQUIRER_NAME = "%s active acquirer".formatted(RUN_ID);
     private static final String INACTIVE_ACQUIRER_NAME = "%s inactive acquirer".formatted(RUN_ID);
 
@@ -294,29 +278,29 @@ public class AcquirersPageTest extends BaseTest {
                     + "action buttons.")
     public void testDisplaySingleRowWhenAcquirerIsSelected() {
         Map<String, String> expectedColumnValues = Map.of(
-                COLUMNS_HEADERS.get(0), ACQUIRER.acquirerName(),
-                COLUMNS_HEADERS.get(1), ACQUIRER.acquirerDisplayName(),
-                COLUMNS_HEADERS.get(2), ACQUIRER.acquirerCode(),
-                COLUMNS_HEADERS.get(3), ACQUIRER.acquirerMid(),
-                COLUMNS_HEADERS.get(4), ACQUIRER.acquirerMidMcc(),
+                COLUMNS_HEADERS.get(0), ACQUIRER.getAcquirerName(),
+                COLUMNS_HEADERS.get(1), ACQUIRER.getAcquirerDisplayName(),
+                COLUMNS_HEADERS.get(2), ACQUIRER.getAcquirerCode(),
+                COLUMNS_HEADERS.get(3), ACQUIRER.getAcquirerMid(),
+                COLUMNS_HEADERS.get(4), ACQUIRER.getAcquirerMidMcc(),
 
-                COLUMNS_HEADERS.get(5), String.join(", ", Arrays.stream(ACQUIRER.currencyList())
+                COLUMNS_HEADERS.get(5), String.join(", ", Arrays.stream(ACQUIRER.getCurrencyList())
                         .map(Enum::name)
                         .toList()),
-                COLUMNS_HEADERS.get(6), ACQUIRER.acquirerConfig(),
+                COLUMNS_HEADERS.get(6), ACQUIRER.getAcquirerConfig(),
                 COLUMNS_HEADERS.get(7), String.join("\n",
-                        "Challenge URL\n" + ACQUIRER.systemConfig().challengeUrl(),
-                        "Fingerprint URL\n" + ACQUIRER.systemConfig().fingerprintUrl(),
-                        "Resource URL\n" + ACQUIRER.systemConfig().resourceUrl(),
-                        "Notification queue\n" + ACQUIRER.systemConfig().notificationQueue()),
+                        "Challenge URL\n" + ACQUIRER.getSystemConfig().challengeUrl(),
+                        "Fingerprint URL\n" + ACQUIRER.getSystemConfig().fingerprintUrl(),
+                        "Resource URL\n" + ACQUIRER.getSystemConfig().resourceUrl(),
+                        "Notification queue\n" + ACQUIRER.getSystemConfig().notificationQueue()),
                 COLUMNS_HEADERS.get(8), ACQUIRER.isActive() ? "Active" : "Inactive"
         );
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().typeName(ACQUIRER.acquirerName())
-                .getSelectAcquirer().clickAcquirerInDropdown(ACQUIRER.acquirerName());
+                .getSelectAcquirer().typeName(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().clickAcquirerInDropdown(ACQUIRER.getAcquirerName());
 
         Locator row = acquirersPage.getTable().getRows();
 
@@ -420,8 +404,8 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().typeName(CHANGE_STATE_ACQUIRER.acquirerName())
-                .getSelectAcquirer().clickAcquirerInDropdown(CHANGE_STATE_ACQUIRER.acquirerName());
+                .getSelectAcquirer().typeName(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().clickAcquirerInDropdown(CHANGE_STATE_ACQUIRER.getAcquirerName());
 
         Locator row = acquirersPage.getTable().getRows();
 
@@ -439,7 +423,7 @@ public class AcquirersPageTest extends BaseTest {
 //                .getAlert().waitUntilAlertIsDetached();
 
         Allure.step("Verify: Acquirer status changed to Inactive");
-        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.acquirerName(), "Status"))
+        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status"))
                 .hasText("Inactive");
 
         acquirersPage
@@ -454,7 +438,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getAlert().clickCloseButton();
 
         Allure.step("Verify: Acquirer status changed back to Active");
-        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.acquirerName(), "Status"))
+        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status"))
                 .hasText("Active");
     }
 
@@ -467,7 +451,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .getSelectStatus().select(status)
                 .clickResetFilterButton();
 
@@ -487,7 +471,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new AcquirersPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.acquirerName())
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickDeleteAcquirer()
                 .clickDeleteButton();
 
@@ -496,7 +480,7 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("SUCCESSAcquirer was deleted successfully");
 
         Allure.step("Verify: the deleted acquirer is no longer present in the dropdown list");
-        assertTrue(acquirersPage.getSelectAcquirer().isAcquirerAbsent(ACQUIRER.acquirerName()));
+        assertTrue(acquirersPage.getSelectAcquirer().isAcquirerAbsent(ACQUIRER.getAcquirerName()));
     }
 
     @AfterClass
@@ -504,7 +488,7 @@ public class AcquirersPageTest extends BaseTest {
     protected void afterClass() {
         TestUtils.deleteAcquirer(getApiRequestContext(), ACTIVE_ACQUIRER_NAME);
         TestUtils.deleteAcquirer(getApiRequestContext(), INACTIVE_ACQUIRER_NAME);
-        TestUtils.deleteAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER.acquirerName());
+        TestUtils.deleteAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER.getAcquirerName());
         super.afterClass();
     }
 }

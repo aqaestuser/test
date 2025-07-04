@@ -10,6 +10,8 @@ import xyz.npgw.test.page.system.TeamPage;
 
 import java.util.Arrays;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 @SuppressWarnings("unchecked")
 public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialogT>>
         extends BaseDialog<TeamPage, CurrentDialogT> {
@@ -43,6 +45,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'System admin' user role radiobutton")
     public CurrentDialogT checkSystemAdminRadiobutton() {
         getByRole(AriaRole.RADIO, "System admin").check();
+        assertThat(getByRole(AriaRole.RADIO, "System admin")).isChecked();
 
         return (CurrentDialogT) this;
     }
@@ -50,6 +53,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'Company admin' user role radiobutton")
     public CurrentDialogT checkCompanyAdminRadiobutton() {
         getByRole(AriaRole.RADIO, "Company admin").check();
+        assertThat(getByRole(AriaRole.RADIO, "Company admin")).isChecked();
 
         return (CurrentDialogT) this;
     }
@@ -57,6 +61,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'Company analyst' user role radiobutton")
     public CurrentDialogT checkCompanyAnalystRadiobutton() {
         getByRole(AriaRole.RADIO, "Company analyst").check();
+        assertThat(getByRole(AriaRole.RADIO, "Company analyst")).isChecked();
 
         return (CurrentDialogT) this;
     }

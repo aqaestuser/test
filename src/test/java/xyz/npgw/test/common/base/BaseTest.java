@@ -246,7 +246,7 @@ public abstract class BaseTest {
                     .newContext(new APIRequest.NewContextOptions()
                             .setBaseURL(ProjectProperties.getBaseUrl())
                             .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
-            bestBefore = LocalTime.now().plusSeconds(token.expiresIn()).minusMinutes(1);
+            bestBefore = LocalTime.now().plusSeconds(token.expiresIn()).minusMinutes(3);
         }
     }
 

@@ -16,6 +16,5 @@ public class Run {
 
         testng.run();
         System.exit(testng.getStatus());
-
     }
 }

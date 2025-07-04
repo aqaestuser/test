@@ -492,7 +492,7 @@ public class TransactionsPageTest extends BaseTest {
 
         Allure.step("Verify: The dialog box section names");
         assertThat(transactionDetailsDialog.getSectionNames())
-                .hasText(new String[]{"Amount", "Updated on (GMT)", "NPGW reference", "Merchant reference",
+                .hasText(new String[]{"Amount", "Updated on (GMT)", "NPGW reference", "Business unit reference",
                         "Payment lifecycle", "Card details", "Customer details", "3D Secure"});
 
         Allure.step("Verify: The Card details labels");
@@ -723,8 +723,8 @@ public class TransactionsPageTest extends BaseTest {
         String amount = transactionsPage
                 .getTable().getFirstRowCell("Amount").textContent();
 
-        String merchantReference = transactionsPage
-                .getTable().getFirstRowCell("Merchant Reference").textContent();
+        String businessUnitReference = transactionsPage
+                .getTable().getFirstRowCell("Business unit reference").textContent();
 
         String cardType = transactionsPage
                 .getTable().getFirstRowCardType();
@@ -735,8 +735,8 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: 'Status' value is the same as in the table");
         assertThat(transactionDetails.getStatusValue()).hasText(status);
 
-        Allure.step("Verify: Merchant Reference  is the same as in the table");
-        assertThat(transactionDetails.getMerchantReferenceValue()).hasText(merchantReference);
+        Allure.step("Verify: Business unit reference is the same as in the table");
+        assertThat(transactionDetails.getBusinessUnitReferenceValue()).hasText(businessUnitReference);
 
         Allure.step("Verify: Amount value and Currency are the same as in the table");
         assertThat(transactionDetails.getAmountValue()).hasText(currency + " " + amount);
@@ -788,7 +788,7 @@ public class TransactionsPageTest extends BaseTest {
     @TmsLink("851")
     @Epic("Transactions")
     @Feature("Transactions Search")
-    @Description("Verify that 'NPGW reference' and 'Merchant reference' fields appear when clicking on 'Trx IDs'.")
+    @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testSearchOptionsVisibleAfterClickingTrxIds() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
@@ -797,22 +797,22 @@ public class TransactionsPageTest extends BaseTest {
         Allure.step("Verify: 'NPGW reference' is visible ");
         assertThat(transactionsPage.getNpgwReferenceField()).isVisible();
 
-        Allure.step("Verify: 'Merchant reference' is visible ");
-        assertThat(transactionsPage.getMerchantReferenceField()).isVisible();
+        Allure.step("Verify: 'Business unit reference' is visible ");
+        assertThat(transactionsPage.getBusinessUnitReference()).isVisible();
     }
 
     @Test
     @TmsLink("853")
     @Epic("Transactions")
     @Feature("Transactions Search")
-    @Description("Verify that 'NPGW reference' and 'Merchant reference' fields appear when clicking on 'Trx IDs'.")
+    @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testTransactionSearchByNpgwReference() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
-        List<Locator> npgwReference = transactionsPage.getTable().getColumnCells("NPGW Reference");
+        List<Locator> npgwReference = transactionsPage.getTable().getColumnCells("NPGW reference");
 
         int index1 = new Random().nextInt(npgwReference.size());
         int index2;

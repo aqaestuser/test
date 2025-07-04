@@ -34,12 +34,12 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
     @Step("Click on the first transaction from the table")
     public TransactionDetailsDialog clickOnFirstTransaction() {
-        getFirstRowCell("NPGW Reference").click();
+        getFirstRowCell("NPGW reference").click();
 
         return new TransactionDetailsDialog(getPage());
     }
 
-    @Step("Click on the transaction NPGW Reference")
+    @Step("Click on the transaction NPGW reference")
     public TransactionDetailsDialog clickOnTransaction(int index) {
         npgwReference.nth(index).click();
 

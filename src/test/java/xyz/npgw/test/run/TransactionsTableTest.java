@@ -41,8 +41,8 @@ public class TransactionsTableTest extends BaseTest {
     private static final List<String> COLUMNS_HEADERS = List.of(
             "Creation Date (GMT)",
             "Business unit ID",
-            "NPGW Reference",
-            "Merchant Reference",
+            "NPGW reference",
+            "Business unit reference",
             "Amount",
             "Currency",
             "Card type",
@@ -416,7 +416,7 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify mock transaction is displayed");
-        assertThat(transactionsPage.getTable().getFirstRowCell("NPGW Reference")).hasText("12345");
+        assertThat(transactionsPage.getTable().getFirstRowCell("NPGW reference")).hasText("12345");
     }
 
     @Test

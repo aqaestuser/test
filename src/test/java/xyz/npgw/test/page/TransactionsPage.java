@@ -43,8 +43,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator npgwReferenceField = getByLabelExact("NPGW reference");
     private final Locator npgwReferenceFieldClearIcon = getByRole(AriaRole.BUTTON, "clear input").first();
 
-    private final Locator merchantReferenceField = getByLabelExact("Merchant reference");
-    private final Locator merchantReferenceClear = getByRole(AriaRole.BUTTON, "clear input").last();
+    private final Locator businessUnitReference = getByLabelExact("Business unit reference");
+    private final Locator businessUnitReferenceClear = getByRole(AriaRole.BUTTON, "clear input").last();
 
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonTransactionsPage");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
@@ -350,7 +350,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    @Step("Click 'Npgw Reference' Clear Icon")
+    @Step("Click 'Npgw reference' Clear Icon")
     public TransactionsPage clickNpgwReferenceClearIcon() {
         npgwReferenceFieldClearIcon.click();
 

@@ -31,11 +31,11 @@ public class CleanupUtils {
 
     public static void deleteAcquirers(APIRequestContext request) {
         Arrays.stream(Acquirer.getAll(request))
-                .filter(acquirer -> !ACQUIRER.contains(acquirer.acquirerName()))
-                .filter(acquirer -> acquirer.acquirerName().matches("^\\d{4}\\.\\d{6}.*$"))
-                .filter(acquirer -> !acquirer.acquirerName().startsWith("acquirerName "))
-                .filter(acquirer -> TestUtils.isOneHourOld(acquirer.acquirerName()))
-                .forEach(item -> Acquirer.delete(request, item.acquirerName()));
+                .filter(acquirer -> !ACQUIRER.contains(acquirer.getAcquirerName()))
+                .filter(acquirer -> acquirer.getAcquirerName().matches("^\\d{4}\\.\\d{6}.*$"))
+                .filter(acquirer -> !acquirer.getAcquirerName().startsWith("acquirerName "))
+                .filter(acquirer -> TestUtils.isOneHourOld(acquirer.getAcquirerName()))
+                .forEach(item -> Acquirer.delete(request, item.getAcquirerName()));
     }
 
     private static void deleteUsersFromSuper(APIRequestContext request) {

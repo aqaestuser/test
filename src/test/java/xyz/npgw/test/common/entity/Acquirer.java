@@ -4,53 +4,49 @@ import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
-import lombok.extern.log4j.Log4j2;
-import org.testng.SkipException;
+import lombok.Builder;
+import lombok.CustomLog;
+import lombok.Getter;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
-@Log4j2
-public record Acquirer(
-        String acquirerDisplayName,
-        String acquirerMid,
-        String acquirerCode,
-        String acquirerConfig,
-        Currency[] currencyList,
-        SystemConfig systemConfig,
-        boolean isActive,
-        String acquirerName,
-        String acquirerMidMcc) {
+@Getter
+@Builder
+@CustomLog
+public class Acquirer {
 
-    public Acquirer(String acquirerName) {
-        this("", "mid", "NGenius", "config",
-                new Currency[]{Currency.USD}, new SystemConfig(), true, acquirerName, "1111");
-    }
+    @Builder.Default
+    private String acquirerDisplayName = "display name";
+    @Builder.Default
+    private String acquirerMid = "acquirer mid";
+    @Builder.Default
+    private String acquirerCode = "NGenius";
+    @Builder.Default
+    private String acquirerConfig = "default";
+    @Builder.Default
+    private Currency[] currencyList = new Currency[]{Currency.USD, Currency.EUR};
+    @Builder.Default
+    private SystemConfig systemConfig = new SystemConfig();
+    @Builder.Default
+    private boolean isActive = true;
+    @Builder.Default
+    private String acquirerName = "acquirer name";
+    @Builder.Default
+    private String acquirerMidMcc = "1111";
 
     public static void create(APIRequestContext request, Acquirer acquirer) {
         APIResponse response = request.post("portal-v1/acquirer", RequestOptions.create().setData(acquirer));
-        log.info("create acquirer '{}' - {}", acquirer.acquirerName(), response.status());
-        if (response.status() >= 400) {
-            log.info("create acquirer - {}", response.text());
-        }
-        if (response.status() >= 500) {
-            throw new SkipException(response.text());
-        }
+        log.response(response, "create acquirer %s".formatted(acquirer.acquirerName));
     }
 
     public static Acquirer[] getAll(APIRequestContext request) {
         APIResponse response = request.get("portal-v1/acquirer");
-        log.info("get all acquirers - {}", response.status());
-        if (response.status() >= 500) {
-            throw new SkipException(response.text());
-        }
+        log.response(response, "get all acquirers");
         return new Gson().fromJson(response.text(), Acquirer[].class);
     }
 
     public static void delete(APIRequestContext request, String acquirerName) {
         APIResponse response = request.delete("portal-v1/acquirer/%s".formatted(encode(acquirerName)));
-        log.info("delete acquirer '{}' - {}", acquirerName, response.status());
-        if (response.status() >= 500) {
-            throw new SkipException(response.text());
-        }
+        log.response(response, "delete acquirer %s".formatted(acquirerName));
     }
 }

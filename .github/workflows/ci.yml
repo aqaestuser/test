@@ -56,8 +56,6 @@ jobs:
             closeBrowserIfError=true;
             artefactDir=target/artefact;
             defaultTimeout=5000;
-            failFast=false;
-            skipMode=false;
             additionalRetries=0;
             colorScheme=DARK;
             DEBUG='';

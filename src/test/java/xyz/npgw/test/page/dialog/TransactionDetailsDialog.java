@@ -18,7 +18,7 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
     private final Locator amount = getDialog().getByText("Amount");
     private final Locator updatedOn = getDialog().getByText("Updated on");
     private final Locator npgwReference = getDialog().getByText("NPGW reference");
-    private final Locator merchantReference = getDialog().getByText("Merchant reference");
+    private final Locator businessUnitReference = getDialog().getByText("Business unit reference");
 
     private final Locator paymentLifecycleTable = getByLabelExact("payment lifecycle table");
     private final Locator paymentLifecycleType = paymentLifecycleTable.getByRole(AriaRole.ROWHEADER);
@@ -48,7 +48,7 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
     private final Locator amountValue = amount.locator("+div");
     private final Locator updatedOnValue = updatedOn.locator("+div");
     private final Locator npgwReferenceValue = npgwReference.locator("+div");
-    private final Locator merchantReferenceValue = merchantReference.locator("+div");
+    private final Locator businessUnitReferenceValue = businessUnitReference.locator("+div");
 
     public TransactionDetailsDialog(Page page) {
         super(page);
