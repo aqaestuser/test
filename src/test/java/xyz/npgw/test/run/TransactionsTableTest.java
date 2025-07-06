@@ -207,7 +207,6 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
     }
 
-    @Ignore("BUG - sort by date not working correctly 0.1.2506281212")
     @Test
     @TmsLink("559")
     @Epic("Transactions")
