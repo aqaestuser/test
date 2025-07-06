@@ -5,7 +5,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.TransactionsPage;
-import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
+import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
+import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -121,4 +122,14 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return collectAllPages(this::getCardTypeColumnValues);
     }
 
+    @Step("Click 'Refund transaction'")
+    public RefundTransactionDialog clickRefundTransaction(Locator row) {
+        row.locator(refundTransactionButton).click();
+
+        return new RefundTransactionDialog(getPage());
+    }
+
+    public Locator getRefundButton(Locator row) {
+        return row.locator(refundTransactionButton);
+    }
 }

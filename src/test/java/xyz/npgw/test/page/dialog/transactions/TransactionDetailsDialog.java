@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.dialog;
+package xyz.npgw.test.page.dialog.transactions;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dialog.BaseDialog;
 
 @Getter
 public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, TransactionDetailsDialog> {

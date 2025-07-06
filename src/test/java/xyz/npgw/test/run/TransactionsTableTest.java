@@ -1,6 +1,7 @@
 package xyz.npgw.test.run;
 
 import com.google.gson.Gson;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Route;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
@@ -21,6 +22,7 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -451,5 +453,50 @@ public class TransactionsTableTest extends BaseTest {
                 assertFalse(isVisible);
             }
         }
+    }
+
+    @Test
+    @TmsLink("863")
+    @Epic("Transactions")
+    @Feature("Actions")
+    @Description("All refundable transactions display correct refund dialog text and pre-filled refund amount.")
+    public void testRefundDialogDisplaysCorrectTextAndAmount() {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        do {
+            List<Locator> currentRows = transactionsPage.getTable().getRows().all();
+
+            for (Locator row : currentRows) {
+                Locator refundButton = transactionsPage.getTable().getRefundButton(row);
+
+                if (refundButton.count() > 0 && refundButton.isVisible()) {
+                    String amount = transactionsPage.getTable().getCell(row, "Amount").innerText().trim();
+                    String currency = transactionsPage.getTable().getCell(row, "Currency").innerText().trim();
+
+                    RefundTransactionDialog refundTransactionDialog = transactionsPage
+                            .getTable().clickRefundTransaction(row);
+
+                    Allure.step("Verify: refund dialog header is correct");
+                    assertThat(refundTransactionDialog.getDialogHeader()).hasText("Refund transaction");
+
+                    Allure.step("Verify: refund message contains correct max amount and currency");
+                    assertThat(refundTransactionDialog.getRefundMessage(
+                            String.format("Enter amount up to %s %s to refund?", amount, currency))).isVisible();
+
+                    Allure.step("Verify: refund amount input is pre-filled with correct value");
+                    assertThat(refundTransactionDialog.getAmountToRefundInput()).hasValue(amount);
+
+                    Allure.step("Verify: increase amount button to refund is disabled");
+                    assertThat(refundTransactionDialog.getIncreaseAmountToRefundButton()).isDisabled();
+
+                    refundTransactionDialog.clickCloseIcon();
+                }
+            }
+
+        } while (transactionsPage.getTable().goToNextPage());
     }
 }

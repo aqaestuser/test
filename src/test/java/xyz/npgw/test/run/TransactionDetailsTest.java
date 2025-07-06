@@ -10,7 +10,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
-import xyz.npgw.test.page.dialog.TransactionDetailsDialog;
+import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
