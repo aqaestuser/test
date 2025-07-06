@@ -188,6 +188,8 @@ public class AddAcquirerDialogTest extends BaseTest {
         AddAcquirerDialog acquirerDialog = acquirersPage
                 .clickAddAcquirer()
                 .fillAcquirerNameField(EXISTING_ACQUIRER)
+                .fillAcquirerMidField("1234")
+                .fillAcquirerMidMccField("1234")
                 .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
                 .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl())

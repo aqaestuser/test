@@ -50,8 +50,6 @@ public class AcquirersPageTest extends BaseTest {
             .acquirerName("%s acquirer activate and deactivate".formatted(RUN_ID))
             .acquirerMidMcc("4321")
             .build();
-    private static final String ACTIVE_ACQUIRER_NAME = "%s active acquirer".formatted(RUN_ID);
-    private static final String INACTIVE_ACQUIRER_NAME = "%s inactive acquirer".formatted(RUN_ID);
 
     String[] rowsPerPageOptions = new String[]{"10", "25", "50", "100"};
 
@@ -375,7 +373,7 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Acquirers list")
     @Description("Verify Acquirer status 'Active/Inactive' is displayed in column 'Status'")
     public void testVerifyAcquirerStatus(String status) {
-        String acquirerName = status.equals("Active") ? ACTIVE_ACQUIRER_NAME : INACTIVE_ACQUIRER_NAME;
+        String acquirerName = "%s %s acquirer".formatted(TestUtils.now(), status);
         SystemConfig systemConfig = new SystemConfig();
 
         AcquirersPage acquirersPage = new DashboardPage(getPage())
@@ -383,16 +381,19 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab()
                 .clickAddAcquirer()
                 .fillAcquirerNameField(acquirerName)
+                .fillAcquirerMidField("1234")
+                .fillAcquirerMidMccField("1234")
                 .fillChallengeUrlField(systemConfig.challengeUrl())
                 .fillFingerprintUrlField(systemConfig.fingerprintUrl())
                 .fillResourceUrlField(systemConfig.resourceUrl())
                 .clickStatusRadiobutton(status)
                 .clickCheckboxCurrency("USD")
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone();
+                .clickCreateButton();
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getCell(acquirerName, "Status")).hasText(status);
+
+        TestUtils.deleteAcquirer(getApiRequestContext(), acquirerName);
     }
 
     @Test
@@ -486,8 +487,6 @@ public class AcquirersPageTest extends BaseTest {
     @AfterClass
     @Override
     protected void afterClass() {
-        TestUtils.deleteAcquirer(getApiRequestContext(), ACTIVE_ACQUIRER_NAME);
-        TestUtils.deleteAcquirer(getApiRequestContext(), INACTIVE_ACQUIRER_NAME);
         TestUtils.deleteAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER.getAcquirerName());
         super.afterClass();
     }

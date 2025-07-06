@@ -29,6 +29,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     private final Locator rows = getByRole(AriaRole.ROW).filter(new Locator.FilterOptions()
             .setHasNot(columnHeader)
             .setHasNotText("No rows to display."));
+    private final Locator firstRow = locator("tr[data-first='true']");
 
     private final Locator rowsPerPage = getByRole(AriaRole.BUTTON, "Rows Per Page");
     private final Locator rowsPerPageDropdown = locator("div[data-slot='listbox']");
@@ -40,7 +41,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     public BaseTableComponent(Page page) {
         super(page);
         getByRole(AriaRole.GRIDCELL, "No rows to display.")
-                .or(locator("tr[data-first='true']")).waitFor();
+                .or(firstRow)
+                .waitFor();
     }
 
     protected abstract CurrentPageT getCurrentPage();
@@ -58,10 +60,10 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public Locator getRow(String rowHeader) {
-        locator("tr[data-first='true']").waitFor();
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         do {
+            firstRow.waitFor();
             Locator header = getByRole(AriaRole.ROWHEADER, rowHeader);
 
             try {
@@ -286,7 +288,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public Locator getRowByText(String text) {
-        locator("tr[data-first='true']").waitFor();
+        firstRow.waitFor();
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         do {
