@@ -35,5 +35,4 @@ public class AddMerchantAcquirerDialog extends BaseDialog<GatewayPage, AddMercha
 
         return new GatewayPage(getPage());
     }
-
 }

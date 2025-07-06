@@ -15,6 +15,7 @@ public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
     }
 
     private final Locator changeMerchantAcquirerActivityButton = getByTestId("ChangeMerchantAcquirerActivityButton");
+    private final Locator statusColumnHeader = locator("//th[text()='Status']");
 
     @Getter
     private final Locator acquirerStatus = locator("td > div.rounded-full");
@@ -36,5 +37,12 @@ public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
         getRowByText(acquirerDisplayName).locator(getByTestId("DeleteMerchantAcquirerButton")).click();
 
         return new DeleteBusinessUnitAcquirerDialog(getPage());
+    }
+
+    @Step("Click 'Status' column header")
+    public GatewayPage clickStatusColumnHeader() {
+        statusColumnHeader.click();
+
+        return new GatewayPage(getPage());
     }
 }

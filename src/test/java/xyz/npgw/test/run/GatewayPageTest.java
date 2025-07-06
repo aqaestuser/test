@@ -18,6 +18,8 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.GatewayPage;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -363,6 +365,44 @@ public class GatewayPageTest extends BaseTest {
                 .clickSubmitButton();
 
         assertThat(gatewayPage.getTable().getAcquirerStatus()).hasText("Active");
+    }
+
+    @Test
+    @TmsLink("864")
+    @Epic("System/Gateway")
+    @Feature("Merchant acquirer")
+    @Description("Verify that entries can be sorted by Status")
+    public void testSortEntriesByStatus() {
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .clickCreateButton()
+                .clickAddBusinessUnitAcquirerButton()
+                .selectInactiveStatus()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .clickCreateButton()
+                .getTable().clickStatusColumnHeader();
+
+        List<String> actualStatusList = gatewayPage.getTable().getColumnValues("Status");
+        List<String> sortedStatusListDesc = new ArrayList<>(actualStatusList);
+        sortedStatusListDesc.sort(Collections.reverseOrder());
+
+        Allure.step("Verify that entries are sorted by Status in Desc order ");
+        Assert.assertEquals(actualStatusList, sortedStatusListDesc);
+
+        gatewayPage
+                .getTable().clickStatusColumnHeader();
+
+        actualStatusList = gatewayPage.getTable().getColumnValues("Status");
+        List<String> sortedStatusListAsc = new ArrayList<>(actualStatusList);
+        Collections.sort(sortedStatusListAsc);
+
+        Allure.step("Verify that entries are sorted by Status in Asc order ");
+        Assert.assertEquals(actualStatusList, sortedStatusListAsc);
     }
 
     @AfterClass
