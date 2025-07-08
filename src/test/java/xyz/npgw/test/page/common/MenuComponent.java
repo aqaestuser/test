@@ -9,6 +9,7 @@ import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.system.AcquirersPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.GatewayPage;
+import xyz.npgw.test.page.system.TransactionManagementPage;
 
 import java.time.LocalTime;
 
@@ -19,6 +20,7 @@ public class MenuComponent extends BaseComponent {
     private final Locator companiesAndBusinessUnitsTab = getByRole(AriaRole.TAB, "Companies and business units");
     private final Locator acquirersTab = getByRole(AriaRole.TAB, "Acquirers");
     private final Locator gatewayTab = getByRole(AriaRole.TAB, "Gateway");
+    private final Locator transactionManagementTab = getByRole(AriaRole.TAB, "Transaction management");
 
     public MenuComponent(Page page) {
         super(page);
@@ -50,5 +52,13 @@ public class MenuComponent extends BaseComponent {
         assertThat(gatewayTab).hasAttribute("data-selected", "true");
 
         return new GatewayPage(getPage());
+    }
+
+    @Step("click 'Transaction management' tab")
+    public TransactionManagementPage clickTransactionManagementTab() {
+        transactionManagementTab.click();
+        assertThat(transactionManagementTab).hasAttribute("data-selected", "true");
+
+        return new TransactionManagementPage(getPage());
     }
 }
