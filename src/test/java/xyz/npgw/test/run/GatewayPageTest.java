@@ -355,16 +355,18 @@ public class GatewayPageTest extends BaseTest {
                 .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
-                .getTable().clickChangeMerchantAcquirerActivityButton()
+                .getTable().clickFirstRowChangeActivityButton()
                 .clickSubmitButton();
 
-        assertThat(gatewayPage.getTable().getAcquirerStatus()).hasText("Inactive");
+        Allure.step("Verify that acquirer status is 'Inactive' ");
+        assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Inactive");
 
         gatewayPage
-                .getTable().clickChangeMerchantAcquirerActivityButton()
+                .getTable().clickFirstRowChangeActivityButton()
                 .clickSubmitButton();
 
-        assertThat(gatewayPage.getTable().getAcquirerStatus()).hasText("Active");
+        Allure.step("Verify that acquirer status is 'Active' ");
+        assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
     }
 
     @Test
@@ -403,6 +405,48 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify that entries are sorted by Status in Asc order ");
         Assert.assertEquals(actualStatusList, sortedStatusListAsc);
+    }
+
+    @Test
+    @TmsLink("857")
+    @Epic("System/Gateway")
+    @Feature("Merchant acquirer")
+    @Description("Verify that click on Cancel button cancels the Merchant Acquirer status change")
+    public void testCancelButtonInChangeMerchantAcquirerActivityDialog() {
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .clickCreateButton()
+                .getTable().clickFirstRowChangeActivityButton()
+                .clickCancelButton();
+
+        Allure.step("Verify that acquirer status is still 'Active' ");
+        assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
+    }
+
+    @Test
+    @TmsLink("858")
+    @Epic("System/Gateway")
+    @Feature("Merchant acquirer")
+    @Description("Verify that click on Cancel button cancels the Merchant Acquirer status change")
+    public void testCloseButtonInChangeMerchantAcquirerActivityDialog() {
+        GatewayPage gatewayPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .clickCreateButton()
+                .getTable().clickFirstRowChangeActivityButton()
+                .clickCloseButton();
+
+        Allure.step("Verify that acquirer status is still 'Active' ");
+        assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
     }
 
     @AfterClass
