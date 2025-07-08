@@ -22,7 +22,7 @@ import java.util.List;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
 
-public class AddCompanyDialogTest extends BaseTest {
+public class AddEditCompanyTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s company name".formatted(RUN_ID);
     private static final String EXISTING_COMPANY_NAME = "%s existing company name".formatted(RUN_ID);
@@ -300,6 +300,36 @@ public class AddCompanyDialogTest extends BaseTest {
 
         Allure.step("Verify: city field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getCity()).hasValue(company.companyAddress().city());
+    }
+
+    @Test
+    @TmsLink("266")
+    @Epic("System/Companies and business units")
+    @Feature("Edit company")
+    @Description("Edit company info and save")
+    public void testEditCompanyInfoAndSave() {
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .clickEditCompanyButton()
+                .fillCompanyTypeField("LLC")
+                .fillCompanyDescriptionField("Description of company business model")
+                .fillCompanyWebsiteField("https://google.com")
+                .fillCompanyPrimaryContactField("John Doe")
+                .fillCompanyEmailField("google@gmail.com")
+                .fillCompanyCountryField("FR")
+                .fillCompanyStateField("Provence")
+                .fillCompanyZipField("75001")
+                .fillCompanyCityField("Paris")
+                .fillCompanyPhoneField("+1234567890123")
+                .fillCompanyMobileField("+1234567890123")
+                .fillCompanyFaxField("+1234567890123")
+                .clickSaveChangesButton();
+
+        Allure.step("Verify: success message is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSCompany was updated successfully");
     }
 
     @AfterClass
