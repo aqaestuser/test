@@ -10,7 +10,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -389,10 +388,11 @@ public class AcquirersPageTest extends BaseTest {
                 .fillResourceUrlField(systemConfig.resourceUrl())
                 .clickStatusRadiobutton(status)
                 .clickCheckboxCurrency("USD")
-                .clickCreateButton();
+                .clickCreateButton()
+                .getSelectAcquirer().selectAcquirer(acquirerName);
 
         Allure.step("Verify: Acquirer status");
-        assertThat(acquirersPage.getTable().getCell(acquirerName, "Status")).hasText(status);
+        assertThat(acquirersPage.getTable().getFirstRowCell("Status")).hasText(status);
 
         TestUtils.deleteAcquirer(getApiRequestContext(), acquirerName);
     }

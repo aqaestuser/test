@@ -47,10 +47,6 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return new TransactionDetailsDialog(getPage());
     }
 
-    public int getNumberOfTransactionOnCurrentPage() {
-        return npgwReference.count();
-    }
-
     public List<LocalDateTime> getAllCreationDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

@@ -10,7 +10,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
@@ -198,7 +197,7 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
 
         transactionsPage
-                .getTable().goToLastPageIfNeeded();
+                .getTable().goToLastPage();
 
         transactionsPage
                 .clickCurrencySelector().selectCurrency("EUR");

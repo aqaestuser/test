@@ -179,13 +179,18 @@ public class TransactionDetailsTest extends BaseTest {
     @Feature("Transaction details")
     @Description("Check that the 'Pending' occurs at most once in the Payment lifecycle section")
     public void testPendingOccursAtMostOnceInLifecycle() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
+        new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getTable().selectRowsPerPageOption("10")
+                .getTable().goToLastPage();
 
-        int numberOfTransactions = transactionsPage.getTable().getNumberOfTransactionOnCurrentPage();
+        TransactionsPage transactionsPage = new TransactionsPage(getPage());
+        int numberOfTransactions = transactionsPage
+                .getTable().getRows()
+                .count();
 
         for (int i = 0; i < numberOfTransactions; i++) {
             TransactionDetailsDialog transactionDetails = transactionsPage

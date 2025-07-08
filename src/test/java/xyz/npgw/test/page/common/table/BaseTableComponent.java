@@ -141,7 +141,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public Locator getFirstRowCell(String columnHeader) {
-        return getColumnCells(columnHeader).get(0);
+        return firstRow.locator(columnSelector(columnHeader));
     }
 
     public int countAllRows() {
@@ -214,13 +214,11 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return true;
     }
 
-    public boolean goToLastPageIfNeeded() {
+    public boolean goToLastPage() {
         if (hasNoPagination()) {
             return false;
         }
-        if (isNotCurrentPage(getLastPageNumber())) {
-            clickPaginationPageButton(getLastPageNumber());
-        }
+        clickPaginationPageButton(getLastPageNumber());
 
         return true;
     }

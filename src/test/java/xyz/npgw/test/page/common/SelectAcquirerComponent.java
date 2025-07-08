@@ -15,7 +15,7 @@ import java.util.NoSuchElementException;
 public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
 
     @Getter
-    private final Locator selectAcquirerField = getByLabelExact("Select acquirer");
+    private final Locator selectAcquirerField = locator("input[aria-label='Select acquirer']");
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
     private final Locator selectAcquirerContainer = locator("div[data-slot='input-wrapper']");
     private final Locator selectAcquirerDropdownChevron = selectAcquirerContainer
@@ -37,9 +37,9 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
         return page;
     }
 
-    @Step("Enter '{acquirerName}' into select acquirer field")
+    @Step("Type '{acquirerName}' into 'Select acquirer' field")
     public CurrentPageT typeName(String acquirerName) {
-        selectAcquirerField.fill(acquirerName);
+        selectAcquirerField.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(1));
 
         return page;
     }
@@ -67,10 +67,11 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
         getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
-        selectAcquirerField.fill(acquirerName);
+
+        typeName(acquirerName);
 
         if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Acquirer '" + acquirerName + "' not found in dropdown.");
+            throw new NoSuchElementException("Acquirer dropdown list is empty.");
         }
 
         while (getAcquirerInDropdownOption(acquirerName).all().isEmpty()) {
@@ -82,7 +83,7 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
             lastName = dropdownOptionList.last().innerText();
         }
 
-        getAcquirerInDropdownOption(acquirerName).click();
+        clickAcquirerInDropdown(acquirerName);
 
         return page;
     }
