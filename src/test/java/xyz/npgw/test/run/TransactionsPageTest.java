@@ -124,7 +124,9 @@ public class TransactionsPageTest extends BaseTest {
                 "SUCCESS",
                 "FAILED",
                 "CANCELLED",
-                "EXPIRED"
+                "EXPIRED",
+                "PARTIAL_REFUND",
+                "REFUNDED",
         });
 
         Allure.step("Verify: Default selected option in status selector is 'ALL'");

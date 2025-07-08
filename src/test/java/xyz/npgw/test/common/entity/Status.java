@@ -8,4 +8,6 @@ public enum Status {
     FAILED,
     CANCELLED,
     EXPIRED,
+    PARTIAL_REFUND,
+    REFUNDED,
 }
