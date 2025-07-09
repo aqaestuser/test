@@ -10,15 +10,15 @@ import java.time.LocalTime;
 @Getter
 public abstract class BaseModel {
 
-    protected static final ThreadLocal<LocalTime> THREAD_LAST_ACTIVITY = ThreadLocal.withInitial(LocalTime::now);
+//    protected static final ThreadLocal<LocalTime> THREAD_LAST_ACTIVITY = ThreadLocal.withInitial(LocalTime::now);
     private final Page page;
 
     public BaseModel(Page page) {
         this.page = page;
-        page.route("**/*", route -> {
-            THREAD_LAST_ACTIVITY.set(LocalTime.now().plusNanos(1500_000_000));
-            route.fallback();
-        });
+//        page.route("**/*", route -> {
+//            THREAD_LAST_ACTIVITY.set(LocalTime.now().plusNanos(1500_000_000));
+//            route.fallback();
+//        });
     }
 
     protected Locator getByRole(AriaRole ariaRole) {

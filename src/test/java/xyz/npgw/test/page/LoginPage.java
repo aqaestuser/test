@@ -3,6 +3,7 @@ package xyz.npgw.test.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
@@ -107,7 +108,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         clickLoginButton();
 
         getPage().waitForURL("**/dashboard");
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return new DashboardPage(getPage());
     }

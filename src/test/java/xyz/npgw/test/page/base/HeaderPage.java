@@ -57,10 +57,10 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     public TeamPage clickSystemAdministrationLink() {
         systemAdministrationButton.click();
 
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         getByRole(AriaRole.GRIDCELL, "No rows to display.")
                 .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
+//        getPage().waitForLoadState(LoadState.NETWORKIDLE);
 
         return new TeamPage(getPage());
     }
@@ -81,7 +81,7 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
 
     @Step("Click 'User menu' button")
     public CurrentPageT clickUserMenuButton() {
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
+//        getPage().waitForLoadState(LoadState.NETWORKIDLE);
         userMenuButton.click();
 
         return (CurrentPageT) this;
@@ -96,9 +96,9 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
 
     @Step("Click 'Log out' button in User menu")
     public LoginPage clickLogOutButtonUserMenu() {
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
+//        getPage().waitForLoadState(LoadState.NETWORKIDLE);
         logOutButtonInUserMenu.click();
-        getPage().waitForURL("**/");
+//        getPage().waitForURL("**/");
 
         return new LoginPage(getPage());
     }

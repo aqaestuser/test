@@ -41,7 +41,7 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         getByRole(AriaRole.SPINBUTTON).nth(4).fill(endParts[1]);
         getByRole(AriaRole.SPINBUTTON).nth(5).fill(endParts[2]);
 
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
     }

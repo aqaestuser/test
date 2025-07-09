@@ -36,12 +36,12 @@ public class MenuComponent extends BaseComponent {
 
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-        getPage().waitForTimeout(1500);
+//        getPage().waitForLoadState(LoadState.NETWORKIDLE);
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForTimeout(1500);
         acquirersTab.click();
-//        assertThat(acquirersTab).hasAttribute("data-selected", "true");
-        getPage().waitForTimeout(3000);
+        assertThat(acquirersTab).hasAttribute("data-selected", "true");
+//        getPage().waitForTimeout(5000);
 
         return new AcquirersPage(getPage());
     }
