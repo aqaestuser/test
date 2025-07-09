@@ -16,7 +16,7 @@ public class EditAcquirerDialog extends AcquirerDialog<EditAcquirerDialog> {
 
     @Step("Click on the 'Save changes' button")
     public AcquirersPage clickSaveChangesButton() {
-        getPage().waitForCondition(saveChangesButton::isEnabled);
+//        getPage().waitForCondition(saveChangesButton::isEnabled);
         saveChangesButton.click();
 
         return new AcquirersPage(getPage());

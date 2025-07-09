@@ -28,6 +28,7 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
 
     public BaseDialog(Page page) {
         super(page);
+        dialog.waitFor();
     }
 
     protected abstract ReturnPageT getReturnPage();

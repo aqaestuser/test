@@ -389,7 +389,8 @@ public class AcquirersPageTest extends BaseTest {
                 .fillResourceUrlField(systemConfig.resourceUrl())
                 .clickStatusRadiobutton(status)
                 .clickCheckboxCurrency("USD")
-                .clickCreateButton();
+                .clickCreateButton()
+                .waitForAcquirerPresence(getApiRequestContext(), acquirerName);
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getCell(acquirerName, "Status")).hasText(status);
@@ -480,6 +481,15 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify: a success message appears after deleting the acquirer");
         assertThat(acquirersPage.getAlert().getMessage())
                 .hasText("SUCCESSAcquirer was deleted successfully");
+
+        acquirersPage
+                .getAlert().clickCloseButton();
+
+        acquirersPage
+                .waitForAcquirerAbsence(getApiRequestContext(), ACQUIRER.getAcquirerName());
+
+        Allure.step("Verify: the deleted acquirer is no longer present in the table");
+        assertThat(acquirersPage.getTable().getNoRowsToDisplayMessage()).isVisible();
 
         Allure.step("Verify: the deleted acquirer is no longer present in the dropdown list");
         assertTrue(acquirersPage.getSelectAcquirer().isAcquirerAbsent(ACQUIRER.getAcquirerName()));

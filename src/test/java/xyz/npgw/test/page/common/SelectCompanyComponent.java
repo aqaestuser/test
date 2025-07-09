@@ -40,10 +40,12 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Select '{companyName}' company using filter")
     public CurrentPageT selectCompany(String companyName) {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
         selectCompanyField.fill(companyName);
+
+        getByRole(AriaRole.OPTION).first().or(locator("div[data-slot='empty-content']")).waitFor();
 
         if (locator("div[data-slot='empty-content']").isVisible()) {
             throw new NoSuchElementException("Company '" + companyName + "' not found. Dropdown list is empty.");

@@ -92,7 +92,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Settings'")
     public CompaniesAndBusinessUnitsPage clickSettings() {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         settings.click();
 
         return this;
