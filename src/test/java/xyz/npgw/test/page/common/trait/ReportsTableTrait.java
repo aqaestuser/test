@@ -8,5 +8,4 @@ public interface ReportsTableTrait extends BaseTrait {
     default ReportsTableComponent getTable() {
         return new ReportsTableComponent(getPage());
     }
-
 }

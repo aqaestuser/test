@@ -18,7 +18,6 @@ import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -95,7 +94,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         option.waitFor();
         option.click();
         dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return this;
     }
@@ -311,7 +310,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     @Step("Click 'Reset filter' button")
     public TransactionsPage clickResetFilterButton() {
         resetFilterButton.click();
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return this;
     }

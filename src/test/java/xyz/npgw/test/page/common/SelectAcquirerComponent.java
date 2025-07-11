@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 
-import java.time.LocalTime;
 import java.util.NoSuchElementException;
 
 @Log4j2
@@ -64,7 +63,7 @@ public class SelectAcquirerComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Select '{acquirerName}' acquirer using filter")
     public CurrentPageT selectAcquirer(String acquirerName) {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
 

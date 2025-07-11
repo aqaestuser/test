@@ -8,7 +8,6 @@ import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
@@ -41,7 +40,7 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         getByRole(AriaRole.SPINBUTTON).nth(4).fill(endParts[1]);
         getByRole(AriaRole.SPINBUTTON).nth(5).fill(endParts[2]);
 
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return currentPage;
     }

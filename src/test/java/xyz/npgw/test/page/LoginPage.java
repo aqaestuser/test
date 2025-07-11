@@ -9,8 +9,6 @@ import lombok.Getter;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 
-import java.time.LocalTime;
-
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
 public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
@@ -107,7 +105,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         clickLoginButton();
 
         getPage().waitForURL("**/dashboard");
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return new DashboardPage(getPage());
     }

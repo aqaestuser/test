@@ -14,6 +14,8 @@ import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 @Getter
 public final class DashboardPage extends HeaderPage<DashboardPage> implements
         SelectDateRangeTrait<DashboardPage>,
@@ -48,6 +50,7 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
 
     public DashboardPage(Page page) {
         super(page);
+        assertThat(getDashboardButton().locator("..")).hasAttribute("data-active", "true");
     }
 
     @Step("Click 'Refresh data' button")

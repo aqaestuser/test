@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
 
-import java.time.LocalTime;
 import java.util.NoSuchElementException;
 
 @Log4j2
@@ -42,7 +41,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
     @Step("Select '{businessUnitName}' business unit using filter")
     public CurrentPageT selectBusinessUnit(String businessUnitName) {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         String lastName = "";
         selectBusinessUnitField.fill(businessUnitName);
@@ -62,7 +61,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
 
         getBusinessUnitInDropdownOption(businessUnitName).first().click();
 
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         return page;
     }
 

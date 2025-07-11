@@ -389,6 +389,7 @@ public class AcquirersPageTest extends BaseTest {
                 .clickStatusRadiobutton(status)
                 .clickCheckboxCurrency("USD")
                 .clickCreateButton()
+                .waitForAcquirerPresence(getApiRequestContext(), acquirerName)
                 .getSelectAcquirer().selectAcquirer(acquirerName);
 
         Allure.step("Verify: Acquirer status");

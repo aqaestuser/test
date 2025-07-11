@@ -13,8 +13,6 @@ import xyz.npgw.test.page.dialog.company.DeleteCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 
-import java.time.LocalTime;
-
 @Getter
 public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> implements
         SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
@@ -92,7 +90,7 @@ public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBu
 
     @Step("Click 'Settings'")
     public CompaniesAndBusinessUnitsPage clickSettings() {
-        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         settings.click();
 
         return this;
