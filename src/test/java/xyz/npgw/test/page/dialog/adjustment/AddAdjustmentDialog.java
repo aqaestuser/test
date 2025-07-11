@@ -4,9 +4,11 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
+import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TransactionManagementPage;
 
+@Getter
 public class AddAdjustmentDialog extends BaseDialog<TransactionManagementPage, AddAdjustmentDialog> {
 
     private final Locator transactionRow = locator("[aria-label='transactions table'] tr[data-first]");

@@ -7,6 +7,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.page.dialog.adjustment.AddAdjustmentDialog;
 import xyz.npgw.test.page.system.TransactionManagementPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -45,5 +46,19 @@ public class TransactionManagementPageTest extends BaseTest {
                 .clickOnCloseButton();
 
         assertThat(page.getTransactionsTable()).containsText("No rows to display.");
+    }
+
+    @Test
+    @TmsLink("884")
+    @Epic("System/TransactionManagement")
+    @Feature("Add adjustment")
+    @Description("Create button is disabled if nothing is selected")
+    public void testCreateButtonIsDisabledByDefault() {
+        AddAdjustmentDialog page = new TransactionManagementPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickTransactionManagementTab()
+                .clickAddAdjustmentButton();
+
+        assertThat(page.getCreateButton()).hasAttribute("data-disabled", "true");
     }
 }
