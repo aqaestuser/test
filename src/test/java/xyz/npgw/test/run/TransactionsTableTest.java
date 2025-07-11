@@ -1,6 +1,7 @@
 package xyz.npgw.test.run;
 
 import com.google.gson.Gson;
+import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Route;
 import io.qameta.allure.Allure;
@@ -23,11 +24,16 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -189,7 +195,6 @@ public class TransactionsTableTest extends BaseTest {
     public void testTableDisplayWhenCurrencyFilterAppliedWhileOnLastPage() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -496,5 +501,58 @@ public class TransactionsTableTest extends BaseTest {
             }
 
         } while (transactionsPage.getTable().goToNextPage());
+    }
+
+    @Test
+    @TmsLink("880")
+    @Epic("Transactions")
+    @Feature("Export table data")
+    @Description("The transaction table data on the UI matches the exported CSV file data.")
+    public void testTransactionTableMatchesDownloadedCsv() throws IOException {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        List<List<String>> uiRows = new ArrayList<>();
+        do {
+            List<Locator> rows = transactionsPage.getTable().getRows().all();
+            for (Locator row : rows) {
+                uiRows.add(transactionsPage.getTable().getRowData(row));
+            }
+        } while (transactionsPage.getTable().goToNextPage());
+
+        Download download = getPage().waitForDownload(() -> transactionsPage
+                .clickExportTableDataToFileButton()
+                .selectCsv());
+
+        Path targetPath = Paths.get("downloads", "transactions-export.csv");
+        Files.createDirectories(targetPath.getParent());
+        download.saveAs(targetPath);
+
+        List<String> uiHeader = transactionsPage.getTable().getColumnHeadersText();
+        List<List<String>> rowsFromCsv = transactionsPage
+                .readCsv(targetPath);
+        List<String> csvHeader = rowsFromCsv.remove(0);
+
+        Allure.step("Verify: CSV headers match the UI headers");
+        assertEquals(csvHeader, uiHeader.subList(0, csvHeader.size()));
+
+        Allure.step("Verify the row count between UI and CSV");
+        assertEquals(uiRows.size(), rowsFromCsv.size());
+
+        IntStream.range(0, uiRows.size()).forEach(i -> {
+            List<String> uiRow = uiRows.get(i);
+            List<String> csvRow = rowsFromCsv.get(i);
+
+            IntStream.range(0, uiRow.size()).forEach(j -> {
+                String uiCell = uiRow.get(j);
+                String csvCell = csvRow.get(j);
+
+                Allure.step("Verify: cell values match between UI and CSV", () ->
+                        assertEquals(uiCell, csvCell, String.format("Mismatch at row %d, column %d", i + 1, j + 1)));
+            });
+        });
     }
 }

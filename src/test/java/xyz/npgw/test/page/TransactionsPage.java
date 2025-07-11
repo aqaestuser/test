@@ -16,8 +16,13 @@ import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -374,5 +379,36 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
             return false;
         }, refreshDataButton::click);
         return data.get();
+    }
+
+    @Step("Click 'Export table data to file' button")
+    public TransactionsPage clickExportTableDataToFileButton() {
+        downloadButton.click();
+
+        return this;
+    }
+
+    @Step("Select 'CSV' option")
+    public TransactionsPage selectCsv() {
+        downloadCsvOption.click();
+
+        return this;
+    }
+
+    @Step("Read and parse CSV from path: {csvFilePath}")
+    public List<List<String>> readCsv(Path csvFilePath) throws IOException {
+        List<List<String>> rows = new ArrayList<>();
+
+        try (BufferedReader reader = Files.newBufferedReader(csvFilePath)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<String> cells = Arrays.stream(line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
+                        .map(s -> s.replaceAll("^\"|\"$", "").trim())
+                        .toList();
+                rows.add(cells);
+            }
+        }
+
+        return rows;
     }
 }

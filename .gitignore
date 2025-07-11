@@ -45,3 +45,4 @@ browser.properties
 .properties
 *.dockerfile
 docker-compose*.yml
+downloads/
