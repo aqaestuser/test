@@ -14,6 +14,9 @@ public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
     }
 
     private final Locator firstRowChangeActivityButton = getByTestId("ChangeMerchantAcquirerActivityButton").nth(0);
+    private final Locator acquirerColumnHeader = locator("//th[text()='Acquirer']");
+    private final Locator currenciesColumnHeader = locator("//th[text()='Currencies']");
+    private final Locator priorityColumnHeader = locator("//th[text()='Priority']");
     private final Locator statusColumnHeader = locator("//th[text()='Status']");
 
     @Override
@@ -38,6 +41,27 @@ public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
     @Step("Click 'Status' column header")
     public GatewayPage clickStatusColumnHeader() {
         statusColumnHeader.click();
+
+        return new GatewayPage(getPage());
+    }
+
+    @Step("Click 'Priority' column header")
+    public GatewayPage clickPriorityColumnHeader() {
+        priorityColumnHeader.click();
+
+        return new GatewayPage(getPage());
+    }
+
+    @Step("Click 'Acquirer' column header")
+    public GatewayPage clickAcquirerColumnHeader() {
+        acquirerColumnHeader.click();
+
+        return new GatewayPage(getPage());
+    }
+
+    @Step("Click 'Currencies' column header")
+    public GatewayPage clickCurrenciesColumnHeader() {
+        currenciesColumnHeader.click();
 
         return new GatewayPage(getPage());
     }
