@@ -47,6 +47,10 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return new TransactionDetailsDialog(getPage());
     }
 
+    public String getFirstRowReference() {
+        return getFirstRowCell("NPGW reference").innerText();
+    }
+
     public List<LocalDateTime> getAllCreationDates() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -94,7 +98,6 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
         return results;
     }
-
 
     public List<String> getCardTypeColumnValues() {
         Locator imgs = getRows()
