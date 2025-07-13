@@ -129,7 +129,6 @@ public class GatewayPageTest extends BaseTest {
         GatewayPage gatewayPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
-                .getSelectCompany().clickSelectCompanyField()
                 .getSelectCompany().selectCompany(COMPANY_NAME);
 
         Locator selectCompanyField = gatewayPage
@@ -178,7 +177,6 @@ public class GatewayPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getSystemMenu().clickGatewayTab()
-                .getSelectCompany().clickSelectCompanyField()
                 .getSelectCompany().selectCompany(company.companyName())
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
@@ -211,7 +209,6 @@ public class GatewayPageTest extends BaseTest {
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getSystemMenu().clickGatewayTab()
-                .getSelectCompany().clickSelectCompanyField()
                 .getSelectCompany().selectCompany(company.companyName())
                 .getSelectBusinessUnit().selectBusinessUnit(company.companyType())
                 .clickCurrencyValue()
@@ -312,7 +309,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .selectInactiveStatus()
+                .checkInactiveRadiobutton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickCreateButton();
 
@@ -348,6 +345,7 @@ public class GatewayPageTest extends BaseTest {
                 .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone() //TODO remove alert closing BUG workaround
                 .getTable().clickDeleteBusinessUnitAcquirer(ACQUIRER.getAcquirerDisplayName())
                 .clickDeleteButton();
 
@@ -399,7 +397,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .selectInactiveStatus()
+                .checkInactiveRadiobutton()
                 .getSelectAcquirer().selectAcquirer(ACQUIRER_EUR.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()

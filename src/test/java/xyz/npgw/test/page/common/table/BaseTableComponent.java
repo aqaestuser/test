@@ -231,7 +231,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     }
 
     public boolean goToNextPage() {
-        if (!hasNextPage()) {
+        if (nextPageButton.isDisabled()) {
             return false;
         }
         clickNextPageButton();
@@ -255,6 +255,10 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     public boolean hasNoPagination() {
         return paginationItems.first().isHidden();
+    }
+
+    public List<String> getColumnValuesFromAllPages(String columnName) {
+        return collectAllPages(() -> getColumnValues(columnName).stream().map(String::trim).toList());
     }
 
     public <T> List<T> getColumnValuesFromAllPages(String columnName, Function<String, T> parser) {

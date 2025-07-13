@@ -32,7 +32,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -178,7 +177,7 @@ public class TransactionsTableTest extends BaseTest {
 
         List<String> currencyValues = transactionsPage.clickCurrencySelector()
                 .selectCurrency(currency)
-                .getTable().getColumnValuesFromAllPages("Currency", Function.identity());
+                .getTable().getColumnValuesFromAllPages("Currency");
 
         Allure.step("Verify: Filter displays the selected currency");
         assertThat(transactionsPage.getCurrencySelector()).containsText(currency);

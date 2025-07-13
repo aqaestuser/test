@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.common.trait.AcquirersTableTrait;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
@@ -71,6 +72,22 @@ public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements Acqu
             }
         }
         log.info("Acquirer presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        refreshDataButton.click();
+
+        return this;
+    }
+
+    @SneakyThrows
+    public AcquirersPage waitForAcquirerAbsence(APIRequestContext request, String acquirerName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(Acquirer.getAll(request)).anyMatch(item -> item.getAcquirerName().equals(acquirerName))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for acquirer '%s' absence".formatted(acquirerName));
+            }
+        }
+        log.info("Acquirer absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         refreshDataButton.click();
 
         return this;

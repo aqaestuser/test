@@ -6,12 +6,11 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.page.base.BaseComponent;
 
 import java.util.NoSuchElementException;
 
 @Log4j2
-public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
+public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter
     private final Locator selectCompanyField = getByLabelExact("Select company")
@@ -26,59 +25,29 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
     private final Locator selectCompanyClearIcon = selectCompanyContainer
             .locator("button[aria-label='Show suggestions']:first-child");
 
-    private final CurrentPageT page;
-
     public SelectCompanyComponent(Page page, CurrentPageT currentPage) {
-        super(page);
-        this.page = currentPage;
-    }
-
-    public Locator getCompanyInDropdown(String companyName) {
-        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(getByTextExact(companyName)));
+        super(page, currentPage);
     }
 
     @Step("Select '{companyName}' company using filter")
     public CurrentPageT selectCompany(String companyName) {
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+        select(selectCompanyField, companyName);
 
-        String lastName = "";
-        selectCompanyField.fill(companyName);
-
-        if (locator("div[data-slot='empty-content']").isVisible()) {
-            throw new NoSuchElementException("Company '" + companyName + "' not found. Dropdown list is empty.");
-        }
-
-        while (getCompanyInDropdown(companyName).all().isEmpty()) {
-            if (dropdownOptionList.last().innerText().equals(lastName)) {
-                throw new NoSuchElementException("Company '" + companyName + "' not found in dropdown list.");
-            }
-            dropdownOptionList.last().scrollIntoViewIfNeeded();
-            lastName = dropdownOptionList.last().innerText();
-        }
-        getCompanyInDropdown(companyName).click();
-
-        return page;
+        return currentPage;
     }
 
     @Step("Click select Company clear icon")
     public CurrentPageT clickSelectCompanyClearIcon() {
         selectCompanyClearIcon.dispatchEvent("click");
 
-        return page;
+        return currentPage;
     }
 
     @Step("Click company dropdown toggle arrow '˅˄'")
     public CurrentPageT clickSelectCompanyDropdownChevron() {
         selectCompanyDropdownChevron.click();
 
-        return page;
-    }
-
-    @Step("Click 'Select company' field")
-    public CurrentPageT clickSelectCompanyField() {
-        selectCompanyField.click();
-
-        return page;
+        return currentPage;
     }
 
     @Step("Select first company in dropdown")
@@ -89,7 +58,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
             dropdownOptionList.first().click();
         }
 
-        return page;
+        return currentPage;
     }
 
     public String firstCompanyName() {
@@ -97,12 +66,7 @@ public class SelectCompanyComponent<CurrentPageT> extends BaseComponent {
         return dropdownOptionList.first().textContent();
     }
 
-    public boolean isCompanyAbsentInDropdown(String companyName) {
-        try {
-            selectCompany(companyName);
-            return false;
-        } catch (NoSuchElementException e) {
-            return true;
-        }
+    public boolean isCompanyPresent(String companyName) {
+        return getAllOptions(selectCompanyField, companyName).contains(companyName);
     }
 }

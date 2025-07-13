@@ -32,14 +32,14 @@ public class ChangeMerchantAcquirerActivityDialog extends BaseDialog<GatewayPage
         return new GatewayPage(getPage());
     }
 
-    @Step("Click on submit Cancel button ")
+    @Step("Click on 'Cancel' button ")
     public GatewayPage clickCancelButton() {
         cancelButton.click();
 
         return new GatewayPage(getPage());
     }
 
-    @Step("Click on submit close button ")
+    @Step("Click on 'Close' button ")
     public GatewayPage clickCloseButton() {
         closeButton.click();
 

@@ -8,7 +8,6 @@ import xyz.npgw.test.page.system.FraudControlPage;
 
 public class DeleteControlDialog extends BaseDialog<FraudControlPage, DeleteControlDialog> {
 
-
     public DeleteControlDialog(Page page) {
         super(page);
     }

@@ -11,6 +11,7 @@ import xyz.npgw.test.page.system.TransactionManagementPage;
 
 @Getter
 public class AddAdjustmentDialog extends BaseDialog<TransactionManagementPage, AddAdjustmentDialog> {
+
     private final Locator npgwReferenceInput = locator("input[aria-label='NPGW reference']");
     private final Locator npgwReferenceFieldLabel = locator("label[data-slot='label']").first();
     private final Locator buReferenceFieldLabel = locator("label[data-slot='label']").last();

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
@@ -80,7 +79,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
     public List<String> getAllTransactionsStatusList() {
         getByRole(AriaRole.BUTTON, "next page button").waitFor();
 
-        return getColumnValuesFromAllPages("Status", Function.identity());
+        return getColumnValuesFromAllPages("Status");
     }
 
     public List<Boolean> getRefundButtonVisibilityFromAllPages() {

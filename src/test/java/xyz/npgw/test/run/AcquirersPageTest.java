@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
 public class AcquirersPageTest extends BaseTest {
@@ -152,7 +152,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getSelectStatus().select(status);
 
         Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
-        assertTrue(acquirersPage.getTable().getColumnValuesFromAllPages("Status", Function.identity())
+        assertTrue(acquirersPage.getTable().getColumnValuesFromAllPages("Status")
                 .stream().allMatch(value -> value.equals(status)));
     }
 
@@ -482,8 +482,15 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getAlert().getMessage())
                 .hasText("SUCCESSAcquirer was deleted successfully");
 
+        acquirersPage
+                .getAlert().clickCloseButton()
+                .waitForAcquirerAbsence(getApiRequestContext(), ACQUIRER.getAcquirerName());
+
+        Allure.step("Verify: the deleted acquirer is no longer present in the table");
+        assertThat(acquirersPage.getTable().getTableContent()).hasText("No rows to display.");
+
         Allure.step("Verify: the deleted acquirer is no longer present in the dropdown list");
-        assertTrue(acquirersPage.getSelectAcquirer().isAcquirerAbsent(ACQUIRER.getAcquirerName()));
+        assertFalse(acquirersPage.getSelectAcquirer().isAcquirerPresent(ACQUIRER.getAcquirerName()));
     }
 
     @AfterClass

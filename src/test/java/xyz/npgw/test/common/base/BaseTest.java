@@ -5,13 +5,10 @@ import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
-import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Tracing;
-import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import com.microsoft.playwright.options.Cookie;
-import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -131,15 +128,19 @@ public abstract class BaseTest {
         }
 
         page = context.newPage();
-        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout() * 6);
-        PlaywrightAssertions.setDefaultAssertionTimeout(ProjectProperties.getDefaultTimeout() * 6);
+        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout()); // * 6);
+//        PlaywrightAssertions.setDefaultAssertionTimeout(ProjectProperties.getDefaultTimeout() * 6);
 
-        page.addLocatorHandler(page.getByText("Loading..."),
-                locator -> page.getByText("Loading...").waitFor(
-                        new Locator.WaitForOptions()
-                                .setState(WaitForSelectorState.HIDDEN)
-                                .setTimeout(ProjectProperties.getDefaultTimeout() * 5)),
-                new Page.AddLocatorHandlerOptions().setNoWaitAfter(true));
+//        page.addLocatorHandler(page.getByText("Loading..."),
+//                locator -> page.getByText("Loading...").waitFor(
+//                        new Locator.WaitForOptions()
+//                                .setState(WaitForSelectorState.HIDDEN)
+//                                .setTimeout(ProjectProperties.getDefaultTimeout() * 5)),
+//                new Page.AddLocatorHandlerOptions().setNoWaitAfter(true));
+        page.addLocatorHandler(page.getByText("Loading..."), locator -> {
+        });
+
+        initApiRequestContext();
         openSite(args);
     }
 
@@ -234,7 +235,6 @@ public abstract class BaseTest {
         if (LocalTime.now().isBefore(bestBefore)) {
             return;
         }
-
         APIRequestContext request = playwright.request()
                 .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseUrl()));
         Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());

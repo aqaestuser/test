@@ -102,7 +102,7 @@ public class TeamPageTest extends BaseTest {
                 .waitForUserAbsence(getApiRequestContext(), systemAdminEmail, "super");
 
         Allure.step("Verify: deleted system admin is no longer present in the users table");
-        assertFalse(teamPage.getTable().isUserPresentInTable(systemAdminEmail));
+        assertFalse(teamPage.getTable().getColumnValuesFromAllPages("Username").contains(systemAdminEmail));
     }
 
     @Test
@@ -146,7 +146,7 @@ public class TeamPageTest extends BaseTest {
                 .waitForUserAbsence(getApiRequestContext(), companyAdminEmail, getCompanyName());
 
         Allure.step("Verify: deleted company admin is no longer present in the users table");
-        assertFalse(teamPage.getTable().isUserPresentInTable(companyAdminEmail));
+        assertFalse(teamPage.getTable().getColumnValuesFromAllPages("Username").contains(companyAdminEmail));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(companyAnalystEmail)
                 .fillPasswordField("Qwerty123!")
                 .checkCompanyAnalystRadiobutton()
-                .setAllowedBusinessUnit(MERCHANT_TITLE)
+                .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton();
 
         Allure.step("Verify: a success alert appears after user creation");
@@ -218,7 +218,7 @@ public class TeamPageTest extends BaseTest {
                 .waitForUserAbsence(getApiRequestContext(), companyAnalystEmail, getCompanyName());
 
         Allure.step("Verify: deleted company analyst is no longer present in the users table");
-        assertFalse(teamPage.getTable().isUserPresentInTable(companyAnalystEmail));
+        assertFalse(teamPage.getTable().getColumnValuesFromAllPages("Username").contains(companyAnalystEmail));
     }
 
     @Test
@@ -236,7 +236,7 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(email)
                 .fillPasswordField("Qwerty123!")
                 .checkCompanyAnalystRadiobutton()
-                .setAllowedBusinessUnit(MERCHANT_TITLE)
+                .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickEditUserIcon(email);
@@ -252,7 +252,7 @@ public class TeamPageTest extends BaseTest {
 
         TeamPage teamPage = editUserDialog
                 .checkInactiveRadiobutton()
-                .unsetAllowedBusinessUnits(new String[]{MERCHANT_TITLE})
+                .uncheckAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .checkCompanyAdminRadiobutton()
                 .clickSaveChangesButton();
 
@@ -311,7 +311,7 @@ public class TeamPageTest extends BaseTest {
                 .fillEmailField(email)
                 .fillPasswordField("Qwerty123!")
                 .checkCompanyAnalystRadiobutton()
-                .setAllowedBusinessUnit(MERCHANT_TITLE)
+                .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
                 .getTable().clickDeactivateUserIcon(email)
@@ -457,7 +457,7 @@ public class TeamPageTest extends BaseTest {
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)
                 .fillPasswordField(analystPassword)
-                .setAllowedBusinessUnit(MERCHANT_TITLE)
+                .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");

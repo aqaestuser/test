@@ -14,6 +14,7 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertFalse;
 
 public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
@@ -52,7 +53,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getCompanyInfoBlock()).isVisible();
     }
 
-    // TODO unstable - company not found sometimes
     @Test(priority = 1)
     @TmsLink("723")
     @Epic("System/Companies and business units")
@@ -70,8 +70,18 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
                 .hasText("SUCCESSCompany was deleted successfully");
 
-//        Allure.step("Verify: the deleted company is no longer present in the dropdown list");
-//        assertTrue(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyAbsentInDropdown(COMPANY_NAME));
+        companiesAndBusinessUnitsPage
+                .getAlert().clickCloseButton()
+                .waitForCompanyAbsence(getApiRequestContext(), COMPANY_NAME);
+
+        Allure.step("Verify: the deleted company is no longer present on the page");
+        assertThat(companiesAndBusinessUnitsPage.getPageContent())
+                .hasText("Select company name to view merchants");
+
+        getPage().waitForTimeout(2000);
+
+        Allure.step("Verify: the deleted company is no longer present in the dropdown list");
+        assertFalse(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyPresent(COMPANY_NAME));
     }
 
     @Test

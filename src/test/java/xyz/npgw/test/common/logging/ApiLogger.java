@@ -1,9 +1,12 @@
 package xyz.npgw.test.common.logging;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.PlaywrightException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import xyz.npgw.test.common.entity.ApiError;
 
 public class ApiLogger {
 
@@ -19,7 +22,13 @@ public class ApiLogger {
                 log.debug("{} {}", message, response.status());
                 break;
             case 4:
-                log.warn("{} {} - {}", message, response.status(), response.text());
+                String errorMessage = response.text();
+                try {
+                    errorMessage = new Gson().fromJson(response.text(), ApiError.class).message();
+                } catch (JsonSyntaxException ignored) {
+                    // no handling
+                }
+                log.warn("{} {} - {}", message, response.status(), errorMessage);
                 break;
             case 5:
                 log.error("{} {} - {}", message, response.status(), response.text());

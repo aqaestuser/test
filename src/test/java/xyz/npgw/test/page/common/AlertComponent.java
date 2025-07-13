@@ -19,6 +19,7 @@ public class AlertComponent<CurrentPageT> extends BaseComponent {
     public AlertComponent(Page page, CurrentPageT currentPage) {
         super(page);
         this.currentPage = currentPage;
+        alertMessage.waitFor();
     }
 
     public CurrentPageT waitUntilAlertIsHidden() {

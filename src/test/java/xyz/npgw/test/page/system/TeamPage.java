@@ -37,7 +37,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
 
     @Step("Click 'Refresh data' button")
     public TeamPage clickRefreshDataButton() {
-        getByTestId("ApplyFilterButtonTeamPage").click();
+        getPage().waitForResponse("**/portal-v1/user/list/*", getByTestId("ApplyFilterButtonTeamPage")::click);
 
         return this;
     }
@@ -59,7 +59,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
                 throw new TimeoutError("Waiting for user '%s' presence".formatted(email));
             }
         }
-        log.info("Presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
 
         return this;
@@ -75,7 +75,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
                 throw new TimeoutError("Waiting for user '%s' absence".formatted(email));
             }
         }
-        log.info("Absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        log.info("User absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
 
         return this;
@@ -92,7 +92,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
                 throw new TimeoutError("Waiting for user '%s' activation".formatted(email));
             }
         }
-        log.info("Activation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        log.info("User activation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
 
         return this;
@@ -109,7 +109,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
                 throw new TimeoutError("Waiting for user '%s' deactivation".formatted(email));
             }
         }
-        log.info("Deactivation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        log.info("User deactivation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
 
         return this;

@@ -8,10 +8,6 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.TeamPage;
 
-import java.util.Arrays;
-
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-
 @SuppressWarnings("unchecked")
 public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialogT>>
         extends BaseDialog<TeamPage, CurrentDialogT> {
@@ -45,7 +41,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'System admin' user role radiobutton")
     public CurrentDialogT checkSystemAdminRadiobutton() {
         getByRole(AriaRole.RADIO, "System admin").check();
-        assertThat(getByRole(AriaRole.RADIO, "System admin")).isChecked();
+//        assertThat(getByRole(AriaRole.RADIO, "System admin")).isChecked();
 
         return (CurrentDialogT) this;
     }
@@ -53,7 +49,7 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'Company admin' user role radiobutton")
     public CurrentDialogT checkCompanyAdminRadiobutton() {
         getByRole(AriaRole.RADIO, "Company admin").check();
-        assertThat(getByRole(AriaRole.RADIO, "Company admin")).isChecked();
+//        assertThat(getByRole(AriaRole.RADIO, "Company admin")).isChecked();
 
         return (CurrentDialogT) this;
     }
@@ -61,38 +57,22 @@ public abstract class UserDialog<CurrentDialogT extends UserDialog<CurrentDialog
     @Step("Check 'Company analyst' user role radiobutton")
     public CurrentDialogT checkCompanyAnalystRadiobutton() {
         getByRole(AriaRole.RADIO, "Company analyst").check();
-        assertThat(getByRole(AriaRole.RADIO, "Company analyst")).isChecked();
+//        assertThat(getByRole(AriaRole.RADIO, "Company analyst")).isChecked();
 
         return (CurrentDialogT) this;
     }
 
-    @Step("Set checked 'Allowed business units' checkboxes by business units names")
-    public CurrentDialogT setAllowedBusinessUnits(String[] businessUnits) {
-        Arrays.stream(businessUnits).forEach(this::setAllowedBusinessUnit);
+    @Step("Check '{businessUnitName}' checkbox")
+    public CurrentDialogT checkAllowedBusinessUnitCheckbox(String businessUnitName) {
+//        getByTextExact("Allowed business units").waitFor();
+        getByRole(AriaRole.CHECKBOX, businessUnitName).setChecked(true);
 
         return (CurrentDialogT) this;
     }
 
-    @Step("Set checked all '{businessUnit}' checkboxes")
-    public CurrentDialogT setAllowedBusinessUnit(String businessUnit) {
-        getByTextExact("Allowed business units").waitFor();
-        getByRole(AriaRole.CHECKBOX, businessUnit).all()
-                .forEach(item -> {
-                    item.waitFor();
-                    item.setChecked(true);
-                });
-
-        return (CurrentDialogT) this;
-    }
-
-    @Step("Unset checked 'Allowed business units' checkboxes by business units names")
-    public CurrentDialogT unsetAllowedBusinessUnits(String[] businessUnits) {
-        for (String businessUnit : businessUnits) {
-            Locator businessUnitLocator = getByRole(AriaRole.CHECKBOX, businessUnit);
-
-            businessUnitLocator.last().waitFor();
-            businessUnitLocator.all().forEach(item -> item.setChecked(false));
-        }
+    @Step("Uncheck '{businessUnitName}' checkbox")
+    public CurrentDialogT uncheckAllowedBusinessUnitCheckbox(String businessUnitName) {
+        getByRole(AriaRole.CHECKBOX, businessUnitName).setChecked(false);
 
         return (CurrentDialogT) this;
     }

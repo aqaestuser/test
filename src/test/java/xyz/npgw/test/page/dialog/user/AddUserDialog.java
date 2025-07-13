@@ -5,12 +5,11 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.system.TeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public class AddUserDialog extends UserDialog<AddUserDialog> implements AlertTrait<AddUserDialog> {
+public class AddUserDialog extends UserDialog<AddUserDialog> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 

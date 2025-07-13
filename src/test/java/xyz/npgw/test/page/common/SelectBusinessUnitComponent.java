@@ -6,12 +6,9 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-import xyz.npgw.test.page.base.BaseComponent;
-
-import java.util.NoSuchElementException;
 
 @Log4j2
-public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
+public class SelectBusinessUnitComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter
     private final Locator selectBusinessUnitField = getByLabelExact("Business unit");
@@ -28,61 +25,35 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends BaseComponent {
     private final Locator selectBusinessUnitClearIcon = selectBusinessUnitContainer
             .locator("button[aria-label='Show suggestions']:first-child");
 
-    private final CurrentPageT page;
-
     public SelectBusinessUnitComponent(Page page, CurrentPageT currentPage) {
-        super(page);
-        this.page = currentPage;
-    }
-
-    public Locator getBusinessUnitInDropdownOption(String businessUnitName) {
-        return dropdownOptionList.filter(new Locator.FilterOptions().setHas(getByTextExact(businessUnitName)));
+        super(page, currentPage);
     }
 
     @Step("Select '{businessUnitName}' business unit using filter")
     public CurrentPageT selectBusinessUnit(String businessUnitName) {
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+        select(selectBusinessUnitField, businessUnitName);
 
-        String lastName = "";
-        selectBusinessUnitField.fill(businessUnitName);
-
-        if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown.");
-        }
-
-        while (getBusinessUnitInDropdownOption(businessUnitName).all().isEmpty()) {
-            if (dropdownOptionList.last().innerText().equals(lastName)) {
-                throw new NoSuchElementException("Business unit '" + businessUnitName + "' not found in dropdown.");
-            }
-            dropdownOptionList.last().scrollIntoViewIfNeeded();
-
-            lastName = dropdownOptionList.last().innerText();
-        }
-
-        getBusinessUnitInDropdownOption(businessUnitName).first().click();
-
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-        return page;
+        return currentPage;
     }
 
     @Step("Click select Business unit clear icon")
     public CurrentPageT clickSelectBusinessUnitClearIcon() {
         selectBusinessUnitClearIcon.dispatchEvent("click");
 
-        return page;
+        return currentPage;
     }
 
     @Step("Click Business unit dropdown toggle arrow '˅˄'")
     public CurrentPageT clickSelectBusinessUnitDropdownChevron() {
         selectBusinessUnitDropdownChevron.click();
 
-        return page;
+        return currentPage;
     }
 
     @Step("Click 'Select Business unit' placeholder")
     public CurrentPageT clickSelectBusinessUnitPlaceholder() {
         selectBusinessUnitPlaceholder.click();
 
-        return page;
+        return currentPage;
     }
 }
