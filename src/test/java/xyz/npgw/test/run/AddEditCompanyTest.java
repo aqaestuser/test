@@ -25,11 +25,12 @@ import static org.testng.Assert.assertEquals;
 public class AddEditCompanyTest extends BaseTest {
 
     private static final String COMPANY_NAME = "%s company name".formatted(RUN_ID);
+    private static final String COMPANY_NAME_TEST = "%s company name test".formatted(RUN_ID);
     private static final String EXISTING_COMPANY_NAME = "%s existing company name".formatted(RUN_ID);
     private static final String COMPANY_TYPE = "CompanyType";
 
     Company company = new Company(
-            "%s company name test".formatted(RUN_ID), "Company Type Test",
+            COMPANY_NAME_TEST, "Company Type Test",
             new Address("Warwick", "PA",
                     "19876", "US",
                     "+1234567", "+1234567", "+1234567"),
@@ -38,40 +39,21 @@ public class AddEditCompanyTest extends BaseTest {
             true, true
     );
 
+    Company editedCompany = new Company(
+            COMPANY_NAME_TEST, "Edited company type",
+            new Address("Delmor", "CA",
+                    "19000", "AL",
+                    "+2222222", "+2222222", "+2222222"),
+            "Edited Description Test",
+            "https://www.editedtest.com", "Catty Smith", "editedtest@yahoo.com",
+            false, false
+    );
+
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), EXISTING_COMPANY_NAME);
-    }
-
-    @Test
-    @TmsLink("189")
-    @Epic("System/Companies and business units")
-    @Feature("Add company")
-    @Description("Verify that the placeholder text for each field is correct.")
-    public void testVerifyPlaceholders() {
-        AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton();
-
-        Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
-                "Enter name",
-                "Enter type",
-                "Enter company description",
-                "Enter website",
-                "Enter primary contact",
-                "Enter email",
-                "Enter country",
-                "Enter state",
-                "Enter ZIP",
-                "Enter city",
-                "Enter phone",
-                "Enter mobile",
-                "Enter fax"
-        ));
     }
 
     @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
@@ -97,8 +79,8 @@ public class AddEditCompanyTest extends BaseTest {
     @TmsLink("206")
     @Epic("System/Companies and business units")
     @Feature("Add company")
-    @Description("'Create' button is disabled when required fields are not filled.")
-    public void testCreateButtonDisabledWhenRequiredFieldsAreEmpty() {
+    @Description("Verify required field states, placeholders, and button state in empty 'Add Company' form.")
+    public void testAddCompanyFormValidationWhenEmpty() {
         AddCompanyDialog addCompanyDialog = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
@@ -110,20 +92,27 @@ public class AddEditCompanyTest extends BaseTest {
         Allure.step("Verify: 'Company type' field is marked invalid");
         assertThat(addCompanyDialog.getCompanyTypeField()).hasAttribute("aria-invalid", "true");
 
+        Allure.step("Verify: all placeholders are correct for each field");
+        assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
+                "Enter name",
+                "Enter type",
+                "Enter company description",
+                "Enter website",
+                "Enter primary contact",
+                "Enter email",
+                "Enter country",
+                "Enter state",
+                "Enter ZIP",
+                "Enter city",
+                "Enter phone",
+                "Enter mobile",
+                "Enter fax"
+        ));
+
         Allure.step("Verify: 'Create' button is disabled when required fields are not filled.");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
-    }
 
-    @Test
-    @TmsLink("184")
-    @Epic("System/Companies and business units")
-    @Feature("Add company")
-    @Description("Verify that clicking the Close button successfully closes the 'Add Company' dialog.")
-    public void testVerifyCloseAddCompanyDialogWhenCloseButtonIsClicked() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .clickAddCompanyButton()
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
                 .clickCloseButton();
 
         Allure.step("Verify: the 'Add Company' dialog is no longer visible");
@@ -302,7 +291,7 @@ public class AddEditCompanyTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getCity()).hasValue(company.companyAddress().city());
     }
 
-    @Test
+    @Test(dependsOnMethods = "testAddCompanyEndToEndTest")
     @TmsLink("266")
     @Epic("System/Companies and business units")
     @Feature("Edit company")
@@ -311,25 +300,75 @@ public class AddEditCompanyTest extends BaseTest {
         CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectCompany().selectCompany(editedCompany.companyName())
                 .clickEditCompanyButton()
-                .fillCompanyTypeField("LLC")
-                .fillCompanyDescriptionField("Description of company business model")
-                .fillCompanyWebsiteField("https://google.com")
-                .fillCompanyPrimaryContactField("John Doe")
-                .fillCompanyEmailField("google@gmail.com")
-                .fillCompanyCountryField("FR")
-                .fillCompanyStateField("Provence")
-                .fillCompanyZipField("75001")
-                .fillCompanyCityField("Paris")
-                .fillCompanyPhoneField("+1234567890123")
-                .fillCompanyMobileField("+1234567890123")
-                .fillCompanyFaxField("+1234567890123")
+                .fillCompanyTypeField(editedCompany.companyType())
+                .fillCompanyDescriptionField(editedCompany.description())
+                .fillCompanyWebsiteField(editedCompany.website())
+                .fillCompanyPrimaryContactField(editedCompany.primaryContact())
+                .fillCompanyEmailField(editedCompany.email())
+                .setApiActiveCheckbox(editedCompany.isApiActive())
+                .setPortalActiveCheckbox(editedCompany.isPortalActive())
+                .fillCompanyCountryField(editedCompany.companyAddress().country())
+                .fillCompanyStateField(editedCompany.companyAddress().state())
+                .fillCompanyZipField(editedCompany.companyAddress().zip())
+                .fillCompanyCityField(editedCompany.companyAddress().city())
+                .fillCompanyPhoneField(editedCompany.companyAddress().phone())
+                .fillCompanyMobileField(editedCompany.companyAddress().mobile())
+                .fillCompanyFaxField(editedCompany.companyAddress().fax())
                 .clickSaveChangesButton();
 
         Allure.step("Verify: success message is displayed");
         assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
                 .hasText("SUCCESSCompany was updated successfully");
+
+        companiesAndBusinessUnitsPage
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        Allure.step("Verify: name field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getName()).hasValue(editedCompany.companyName());
+
+        Allure.step("Verify: type field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getType()).hasValue(editedCompany.companyType());
+
+        Allure.step("Verify: description field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getDescription()).hasValue(editedCompany.description());
+
+        Allure.step("Verify: website field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getWebsite()).hasValue(editedCompany.website());
+
+        Allure.step("Verify: primary contact field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getPrimaryContact()).hasValue(editedCompany.primaryContact());
+
+        Allure.step("Verify: email field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getEmail()).hasValue(editedCompany.email());
+
+        Allure.step("Verify: 'API active' checkbox is checked");
+        assertThat(companiesAndBusinessUnitsPage.getApiActive()).not().isChecked();
+
+        Allure.step("Verify: 'Portal active' checkbox is checked");
+        assertThat(companiesAndBusinessUnitsPage.getPortalActive()).not().isChecked();
+
+        Allure.step("Verify: phone field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getPhone()).hasValue(editedCompany.companyAddress().phone());
+
+        Allure.step("Verify: mobile field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getMobile()).hasValue(editedCompany.companyAddress().mobile());
+
+        Allure.step("Verify: fax field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getFax()).hasValue(editedCompany.companyAddress().fax());
+
+        Allure.step("Verify: country field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getCountry()).hasValue(editedCompany.companyAddress().country());
+
+        Allure.step("Verify: state field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getState()).hasValue(editedCompany.companyAddress().state());
+
+        Allure.step("Verify: ZIP code field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getZip()).hasValue(editedCompany.companyAddress().zip());
+
+        Allure.step("Verify: city field is correctly filled");
+        assertThat(companiesAndBusinessUnitsPage.getCity()).hasValue(editedCompany.companyAddress().city());
     }
 
     @AfterClass
@@ -337,7 +376,7 @@ public class AddEditCompanyTest extends BaseTest {
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.deleteCompany(getApiRequestContext(), EXISTING_COMPANY_NAME);
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), editedCompany.companyName());
         super.afterClass();
     }
 }
