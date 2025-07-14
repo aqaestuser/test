@@ -42,7 +42,6 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         super(page);
         getByRole(AriaRole.GRIDCELL, "No rows to display.")
                 .or(firstRow)
-                .first()
                 .waitFor();
     }
 
