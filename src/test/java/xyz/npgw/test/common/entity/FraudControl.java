@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.CustomLog;
 import lombok.Getter;
 
+import static xyz.npgw.test.common.util.TestUtils.encode;
+
 @Getter
 @Builder
 @CustomLog
@@ -26,5 +28,10 @@ public class FraudControl {
     public static void create(APIRequestContext request, FraudControl fraudControl) {
         APIResponse response = request.post("portal-v1/control", RequestOptions.create().setData(fraudControl));
         log.response(response, "create control %s".formatted(fraudControl.controlName));
+    }
+
+    public static void delete(APIRequestContext request, String fraudControlName) {
+        APIResponse response = request.delete("portal-v1/control/%s".formatted(encode(fraudControlName)));
+        log.response(response, "delete control %s".formatted(fraudControlName));
     }
 }
