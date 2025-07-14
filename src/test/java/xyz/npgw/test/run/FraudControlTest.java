@@ -24,6 +24,7 @@ public class FraudControlTest extends BaseTest {
             .controlDisplayName("ControlDisplay")
             .controlConfig("default")
             .build();
+    private final String fraudControlName = "Test fraudControl name";
 
     @Test
     @TmsLink("891")
@@ -52,10 +53,33 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).containsText("Active");
     }
 
+    @Test
+    @TmsLink("895")
+    @Epic("System/Fraud control")
+    @Feature("Fraud control")
+    @Description("Verify the error message when attempting to create a Fraud Control with the existing name")
+    public void testErrorMessageForExistedName() {
+        FraudControlPage fraudControlPage = new FraudControlPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .clickAddFraudControl()
+                .fillFraudControlNameField(fraudControlName)
+                .clickCreateButton()
+                .clickAddFraudControl()
+                .fillFraudControlNameField(fraudControlName)
+                .clickCreateButton();
+
+        Allure.step("Verify that the error message ‘ERROR Entity with name … already exists.’ is displayed.");
+
+        assertThat(fraudControlPage.getAlert().getMessage())
+                .hasText("ERROREntity with name {" + fraudControlName + "} already exists.");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
         TestUtils.deleteFraudControl(getApiRequestContext(), FRAUD_CONTROL.getControlName());
+        TestUtils.deleteFraudControl(getApiRequestContext(), fraudControlName);
         super.afterClass();
     }
 }
