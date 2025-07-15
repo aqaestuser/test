@@ -17,6 +17,7 @@ import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
+import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.TeamPage;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class TeamPageTest extends BaseTest {
     private static final String MERCHANT_TITLE = "Business unit 1";
     private static final String SUCCESS_MESSAGE_USER_CREATED = "SUCCESSUser was created successfully";
     private static final String SUCCESS_MESSAGE_USER_UPDATED = "SUCCESSUser was updated successfully";
+    private static final String SUCCESS_MESSAGE_USER_DELETED = "SUCCESSUser was deleted successfully";
     private static String systemAdminEmail;
     private static String companyAdminEmail;
     private static String companyAnalystEmail;
@@ -95,7 +97,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the system admin");
-        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_DELETED);
 
         teamPage
                 .getAlert().clickCloseButton()
@@ -139,7 +141,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the company admin");
-        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_DELETED);
 
         teamPage
                 .getAlert().clickCloseButton()
@@ -153,7 +155,7 @@ public class TeamPageTest extends BaseTest {
     @TmsLink("330")
     @Epic("System/Team")
     @Feature("Add user")
-    @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed(e2e).")
+    @Description("Add a new user and verify that all fields, statuses, and icons are correctly displayed.")
     public void testAddCompanyAnalyst() {
         companyAnalystEmail = "%s.newuser@email.com".formatted(TestUtils.now());
 
@@ -199,6 +201,24 @@ public class TeamPageTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testAddCompanyAnalyst")
+    @TmsLink("908")
+    @Epic("System/Companies and business units")
+    @Feature("Delete Business unit")
+    @Description("Verify that business unit cannot be deleted if there are users associated with it")
+    public void testDeletingBusinessUnitWithUsersFailsWithError() {
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(getCompanyName())
+                .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE)
+                .clickDeleteButton();
+
+        Allure.step("Verify: business unit deletion fails with expected error message");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("ERRORMerchant could not be deleted: there are still users associated with it.");
+    }
+
+    @Test(dependsOnMethods = "testDeletingBusinessUnitWithUsersFailsWithError")
     @TmsLink("748")
     @Epic("System/Team")
     @Feature("Delete user")
@@ -211,7 +231,7 @@ public class TeamPageTest extends BaseTest {
                 .clickDeleteButton();
 
         Allure.step("Verify: success alert appears after deleting the company analyst");
-        assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSUser was deleted successfully");
+        assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_DELETED);
 
         teamPage
                 .getAlert().clickCloseButton()
@@ -225,7 +245,7 @@ public class TeamPageTest extends BaseTest {
     @TmsLink("331")
     @Epic("System/Team")
     @Feature("Edit user")
-    @Description("Edits the user's role and status, verifies the updates, and reactivates the user(e2e).")
+    @Description("Edits the user's role and status, verifies the updates, and reactivates the user.")
     public void testEditUser() {
         String email = "%s.edit.analyst@email.com".formatted(TestUtils.now());
 
@@ -569,7 +589,7 @@ public class TeamPageTest extends BaseTest {
         Collections.sort(expectedSortedList);
 
         Assert.assertEquals(sortedUsersAlphabetically, expectedSortedList,
-                "Список пользователей не отсортирован по алфавиту");
+                "The list of users is not sorted alphabetically.");
     }
 
     @Test
@@ -589,7 +609,7 @@ public class TeamPageTest extends BaseTest {
         expectedSortedList.sort(Collections.reverseOrder());
 
         Assert.assertEquals(sortedUsersReverseAlphabetically, expectedSortedList,
-                "Список пользователей не отсортирован по алфавиту в обратном порядке");
+                "The list of users is not sorted in reverse alphabetical order.");
     }
 
     @Test
