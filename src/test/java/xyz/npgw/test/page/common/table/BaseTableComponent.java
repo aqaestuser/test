@@ -42,6 +42,7 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         super(page);
         getByRole(AriaRole.GRIDCELL, "No rows to display.")
                 .or(firstRow)
+                .first()
                 .waitFor();
     }
 
@@ -64,6 +65,26 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
             try {
                 Locator row = locator("tr[data-key]").filter(new Locator.FilterOptions()
                         .setHasText(rowHeader));
+                row.waitFor(new Locator.WaitForOptions().setTimeout(3000).setState(WaitForSelectorState.ATTACHED));
+                log.info(row.allInnerTexts());
+                return row;
+            } catch (PlaywrightException ignored) {
+                if (hasNoPagination()) {
+                    throw new NoSuchElementException("No rows with data-key '" + rowHeader + "! Table is empty");
+                } else {
+                    log.info("Row not found on this page, trying next page.");
+                }
+            }
+        } while (goToNextPage());
+
+        throw new NoSuchElementException("Row with data-key '" + rowHeader + "' not found on any page.");
+    }
+
+    public Locator getRow(String rowHeader, int tableNumber) {
+        do {
+            try {
+                Locator row = locator("tr[data-key]").filter(new Locator.FilterOptions()
+                        .setHasText(rowHeader)).nth(tableNumber);
                 row.waitFor(new Locator.WaitForOptions().setTimeout(3000).setState(WaitForSelectorState.ATTACHED));
                 log.info(row.allInnerTexts());
                 return row;

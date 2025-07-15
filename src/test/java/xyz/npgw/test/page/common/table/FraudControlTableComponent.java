@@ -3,6 +3,7 @@ package xyz.npgw.test.page.common.table;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.control.ActivateControlActivityDialog;
+import xyz.npgw.test.page.dialog.control.ConnectFraudControlToBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateControlActivityDialog;
 import xyz.npgw.test.page.dialog.control.DeleteControlDialog;
 import xyz.npgw.test.page.dialog.control.EditFraudControlDialog;
@@ -48,9 +49,9 @@ public class FraudControlTableComponent extends BaseTableComponent<FraudControlP
     }
 
     @Step("Click 'Connect control' icon")
-    public FraudControlPage clickConnectControlIcon(String controlName) {
+    public ConnectFraudControlToBusinessUnitDialog clickConnectControlIcon(String controlName) {
         getRow(controlName).getByTestId("ConnectControlButton").click();
 
-        return getCurrentPage();
+        return new ConnectFraudControlToBusinessUnitDialog(getPage());
     }
 }

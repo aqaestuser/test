@@ -73,6 +73,10 @@ public final class TestUtils {
         Acquirer.delete(request, acquirerName);
     }
 
+    public static void createFraudControl(APIRequestContext request, FraudControl fraudControl) {
+        FraudControl.create(request, fraudControl);
+    }
+
     public static void deleteFraudControl(APIRequestContext request, String fraudControlName) {
         FraudControl.delete(request, fraudControlName);
     }

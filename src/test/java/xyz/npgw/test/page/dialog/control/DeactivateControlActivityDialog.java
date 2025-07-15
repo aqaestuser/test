@@ -8,7 +8,6 @@ import xyz.npgw.test.page.system.FraudControlPage;
 
 public class DeactivateControlActivityDialog extends BaseDialog<FraudControlPage, DeactivateControlActivityDialog> {
 
-
     public DeactivateControlActivityDialog(Page page) {
         super(page);
     }
