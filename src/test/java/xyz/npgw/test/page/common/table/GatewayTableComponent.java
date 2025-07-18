@@ -9,15 +9,21 @@ import xyz.npgw.test.page.system.GatewayPage;
 
 public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
 
+    private final Locator firstRowChangeActivityButton;
+    private final Locator acquirerColumnHeader;
+    private final Locator currenciesColumnHeader;
+    private final Locator priorityColumnHeader;
+    private final Locator statusColumnHeader;
+
     public GatewayTableComponent(Page page) {
         super(page);
-    }
 
-    private final Locator firstRowChangeActivityButton = getByTestId("ChangeMerchantAcquirerActivityButton").nth(0);
-    private final Locator acquirerColumnHeader = locator("//th[text()='Acquirer']");
-    private final Locator currenciesColumnHeader = locator("//th[text()='Currencies']");
-    private final Locator priorityColumnHeader = locator("//th[text()='Priority']");
-    private final Locator statusColumnHeader = locator("//th[text()='Status']");
+        this.firstRowChangeActivityButton = getRoot().getByTestId("ChangeMerchantAcquirerActivityButton").nth(0);
+        this.acquirerColumnHeader = getRoot().locator("//th[text()='Acquirer']");
+        this.currenciesColumnHeader = getRoot().locator("//th[text()='Currencies']");
+        this.priorityColumnHeader = getRoot().locator("//th[text()='Priority']");
+        this.statusColumnHeader = getRoot().locator("//th[text()='Status']");
+    }
 
     @Override
     protected GatewayPage getCurrentPage() {
@@ -33,7 +39,7 @@ public class GatewayTableComponent extends BaseTableComponent<GatewayPage> {
 
     @Step("Click 'Delete business unit acquirer' for merchant acquirer with name: {acquirerDisplayName}")
     public DeleteBusinessUnitAcquirerDialog clickDeleteBusinessUnitAcquirer(String acquirerDisplayName) {
-        getRowByText(acquirerDisplayName).locator(getByTestId("DeleteMerchantAcquirerButton")).click();
+        getRow(acquirerDisplayName).locator(getByTestId("DeleteMerchantAcquirerButton")).click();
 
         return new DeleteBusinessUnitAcquirerDialog(getPage());
     }

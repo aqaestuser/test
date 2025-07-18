@@ -17,7 +17,6 @@ import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.common.table.AcquirersTableComponent;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.ArrayList;
@@ -261,7 +260,7 @@ public class AcquirersPageTest extends BaseTest {
         List<String> acquirerTableHeaders = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getTable().getColumnHeadersText();
+                .getTable().getColumnHeaderTexts();
 
         Allure.step("Verify: The Acquirer table contains correct column headers");
         Assert.assertEquals(acquirerTableHeaders, COLUMNS_HEADERS, "Mismatch in Acquirer table columns");
@@ -346,15 +345,14 @@ public class AcquirersPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        AcquirersTableComponent table = acquirersPage.getTable();
         double pageWidth = getPage().viewportSize().width;
 
         for (String option : rowsPerPageOptions) {
-            table.forEachPage(option, activePage -> {
-                BoundingBox box = table.getHeadersRow().boundingBox();
+            acquirersPage.getTable().forEachPage(option, activePage -> {
+                BoundingBox box = acquirersPage.getTable().getHeaderRow().boundingBox();
 
                 Allure.step(String.format("Verify headers on page '%s' with '%s' pagination", activePage, option));
-                Assert.assertEquals(table.getColumnHeader().allTextContents(), COLUMNS_HEADERS,
+                Assert.assertEquals(acquirersPage.getTable().getColumnHeader().allTextContents(), COLUMNS_HEADERS,
                         String.format("Headers mismatch on page %s with '%s' rows per page", activePage, option));
 
                 assertTrue(box.x >= 0, String.format(

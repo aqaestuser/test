@@ -328,13 +328,13 @@ public class TransactionsTableTest extends BaseTest {
 
         List<String> headersList = transactionsPage
                 .clickRefreshDataButton()
-                .getTable().getColumnHeadersText();
+                .getTable().getColumnHeaderTexts();
 
         List<String> headersListAfterUncheckAllVisibleColumns = transactionsPage
                 .clickSettingsButton()
                 .uncheckAllCheckboxInSettings()
                 .clickRefreshDataButton()
-                .getTable().getColumnHeadersText();
+                .getTable().getColumnHeaderTexts();
 
         Allure.step("Verify: All column headers are displayed in the Settings");
         assertEquals(visibleColumnsLabels, COLUMNS_HEADERS);
@@ -366,7 +366,7 @@ public class TransactionsTableTest extends BaseTest {
             List<String> headersListAfterUncheckOne = transactionsPage
                     .uncheckVisibleColumn(item)
                     .clickRefreshDataButton()
-                    .getTable().getColumnHeadersText();
+                    .getTable().getColumnHeaderTexts();
 
             Allure.step("Verify: Only one column header is NOT displayed in the Transactions. And it's - '{item}'");
             assertTrue((headersListAfterUncheckOne.size() == COLUMNS_HEADERS.size())
@@ -384,7 +384,7 @@ public class TransactionsTableTest extends BaseTest {
             List<String> headersListAfterCheckOnlyOne = transactionsPage
                     .checkVisibleColumn(item)
                     .clickRefreshDataButton()
-                    .getTable().getColumnHeadersText();
+                    .getTable().getColumnHeaderTexts();
 
             Allure.step("Verify: Only two column headers are displayed in the transactions table -"
                     + " '{item}' column header and 'Actions'");
@@ -530,7 +530,7 @@ public class TransactionsTableTest extends BaseTest {
         Files.createDirectories(targetPath.getParent());
         download.saveAs(targetPath);
 
-        List<String> uiHeader = transactionsPage.getTable().getColumnHeadersText();
+        List<String> uiHeader = transactionsPage.getTable().getColumnHeaderTexts();
         List<List<String>> rowsFromCsv = transactionsPage
                 .readCsv(targetPath);
         List<String> csvHeader = rowsFromCsv.remove(0);

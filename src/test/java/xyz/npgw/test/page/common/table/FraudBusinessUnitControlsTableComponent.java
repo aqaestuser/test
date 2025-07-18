@@ -1,16 +1,20 @@
 package xyz.npgw.test.page.common.table;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.control.ActivateBusinessUnitControlActivityDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateBusinessUnitControlActivityDialog;
 import xyz.npgw.test.page.dialog.control.DeleteBusinessUnitControlDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
-public class BusinessUnitControlsTableComponent extends BaseTableComponent<FraudControlPage> {
+public class FraudBusinessUnitControlsTableComponent extends BaseTableComponent<FraudControlPage> {
 
-    public BusinessUnitControlsTableComponent(Page page) {
-        super(page);
+    public FraudBusinessUnitControlsTableComponent(Page page) {
+        super(page, page.getByLabel("transactions table")
+                .or(page.getByRole(AriaRole.GROUP)
+                        .filter(new Locator.FilterOptions().setHasText("Rows Per Page"))).last());
     }
 
     @Override

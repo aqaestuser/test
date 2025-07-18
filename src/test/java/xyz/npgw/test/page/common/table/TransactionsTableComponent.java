@@ -19,12 +19,16 @@ import java.util.stream.IntStream;
 
 public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
 
-    private final Locator refundTransactionButton = getByTestId("RefundTransactionButton");
-    private final Locator cardTypeImage = locator("img[alt='logo']");
-    private final Locator npgwReference = getRows().getByRole(AriaRole.LINK);
+    private final String refundTransactionButtonSelector;
+    private final Locator cardTypeImage;
+    private final Locator npgwReference;
 
     public TransactionsTableComponent(Page page) {
         super(page);
+
+        this.refundTransactionButtonSelector = "[data-testid='RefundTransactionButton']";
+        this.cardTypeImage = locator("img[alt='logo']");
+        this.npgwReference = getRows().getByRole(AriaRole.LINK);
     }
 
     @Override
@@ -73,11 +77,11 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
     public String getFirstRowCardType() {
         getFirstRowCell("Card type").getByRole(AriaRole.IMG).hover();
 
-        return locator("[data-slot='content']").textContent();
+        return getRoot().locator("[data-slot='content']").textContent();
     }
 
     public List<String> getAllTransactionsStatusList() {
-        getByRole(AriaRole.BUTTON, "next page button").waitFor();
+        getPaginationItems().last().waitFor();
 
         return getColumnValuesFromAllPages("Status");
     }
@@ -85,12 +89,12 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
     public List<Boolean> getRefundButtonVisibilityFromAllPages() {
         selectRowsPerPageOption("100");
         goToFirstPageIfNeeded();
-
         List<Boolean> results = new ArrayList<>();
         do {
             List<Locator> cells = getColumnCells("Actions");
             for (Locator cell : cells) {
-                boolean isVisible = cell.locator(refundTransactionButton).isVisible();
+                cell.waitFor();
+                boolean isVisible = cell.locator(refundTransactionButtonSelector).isVisible();
                 results.add(isVisible);
             }
         } while (goToNextPage());
@@ -126,7 +130,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
     @Step("Click 'Refund transaction'")
     public RefundTransactionDialog clickRefundTransaction(Locator row) {
-        row.locator(refundTransactionButton).click();
+        row.locator(refundTransactionButtonSelector).click();
 
         return new RefundTransactionDialog(getPage());
     }
@@ -145,6 +149,6 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
     }
 
     public Locator getRefundButton(Locator row) {
-        return row.locator(refundTransactionButton);
+        return row.locator(refundTransactionButtonSelector);
     }
 }
