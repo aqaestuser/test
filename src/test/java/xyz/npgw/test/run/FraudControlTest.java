@@ -84,6 +84,41 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).containsText("Active");
     }
 
+    @Test(dependsOnMethods = "testAddActiveFraudControl")
+    @TmsLink("920")
+    @Epic("System/Fraud Control")
+    @Feature("Add/Edit/Delete Fraud Control")
+    @Description("Add Fraud Control to Business Unit with Cancel button"
+            + "Add Fraud Control to Business Unit with 'Cross'"
+            + "Add Fraud Control to Business Unit with ESC")
+    public void testCancelAddingFraudControlToBusinessUnit() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTable().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+                .clickCancelButton();
+
+        Allure.step("Verify that due to click Cancel button Fraud Control hasn't been added");
+        Locator attemptOne = page.getTable().getNoRowsToDisplayMessage();
+        assertThat(attemptOne).hasText("No rows to display.");
+
+        page.getTable().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+                .clickCloseIcon();
+
+        Allure.step("Verify that due to click Cross icon Fraud Control hasn't been added");
+        Locator attemptTwo = page.getTable().getNoRowsToDisplayMessage();
+        assertThat(attemptTwo).hasText("No rows to display.");
+
+        page.getTable().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+                .pressEscapeToCancel();
+
+        Allure.step("Verify that due to press ESC keyboard button Fraud Control hasn't been added");
+        Locator attemptThree = page.getTable().getNoRowsToDisplayMessage();
+        assertThat(attemptThree).hasText("No rows to display.");
+    }
+
     @Test
     @TmsLink("904")
     @Epic("System/Fraud Control")
@@ -110,7 +145,7 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).containsText("Inactive");
     }
 
-    @Test
+    @Test(dependsOnMethods = "testCancelAddingFraudControlToBusinessUnit")
     @TmsLink("910")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
