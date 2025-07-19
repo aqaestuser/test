@@ -65,23 +65,26 @@ public class TransactionsPageTest extends BaseTest {
     @TmsLink("181")
     @Epic("Transactions")
     @Feature("Panel")
-    @Description("Verify that on the Transactions Page user can see Panel:"
-            + " Date range, Business unit, Currency, Payment method, Status, Amount, Reset filter, "
+    @Description("Verify that on the Transactions Page user can see Panel: Company"
+            + " Business unit, Date range, Currency, Card type, Status, Trx Ids, Amount, Reset filter, "
             + "Apply data, Download file, Settings.")
     public void testVisibilityOfControlPanelElements() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink();
 
-        Allure.step("Verify: DataRange picker is visible");
-        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).isVisible();
+        Allure.step("Verify: Company selector is visible");
+        assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isVisible();
 
         Allure.step("Verify: Business Unit selector is visible");
         assertThat(transactionsPage.getBusinessUnitSelector()).isVisible();
 
+        Allure.step("Verify: DataRange picker is visible");
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).isVisible();
+
         Allure.step("Verify: Currency selector is visible");
         assertThat(transactionsPage.getCurrencySelector()).isVisible();
 
-        Allure.step("Verify: Payment method selector is visible");
+        Allure.step("Verify: Card type selector is visible");
         assertThat(transactionsPage.getCardTypeSelector()).isVisible();
 
         Allure.step("Verify: Status selector is visible");

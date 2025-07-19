@@ -27,7 +27,7 @@ public abstract class FraudControlDialog<CurrentDialogT extends FraudControlDial
         return (CurrentDialogT) this;
     }
 
-    @Step("Fill in fraud control name: {controlCode}")
+    @Step("Fill in fraud control code: {controlCode}")
     public CurrentDialogT fillFraudControlCodeField(String controlCode) {
         getByPlaceholder("Enter control code").fill(controlCode);
 
