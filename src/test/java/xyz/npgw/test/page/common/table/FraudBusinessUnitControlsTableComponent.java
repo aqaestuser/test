@@ -52,7 +52,7 @@ public class FraudBusinessUnitControlsTableComponent extends BaseTableComponent<
 
     @Step("Click 'Delete business unit control' icon")
     public DeleteBusinessUnitControlDialog clickDeleteBusinessUnitControlIcon(String priority) {
-        getRow(priority).getByTestId("DeleteControlButton").click();
+        getRow(priority).getByTestId("DeleteBusinessUnitControlButton").click();
 
         return new DeleteBusinessUnitControlDialog(getPage());
     }
