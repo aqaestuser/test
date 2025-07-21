@@ -26,10 +26,11 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
 
     private final Locator root;
 
-    private final Locator columnHeader;
+    private final Locator columnHeaders;
     private final Locator headerRow;
     private final Locator rows;
     private final Locator firstRow;
+    private final Locator lastRow;
 
     private final Locator rowsPerPage;
     private final Locator rowsPerPageDropdown;
@@ -47,10 +48,11 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         super(page);
         this.root = root;
 
-        this.columnHeader = root.getByRole(AriaRole.COLUMNHEADER);
+        this.columnHeaders = root.getByRole(AriaRole.COLUMNHEADER);
         this.headerRow = root.locator("[role='row']:has([role='columnheader']):not(:has([role='cell']))");
         this.rows = root.locator("tr[data-key]");
         this.firstRow = root.locator("tr[data-first='true']");
+        this.lastRow = root.locator("tr[data-last='true']");
 
         this.rowsPerPage = root.getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions().setName("Rows Per Page"));
         this.rowsPerPageDropdown = locator("div[data-slot='listbox']");
@@ -62,24 +64,19 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         this.noRowsToDisplayMessage = root.getByText("No rows to display.",
                 new Locator.GetByTextOptions().setExact(true));
 
-        getByRole(AriaRole.GRIDCELL, "No rows to display.")
-                .or(firstRow)
-                .first()
+        root.getByRole(AriaRole.GRIDCELL, new Locator.GetByRoleOptions().setName("No rows to display."))
+                .or(lastRow)
                 .waitFor();
     }
 
     protected abstract CurrentPageT getCurrentPage();
 
     public Locator getColumnHeader(String name) {
-        return columnHeader.getByText(name, new Locator.GetByTextOptions().setExact(true));
+        return columnHeaders.getByText(name, new Locator.GetByTextOptions().setExact(true));
     }
 
     public List<String> getColumnValues(String name) {
         return rows.locator(columnSelector(name)).allInnerTexts();
-    }
-
-    public List<String> getColumnHeaderTexts() {
-        return columnHeader.allInnerTexts();
     }
 
     public Locator getRow(String content) {
@@ -101,6 +98,20 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         throw new NoSuchElementException("Row with '" + content + "' not found on any page.");
     }
 
+    public Locator getRowByDataKey(String rowDataKey) {
+        do {
+            if (locator("tr[data-key]").all().stream()
+                    .anyMatch(x -> x.getAttribute("data-key").equals(rowDataKey))) {
+                return locator("tr[data-key='%s']".formatted(rowDataKey));
+            }
+        } while (goToNextPage());
+
+        throw new NoSuchElementException("Row with data-key '" + rowDataKey + "' not found on any page.");
+    }
+
+    public Locator getCell(int priority, String columnHeader) {
+        return getCell(getRowByDataKey(String.valueOf(priority)), columnHeader);
+    }
 
     public Locator getCell(String rowHeader, String columnHeader) {
         return getCell(getRow(rowHeader), columnHeader);
@@ -114,10 +125,18 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
         return rows.locator(columnSelector(columnHeader)).all();
     }
 
+    @Step("Click '{name}' column header")
+    public CurrentPageT clickColumnHeader(String name) {
+        getRoot().getByRole(AriaRole.COLUMNHEADER, new Locator.GetByRoleOptions().setName(name).setExact(true)).click();
+        lastRow.waitFor();
+
+        return getCurrentPage();
+    }
+
     @Step("Click sort icon in '{columnName}' column")
     public CurrentPageT clickSortIcon(String columnName) {
         getColumnHeader(columnName).locator("svg").click();
-        root.locator("tr[data-last='true']").waitFor();
+        lastRow.waitFor();
 
         return getCurrentPage();
     }

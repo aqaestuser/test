@@ -6,9 +6,9 @@ import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
-public class ActivateControlActivityDialog extends BaseDialog<FraudControlPage, ActivateControlActivityDialog> {
+public class DeactivateControlDialog extends BaseDialog<FraudControlPage, DeactivateControlDialog> {
 
-    public ActivateControlActivityDialog(Page page) {
+    public DeactivateControlDialog(Page page) {
         super(page);
     }
 
@@ -17,9 +17,9 @@ public class ActivateControlActivityDialog extends BaseDialog<FraudControlPage, 
         return new FraudControlPage(getPage());
     }
 
-    @Step("Click 'Activate' button")
-    public FraudControlPage clickActivateButton() {
-        getByRole(AriaRole.BUTTON, "Activate").click();
+    @Step("Click 'Deactivate' button")
+    public FraudControlPage clickDeactivateButton() {
+        getByRole(AriaRole.BUTTON, "Deactivate").click();
 
         return getReturnPage();
     }

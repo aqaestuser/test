@@ -43,7 +43,7 @@ public class FraudControlTest extends BaseTest {
             .controlDisplayName("ControlDisplaySecond")
             .controlConfig("secondQueue")
             .build();
-    private static final String FRAUD_CONTROL_NAME = "Test fraudControl name";
+    private static final String FRAUD_CONTROL_NAME = "%S Test fraudControl name".formatted(RUN_ID);
     private static final String COMPANY_NAME = "%s company to bend Fraud Control".formatted(RUN_ID);
     private static final String BUSINESS_UNIT_NAME = "Business unit %s".formatted(RUN_ID);
 
@@ -96,21 +96,21 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .getTableControls().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL.getControlName())
                 .clickCancelButton();
 
         Allure.step("Verify that due to click Cancel button Fraud Control hasn't been added");
         Locator attemptOne = page.getTableBusinessUnitControls().getNoRowsToDisplayMessage();
         assertThat(attemptOne).isAttached();
 
-        page.getTableControls().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+        page.getTableControls().clickConnectControlButton(FRAUD_CONTROL.getControlName())
                 .clickCloseIcon();
 
         Allure.step("Verify that due to click Cross icon Fraud Control hasn't been added");
         Locator attemptTwo = page.getTableBusinessUnitControls().getNoRowsToDisplayMessage();
         assertThat(attemptTwo).isAttached();
 
-        page.getTableControls().clickConnectControlIcon(FRAUD_CONTROL.getControlName())
+        page.getTableControls().clickConnectControlButton(FRAUD_CONTROL.getControlName())
                 .pressEscapeToCancel();
 
         Allure.step("Verify that due to press ESC keyboard button Fraud Control hasn't been added");
@@ -154,7 +154,7 @@ public class FraudControlTest extends BaseTest {
         FraudControlPage page = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
-                .getTableControls().clickActivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName())
+                .getTableControls().clickActivateControlButton(FRAUD_CONTROL_INACTIVE.getControlName())
                 .clickActivateButton();
 
         Locator row = page.getTableControls().getRow(FRAUD_CONTROL_INACTIVE.getControlName());
@@ -163,7 +163,7 @@ public class FraudControlTest extends BaseTest {
         Allure.step("Verify that Fraud Control state now is Active");
         assertThat(cell).hasText("Active");
 
-        page.getTableControls().clickDeactivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName())
+        page.getTableControls().clickDeactivateControlButton(FRAUD_CONTROL_INACTIVE.getControlName())
                 .clickDeactivateButton();
 
         Allure.step("Verify that Fraud Control state now is Inactive");
@@ -182,10 +182,10 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .getTableControls().clickConnectControlIcon(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
                 .clickConnectButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getTableControls().clickConnectControlIcon(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
                 .clickConnectButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
@@ -233,7 +233,7 @@ public class FraudControlTest extends BaseTest {
         FraudControlPage page = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
-                .getTableControls().clickDeleteControlIcon(FRAUD_CONTROL.getControlName())
+                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
                 .clickDeleteButton();
 
         Allure.step("Check if just deleted Fraud Control still presented in the table");
@@ -256,8 +256,7 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .getTableBusinessUnitControls()
-                .clickDeleteBusinessUnitControlIcon(FRAUD_CONTROL_ADD_TWO.getControlDisplayName())
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("1")
                 .clickDeleteButton();
 
         Allure.step("Check if just deleted Fraud Control still presented in both tables");

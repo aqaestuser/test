@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.CustomLog;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
 @Getter
@@ -33,6 +35,14 @@ public class Acquirer {
     private String acquirerName = "acquirer name";
     @Builder.Default
     private String acquirerMidMcc = "1111";
+
+    public String getStatus() {
+        return isActive ? "Active" : "Inactive";
+    }
+
+    public String getCurrency() {
+        return String.join(", ", Arrays.stream(currencyList).map(Enum::name).toList());
+    }
 
     public static void create(APIRequestContext request, Acquirer acquirer) {
         APIResponse response = request.post("portal-v1/acquirer", RequestOptions.create().setData(acquirer));

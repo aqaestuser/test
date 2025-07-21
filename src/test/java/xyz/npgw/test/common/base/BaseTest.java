@@ -3,10 +3,12 @@ package xyz.npgw.test.common.base;
 import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequest;
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.Route;
 import com.microsoft.playwright.Tracing;
 import com.microsoft.playwright.options.Cookie;
 import io.qameta.allure.Allure;
@@ -39,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @Log4j2
@@ -61,6 +64,8 @@ public abstract class BaseTest {
     @Getter(AccessLevel.PROTECTED)
     private String companyName;
     private BusinessUnit businessUnit;
+
+    private HashMap<String, Response> requestMap = new HashMap<>();
 
     @BeforeSuite
     protected void beforeSuite() {
@@ -102,7 +107,7 @@ public abstract class BaseTest {
                 method.getName(),
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
-        log.info(">>> {}", testId);
+//        log.info(">>> {}", testId);
 
         Browser.NewContextOptions options = new Browser
                 .NewContextOptions()
@@ -138,6 +143,31 @@ public abstract class BaseTest {
 //                                .setTimeout(ProjectProperties.getDefaultTimeout() * 5)),
 //                new Page.AddLocatorHandlerOptions().setNoWaitAfter(true));
         page.addLocatorHandler(page.getByText("Loading..."), locator -> {
+        });
+
+        context.route("**/*", route -> {
+//            log.info("request -> {}", route.request().url());
+            if (route.request().url().endsWith(".css")
+                    || route.request().url().endsWith(".js")
+                    || route.request().url().endsWith(".png")) {
+//                log.info("request ready to handle");
+                if (requestMap.get(route.request().url()) == null) {
+//                    log.info("request map entry not found - > fetching and storing");
+                    APIResponse apiResponse = route.fetch();
+                    requestMap.put(route.request().url(),
+                            new Response(apiResponse.status(), apiResponse.headers(), apiResponse.body()));
+                } else {
+//                    log.info("fulfill request with stored data - {}", route.request().url());
+                }
+                Response r = requestMap.get(route.request().url());
+                route.fulfill(new Route.FulfillOptions()
+                        .setStatus(r.status)
+                        .setHeaders(r.headers)
+                        .setBodyBytes(r.body));
+            } else {
+//                log.info("fallback request - {}", route.request().url());
+                route.fallback();
+            }
         });
 
         initApiRequestContext();
@@ -185,7 +215,7 @@ public abstract class BaseTest {
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
+//        log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
 
         if (page != null) {
             page.close();
@@ -223,7 +253,7 @@ public abstract class BaseTest {
         if (apiRequestContext != null) {
             User.delete(apiRequestContext, "%s.super@email.com".formatted(uid));
             TestUtils.deleteCompany(apiRequestContext, companyName);
-            log.info("                 --- Class finished ---                 ");
+//            log.info("                 --- Class finished ---                 ");
             apiRequestContext.dispose();
         }
         if (playwright != null) {
@@ -283,5 +313,9 @@ public abstract class BaseTest {
     }
 
     private record LocalStorage(String name, String value) {
+    }
+
+    private record Response(int status, Map<String, String> headers, byte[] body) {
+
     }
 }

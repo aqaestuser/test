@@ -13,4 +13,12 @@ public record SystemConfig(
                 "https://test.npgw.xyz/resource/url",
                 "notificationQueue");
     }
+
+    @Override
+    public String toString() {
+        return "Challenge URL" + challengeUrl
+                + "Fingerprint URL" + fingerprintUrl
+                + "Resource URL" + resourceUrl
+                + "Notification queue" + notificationQueue;
+    }
 }

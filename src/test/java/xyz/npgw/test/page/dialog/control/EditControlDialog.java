@@ -5,9 +5,9 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.system.FraudControlPage;
 
-public class EditFraudControlDialog extends FraudControlDialog<EditFraudControlDialog> {
+public class EditControlDialog extends ControlDialog<EditControlDialog> {
 
-    public EditFraudControlDialog(Page page) {
+    public EditControlDialog(Page page) {
         super(page);
     }
 

@@ -29,6 +29,6 @@ public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog>
     public CompaniesAndBusinessUnitsPage clickCreateButton() {
         createButton.click();
 
-        return new CompaniesAndBusinessUnitsPage(getPage());
+        return getReturnPage();
     }
 }

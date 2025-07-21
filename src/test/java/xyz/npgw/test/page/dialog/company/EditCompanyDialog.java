@@ -18,6 +18,6 @@ public final class EditCompanyDialog extends CompanyDialog<EditCompanyDialog> {
     public CompaniesAndBusinessUnitsPage clickSaveChangesButton() {
         saveChangesButton.click();
 
-        return new CompaniesAndBusinessUnitsPage(getPage());
+        return getReturnPage();
     }
 }

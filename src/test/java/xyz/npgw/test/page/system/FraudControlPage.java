@@ -3,17 +3,17 @@ package xyz.npgw.test.page.system;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.common.trait.AlertTrait;
-import xyz.npgw.test.page.common.trait.FraudBusinessUnitControlsTableTrait;
-import xyz.npgw.test.page.common.trait.FraudControlsTableTrait;
+import xyz.npgw.test.page.common.trait.BusinessUnitControlsTableTrait;
+import xyz.npgw.test.page.common.trait.ControlsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
-import xyz.npgw.test.page.dialog.control.AddFraudControlDialog;
+import xyz.npgw.test.page.dialog.control.AddControlDialog;
 
 public class FraudControlPage extends BaseSystemPage<FraudControlPage> implements
         SelectCompanyTrait<FraudControlPage>,
         SelectBusinessUnitTrait<FraudControlPage>,
-        FraudControlsTableTrait,
-        FraudBusinessUnitControlsTableTrait,
+        ControlsTableTrait,
+        BusinessUnitControlsTableTrait,
         AlertTrait<FraudControlPage> {
 
     public FraudControlPage(Page page) {
@@ -21,9 +21,9 @@ public class FraudControlPage extends BaseSystemPage<FraudControlPage> implement
     }
 
     @Step("Click 'Add control' button")
-    public AddFraudControlDialog clickAddFraudControl() {
+    public AddControlDialog clickAddFraudControl() {
         getByTestId("AddControlButton").click();
 
-        return new AddFraudControlDialog(getPage());
+        return new AddControlDialog(getPage());
     }
 }

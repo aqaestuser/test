@@ -75,7 +75,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator amountAppliedClearButton = getByLabelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator cardTypeOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
-    private final Locator settingsVisibleColumns = getPage().getByRole(AriaRole.CHECKBOX);
+    private final Locator settingsVisibleColumns = getByRole(AriaRole.CHECKBOX);
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
     private final Locator downloadCsvOption = getByRole(AriaRole.MENUITEM, "CSV");
     private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
@@ -226,13 +226,9 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    public List<String> getVisibleColumnsLabels() {
 
-        return settingsVisibleColumns
-                .all()
-                .stream()
-                .map(l -> l.getAttribute("aria-label"))
-                .toList();
+    public Locator getColumns() {
+        return getByRole(AriaRole.MENUITEM).getByRole(AriaRole.BUTTON);
     }
 
     private void uncheckIfSelected(Locator checkbox) {

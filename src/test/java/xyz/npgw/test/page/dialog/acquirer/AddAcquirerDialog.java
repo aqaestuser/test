@@ -20,6 +20,6 @@ public class AddAcquirerDialog extends AcquirerDialog<AddAcquirerDialog> {
     public AcquirersPage clickCreateButton() {
         createButton.click();
 
-        return new AcquirersPage(getPage());
+        return getReturnPage();
     }
 }

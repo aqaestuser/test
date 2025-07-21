@@ -18,6 +18,6 @@ public class EditAcquirerDialog extends AcquirerDialog<EditAcquirerDialog> {
     public AcquirersPage clickSaveChangesButton() {
         saveChangesButton.click();
 
-        return new AcquirersPage(getPage());
+        return getReturnPage();
     }
 }

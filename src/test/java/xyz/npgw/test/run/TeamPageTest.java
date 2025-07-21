@@ -259,7 +259,7 @@ public class TeamPageTest extends BaseTest {
                 .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickEditUserIcon(email);
+                .getTable().clickEditUserButton(email);
 
         Allure.step("Verify: 'Edit user' header is displayed");
         assertThat(editUserDialog.getDialogHeader()).hasText("Edit user");
@@ -334,7 +334,7 @@ public class TeamPageTest extends BaseTest {
                 .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickDeactivateUserIcon(email)
+                .getTable().clickDeactivateUserButton(email)
                 .clickDeactivateButton()
                 .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
 
@@ -364,7 +364,7 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickEditUserIcon(email)
+                .getTable().clickEditUserButton(email)
                 .checkInactiveRadiobutton()
                 .clickSaveChangesButton();
 
@@ -394,7 +394,7 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickDeactivateUserIcon(email)
+                .getTable().clickDeactivateUserButton(email)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
@@ -411,7 +411,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(email)).hasAttribute("data-icon", "check");
 
         teamPage
-                .getTable().clickActivateUserIcon(email)
+                .getTable().clickActivateUserButton(email)
                 .clickActivateButton();
 
         Allure.step("Verify: success message is displayed");
@@ -497,7 +497,7 @@ public class TeamPageTest extends BaseTest {
         assertThat(teamPage.getTable().getUserActivityIcon(analystEmail)).hasAttribute("data-icon", "ban");
 
         teamPage
-                .getTable().clickDeactivateUserIcon(analystEmail)
+                .getTable().clickDeactivateUserButton(analystEmail)
                 .clickDeactivateButton();
 
         Allure.step("Verify: success message is displayed");
@@ -523,7 +523,7 @@ public class TeamPageTest extends BaseTest {
         loginPage
                 .loginAs("%s.admin@email.com".formatted(getUid()), ProjectProperties.getPassword())
                 .clickSystemAdministrationLink()
-                .getTable().clickEditUserIcon(analystEmail)
+                .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()
                 .clickSaveChangesButton()
                 .clickLogOutButton()
@@ -556,7 +556,7 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickDeactivateUserIcon(email)
+                .getTable().clickDeactivateUserButton(email)
                 .clickDeactivateButton()
                 .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName())
                 .getSelectStatus().select("Active");

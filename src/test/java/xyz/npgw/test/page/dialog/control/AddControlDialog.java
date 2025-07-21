@@ -7,17 +7,17 @@ import io.qameta.allure.Step;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.system.FraudControlPage;
 
-public class AddFraudControlDialog extends FraudControlDialog<AddFraudControlDialog> implements
-        AlertTrait<AddFraudControlDialog> {
+public class AddControlDialog extends ControlDialog<AddControlDialog> implements
+        AlertTrait<AddControlDialog> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
-    public AddFraudControlDialog(Page page) {
+    public AddControlDialog(Page page) {
         super(page);
     }
 
     @Step("Click on the 'Create' button and trigger an error")
-    public AddFraudControlDialog clickCreateButtonAndTriggerError() {
+    public AddControlDialog clickCreateButtonAndTriggerError() {
         createButton.click();
 
         return this;

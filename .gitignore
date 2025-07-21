@@ -46,3 +46,4 @@ browser.properties
 *.dockerfile
 docker-compose*.yml
 downloads/
+/.run/

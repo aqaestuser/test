@@ -7,10 +7,10 @@ import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
 @SuppressWarnings("unchecked")
-public abstract class FraudControlDialog<CurrentDialogT extends FraudControlDialog<CurrentDialogT>>
+public abstract class ControlDialog<CurrentDialogT extends ControlDialog<CurrentDialogT>>
         extends BaseDialog<FraudControlPage, CurrentDialogT> {
 
-    public FraudControlDialog(Page page) {
+    public ControlDialog(Page page) {
         super(page);
     }
 

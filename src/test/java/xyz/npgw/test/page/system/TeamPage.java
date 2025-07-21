@@ -11,7 +11,7 @@ import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
-import xyz.npgw.test.page.common.trait.UserTableTrait;
+import xyz.npgw.test.page.common.trait.UsersTableTrait;
 import xyz.npgw.test.page.dialog.user.AddUserDialog;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public class TeamPage extends BaseSystemPage<TeamPage> implements
-        UserTableTrait,
+        UsersTableTrait,
         SelectCompanyTrait<TeamPage>,
         AlertTrait<TeamPage>,
         SelectStatusTrait<TeamPage> {

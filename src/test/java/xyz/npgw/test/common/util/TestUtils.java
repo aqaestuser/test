@@ -1,6 +1,10 @@
 package xyz.npgw.test.common.util;
 
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.TimeoutError;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
@@ -15,7 +19,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
+@Log4j2
 public final class TestUtils {
 
     public static String encode(String value) {
@@ -88,5 +94,18 @@ public final class TestUtils {
         final String monthYear = "/" + dataNow[1] + "/" + dataNow[0];
 
         return "Date range01" + monthYear + "-" + lastDay + monthYear;
+    }
+
+    @SneakyThrows
+    public static void waitForUserPresence(APIRequestContext request, String email, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for user '%s' presence".formatted(email));
+            }
+        }
+        log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
     }
 }

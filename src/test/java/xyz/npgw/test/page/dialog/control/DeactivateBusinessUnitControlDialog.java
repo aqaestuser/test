@@ -6,9 +6,10 @@ import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
-public class DeactivateControlActivityDialog extends BaseDialog<FraudControlPage, DeactivateControlActivityDialog> {
+public class DeactivateBusinessUnitControlDialog
+        extends BaseDialog<FraudControlPage, DeactivateBusinessUnitControlDialog> {
 
-    public DeactivateControlActivityDialog(Page page) {
+    public DeactivateBusinessUnitControlDialog(Page page) {
         super(page);
     }
 

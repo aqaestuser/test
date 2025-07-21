@@ -207,7 +207,7 @@ public class ReportsPageTest extends BaseTest {
     public void testSortingByFilename() {
         ReportsPage reportsPage = new ReportsPage(getPage())
                 .clickReportsLink()
-                .getTable().clickFilenameColumnHeader();
+                .getTable().clickColumnHeader("Filename");
 
         List<String> actualFilenameList = reportsPage.getTable().getColumnValues("Filename");
         List<String> sortedFilenameListAsc = new ArrayList<>(actualFilenameList);
@@ -218,7 +218,7 @@ public class ReportsPageTest extends BaseTest {
                 "Filenames are not in alphabetical order");
 
         reportsPage
-                .getTable().clickFilenameColumnHeader();
+                .getTable().clickColumnHeader("Filename");
 
         actualFilenameList = reportsPage.getTable().getColumnValues("filename");
         List<String> sortedFilenameListDesc = new ArrayList<>(sortedFilenameListAsc);
@@ -238,7 +238,7 @@ public class ReportsPageTest extends BaseTest {
     public void testSortingBySize() {
         ReportsPage reportsPage = new ReportsPage(getPage())
                 .clickReportsLink()
-                .getTable().clickSizeColumnHeader();
+                .getTable().clickColumnHeader("Size");
 
         List<String> actualSizeList = reportsPage.getTable().getColumnValues("Size");
         List<String> sortedSizeListAsc = new ArrayList<>(actualSizeList);
@@ -249,7 +249,7 @@ public class ReportsPageTest extends BaseTest {
                 "Filenames are not in alphabetical order");
 
         reportsPage
-                .getTable().clickSizeColumnHeader();
+                .getTable().clickColumnHeader("Size");
 
         actualSizeList = reportsPage.getTable().getColumnValues("Size");
         List<String> sortedSizeListDesc = new ArrayList<>(sortedSizeListAsc);

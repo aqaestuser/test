@@ -21,14 +21,12 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
     private final String refundTransactionButtonSelector;
     private final Locator cardTypeImage;
-    private final Locator npgwReference;
 
     public TransactionsTableComponent(Page page) {
         super(page);
 
         this.refundTransactionButtonSelector = "[data-testid='RefundTransactionButton']";
         this.cardTypeImage = locator("img[alt='logo']");
-        this.npgwReference = getRows().getByRole(AriaRole.LINK);
     }
 
     @Override
@@ -45,7 +43,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
 
     @Step("Click on the transaction NPGW reference")
     public TransactionDetailsDialog clickOnTransaction(int index) {
-        npgwReference.nth(index).click();
+        getRows().getByRole(AriaRole.LINK).nth(index).click();
 
         return new TransactionDetailsDialog(getPage());
     }

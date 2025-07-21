@@ -33,10 +33,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -48,7 +50,7 @@ import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 public class TransactionsTableTest extends BaseTest {
 
     private static final String MERCHANT_TITLE = "%s test transaction table merchant".formatted(RUN_ID);
-    private static final List<String> COLUMNS_HEADERS = List.of(
+    private static final String[] COLUMNS_HEADERS = {
             "Creation Date (GMT)",
             "Business unit ID",
             "NPGW reference",
@@ -56,7 +58,9 @@ public class TransactionsTableTest extends BaseTest {
             "Amount",
             "Currency",
             "Card type",
-            "Status");
+            "Status",
+            "Actions"};
+    private static final String[] SETTINGS_COLUMNS = Arrays.copyOf(COLUMNS_HEADERS, COLUMNS_HEADERS.length - 1);
 
     private BusinessUnit businessUnit;
 
@@ -325,34 +329,22 @@ public class TransactionsTableTest extends BaseTest {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .clickSettingsButton()
-                .checkAllCheckboxInSettings();
+                .checkAllCheckboxInSettings()
+                .clickRefreshDataButton();
 
-        List<String> visibleColumnsLabels = transactionsPage
-                .getVisibleColumnsLabels();
-
-        List<String> headersList = transactionsPage
-                .clickRefreshDataButton()
-                .getTable().getColumnHeaderTexts();
-
-        List<String> headersListAfterUncheckAllVisibleColumns = transactionsPage
-                .clickSettingsButton()
-                .uncheckAllCheckboxInSettings()
-                .clickRefreshDataButton()
-                .getTable().getColumnHeaderTexts();
-
-        Allure.step("Verify: All column headers are displayed in the Settings");
-        assertEquals(visibleColumnsLabels, COLUMNS_HEADERS);
+        Allure.step("Verify: All column headers except 'Actions' are displayed in the Settings");
+        assertThat(transactionsPage.getColumns()).hasText(SETTINGS_COLUMNS);
 
         Allure.step("Verify: All column headers are displayed in the transactions table");
-        assertTrue(headersList.containsAll(COLUMNS_HEADERS));
+        assertThat(transactionsPage.getTable().getColumnHeaders()).hasText(COLUMNS_HEADERS);
 
-        Allure.step("Verify: Column headers are not displayed in the transactions table "
-                + "after it's unchecking in the Settings");
-        assertEquals(headersListAfterUncheckAllVisibleColumns.size(), 1);
+        transactionsPage
+                .clickSettingsButton()
+                .uncheckAllCheckboxInSettings()
+                .clickRefreshDataButton();
 
-        Allure.step("Verify: Only 'Actions' is displayed in the transactions table "
-                + "after it's unchecking in the Settings");
-        assertEquals(headersListAfterUncheckAllVisibleColumns.get(0), "Actions");
+        Allure.step("Verify: Only 'Actions' column is displayed in the transactions table header");
+        assertThat(transactionsPage.getTable().getColumnHeaders()).hasText("Actions");
     }
 
     @Test
@@ -366,38 +358,35 @@ public class TransactionsTableTest extends BaseTest {
                 .clickSettingsButton()
                 .checkAllCheckboxInSettings();
 
-        COLUMNS_HEADERS.forEach(item -> {
-            List<String> headersListAfterUncheckOne = transactionsPage
+        for (String item : SETTINGS_COLUMNS) {
+            transactionsPage
                     .uncheckVisibleColumn(item)
-                    .clickRefreshDataButton()
-                    .getTable().getColumnHeaderTexts();
+                    .clickRefreshDataButton();
 
-            Allure.step("Verify: Only one column header is NOT displayed in the Transactions. And it's - '{item}'");
-            assertTrue((headersListAfterUncheckOne.size() == COLUMNS_HEADERS.size())
-                    && !headersListAfterUncheckOne.contains(item));
+            Allure.step("Verify: Only one column header is NOT displayed in the Transactions");
+            assertThat(transactionsPage.getTable().getColumnHeaders())
+                    .hasText(Arrays.stream(COLUMNS_HEADERS).filter(s -> !s.equals(item)).toArray(String[]::new));
 
             transactionsPage
                     .clickSettingsButton()
                     .checkVisibleColumn(item);
-        });
+        }
 
         transactionsPage
                 .uncheckAllCheckboxInSettings();
 
-        COLUMNS_HEADERS.forEach(item -> {
-            List<String> headersListAfterCheckOnlyOne = transactionsPage
+        for (String item : SETTINGS_COLUMNS) {
+            transactionsPage
                     .checkVisibleColumn(item)
-                    .clickRefreshDataButton()
-                    .getTable().getColumnHeaderTexts();
+                    .clickRefreshDataButton();
 
-            Allure.step("Verify: Only two column headers are displayed in the transactions table -"
-                    + " '{item}' column header and 'Actions'");
-            assertTrue((headersListAfterCheckOnlyOne.size() == 2) && headersListAfterCheckOnlyOne.contains(item));
+            Allure.step("Verify: Only two column headers are displayed in the transactions table");
+            assertThat(transactionsPage.getTable().getColumnHeaders()).hasText(new String[]{item, "Actions"});
 
             transactionsPage
                     .clickSettingsButton()
                     .uncheckVisibleColumn(item);
-        });
+        }
     }
 
     @Test
@@ -534,13 +523,13 @@ public class TransactionsTableTest extends BaseTest {
         Files.createDirectories(targetPath.getParent());
         download.saveAs(targetPath);
 
-        List<String> uiHeader = transactionsPage.getTable().getColumnHeaderTexts();
         List<List<String>> rowsFromCsv = transactionsPage
                 .readCsv(targetPath);
         List<String> csvHeader = rowsFromCsv.remove(0);
 
         Allure.step("Verify: CSV headers match the UI headers");
-        assertEquals(csvHeader, uiHeader.subList(0, csvHeader.size()));
+        assertThat(transactionsPage.getTable().getColumnHeaders())
+                .hasText(Stream.concat(csvHeader.stream(), Stream.of("Actions")).toArray(String[]::new));
 
         Allure.step("Verify the row count between UI and CSV");
         assertEquals(uiRows.size(), rowsFromCsv.size());

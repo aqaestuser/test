@@ -11,13 +11,13 @@ import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.GatewayPage;
 
 @Getter
-public class AddMerchantAcquirerDialog extends BaseDialog<GatewayPage, AddMerchantAcquirerDialog>
-        implements SelectAcquirerTrait<AddMerchantAcquirerDialog>, AlertTrait<AddMerchantAcquirerDialog> {
+public class AddBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, AddBusinessUnitAcquirerDialog>
+        implements SelectAcquirerTrait<AddBusinessUnitAcquirerDialog>, AlertTrait<AddBusinessUnitAcquirerDialog> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
-    public AddMerchantAcquirerDialog(Page page) {
+    public AddBusinessUnitAcquirerDialog(Page page) {
         super(page);
     }
 
@@ -30,11 +30,18 @@ public class AddMerchantAcquirerDialog extends BaseDialog<GatewayPage, AddMercha
     public GatewayPage clickCreateButton() {
         createButton.click();
 
-        return new GatewayPage(getPage());
+        return getReturnPage();
+    }
+
+    @Step("Check 'Active' status radiobutton")
+    public AddBusinessUnitAcquirerDialog checkActiveRadiobutton() {
+        getByRole(AriaRole.RADIO, "Active").setChecked(true);
+
+        return this;
     }
 
     @Step("Check 'Inactive' status radiobutton")
-    public AddMerchantAcquirerDialog checkInactiveRadiobutton() {
+    public AddBusinessUnitAcquirerDialog checkInactiveRadiobutton() {
         getByRole(AriaRole.RADIO, "Inactive").setChecked(true);
 
         return this;

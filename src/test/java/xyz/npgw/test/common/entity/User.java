@@ -6,6 +6,7 @@ import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.CustomLog;
 import lombok.SneakyThrows;
+import xyz.npgw.test.common.util.TestUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,9 +21,12 @@ public record User(
         String email,
         String password) {
 
+    @SneakyThrows
     public static void create(APIRequestContext request, User user) {
         APIResponse response = request.post("portal-v1/user/create", RequestOptions.create().setData(user));
         log.response(response, "create user %s %s".formatted(user.email(), user.companyName()));
+
+        TestUtils.waitForUserPresence(request, user.email, user.companyName);
     }
 
     public static boolean exists(APIRequestContext request, String email) {
