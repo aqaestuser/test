@@ -9,6 +9,9 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.apache.pdfbox.Loader;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -32,6 +35,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -407,7 +411,7 @@ public class TransactionsTableTest extends BaseTest {
                 List<Transaction> transactionList = new ArrayList<>();
                 transactionList.add(new Transaction("2025-06-02T04:18:09.047146423Z",
                         "12345", "", 100,
-                        CardType.VISA, Currency.USD, Status.FAILED));
+                        Currency.USD, CardType.VISA, Status.FAILED));
                 route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(transactionList)));
                 return;
             }
@@ -553,5 +557,59 @@ public class TransactionsTableTest extends BaseTest {
                         assertEquals(uiCell, csvCell, String.format("Mismatch at row %d, column %d", i + 1, j + 1)));
             });
         });
+    }
+
+    @Test
+    @TmsLink("957")
+    @Epic("Transactions")
+    @Feature("Export table data")
+    @Description("The transaction table data on the UI matches the exported PDF file data.")
+    public void testTransactionTableMatchesDownloadedPdf() throws IOException {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        List<List<String>> uiRows = new ArrayList<>();
+        do {
+            List<Locator> rows = transactionsPage.getTable().getRows().all();
+            for (Locator row : rows) {
+                uiRows.add(transactionsPage.getTable().getRowData(row));
+            }
+        } while (transactionsPage.getTable().goToNextPage());
+
+        Download download = getPage().waitForDownload(() -> transactionsPage
+                .clickExportTableDataToFileButton()
+                .selectPdf());
+
+        Path targetPath = Paths.get("downloads", "transactions-export.pdf");
+        Files.createDirectories(targetPath.getParent());
+        download.saveAs(targetPath);
+
+        String pdfText;
+        try (PDDocument document = Loader.loadPDF(targetPath.toFile())) {
+            PDFTextStripper pdfStripper = new PDFTextStripper();
+            pdfText = pdfStripper.getText(document);
+        }
+
+        List<String> pdfRows = transactionsPage.readPdf(pdfText).stream()
+                .map(t -> String.join(" | ",
+                        t.createdOn(),
+                        t.transactionId(),
+                        t.externalTransactionId(),
+                        String.format("%.2f", t.amount()),
+                        t.currency().toString(),
+                        t.paymentDetails().cardType().toString(),
+                        t.status().toString()
+                ))
+                .collect(Collectors.toList());
+
+        List<String> uiFormattedRows = uiRows.stream()
+                .map(row -> String.join(" | ", row))
+                .toList();
+
+        Allure.step("Verify: cell values match between UI and PDF");
+        Assert.assertEquals(uiFormattedRows, pdfRows);
     }
 }

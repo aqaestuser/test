@@ -1,7 +1,7 @@
 package xyz.npgw.test.common.entity;
 
 public record Transaction(
-        int amount,
+        double amount,
         Currency currency,
         String merchantId,
         String externalTransactionId,
@@ -20,9 +20,9 @@ public record Transaction(
             String createdOn,
             String npgwReference,
             String merchantReference,
-            int amount,
-            CardType cardType,
+            double amount,
             Currency currency,
+            CardType cardType,
             Status status) {
         this(amount, currency, "", merchantReference, "", "", "",
                 "", new PaymentDetails(cardType), npgwReference, status, new Error(), createdOn, "");
