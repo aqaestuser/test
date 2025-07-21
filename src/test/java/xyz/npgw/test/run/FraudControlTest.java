@@ -144,6 +144,32 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).containsText("Inactive");
     }
 
+    @Test(dependsOnMethods = "testAddInactiveFraudControl")
+    @TmsLink("955")
+    @Epic("System/Fraud Control")
+    @Feature("Control table")
+    @Description("Activate Fraud Control not added to Business Unit"
+            + "Deactivate Fraud Control not added to Business Unit")
+    public void testChangeControlActivityForFraudControlNotAddedToBusinessUnit() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls().clickActivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName())
+                .clickActivateButton();
+
+        Locator row = page.getTableControls().getRow(FRAUD_CONTROL_INACTIVE.getControlName());
+        Locator cell = page.getTableControls().getCell(row, "Status");
+
+        Allure.step("Verify that Fraud Control state now is Active");
+        assertThat(cell).hasText("Active");
+
+        page.getTableControls().clickDeactivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName())
+                .clickDeactivateButton();
+
+        Allure.step("Verify that Fraud Control state now is Inactive");
+        assertThat(cell).hasText("Inactive");
+    }
+
     @Test(dependsOnMethods = "testCancelAddingFraudControlToBusinessUnit")
     @TmsLink("910")
     @Epic("System/Fraud Control")
