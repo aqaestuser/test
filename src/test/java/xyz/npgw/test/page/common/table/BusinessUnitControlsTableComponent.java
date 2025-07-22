@@ -21,14 +21,14 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Fraud
 
     @Step("Click 'Move business unit control down' button")
     public FraudControlPage clickMoveBusinessUnitControlDownButton(String priority) {
-        getRow(priority).getByTestId("MoveMerchantControlDownButton").click();
+        getRowByDataKey(priority).getByTestId("MoveMerchantControlDownButton").click();
 
         return getCurrentPage();
     }
 
     @Step("Click 'Move business unit control up' button")
     public FraudControlPage clickMoveBusinessUnitControlUpButton(String priority) {
-        getRow(priority).getByTestId("MoveMerchantControlUpButton").click();
+        getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton").click();
 
         return getCurrentPage();
     }

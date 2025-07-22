@@ -245,7 +245,7 @@ public class FraudControlTest extends BaseTest {
         }
     }
 
-    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority"})
     @TmsLink("950")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -267,6 +267,34 @@ public class FraudControlTest extends BaseTest {
             throw new RuntimeException("There no rows with name "
                     + FRAUD_CONTROL_ADD_TWO.getControlName() + " in the table");
         }
+    }
+
+    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @TmsLink("960")
+    @Epic("System/Fraud Control")
+    @Feature("Business Unit Control table")
+    @Description("Move Business unit control up" + "Move Business unit control down")
+    public void testChangeFraudControlPriority() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableBusinessUnitControls().clickMoveBusinessUnitControlUpButton("1")
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        Allure.step("Check that the second Fraud Control is '0' priority now");
+        assertThat(page.getTableBusinessUnitControls().getRowByDataKey("0"))
+                .containsText(FRAUD_CONTROL_ADD_TWO.getControlDisplayName());
+
+        page.getTableBusinessUnitControls().clickMoveBusinessUnitControlDownButton("0")
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        Allure.step("Check that the second Fraud Control is '1' priority again");
+        assertThat(page.getTableBusinessUnitControls().getRowByDataKey("0"))
+                .containsText(FRAUD_CONTROL_ADD_ONE.getControlDisplayName());
+        assertThat(page.getTableBusinessUnitControls().getRowByDataKey("1"))
+                .containsText(FRAUD_CONTROL_ADD_TWO.getControlDisplayName());
     }
 
     @AfterClass
