@@ -603,4 +603,37 @@ public class TransactionsTableTest extends BaseTest {
         Allure.step("Verify: cell values match between UI and PDF");
         Assert.assertEquals(uiFormattedRows, pdfRows);
     }
+
+    @Test
+    @TmsLink("978")
+    @Epic("Transactions")
+    @Feature("Settings")
+    @Description("Verify that changing the order of visible columns in Settings affects the table.")
+    public void testMoveVisibleColumns() {
+        final String creationDate = SETTINGS_COLUMNS[0];
+        final String amount = SETTINGS_COLUMNS[4];
+        final String currency = SETTINGS_COLUMNS[5];
+        final String status = SETTINGS_COLUMNS[7];
+
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .clickSettingsButton()
+                .uncheckAllCheckboxInSettings()
+                .checkVisibleColumn(creationDate)
+                .checkVisibleColumn(amount)
+                .checkVisibleColumn(currency)
+                .checkVisibleColumn(status)
+                .dragArrowsToFirstPosition(status)  // status...
+                .dragArrowsToFirstPosition(currency) // currency status...
+                .dragArrowsToFirstPosition(amount) // amount currency status...
+                .dragArrowsToFirstPosition(creationDate) // creationDate amount currency status...
+                .dragArrowsToLastPosition(currency) // creationDate amount status currency...
+                .dragArrows(creationDate, status) // amount status creationDate currency...
+                .dragArrows(amount, creationDate) // status creationDate amount currency...
+                .clickRefreshDataButton();
+
+        Allure.step("Verify: Selected column headers are displayed in the correct order in the transactions table.");
+        assertThat(transactionsPage.getTable().getColumnHeaders())
+                .hasText(new String[]{status, creationDate, amount, currency, "Actions"});
+    }
 }

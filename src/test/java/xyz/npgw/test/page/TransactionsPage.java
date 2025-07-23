@@ -75,7 +75,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator amountAppliedClearButton = getByLabelExact("close chip");
     private final Locator amountErrorMessage = locator("[data-slot='error-message']");
     private final Locator cardTypeOptions = locator("ul[data-slot='listbox']").getByRole(AriaRole.OPTION);
-    private final Locator settingsVisibleColumns = getByRole(AriaRole.CHECKBOX);
+    private final Locator settingsVisibleColumnCheckbox = getByRole(AriaRole.CHECKBOX);
+    private final Locator settingsArrowsUpDown = locator("svg[data-icon='arrows-up-down']");
     private final Locator amountEditButton = locator("svg[data-icon='pencil']");
     private final Locator downloadCsvOption = getByRole(AriaRole.MENUITEM, "CSV");
     private final Locator downloadExcelOption = getByRole(AriaRole.MENUITEM, "EXCEL");
@@ -245,7 +246,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Uncheck all 'Visible columns' in Settings")
     public TransactionsPage uncheckAllCheckboxInSettings() {
-        settingsVisibleColumns
+        settingsVisibleColumnCheckbox
                 .all()
                 .forEach(this::uncheckIfSelected);
 
@@ -254,7 +255,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Uncheck Visible column '{name}' in Settings")
     public TransactionsPage uncheckVisibleColumn(String name) {
-        settingsVisibleColumns
+        settingsVisibleColumnCheckbox
                 .all()
                 .stream()
                 .filter(l -> name.equals(l.getAttribute("aria-label")))
@@ -266,7 +267,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Check all 'Visible columns' in Settings")
     public TransactionsPage checkAllCheckboxInSettings() {
-        settingsVisibleColumns
+        settingsVisibleColumnCheckbox
                 .all()
                 .forEach(this::checkIfNotSelected);
 
@@ -275,7 +276,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     @Step("Check visible column '{name}' in Settings")
     public TransactionsPage checkVisibleColumn(String name) {
-        settingsVisibleColumns
+        settingsVisibleColumnCheckbox
                 .all()
                 .stream()
                 .filter(l -> name.equals(l.getAttribute("aria-label")))
@@ -527,5 +528,31 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         }
 
         return transactions;
+    }
+
+    public TransactionsPage dragArrows(String from, String to) {
+        dragAndDrop(getArrowsUpDown(from), getArrowsUpDown(to));
+
+        return this;
+    }
+
+    public TransactionsPage dragArrowsToFirstPosition(String from) {
+        dragAndDrop(getArrowsUpDown(from), settingsArrowsUpDown.first());
+
+        return this;
+    }
+
+    public TransactionsPage dragArrowsToLastPosition(String from) {
+        dragAndDrop(getArrowsUpDown(from), settingsArrowsUpDown.last());
+
+        return this;
+    }
+
+    private void dragAndDrop(Locator source, Locator target) {
+        source.dragTo(target);
+    }
+
+    private Locator getArrowsUpDown(String name) {
+        return getByRole(AriaRole.BUTTON, name).locator(settingsArrowsUpDown);
     }
 }
