@@ -27,8 +27,8 @@ public abstract class BaseTableComponent<CurrentPageT extends HeaderPage<?>> ext
     private final Locator root;
 
     private final Locator columnHeaders;
-    private final Locator headerRow;
     private final Locator rows;
+    private final Locator headerRow;
     private final Locator firstRow;
     private final Locator lastRow;
 

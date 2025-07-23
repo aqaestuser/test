@@ -2,12 +2,9 @@ package xyz.npgw.test.page.common;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
-
-import java.util.NoSuchElementException;
 
 @Log4j2
 public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
@@ -15,7 +12,6 @@ public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<Curren
     @Getter
     private final Locator selectCompanyField = getByLabelExact("Select company")
             .or(getByLabelExact("Company"));
-    private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
     @Getter
     private final Locator companyDropdown = locator("div[data-slot='content']");
     private final Locator selectCompanyContainer = locator("div[data-slot='input-wrapper']")
@@ -48,22 +44,6 @@ public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<Curren
         selectCompanyDropdownChevron.click();
 
         return currentPage;
-    }
-
-    @Step("Select first company in dropdown")
-    public CurrentPageT selectFirstCompany() {
-        if (dropdownOptionList.all().isEmpty()) {
-            throw new NoSuchElementException("Dropdown list is empty.");
-        } else {
-            dropdownOptionList.first().click();
-        }
-
-        return currentPage;
-    }
-
-    public String firstCompanyName() {
-
-        return dropdownOptionList.first().textContent();
     }
 
     public boolean isCompanyPresent(String companyName) {

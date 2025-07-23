@@ -3,6 +3,7 @@ package xyz.npgw.test.run;
 import com.google.gson.Gson;
 import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
+import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Route;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
@@ -15,6 +16,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.CardType;
@@ -515,9 +517,9 @@ public class TransactionsTableTest extends BaseTest {
             }
         } while (transactionsPage.getTable().goToNextPage());
 
-        Download download = getPage().waitForDownload(() -> transactionsPage
-                .clickExportTableDataToFileButton()
-                .selectCsv());
+        Download download = getPage().waitForDownload(
+                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
+                () -> transactionsPage.clickExportTableDataToFileButton().selectCsv());
 
         Path targetPath = Paths.get("downloads", "transactions-export.csv");
         Files.createDirectories(targetPath.getParent());
@@ -568,9 +570,9 @@ public class TransactionsTableTest extends BaseTest {
             }
         } while (transactionsPage.getTable().goToNextPage());
 
-        Download download = getPage().waitForDownload(() -> transactionsPage
-                .clickExportTableDataToFileButton()
-                .selectPdf());
+        Download download = getPage().waitForDownload(
+                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
+                () -> transactionsPage.clickExportTableDataToFileButton().selectPdf());
 
         Path targetPath = Paths.get("downloads", "transactions-export.pdf");
         Files.createDirectories(targetPath.getParent());

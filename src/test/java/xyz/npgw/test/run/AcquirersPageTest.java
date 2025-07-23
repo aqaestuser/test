@@ -29,7 +29,8 @@ import static org.testng.Assert.assertTrue;
 
 public class AcquirersPageTest extends BaseTest {
 
-    private static final String[] ROWS_PER_PAGE_OPTIONS = new String[]{"10", "25", "50", "100"};
+    private static final String[] STATUS_OPTIONS = {"All", "Active", "Inactive"};
+    private static final String[] ROWS_PER_PAGE_OPTIONS = {"10", "25", "50", "100"};
     private static final String[] COLUMNS_HEADERS = {
             "Entity name",
             "Display name",
@@ -41,6 +42,7 @@ public class AcquirersPageTest extends BaseTest {
             "System config",
             "Status",
             "Actions"};
+
     private static final Acquirer ACQUIRER = Acquirer.builder()
             .acquirerName("%s acquirer 11.002.01".formatted(RUN_ID))
             .acquirerMidMcc("4321")
@@ -62,19 +64,19 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("134")
     @Epic("System/Acquirers")
     @Feature("Acquirers list")
-    @Description("The visibility of elements in the 'Acquirers List' control panel")
+    @Description("The visibility of elements in the filter")
     public void testVisibilityAcquirersListControlTab() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        Allure.step("Verify: Add Acquirer Button is visible");
+        Allure.step("Verify: Add acquirer button is visible");
         assertThat(acquirersPage.getAddAcquirerButton()).isVisible();
 
-        Allure.step("Verify: Select Acquirer label is visible");
+        Allure.step("Verify: Acquirer selector is visible");
         assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirerField()).isVisible();
 
-        Allure.step("Verify: Status label is visible");
+        Allure.step("Verify: Status selector is visible");
         assertThat(acquirersPage.getSelectStatus().getStatusSelector()).isVisible();
 
         Allure.step("Verify: Reset Filter Button is visible");
@@ -88,37 +90,32 @@ public class AcquirersPageTest extends BaseTest {
     @TmsLink("157")
     @Epic("System/Acquirers")
     @Feature("Acquirers list")
-    @Description("The visibility of the 'Acquirers List' header, which contains a list of Acquirers.")
+    @Description("The visibility of the acquirers table header and table contents")
     public void testVisibilityHeaderAndAcquirersList() {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        Allure.step("Verify: Table column header is visible");
-        assertThat(acquirersPage.getTable().getColumnHeader("Entity name")).isVisible();
+        Allure.step("Verify: Table column headers");
+        assertThat(acquirersPage.getTable().getColumnHeaders()).hasText(COLUMNS_HEADERS);
 
-        List<Locator> acquirersList = acquirersPage.getTable().getColumnCells("Entity name");
-
-//        TODO refactor this
-        Allure.step("Verify: Acquirers list is visible and contains elements");
-        assertThat(acquirersList.get(0)).isVisible();
-        assertThat(acquirersList.get(acquirersList.size() - 1)).isVisible();
+        Allure.step("Verify: Acquirers table content is visible and contains acquirers");
+        assertThat(acquirersPage.getTable().getRows()).not().hasCount(0);
     }
 
     @Test
     @TmsLink("168")
     @Epic("System/Acquirers")
     @Feature("Select acquirer")
-    @Description("Selecting the 'Select acquirer' field opens a dropdown with Acquirers list.")
+    @Description("Click on 'Select acquirer' field opens a dropdown populated with acquirers")
     public void testSelectAcquirerDropdownFunctionality() {
-        Locator dropdownAcquirerList = new DashboardPage(getPage())
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().clickSelectAcquirerField()
-                .getSelectAcquirer().getSelectAcquirersDropdownItems();
+                .getSelectAcquirer().clickSelectAcquirerField();
 
         Allure.step("Verify: Dropdown list is not empty");
-        assertThat(dropdownAcquirerList).not().hasCount(0);
+        assertThat(acquirersPage.getSelectAcquirer().getDropdownOptionList()).not().hasCount(0);
     }
 
     @Test
@@ -127,14 +124,13 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Status")
     @Description("The 'Status' dropdown toggles and contains options All, Active, Inactive.")
     public void testOpenStatusDropdown() {
-        Locator actualOptions = new DashboardPage(getPage())
+        AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectStatus().clickSelector()
-                .getSelectStatus().getStatusOptions();
+                .getSelectStatus().clickSelector();
 
         Allure.step("Verify: The 'Status' dropdown toggles and contains options");
-        assertThat(actualOptions).hasText(new String[]{"All", "Active", "Inactive"});
+        assertThat(acquirersPage.getSelectStatus().getStatusOptions()).hasText(STATUS_OPTIONS);
     }
 
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
@@ -159,24 +155,22 @@ public class AcquirersPageTest extends BaseTest {
     @Feature("Status")
     @Description("Verify that re-selecting an already selected status keeps the selection unchanged.")
     public void testRetainStatusWhenReSelectingSameOption() {
-        List<String> expectedOptions = List.of("All", "Active", "Inactive");
-
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        Locator actualStatus = acquirersPage.getSelectStatus().getStatusValue();
-
-        for (String status : expectedOptions) {
-            acquirersPage.getSelectStatus().select(status);
+        for (String status : STATUS_OPTIONS) {
+            acquirersPage
+                    .getSelectStatus().select(status);
 
             Allure.step("Verify placeholder matches expected value: " + status);
-            assertThat(actualStatus).hasText(status);
+            assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText(status);
 
-            acquirersPage.getSelectStatus().select(status);
+            acquirersPage
+                    .getSelectStatus().select(status);
 
             Allure.step("Verify again placeholder matches expected value: " + status);
-            assertThat(actualStatus).hasText(status);
+            assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText(status);
         }
     }
 
@@ -198,7 +192,7 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify: Dropdown is visible");
         assertThat(acquirersPage.getTable().getRowsPerPageDropdown()).isVisible();
 
-        Allure.step("Verify: The dropdown contains all four options: 10, 25, 50, 100");
+        Allure.step("Verify: The dropdown contains options");
         assertThat(acquirersPage.getTable().getRowsPerPageOptions()).hasText(ROWS_PER_PAGE_OPTIONS);
     }
 
