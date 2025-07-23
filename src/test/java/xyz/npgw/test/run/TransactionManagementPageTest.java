@@ -31,8 +31,8 @@ public class TransactionManagementPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
-                .clickOnTheTransaction()
-                .clickOnCreateButton();
+                .getTable().clickTransaction()
+                .clickCreateButton();
 
         assertThat(page.getTransactionsTable()).containsText("id.transaction.");
     }
@@ -48,8 +48,8 @@ public class TransactionManagementPageTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
-                .clickOnTheTransaction()
-                .clickOnCloseButton();
+                .getTable().clickTransaction()
+                .clickCloseButton();
 
         assertThat(page.getTransactionsTable()).containsText("No rows to display.");
     }
@@ -95,6 +95,6 @@ public class TransactionManagementPageTest extends BaseTest {
         addAdjustmentDialog.fillNpgwReferenceInput(referenceFromTable);
 
         Allure.step("Verify: The located reference matches the one entered in the search field.");
-        assertThat(addAdjustmentDialog.getNpgwReferenceFromTable()).hasText(referenceFromTable);
+        assertThat(addAdjustmentDialog.getTable().getFirstRowCell("NPGW reference")).hasText(referenceFromTable);
     }
 }
