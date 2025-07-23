@@ -35,14 +35,14 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Fraud
 
     @Step("Click 'Activate business unit control' button")
     public ActivateBusinessUnitControlDialog clickActivateBusinessUnitControlButton(String priority) {
-        getRow(priority).locator("//*[@data-icon='check']/..").click();
+        getRowByDataKey(priority).locator("//*[@data-icon='check']/..").click();
 
         return new ActivateBusinessUnitControlDialog(getPage());
     }
 
     @Step("Click 'Deactivate business unit control' button")
     public DeactivateBusinessUnitControlDialog clickDeactivateBusinessUnitControlButton(String priority) {
-        getRow(priority).locator("//*[@data-icon='ban']/..").click();
+        getRowByDataKey(priority).locator("//*[@data-icon='ban']/..").click();
 
         return new DeactivateBusinessUnitControlDialog(getPage());
     }
