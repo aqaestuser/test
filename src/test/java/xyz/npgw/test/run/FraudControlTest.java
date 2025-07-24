@@ -123,11 +123,41 @@ public class FraudControlTest extends BaseTest {
         assertThat(attemptTwo).isAttached();
 
         page.getTableControls().clickConnectControlButton(FRAUD_CONTROL.getControlName())
-                .pressEscapeToCancel();
+                .pressEscapeKey();
 
         Allure.step("Verify that due to press ESC keyboard button Fraud Control hasn't been added");
         Locator attemptThree = page.getTableBusinessUnitControls().getNoRowsToDisplayMessage();
         assertThat(attemptThree).isAttached();
+    }
+
+    @Test(dependsOnMethods = "testAddActiveFraudControl")
+    @TmsLink("972")
+    @Epic("System/Fraud Control")
+    @Feature("Control table")
+    @Description("Delete Fraud Control with Cancel button"
+            + "Delete Fraud Control with 'Cross'"
+            + "Delete Fraud Control with ESC")
+    public void testCancelDeletingFraudControl() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
+                .clickCancelButton();
+
+        Allure.step("Verify that due to click Cancel button Fraud Control hasn't been deleted");
+        assertThat(page.getTableControls().getRow(FRAUD_CONTROL.getControlName())).isAttached();
+
+        page.getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
+                .clickCloseIcon();
+
+        Allure.step("Verify that due to click Cross icon Fraud Control hasn't been deleted");
+        assertThat(page.getTableControls().getRow(FRAUD_CONTROL.getControlName())).isAttached();
+
+        page.getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
+                .pressEscapeKey();
+
+        Allure.step("Verify that due to press ESC keyboard button Fraud Control hasn't been deleted");
+        assertThat(page.getTableControls().getRow(FRAUD_CONTROL.getControlName())).isAttached();
     }
 
     @Test
@@ -182,7 +212,8 @@ public class FraudControlTest extends BaseTest {
         assertThat(cell).hasText("Inactive");
     }
 
-    @Test(dependsOnMethods = "testCancelAddingFraudControlToBusinessUnit")
+    @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit",
+            "testDeleteInactiveFraudControlAddedToBusinessUnit"})
     @TmsLink("910")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -272,7 +303,7 @@ public class FraudControlTest extends BaseTest {
                 .hasText("ERROREntity with name {" + FRAUD_CONTROL_NAME + "} already exists.");
     }
 
-    @Test(dependsOnMethods = "testCancelAddingFraudControlToBusinessUnit")
+    @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl"})
     @TmsLink("949")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -376,7 +407,6 @@ public class FraudControlTest extends BaseTest {
         Assert.assertFalse(actualFraudControlBusinessUnitList.contains(FRAUD_CONTROL_ADD_INACTIVE
                 .getControlDisplayName()));
     }
-
 
     @AfterClass
     @Override

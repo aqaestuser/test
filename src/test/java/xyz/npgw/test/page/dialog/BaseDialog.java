@@ -63,7 +63,7 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
     }
 
     @Step("Press 'Escape' to cancel")
-    public ReturnPageT pressEscapeToCancel() {
+    public ReturnPageT pressEscapeKey() {
         getPage().keyboard().press("Escape");
 
         return getReturnPage();
