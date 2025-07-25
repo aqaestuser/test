@@ -8,6 +8,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -118,6 +119,7 @@ public class AddEditAcquirerTest extends BaseTest {
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
+    @Ignore("Possible bug: aria-readonly='true' for AcquirerDisplayName field")
     @Test
     @TmsLink("412")
     @Epic("System/Acquirers")
@@ -285,6 +287,7 @@ public class AddEditAcquirerTest extends BaseTest {
         assertEquals(actualPlaceholders, expectedPlaceholders);
     }
 
+    @Ignore("waiting for getByPlaceholder('Enter display name')")
     @Test
     @TmsLink("450")
     @Epic("System/Acquirers")

@@ -86,7 +86,7 @@ public class TestDataProvider {
                 {"CANCELLED"},
                 {"EXPIRED"},
                 {"PARTIAL_REFUND"},
-                {"REFUNDED"},
+                {"REFUND"},
         };
     }
 

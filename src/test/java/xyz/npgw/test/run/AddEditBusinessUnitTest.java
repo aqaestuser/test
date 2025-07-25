@@ -59,6 +59,8 @@ public class AddEditBusinessUnitTest extends BaseTest {
 
         Allure.step("Verify: The table is empty and 'No rows to display.' is displayed");
         assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
+
+        TestUtils.deleteCompany(getApiRequestContext(), company241.companyName());
     }
 
     @Test

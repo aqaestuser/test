@@ -29,6 +29,7 @@ public class ControlsTableComponent extends BaseTableComponent<FraudControlPage>
 
     @Step("Click 'Activate control' button")
     public ActivateControlDialog clickActivateControlButton(String controlName) {
+        getRow(controlName).hover();
         getRow(controlName).locator("//*[@data-icon='check']/..").click();
 
         return new ActivateControlDialog(getPage());
@@ -36,6 +37,7 @@ public class ControlsTableComponent extends BaseTableComponent<FraudControlPage>
 
     @Step("Click 'Deactivate control' button")
     public DeactivateControlDialog clickDeactivateControlButton(String controlName) {
+        getRow(controlName).hover();
         getRow(controlName).locator("//*[@data-icon='ban']/..").click();
 
         return new DeactivateControlDialog(getPage());
