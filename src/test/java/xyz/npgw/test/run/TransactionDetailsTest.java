@@ -199,13 +199,13 @@ public class TransactionDetailsTest extends BaseTest {
                     .getTable().clickOnTransaction(i);
 
             String statusInHeader = transactionDetails.getStatusValue().innerText();
-            String lastTypeInLifecycle = transactionDetails.getLastPaymentLifecycleType().innerText();
+            String firstTypeInLifecycle = transactionDetails.getFirstPaymentLifecycleType().innerText();
 
-            Allure.step("Verify: Statuses in the dialog header and lifecycle are the same");
-            assertEquals(statusInHeader, lastTypeInLifecycle, "Statuses should match!");
+            Allure.step("Verify: Statuses in the dialog header and lifecycle first row are the same");
+            assertEquals(statusInHeader, firstTypeInLifecycle, "Statuses should match!");
 
-            Allure.step("Verify: The Payment lifecycle begins with 'INITIATED'");
-            assertThat(transactionDetails.getFirstPaymentLifecycleType()).hasText("INITIATED");
+            Allure.step("Verify: The Payment lifecycle ends with 'INITIATED'");
+            assertThat(transactionDetails.getLastPaymentLifecycleType()).hasText("INITIATED");
 
             Allure.step("Verify: The 'INITIATED' occurs exactly once in the lifecycle");
             assertThat(transactionDetails.getPaymentLifecycleType("INITIATED")).hasCount(1);

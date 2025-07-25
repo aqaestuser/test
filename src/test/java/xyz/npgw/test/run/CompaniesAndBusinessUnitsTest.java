@@ -7,7 +7,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
@@ -94,15 +93,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
-
-        Allure.step("Verify: 'Add company' dialog is displayed");
-        assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
-
-        Allure.step("Verify: 'Company name' field is marked as invalid");
-        assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
-
-//        Allure.step("Verify: 'Company type' field is marked as invalid");
-//        assertThat(addCompanyDialog.getCompanyTypeField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: 'Create' button is disabled before filling required fields");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
@@ -393,7 +383,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
     }
 
-    @Ignore("CompanyTypeField hasn't aria-invalid anymore")
     @Test
     @TmsLink("206")
     @Epic("System/Companies and business units")
@@ -405,11 +394,11 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
+        Allure.step("Verify: 'Add company' dialog is displayed");
+        assertThat(addCompanyDialog.getDialogHeader()).hasText("Add company");
+
         Allure.step("Verify: 'Company name' field is marked invalid");
         assertThat(addCompanyDialog.getCompanyNameField()).hasAttribute("aria-invalid", "true");
-
-        Allure.step("Verify: 'Company type' field is marked invalid");
-        assertThat(addCompanyDialog.getCompanyTypeField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addCompanyDialog.getAllPlaceholders(), List.of(
