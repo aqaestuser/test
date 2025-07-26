@@ -531,19 +531,19 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     public TransactionsPage dragArrows(String from, String to) {
-        dragAndDrop(getArrowsUpDown(from), getArrowsUpDown(to));
+        dragAndDrop(getArrowsUpDown(from), getSettingsVisibleColumnCheckbox(to));
 
         return this;
     }
 
     public TransactionsPage dragArrowsToFirstPosition(String from) {
-        dragAndDrop(getArrowsUpDown(from), settingsArrowsUpDown.first());
+        dragAndDrop(getArrowsUpDown(from), settingsVisibleColumnCheckbox.first());
 
         return this;
     }
 
     public TransactionsPage dragArrowsToLastPosition(String from) {
-        dragAndDrop(getArrowsUpDown(from), settingsArrowsUpDown.last());
+        dragAndDrop(getArrowsUpDown(from), settingsVisibleColumnCheckbox.last());
 
         return this;
     }
@@ -554,5 +554,9 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     private Locator getArrowsUpDown(String name) {
         return getByRole(AriaRole.BUTTON, name).locator(settingsArrowsUpDown);
+    }
+
+    private Locator getSettingsVisibleColumnCheckbox(String name) {
+        return getByRole(AriaRole.BUTTON, name).locator(settingsVisibleColumnCheckbox);
     }
 }
