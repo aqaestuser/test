@@ -15,6 +15,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
 import java.util.List;
@@ -477,6 +478,22 @@ public class FraudControlTest extends BaseTest {
 
         assertThat(row).containsText("Inactive");
         assertThat(row).not().containsText("Active");
+    }
+
+    @Test(dependsOnMethods = "testDeleteActiveFraudControlAddedToBusinessUnit")
+    @TmsLink("993")
+    @Epic("System/Fraud Control")
+    @Feature("Add/Edit/Delete Fraud Control")
+    @Description("Verify,Control name is immutable")
+    public void testNotEditControlName() {
+        EditControlDialog editControlDialog = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls()
+                .clickEditControlButton(FRAUD_CONTROL_ADD_ONE.getControlName());
+
+        Allure.step("Verify that 'Control Name' input field is immutable");
+        assertThat(editControlDialog.getControlNameInput()).not().isEditable();
     }
 
     @AfterClass
