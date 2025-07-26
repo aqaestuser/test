@@ -186,7 +186,7 @@ public class GatewayPageTest extends BaseTest {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
-    @Test(invocationCount = 3)
+    @Test
     @TmsLink("693")
     @Epic("System/Gateway")
     @Feature("Currency")

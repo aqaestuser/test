@@ -197,6 +197,81 @@ public class FraudControlTest extends BaseTest {
         assertThat(statusCell).hasText("Active");
     }
 
+    @Test(dependsOnMethods = "testAddActiveFraudControl")
+    @TmsLink("999")
+    @Epic("System/Fraud Control")
+    @Feature("Control table")
+    @Description("Edit Fraud Control with Cancel button"
+            + "Edit Fraud Control with 'Cross'"
+            + "Edit Fraud Control with ESC")
+    public void testCancelEditingFraudControl() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls().clickEditControlButton(FRAUD_CONTROL.getControlName())
+                .fillFraudControlDisplayNameField(FRAUD_CONTROL.getControlDisplayName() + " Edited")
+                .fillFraudControlCodeField(FRAUD_CONTROL.getControlCode() + RUN_ID)
+                .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig() + "Not applicable")
+                .checkInactiveRadiobutton()
+                .clickCloseButton();
+
+        Locator controlRow = page.getTableControls().getRow(FRAUD_CONTROL.getControlName());
+
+        Locator displayNameCell = page.getTableControls().getCell(controlRow, "Display name");
+        Locator codeCell = page.getTableControls().getCell(controlRow, "Code");
+        Locator configCell = page.getTableControls().getCell(controlRow, "Config");
+        Locator statusCell = page.getTableControls().getCell(controlRow, "Status");
+
+        Allure.step("Verify that due to click Close button Fraud Control hasn't been changed");
+        assertThat(codeCell).hasText(FRAUD_CONTROL.getControlCode());
+        assertThat(configCell).hasText(FRAUD_CONTROL.getControlConfig());
+        assertThat(displayNameCell).hasText(FRAUD_CONTROL.getControlDisplayName());
+        assertThat(statusCell).hasText("Active");
+
+        page.getTableControls().clickEditControlButton(FRAUD_CONTROL.getControlName())
+                .fillFraudControlDisplayNameField(FRAUD_CONTROL.getControlDisplayName() + " Edited")
+                .fillFraudControlCodeField(FRAUD_CONTROL.getControlCode() + RUN_ID)
+                .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig() + "Not applicable")
+                .checkInactiveRadiobutton()
+                .clickCloseIcon();
+
+        Allure.step("Verify that due to click Cross icon Fraud Control hasn't been changed");
+        assertThat(codeCell).hasText(FRAUD_CONTROL.getControlCode());
+        assertThat(configCell).hasText(FRAUD_CONTROL.getControlConfig());
+        assertThat(displayNameCell).hasText(FRAUD_CONTROL.getControlDisplayName());
+        assertThat(statusCell).hasText("Active");
+
+        page.getTableControls().clickEditControlButton(FRAUD_CONTROL.getControlName())
+                .fillFraudControlDisplayNameField(FRAUD_CONTROL.getControlDisplayName() + " Edited")
+                .fillFraudControlCodeField(FRAUD_CONTROL.getControlCode() + RUN_ID)
+                .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig() + "Not applicable")
+                .checkInactiveRadiobutton()
+                .pressEscapeKey();
+
+        Allure.step("Verify that due to press ESC keyboard button Fraud Control hasn't been changed");
+        assertThat(codeCell).hasText(FRAUD_CONTROL.getControlCode());
+        assertThat(configCell).hasText(FRAUD_CONTROL.getControlConfig());
+        assertThat(displayNameCell).hasText(FRAUD_CONTROL.getControlDisplayName());
+        assertThat(statusCell).hasText("Active");
+    }
+
+    @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl",
+            "testCancelDeactivationFraudControl", "testCancelEditingFraudControl"})
+    @TmsLink("949")
+    @Epic("System/Fraud Control")
+    @Feature("Add/Edit/Delete Fraud Control")
+    @Description("Delete Active Fraud Control not added to Business Unit")
+    public void testDeleteActiveFraudControlNotAddedToBusinessUnit() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
+                .clickDeleteButton();
+
+        Allure.step("Check if just deleted Fraud Control still presented in the table");
+        assertThat(page.getTableControls().getRow(FRAUD_CONTROL.getControlName())).not().isAttached();
+    }
+
     @Test
     @TmsLink("904")
     @Epic("System/Fraud Control")
@@ -339,27 +414,6 @@ public class FraudControlTest extends BaseTest {
 
         assertThat(fraudControlPage.getAlert().getMessage())
                 .hasText("ERROREntity with name {" + FRAUD_CONTROL_NAME + "} already exists.");
-    }
-
-    @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl"})
-    @TmsLink("949")
-    @Epic("System/Fraud Control")
-    @Feature("Add/Edit/Delete Fraud Control")
-    @Description("Delete Active Fraud Control not added to Business Unit")
-    public void testDeleteActiveFraudControlNotAddedToBusinessUnit() {
-        FraudControlPage page = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickFraudControlTab()
-                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL.getControlName())
-                .clickDeleteButton();
-
-        Allure.step("Check if just deleted Fraud Control still presented in the table");
-        try {
-            page.getTableControls().getRow(FRAUD_CONTROL.getControlName());
-        } catch (RuntimeException e) {
-            throw new RuntimeException("There no rows with name "
-                    + FRAUD_CONTROL.getControlName() + " in the table");
-        }
     }
 
     @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority"})
