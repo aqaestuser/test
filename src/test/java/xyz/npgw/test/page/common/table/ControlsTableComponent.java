@@ -1,5 +1,6 @@
 package xyz.npgw.test.page.common.table;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.control.ActivateControlDialog;
@@ -11,6 +12,8 @@ import xyz.npgw.test.page.system.FraudControlPage;
 
 public class ControlsTableComponent extends BaseTableComponent<FraudControlPage> {
 
+    private final Locator tooltip = locator("//div[@data-slot='content']").last();
+
     public ControlsTableComponent(Page page) {
         super(page, page.getByText("Controls", new Page.GetByTextOptions().setExact(true)).locator("../.."));
     }
@@ -18,6 +21,56 @@ public class ControlsTableComponent extends BaseTableComponent<FraudControlPage>
     @Override
     protected FraudControlPage getCurrentPage() {
         return new FraudControlPage(getPage());
+    }
+
+    @Step("Hover over Edit Control icon to get Tooltip")
+    public Locator hoverOverEditIcon(String controlName) {
+        getRow(controlName).hover();
+        getRow(controlName).getByTestId("EditControlButton").hover();
+
+        tooltip.waitFor();
+
+        return tooltip;
+    }
+
+    @Step("Hover over Deactivate Control icon to get Tooltip")
+    public Locator hoverOverDeactivateControlIcon(String controlName) {
+        getRow(controlName).hover();
+        getRow(controlName).locator("//*[@data-icon='ban']/..").hover();
+
+        tooltip.waitFor();
+
+        return tooltip;
+    }
+
+    @Step("Hover over Activate Control icon to get Tooltip")
+    public Locator hoverOverActivateControlIcon(String controlName) {
+        getRow(controlName).hover();
+        getRow(controlName).locator("//*[@data-icon='check']/..").hover();
+
+        tooltip.waitFor();
+
+        return tooltip;
+    }
+
+    @Step("Hover over Activate Control icon to get Tooltip")
+    public Locator hoverOverDeleteIcon(String controlName) {
+        getRow(controlName).hover();
+        getRow(controlName).getByTestId("DeleteControlButton").hover();
+
+        tooltip.waitFor();
+
+        return tooltip;
+    }
+
+    @Step("Hover over Activate Control icon to get Tooltip")
+    public Locator hoverOverConnectControlIcon(String controlName) {
+        getRow(controlName).hover();
+        getRow(controlName).getByTestId("ConnectControlButton").hover();
+
+        tooltip.waitFor();
+
+        return tooltip;
     }
 
     @Step("Click 'Edit control' button")

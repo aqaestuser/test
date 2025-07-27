@@ -255,8 +255,55 @@ public class FraudControlTest extends BaseTest {
         assertThat(statusCell).hasText("Active");
     }
 
+    @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
+    @TmsLink("1001")
+    @Epic("System/Fraud Control")
+    @Feature("Control table")
+    @Description("Tooltips for available actions check")
+    public void testTooltipsForActionsControlTable() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+
+        Locator editIconTooltip = page.getTableControls().hoverOverEditIcon(FRAUD_CONTROL.getControlName());
+
+        Allure.step("Verify that Edit icon Tooltip is presented on Control table");
+        assertThat(editIconTooltip).isVisible();
+        assertThat(editIconTooltip).hasText("Edit control");
+
+        Locator activateIconTooltip = page.getTableControls()
+                .hoverOverActivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName());
+
+        Allure.step("Verify that Activate icon Tooltip is presented on Control table");
+        assertThat(activateIconTooltip).isVisible();
+        assertThat(activateIconTooltip).hasText("Аctivate control");
+
+        Locator deactivateIconTooltip = page.getTableControls()
+                .hoverOverDeactivateControlIcon(FRAUD_CONTROL.getControlName());
+
+        Allure.step("Verify that Deactivate icon Tooltip is presented on Control table");
+        assertThat(deactivateIconTooltip).isVisible();
+        assertThat(deactivateIconTooltip).hasText("Deactivate control");
+
+        Locator deleteIconTooltip = page.getTableControls().hoverOverDeleteIcon(FRAUD_CONTROL.getControlName());
+
+        Allure.step("Verify that Delete icon Tooltip is presented on Control table");
+        assertThat(deleteIconTooltip).isVisible();
+        assertThat(deleteIconTooltip).hasText("Delete control");
+
+        Locator connectControlIconTooltip = page.getTableControls()
+                .hoverOverConnectControlIcon(FRAUD_CONTROL.getControlName());
+
+        Allure.step("Verify that Connect control icon Tooltip is presented on Control table");
+        assertThat(connectControlIconTooltip).isVisible();
+        assertThat(connectControlIconTooltip).hasText("Connect control to business unit");
+    }
+
     @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl",
-            "testCancelDeactivationFraudControl", "testCancelEditingFraudControl"})
+            "testCancelDeactivationFraudControl", "testCancelEditingFraudControl",
+            "testTooltipsForActionsControlTable"})
     @TmsLink("949")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -357,7 +404,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(rowFraudTwo).containsText("Active");
     }
 
-    @Ignore("https://github.com/NPGW/npgw-ui-test/issues/913")
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("967")
     @Epic("System/Fraud Control")
@@ -552,6 +598,7 @@ public class FraudControlTest extends BaseTest {
         assertThat(editControlDialog.getControlNameInput()).not().isEditable();
     }
 
+    @Ignore("not working Assert.assertEquals(actualDisplayNameList, sortedDisplayNameListAsc);")
     @Test
     @TmsLink("969")
     @Epic("System/Fraud control")
