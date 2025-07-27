@@ -13,9 +13,7 @@ import io.qameta.allure.TmsLink;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
@@ -137,7 +135,7 @@ public class TransactionsTableTest extends BaseTest {
                 .clickRefreshDataButton();
 
         Allure.step("Verify: Transactions can be filtered by date range");
-        Assert.assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
+        assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
     }
 
     @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
@@ -219,13 +217,11 @@ public class TransactionsTableTest extends BaseTest {
         assertThat(transactionsPage.getTable().getRows()).not().hasCount(0);
     }
 
-    @Ignore("After the last changes "
-            + "ava.lang.AssertionError: Lists differ at element [0]: 2025-07-07T19:36:51 != 2025-07-25T04:00:51")
     @Test
     @TmsLink("559")
     @Epic("Transactions")
     @Feature("Table sorting")
-    @Description("'Creation Date' column sorts ascending by default and descending on click.")
+    @Description("'Creation Date' column sorts descending by default and ascending on click.")
     public void testSortByCreationDate() {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
@@ -598,7 +594,7 @@ public class TransactionsTableTest extends BaseTest {
                 .toList();
 
         Allure.step("Verify: cell values match between UI and PDF");
-        Assert.assertEquals(uiFormattedRows, pdfRows);
+        assertEquals(uiFormattedRows, pdfRows);
     }
 
     @Test
