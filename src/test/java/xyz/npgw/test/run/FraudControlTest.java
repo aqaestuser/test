@@ -406,6 +406,7 @@ public class FraudControlTest extends BaseTest {
         assertThat(rowFraudTwo).containsText("Active");
     }
 
+    @Ignore("https://github.com/NPGW/npgw-ui-test/issues/913")
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("967")
     @Epic("System/Fraud Control")
@@ -417,28 +418,76 @@ public class FraudControlTest extends BaseTest {
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .getTableBusinessUnitControls().clickDeactivateBusinessUnitControlButton("0")
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+
+        Locator controlStatusCell = page.getTableControls().getCell(FRAUD_CONTROL_ADD_ONE.getControlName(), "Status");
+        Locator businessControlRow = page.getTableBusinessUnitControls().getRowByDataKey("0");
+        Locator businessControlStatusCell = page.getTableBusinessUnitControls().getCell(businessControlRow, "Status");
+
+        Allure.step("Verify Fraud Control's current status in Business Unit Control Table");
+        assertThat(businessControlStatusCell).hasText("Active");
+
+        Allure.step("Verify Fraud Control's current status in Control Table");
+        assertThat(controlStatusCell).hasText("Active");
+
+        page.getTableControls().clickDeactivateControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
                 .clickDeactivateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
-        Locator controlCell = page.getTableControls().getCell(FRAUD_CONTROL_ADD_ONE.getControlName(), "Status");
+        Allure.step("Verify that Fraud Control status has been changed to 'Inactive' in Control Table");
+        assertThat(controlStatusCell).hasText("Inactive");
+
+        Allure.step("Verify that Fraud Control status hasn't been changed in Business Unit Control Table");
+        assertThat(businessControlStatusCell).hasText("Active");
+
+        page.getTableControls().clickActivateControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickActivateButton()
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        Allure.step("Verify that Fraud Control status is Active in Control table again");
+        assertThat(controlStatusCell).hasText("Active");
+        assertThat(businessControlStatusCell).hasText("Active");
+    }
+
+    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @TmsLink("1009")
+    @Epic("System/Fraud Control")
+    @Feature("Business Unit Control table")
+    @Description("Activate Business unit control" + "Deactivate Business unit control")
+    public void testChangeBusinessUnitFraudControlActivity() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+
+        Locator controlStatusCell = page.getTableControls().getCell(FRAUD_CONTROL_ADD_ONE.getControlName(), "Status");
         Locator businessControlRow = page.getTableBusinessUnitControls().getRowByDataKey("0");
-        Locator businessControlCell = page.getTableBusinessUnitControls().getCell(businessControlRow, "Status");
+        Locator businessControlStatusCell = page.getTableBusinessUnitControls().getCell(businessControlRow, "Status");
+
+        Allure.step("Verify Fraud Control's current status in Business Unit Control Table");
+        assertThat(businessControlStatusCell).hasText("Active");
+
+        Allure.step("Verify Fraud Control's current status in Control Table");
+        assertThat(controlStatusCell).hasText("Active");
+
+        page.getTableBusinessUnitControls().clickDeactivateBusinessUnitControlButton("0")
+                .clickDeactivateButton()
+                .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Verify that Fraud Control state hasn't been changed in Control Table");
-        assertThat(controlCell).hasText("Active");
+        assertThat(controlStatusCell).hasText("Active");
 
         Allure.step("Verify that Fraud Control state is Inactive now in Business Unit Control Table");
-        assertThat(businessControlCell).hasText("Inactive");
+        assertThat(businessControlStatusCell).hasText("Inactive");
 
         page.getTableBusinessUnitControls().clickActivateBusinessUnitControlButton("0")
                 .clickActivateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Verify that Fraud Control state is Active in Business Unit Control Table again");
-        assertThat(controlCell).hasText("Active");
-        assertThat(businessControlCell).hasText("Active");
+        assertThat(controlStatusCell).hasText("Active");
+        assertThat(businessControlStatusCell).hasText("Active");
     }
 
     @Test
@@ -464,7 +513,8 @@ public class FraudControlTest extends BaseTest {
                 .hasText("ERROREntity with name {" + FRAUD_CONTROL_NAME + "} already exists.");
     }
 
-    @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority"})
+    @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority",
+            "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("950")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -548,7 +598,8 @@ public class FraudControlTest extends BaseTest {
                 .getControlDisplayName()));
     }
 
-    @Test(dependsOnMethods = "testDeleteActiveFraudControlAddedToBusinessUnit")
+    @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
+            "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("986")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -584,7 +635,8 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).not().containsText("Active");
     }
 
-    @Test(dependsOnMethods = "testDeleteActiveFraudControlAddedToBusinessUnit")
+    @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
+            "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("993")
     @Epic("System/Fraud Control")
     @Feature("Add/Edit/Delete Fraud Control")
