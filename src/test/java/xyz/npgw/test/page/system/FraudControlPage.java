@@ -26,4 +26,11 @@ public class FraudControlPage extends BaseSystemPage<FraudControlPage> implement
 
         return new AddControlDialog(getPage());
     }
+
+    @Step("Click 'Reset filter' button")
+    public FraudControlPage clickResetFilterButton() {
+        getByTestId("ResetButtonFraudControlPage").click();
+
+        return this;
+    }
 }
