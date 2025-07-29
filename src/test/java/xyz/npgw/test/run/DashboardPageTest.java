@@ -245,12 +245,12 @@ public class DashboardPageTest extends BaseTest {
         dashboardPage.clickCurrencySelector().selectCurrency("EUR");
 
         Allure.step("Verify: INITIATED main block contents");
-        assertThat(dashboardPage.getInitiatedBlock()).containsText("INITIATEDEUR6601,00,000");
+        assertThat(dashboardPage.getInitiatedBlock()).containsText("INITIATEDEUR660100,000");
 
         dashboardPage.clickCurrencySelector().selectCurrency("GBP");
 
         Allure.step("Verify: INITIATED main block contents");
-        assertThat(dashboardPage.getInitiatedBlock()).containsText("INITIATEDGBP0.7710,00,00,000");
+        assertThat(dashboardPage.getInitiatedBlock()).containsText("INITIATEDGBP0.77100,000,000");
     }
 
     @AfterClass
