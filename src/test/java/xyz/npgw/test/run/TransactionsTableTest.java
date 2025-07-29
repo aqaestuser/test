@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -595,6 +596,53 @@ public class TransactionsTableTest extends BaseTest {
 
         Allure.step("Verify: cell values match between UI and PDF");
         assertEquals(uiFormattedRows, pdfRows);
+    }
+
+    @Test
+    @TmsLink("1011")
+    @Epic("Transactions")
+    @Feature("Export table data")
+    @Description("The transaction table data on the UI matches the exported Excel file data.")
+    public void testTransactionTableMatchesDownloadedExcel() throws IOException {
+        TransactionsPage transactionsPage = new DashboardPage(getPage())
+                .clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
+
+        List<List<String>> uiRows = transactionsPage.getTable().getAllTableRows();
+
+        Download download = getPage().waitForDownload(
+                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
+                () -> transactionsPage.clickExportTableDataToFileButton().selectExcel());
+
+        Allure.step("Verify: success alert is shown after exporting");
+        assertThat(transactionsPage.getAlert().getMessage())
+                .hasText("SUCCESSExporting the data");
+
+        Path targetPath = Paths.get("downloads", "transactions-export.xlsx");
+        Files.createDirectories(targetPath.getParent());
+        download.saveAs(targetPath);
+
+        List<Transaction> transactionsFromExcel = transactionsPage.readExcel(targetPath.toString());
+
+        IntStream.range(0, uiRows.size()).forEach(i -> {
+            List<String> uiRow = uiRows.get(i);
+            Transaction transaction = transactionsFromExcel.get(i);
+
+            DecimalFormat df = new DecimalFormat("0.00");
+            String formattedAmount = df.format(transaction.amount());
+
+            Allure.step("Verify: cell values match between UI and Excel", () -> {
+                assertEquals(uiRow.get(0), transaction.createdOn());
+                assertEquals(uiRow.get(1), transaction.transactionId());
+                assertEquals(uiRow.get(2), transaction.externalTransactionId());
+                assertEquals(uiRow.get(3), formattedAmount);
+                assertEquals(uiRow.get(4), transaction.currency().toString());
+                assertEquals(uiRow.get(5), transaction.paymentDetails().cardType().toString());
+                assertEquals(uiRow.get(6), transaction.status().toString());
+            });
+        });
     }
 
     @Test

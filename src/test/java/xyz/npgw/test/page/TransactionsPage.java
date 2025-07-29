@@ -7,6 +7,11 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.Assert;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.CardType;
@@ -14,6 +19,7 @@ import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.page.base.HeaderPage;
+import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
@@ -21,6 +27,7 @@ import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -36,7 +43,8 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         SelectDateRangeTrait<TransactionsPage>,
         SelectCompanyTrait<TransactionsPage>,
         SelectBusinessUnitTrait<TransactionsPage>,
-        SelectStatusTrait<TransactionsPage> {
+        SelectStatusTrait<TransactionsPage>,
+        AlertTrait<TransactionsPage> {
 
     private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
     private final Locator currencySelector = getByLabelExact("Currency");
@@ -404,6 +412,13 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
+    @Step("Select 'Excel' option")
+    public TransactionsPage selectExcel() {
+        downloadExcelOption.click();
+
+        return this;
+    }
+
     @Step("Read and parse CSV from path: {csvFilePath}")
     public List<List<String>> readCsv(Path csvFilePath) throws IOException {
         List<List<String>> rows = new ArrayList<>();
@@ -529,6 +544,46 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
         return transactions;
     }
+
+    @Step("Read and parse transactions from Excel file: {filePath}")
+    public List<Transaction> readExcel(String filePath) throws IOException {
+        List<Transaction> transactionList = new ArrayList<>();
+        DataFormatter formatter = new DataFormatter();
+
+        try (
+                FileInputStream fis = new FileInputStream(filePath);
+                Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    continue;
+                }
+                String creationDate = formatter.formatCellValue(row.getCell(0));
+                String npqwReference = formatter.formatCellValue(row.getCell(1));
+                String businessUnit = formatter.formatCellValue(row.getCell(2));
+                String amountStr = formatter.formatCellValue(row.getCell(3));
+                double amount = Double.parseDouble(amountStr);
+                String currency = formatter.formatCellValue(row.getCell(4));
+                String cardType = formatter.formatCellValue(row.getCell(5));
+                String status = formatter.formatCellValue(row.getCell(6));
+
+                transactionList.add(
+                        new Transaction(
+                                creationDate,
+                                npqwReference,
+                                businessUnit,
+                                amount,
+                                Currency.valueOf(currency),
+                                CardType.valueOf(cardType),
+                                Status.valueOf(status)
+                        ));
+            }
+        }
+
+        return transactionList;
+    }
+
 
     public TransactionsPage dragArrows(String from, String to) {
         dragAndDrop(getArrowsUpDown(from), getSettingsVisibleColumnCheckbox(to));
