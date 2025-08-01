@@ -357,7 +357,7 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify: Success deletion alert message is shown");
         assertThat(gatewayPage.getAlert().getMessage())
-                .hasText("SUCCESSBusiness unit acquirer was deleted successfully");
+                .hasText("SUCCESSAcquirer MID was deleted successfully");
     }
 
     @Test

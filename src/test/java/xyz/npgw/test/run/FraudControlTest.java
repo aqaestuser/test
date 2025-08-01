@@ -15,6 +15,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.dialog.control.AddControlDialog;
 import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
@@ -494,11 +495,31 @@ public class FraudControlTest extends BaseTest {
     }
 
     @Test
+    @TmsLink("1024")
+    @Epic("System/Fraud control")
+    @Feature("Add fraud control")
+    @Description("Verify the 'Control name' field is mandatory and marked with '*'")
+    public void testControlNameIsMandatory() {
+        AddControlDialog addControlDialog = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .clickAddFraudControl();
+
+        Allure.step("Verify that the 'Control name' field is marked with '*'");
+        Assert.assertTrue(((String) addControlDialog.getControlNameLabel()
+                .evaluate("el => getComputedStyle(el, '::after').content")).contains("*"),
+                "The '*' symbol is not displayed in the 'Control name' label");
+
+        Allure.step("Verify that the 'Create' button is disabled if the 'Control name field is empty");
+        assertThat(addControlDialog.getCreateButton()).hasAttribute("data-disabled", "true");
+    }
+
+    @Test
     @TmsLink("895")
     @Epic("System/Fraud control")
-    @Feature("Fraud control")
+    @Feature("Add fraud control")
     @Description("Verify the error message when attempting to create a Fraud Control with the existing name")
-    public void testErrorMessageForExistedName() {
+    public void testErrorMessageForExistingControlName() {
         FraudControlPage fraudControlPage = new FraudControlPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()

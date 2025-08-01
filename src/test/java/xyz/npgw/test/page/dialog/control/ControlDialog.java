@@ -14,6 +14,7 @@ public abstract class ControlDialog<CurrentDialogT extends ControlDialog<Current
         extends BaseDialog<FraudControlPage, CurrentDialogT> {
 
     private final Locator controlNameInput = getByPlaceholder("Enter control name");
+    private final Locator controlNameLabel = getByTextExact("Control name");
 
     public ControlDialog(Page page) {
         super(page);

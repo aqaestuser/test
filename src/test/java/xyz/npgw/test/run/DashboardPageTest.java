@@ -58,6 +58,7 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
+    @Ignore("Failed 01.08.2025 The error message has been removed; it's now impossible to select the wrong date")
     @Test
     @TmsLink("403")
     @Epic("Dashboard")
