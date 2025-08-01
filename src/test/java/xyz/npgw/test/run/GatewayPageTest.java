@@ -248,7 +248,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton();
 
         Allure.step("Verify the result of adding Acquirer within Gateway page table");
@@ -258,6 +258,9 @@ public class GatewayPageTest extends BaseTest {
         assertThat(page.getTable().getCell(0, "Status")).hasText("Active");
         assertThat(page.getTable().getCell(0, "Currencies")).hasText("USD, EUR");
         assertThat(page.getTable().getCell(0, "Priority")).hasText("0");
+
+        page.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -273,28 +276,33 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER_MOVE.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER_MOVE.getAcquirerName())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
         Allure.step("Check that the first created acquirer priority is 0");
-        assertThat(gatewayPage.getTable().getCell(0, "Acquirer")).hasText(ACQUIRER.getAcquirerDisplayName());
-        assertThat(gatewayPage.getTable().getCell(1, "Acquirer")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(0, "Acquirer MID")).hasText(ACQUIRER.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(1, "Acquirer MID")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
 
         gatewayPage.getTable().clickMoveBusinessUnitAcquirerDownButton("0");
 
         Allure.step("Check that the second created acquirer priority is 0 now");
-        assertThat(gatewayPage.getTable().getCell(0, "Acquirer")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
-        assertThat(gatewayPage.getTable().getCell(1, "Acquirer")).hasText(ACQUIRER.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(0, "Acquirer MID")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(1, "Acquirer MID")).hasText(ACQUIRER.getAcquirerDisplayName());
 
         gatewayPage.getTable().clickMoveBusinessUnitAcquirerUpButton("1");
 
         Allure.step("Check that the first created acquirer priority is 0 again");
-        assertThat(gatewayPage.getTable().getCell(0, "Acquirer")).hasText(ACQUIRER.getAcquirerDisplayName());
-        assertThat(gatewayPage.getTable().getCell(1, "Acquirer")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(0, "Acquirer MID")).hasText(ACQUIRER.getAcquirerDisplayName());
+        assertThat(gatewayPage.getTable().getCell(1, "Acquirer MID")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -309,11 +317,11 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[1])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
                 .checkInactiveRadiobutton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER_MOVE.getAcquirerName())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone();
 
@@ -322,6 +330,11 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify that new Merchant acquirer is displayed and has Inactive status");
         assertThat(gatewayPage.getTable().getCell(1, "Status")).hasText("Inactive");
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -336,7 +349,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_DELETION_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME_DELETION_TEST)
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone() //TODO remove alert closing BUG workaround
                 .getTable().clickDeleteBusinessUnitAcquirer("0")
@@ -359,7 +372,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickDeactivateButton();
@@ -373,6 +386,9 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify that acquirer status is 'Active' ");
         assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -387,14 +403,14 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
                 .checkInactiveRadiobutton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER_EUR.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER_EUR.getAcquirerName())
                 .clickCreateButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER_GBP.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER_GBP.getAcquirerName())
                 .clickCreateButton()
                 .getTable().clickColumnHeader("Status");
 
@@ -433,8 +449,8 @@ public class GatewayPageTest extends BaseTest {
         Assert.assertEquals(actualPriorityList, sortedPriorityListDesc);
 
         gatewayPage
-                .getTable().clickColumnHeader("Acquirer");
-        List<String> actualAcquirerList = gatewayPage.getTable().getColumnValues("Acquirer");
+                .getTable().clickColumnHeader("Acquirer MID");
+        List<String> actualAcquirerList = gatewayPage.getTable().getColumnValues("Acquirer MID");
         List<String> sortedAcquirerListAsc = new ArrayList<>(actualAcquirerList);
         Collections.sort(sortedPriorityListAsc);
 
@@ -442,8 +458,8 @@ public class GatewayPageTest extends BaseTest {
         Assert.assertEquals(actualAcquirerList, sortedAcquirerListAsc);
 
         gatewayPage
-                .getTable().clickColumnHeader("Acquirer");
-        actualAcquirerList = gatewayPage.getTable().getColumnValues("Acquirer");
+                .getTable().clickColumnHeader("Acquirer MID");
+        actualAcquirerList = gatewayPage.getTable().getColumnValues("Acquirer MID");
         List<String> sortedAcquirerListDesc = new ArrayList<>(actualAcquirerList);
         sortedAcquirerListDesc.sort(Collections.reverseOrder());
 
@@ -467,6 +483,13 @@ public class GatewayPageTest extends BaseTest {
 
         Allure.step("Verify that entries are sorted by Currencies in Desc order");
         Assert.assertEquals(actualCurrenciesList, sortedCurrenciesListDesc);
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -481,13 +504,16 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickCancelButton();
 
         Allure.step("Verify that acquirer status is still 'Active'");
         assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -502,13 +528,16 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirer().selectAcquirerInDialog(ACQUIRER.getAcquirerName())
                 .clickCreateButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickCloseIcon();
 
         Allure.step("Verify that acquirer status is still 'Active' ");
         assertThat(gatewayPage.getTable().getFirstRowCell("Status")).hasText("Active");
+
+        gatewayPage.getTable().clickDeleteBusinessUnitAcquirer("0")
+                .clickDeleteButton();
     }
 
     @AfterClass

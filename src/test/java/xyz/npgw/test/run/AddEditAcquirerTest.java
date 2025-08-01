@@ -73,7 +73,7 @@ public class AddEditAcquirerTest extends BaseTest {
                 .clickAddAcquirer();
 
         Allure.step("Verify: the header contains the expected title text");
-        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Add acquirer");
+        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Setup acquirer MID");
 
         Allure.step("Verify: all placeholders are correct for each field");
         assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
@@ -119,7 +119,7 @@ public class AddEditAcquirerTest extends BaseTest {
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
-    @Test(expectedExceptions = AssertionError.class)
+    @Test//(expectedExceptions = AssertionError.class)
     @TmsLink("412")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")

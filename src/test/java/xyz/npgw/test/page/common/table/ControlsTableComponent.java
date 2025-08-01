@@ -109,4 +109,9 @@ public class ControlsTableComponent extends BaseTableComponent<FraudControlPage>
 
         return new ConnectControlToBusinessUnitDialog(getPage());
     }
+
+    @Step("Get 'Connect control' button locator")
+    public Locator getConnectControlButton(String controlName) {
+        return getRow(controlName).getByTestId("ConnectControlButton");
+    }
 }

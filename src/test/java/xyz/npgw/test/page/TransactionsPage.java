@@ -614,4 +614,10 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private Locator getSettingsVisibleColumnCheckbox(String name) {
         return getByRole(AriaRole.BUTTON, name).locator(settingsVisibleColumnCheckbox);
     }
+
+    public TransactionsPage pressEscapeKey() {
+        getPage().keyboard().press("Escape");
+
+        return this;
+    }
 }

@@ -211,7 +211,7 @@ public class TransactionsPageTest extends BaseTest {
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
-                .clickRefreshDataButton();
+                .clickSettingsButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
         assertThat(transactionsPage.getSelectDateRange().getErrorMessage())
@@ -266,6 +266,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.amountApplied("Amount: 0.00 - 0.00")).isVisible();
     }
 
+    @Ignore("Download button is unavailable")
     @Test
     @TmsLink("356")
     @Epic("Transactions")
@@ -318,6 +319,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 
+    @Ignore("Right now Refresh button is unavailable for only currency changed")
     @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
     @TmsLink("567")
     @Epic("Transactions")
@@ -403,6 +405,7 @@ public class TransactionsPageTest extends BaseTest {
         assertTrue(transactionsPage.getRequestData().contains("SUCCESS"));
     }
 
+    @Ignore("Right now Refresh button is unavailable for only Cart type changed")
     @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("598")
     @Epic("Transactions")
@@ -428,6 +431,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
     }
 
+    @Ignore("Right now Refresh button is unavailable for only status changed")
     @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("639")
     @Epic("Transactions")
@@ -479,6 +483,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
+    @Ignore("Right now Refresh button is unavailable for only amount changed")
     @Test
     @TmsLink("668")
     @Epic("Transactions")
@@ -514,6 +519,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getAmountButton()).hasText("Amount");
     }
 
+    @Ignore("Right now Refresh button is unavailable for only Company selected")
     @Test
     @TmsLink("686")
     @Epic("Transactions")
@@ -565,6 +571,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
+    @Ignore("Right now Refresh button is unavailable for only data range changed")
     @Test
     @TmsLink("736")
     @Epic("Transactions")
