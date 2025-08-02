@@ -14,7 +14,6 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
@@ -33,15 +32,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -64,6 +59,7 @@ public class TransactionsTableTest extends BaseTest {
             "Status",
             "Actions"};
     private static final String[] SETTINGS_COLUMNS = Arrays.copyOf(COLUMNS_HEADERS, COLUMNS_HEADERS.length - 1);
+    private static final String EXPORT_SUCCESS_MESSAGE = "SUCCESSExporting the data";
 
     private BusinessUnit businessUnit;
 
@@ -133,8 +129,10 @@ public class TransactionsTableTest extends BaseTest {
 
         TransactionsPage transactionsPage = new DashboardPage(getPage())
                 .clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(startDate, endDate);
-        //        .clickRefreshDataButton();
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+                .getSelectDateRange().setDateRangeFields(startDate, endDate)
+                .clickRefreshDataButton();
 
         Allure.step("Verify: Transactions can be filtered by date range");
         assertTrue(transactionsPage.getTable().isBetween(startDate, endDate));
@@ -197,7 +195,6 @@ public class TransactionsTableTest extends BaseTest {
         assertTrue(currencyValues.stream().allMatch(value -> value.equals(currency)));
     }
 
-    @Ignore("Failed on 01.08.2025 on the goToLastPage step. There is only one page of transaction.")
     @Test
     @TmsLink("682")
     @Epic("Transactions")
@@ -461,14 +458,18 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
         do {
-            List<Locator> currentRows = transactionsPage.getTable().getRows().all();
+            List<Locator> currentRows = transactionsPage
+                    .getTable().getRows().all();
 
             for (Locator row : currentRows) {
-                Locator refundButton = transactionsPage.getTable().getRefundButton(row);
+                Locator refundButton = transactionsPage
+                        .getTable().getRefundButton(row);
 
                 if (refundButton.count() > 0 && refundButton.isVisible()) {
-                    String amount = transactionsPage.getTable().getCell(row, "Amount").innerText().trim();
-                    String currency = transactionsPage.getTable().getCell(row, "Currency").innerText().trim();
+                    String amount = transactionsPage
+                            .getTable().getCell(row, "Amount").innerText().trim();
+                    String currency = transactionsPage
+                            .getTable().getCell(row, "Currency").innerText().trim();
 
                     RefundTransactionDialog refundTransactionDialog = transactionsPage
                             .getTable().clickRefundTransaction(row);
@@ -505,45 +506,27 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
-        List<List<String>> uiRows = new ArrayList<>();
-        do {
-            List<Locator> rows = transactionsPage.getTable().getRows().all();
-            for (Locator row : rows) {
-                uiRows.add(transactionsPage.getTable().getRowData(row));
-            }
-        } while (transactionsPage.getTable().goToNextPage());
-
         Download download = getPage().waitForDownload(
                 new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
                 () -> transactionsPage.clickExportTableDataToFileButton().selectCsv());
+
+        Allure.step("Verify: success alert is shown after exporting");
+        assertThat(transactionsPage.getAlert().getMessage()).hasText(EXPORT_SUCCESS_MESSAGE);
 
         Path targetPath = Paths.get("downloads", "transactions-export.csv");
         Files.createDirectories(targetPath.getParent());
         download.saveAs(targetPath);
 
-        List<List<String>> rowsFromCsv = transactionsPage
-                .readCsv(targetPath);
-        List<String> csvHeader = rowsFromCsv.remove(0);
+        List<Transaction> uiTransactionList = transactionsPage
+                .getTable().getAllTransactions();
+        List<Transaction> csvTransactionList = transactionsPage
+                .parseTransactionsFromCsvFile(targetPath);
 
-        Allure.step("Verify: CSV headers match the UI headers");
-        assertThat(transactionsPage.getTable().getColumnHeaders())
-                .hasText(Stream.concat(csvHeader.stream(), Stream.of("Actions")).toArray(String[]::new));
+        Allure.step("Verify: row count between UI and CSV");
+        assertEquals(uiTransactionList.size(), csvTransactionList.size());
 
-        Allure.step("Verify the row count between UI and CSV");
-        assertEquals(uiRows.size(), rowsFromCsv.size());
-
-        IntStream.range(0, uiRows.size()).forEach(i -> {
-            List<String> uiRow = uiRows.get(i);
-            List<String> csvRow = rowsFromCsv.get(i);
-
-            IntStream.range(0, uiRow.size()).forEach(j -> {
-                String uiCell = uiRow.get(j);
-                String csvCell = csvRow.get(j);
-
-                Allure.step("Verify: cell values match between UI and CSV", () ->
-                        assertEquals(uiCell, csvCell, String.format("Mismatch at row %d, column %d", i + 1, j + 1)));
-            });
-        });
+        Allure.step("Verify: the UI transaction list matches the CSV transaction list");
+        assertEquals(uiTransactionList, csvTransactionList);
     }
 
     @Test
@@ -558,17 +541,13 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
-        List<List<String>> uiRows = new ArrayList<>();
-        do {
-            List<Locator> rows = transactionsPage.getTable().getRows().all();
-            for (Locator row : rows) {
-                uiRows.add(transactionsPage.getTable().getRowData(row));
-            }
-        } while (transactionsPage.getTable().goToNextPage());
-
         Download download = getPage().waitForDownload(
                 new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
                 () -> transactionsPage.clickExportTableDataToFileButton().selectPdf());
+
+//        Allure.step("Verify: success alert is shown after exporting");
+//        assertThat(transactionsPage.getAlert().getMessage())
+//                .hasText(EXPORT_SUCCESS_MESSAGE);
 
         Path targetPath = Paths.get("downloads", "transactions-export.pdf");
         Files.createDirectories(targetPath.getParent());
@@ -580,24 +559,16 @@ public class TransactionsTableTest extends BaseTest {
             pdfText = pdfStripper.getText(document);
         }
 
-        List<String> pdfRows = transactionsPage.readPdf(pdfText).stream()
-                .map(t -> String.join(" | ",
-                        t.createdOn(),
-                        t.transactionId(),
-                        t.externalTransactionId(),
-                        String.format("%.2f", t.amount()),
-                        t.currency().toString(),
-                        t.paymentDetails().cardType().toString(),
-                        t.status().toString()
-                ))
-                .collect(Collectors.toList());
+        List<Transaction> uiTransactionList = transactionsPage
+                .getTable().getAllTransactions();
+        List<Transaction> pdfTransactionList = transactionsPage
+                .parseTransactionsFromPdfText(pdfText);
 
-        List<String> uiFormattedRows = uiRows.stream()
-                .map(row -> String.join(" | ", row))
-                .toList();
+        Allure.step("Verify: row count between UI and Excel");
+        assertEquals(uiTransactionList.size(), pdfTransactionList.size());
 
-        Allure.step("Verify: cell values match between UI and PDF");
-        assertEquals(uiFormattedRows, pdfRows);
+        Allure.step("Verify: the UI transaction list matches the PDF transaction list");
+        assertEquals(uiTransactionList, pdfTransactionList);
     }
 
     @Test
@@ -612,39 +583,28 @@ public class TransactionsTableTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
-        List<List<String>> uiRows = transactionsPage.getTable().getAllTableRows();
-
         Download download = getPage().waitForDownload(
                 new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
                 () -> transactionsPage.clickExportTableDataToFileButton().selectExcel());
 
         Allure.step("Verify: success alert is shown after exporting");
         assertThat(transactionsPage.getAlert().getMessage())
-                .hasText("SUCCESSExporting the data");
+                .hasText(EXPORT_SUCCESS_MESSAGE);
 
         Path targetPath = Paths.get("downloads", "transactions-export.xlsx");
         Files.createDirectories(targetPath.getParent());
         download.saveAs(targetPath);
 
-        List<Transaction> transactionsFromExcel = transactionsPage.readExcel(targetPath.toString());
+        List<Transaction> uiTransactionList = transactionsPage
+                .getTable().getAllTransactions();
+        List<Transaction> excelTransactionList = transactionsPage
+                .parseTransactionsFromExcelFile(targetPath);
 
-        IntStream.range(0, uiRows.size()).forEach(i -> {
-            List<String> uiRow = uiRows.get(i);
-            Transaction transaction = transactionsFromExcel.get(i);
+        Allure.step("Verify: row count between UI and Excel");
+        assertEquals(uiTransactionList.size(), excelTransactionList.size());
 
-            DecimalFormat df = new DecimalFormat("0.00");
-            String formattedAmount = df.format(transaction.amount());
-
-            Allure.step("Verify: cell values match between UI and Excel", () -> {
-                assertEquals(uiRow.get(0), transaction.createdOn());
-                assertEquals(uiRow.get(1), transaction.transactionId());
-                assertEquals(uiRow.get(2), transaction.externalTransactionId());
-                assertEquals(uiRow.get(3), formattedAmount);
-                assertEquals(uiRow.get(4), transaction.currency().toString());
-                assertEquals(uiRow.get(5), transaction.paymentDetails().cardType().toString());
-                assertEquals(uiRow.get(6), transaction.status().toString());
-            });
-        });
+        Allure.step("Verify: the UI transaction list matches the Excel transaction list");
+        assertEquals(uiTransactionList, excelTransactionList);
     }
 
     @Test

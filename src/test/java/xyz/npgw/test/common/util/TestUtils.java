@@ -7,10 +7,14 @@ import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.CardType;
 import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.entity.Info;
 import xyz.npgw.test.common.entity.MerchantAcquirer;
+import xyz.npgw.test.common.entity.Status;
+import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
@@ -19,6 +23,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
@@ -107,5 +112,17 @@ public final class TestUtils {
             }
         }
         log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+    }
+
+    public static Transaction mapToTransaction(List<String> cells) {
+        return new Transaction(
+                cells.get(0),
+                cells.get(1),
+                cells.get(2),
+                Double.parseDouble(cells.get(3)),
+                Currency.valueOf(cells.get(4)),
+                CardType.valueOf(cells.get(5)),
+                Status.valueOf(cells.get(6))
+        );
     }
 }

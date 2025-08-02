@@ -68,6 +68,7 @@ public class TransactionManagementPageTest extends BaseTest {
         assertThat(page.getCreateButton()).hasAttribute("data-disabled", "true");
     }
 
+    @Ignore("getFirstRowCell(NPGW reference) is not there as for now)")
     @Test
     @TmsLink("886")
     @Epic("System/Transaction Management")

@@ -9,7 +9,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -58,7 +57,6 @@ public class DashboardPageTest extends BaseTest {
         assertThat(dashboardPage.getPage()).hasTitle(Constants.DASHBOARD_URL_TITLE);
     }
 
-    @Ignore("Failed 01.08.2025 The error message has been removed; it's now impossible to select the wrong date")
     @Test
     @TmsLink("403")
     @Epic("Dashboard")
@@ -66,6 +64,8 @@ public class DashboardPageTest extends BaseTest {
     @Description("Error message is displayed when start date is after end date.")
     public void testErrorMessageForReversedDateRange() {
         DashboardPage dashboardPage = new DashboardPage(getPage())
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange()
                 .setDateRangeFields("01-04-2025", "01-04-2024")
                 .clickRefreshDataButton();
@@ -221,7 +221,7 @@ public class DashboardPageTest extends BaseTest {
         route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(arr)));
     }
 
-//    TODO - replace with correct expected values, actual ones are wrong
+    //    TODO - replace with correct expected values, actual ones are wrong
     @Test
     @TmsLink("720")
     @Epic("Dashboard")

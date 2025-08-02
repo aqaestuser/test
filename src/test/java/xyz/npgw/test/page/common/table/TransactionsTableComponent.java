@@ -4,6 +4,8 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
+import xyz.npgw.test.common.entity.Transaction;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
 import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
@@ -133,7 +135,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return new RefundTransactionDialog(getPage());
     }
 
-    public List<String> getRowData(Locator row) {
+    private List<String> getRowData(Locator row) {
         List<String> rowData = new ArrayList<>();
         rowData.add(getCell(row, "Creation Date (GMT)").innerText().trim());
         rowData.add(getCell(row, "NPGW reference").innerText().trim());
@@ -150,7 +152,7 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
         return row.locator(refundTransactionButtonSelector);
     }
 
-    public List<List<String>> getAllTableRows() {
+    private List<List<String>> getAllTableRows() {
         return collectAllPages(() -> {
             List<List<String>> rowsData = new ArrayList<>();
             List<Locator> rows = getRows().all();
@@ -159,5 +161,12 @@ public class TransactionsTableComponent extends BaseTableComponent<TransactionsP
             }
             return rowsData;
         });
+    }
+
+    @Step("Get all transactions displayed in the UI table")
+    public List<Transaction> getAllTransactions() {
+        return getAllTableRows().stream()
+                .map(TestUtils::mapToTransaction)
+                .toList();
     }
 }

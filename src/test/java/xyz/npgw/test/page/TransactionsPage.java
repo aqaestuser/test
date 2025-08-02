@@ -14,10 +14,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.Assert;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.entity.CardType;
-import xyz.npgw.test.common.entity.Currency;
-import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
+import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
@@ -419,25 +417,33 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return this;
     }
 
-    @Step("Read and parse CSV from path: {csvFilePath}")
-    public List<List<String>> readCsv(Path csvFilePath) throws IOException {
-        List<List<String>> rows = new ArrayList<>();
+    @Step("Read and parse transactions from CSV file: {csvFilePath}")
+    public List<Transaction> parseTransactionsFromCsvFile(Path csvFilePath) throws IOException {
+        List<Transaction> transactions = new ArrayList<>();
 
         try (BufferedReader reader = Files.newBufferedReader(csvFilePath)) {
             String line;
+            boolean isFirstLine = true;
+
             while ((line = reader.readLine()) != null) {
                 List<String> cells = Arrays.stream(line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"))
                         .map(s -> s.replaceAll("^\"|\"$", "").trim())
                         .toList();
-                rows.add(cells);
+
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
+                transactions.add(TestUtils.mapToTransaction(cells));
             }
         }
 
-        return rows;
+        return transactions;
     }
 
     @Step("Read and parse transactions from PDF text")
-    public List<Transaction> readPdf(String text) {
+    public List<Transaction> parseTransactionsFromPdfText(String text) {
         List<Transaction> transactions = new ArrayList<>();
 
         String[] lines = text.split("\\R");
@@ -499,7 +505,6 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
             }
 
             String businessUnitReference = businessUnitReferenceBuilder.toString().trim();
-
             if (amountLine == null && i < lines.length) {
                 amountLine = lines[i].trim();
                 i++;
@@ -521,22 +526,18 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
                 continue;
             }
 
+            List<String> fields = List.of(
+                    creationDate,
+                    npgwReference,
+                    businessUnitReference,
+                    String.valueOf(amount),
+                    tokens[1], // currency
+                    tokens[2], // cardType
+                    tokens[3]  // status
+            );
+
             try {
-                Currency currency = Currency.valueOf(tokens[1]);
-                CardType cardType = CardType.valueOf(tokens[2]);
-                Status status = Status.valueOf(tokens[3]);
-
-                Transaction transaction = new Transaction(
-                        creationDate,
-                        npgwReference,
-                        businessUnitReference,
-                        amount,
-                        currency,
-                        cardType,
-                        status
-                );
-
-                transactions.add(transaction);
+                transactions.add(TestUtils.mapToTransaction(fields));
             } catch (IllegalArgumentException e) {
                 // intentionally ignored - invalid enum value
             }
@@ -546,12 +547,12 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     @Step("Read and parse transactions from Excel file: {filePath}")
-    public List<Transaction> readExcel(String filePath) throws IOException {
+    public List<Transaction> parseTransactionsFromExcelFile(Path filePath) throws IOException {
         List<Transaction> transactionList = new ArrayList<>();
         DataFormatter formatter = new DataFormatter();
 
         try (
-                FileInputStream fis = new FileInputStream(filePath);
+                FileInputStream fis = new FileInputStream(String.valueOf(filePath));
                 Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
@@ -559,31 +560,18 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
                 if (row.getRowNum() == 0) {
                     continue;
                 }
-                String creationDate = formatter.formatCellValue(row.getCell(0));
-                String npqwReference = formatter.formatCellValue(row.getCell(1));
-                String businessUnit = formatter.formatCellValue(row.getCell(2));
-                String amountStr = formatter.formatCellValue(row.getCell(3));
-                double amount = Double.parseDouble(amountStr);
-                String currency = formatter.formatCellValue(row.getCell(4));
-                String cardType = formatter.formatCellValue(row.getCell(5));
-                String status = formatter.formatCellValue(row.getCell(6));
 
-                transactionList.add(
-                        new Transaction(
-                                creationDate,
-                                npqwReference,
-                                businessUnit,
-                                amount,
-                                Currency.valueOf(currency),
-                                CardType.valueOf(cardType),
-                                Status.valueOf(status)
-                        ));
+                List<String> cells = new ArrayList<>();
+                for (int i = 0; i <= 6; i++) {
+                    cells.add(formatter.formatCellValue(row.getCell(i)));
+                }
+
+                transactionList.add(TestUtils.mapToTransaction(cells));
             }
         }
 
         return transactionList;
     }
-
 
     public TransactionsPage dragArrows(String from, String to) {
         dragAndDrop(getArrowsUpDown(from), getSettingsVisibleColumnCheckbox(to));
