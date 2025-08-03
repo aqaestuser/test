@@ -11,7 +11,7 @@ import lombok.extern.log4j.Log4j2;
 public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter
-    private final Locator selectAcquirerField = locator("input[aria-label='Select acquirer MID']");
+    private final Locator selectAcquirerMidField = locator("input[aria-label='Select acquirer MID']");
     private final Locator selectAcquirerDialogField = locator("input[aria-label='Select acquirer']");
     @Getter
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
@@ -26,15 +26,15 @@ public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<Curre
     }
 
     @Step("Click 'Select acquirer' field")
-    public CurrentPageT clickSelectAcquirerField() {
-        selectAcquirerField.click();
+    public CurrentPageT clickSelectAcquirerMidField() {
+        selectAcquirerMidField.click();
 
         return currentPage;
     }
 
     @Step("Type '{acquirerName}' into 'Select acquirer' field")
     public CurrentPageT typeName(String acquirerName) {
-        selectAcquirerField.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(1));
+        selectAcquirerMidField.pressSequentially(acquirerName, new Locator.PressSequentiallyOptions().setDelay(1));
 
         return currentPage;
     }
@@ -54,8 +54,8 @@ public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<Curre
     }
 
     @Step("Select '{acquirerName}' acquirer using filter")
-    public CurrentPageT selectAcquirer(String acquirerName) {
-        select(selectAcquirerField, acquirerName);
+    public CurrentPageT selectAcquirerMid(String acquirerName) {
+        select(selectAcquirerMidField, acquirerName);
 
         return currentPage;
     }
@@ -82,6 +82,6 @@ public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<Curre
     }
 
     public boolean isAcquirerPresent(String acquirerName) {
-        return getAllOptions(selectAcquirerField, acquirerName).contains(acquirerName);
+        return getAllOptions(selectAcquirerMidField, acquirerName).contains(acquirerName);
     }
 }

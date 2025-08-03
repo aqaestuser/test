@@ -156,7 +156,7 @@ public class AddEditAcquirerTest extends BaseTest {
                 .containsText("SUCCESSAcquirer was created successfully");
 
         acquirersPage
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName());
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerName());
 
         Allure.step("Verify: Entity name matches expected");
         assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Entity name"))
@@ -289,8 +289,8 @@ public class AddEditAcquirerTest extends BaseTest {
         List<String> actualPlaceholders = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().typeName(ACQUIRER_FOR_EDIT)
-                .getSelectAcquirer().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().typeName(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
                 .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT)
                 .getAllPlaceholders();
 
@@ -308,8 +308,8 @@ public class AddEditAcquirerTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().typeName(ACQUIRER_FOR_EDIT)
-                .getSelectAcquirer().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().typeName(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
                 .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT)
 //      TODO - change after fixing bug
 //                .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())

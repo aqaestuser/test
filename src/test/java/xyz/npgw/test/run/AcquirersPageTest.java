@@ -10,7 +10,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -46,10 +45,12 @@ public class AcquirersPageTest extends BaseTest {
 
     private static final Acquirer ACQUIRER = Acquirer.builder()
             .acquirerName("%s acquirer 11.002.01".formatted(RUN_ID))
+            .acquirerDisplayName("%s display name".formatted(RUN_ID))
             .acquirerMidMcc("4321")
             .build();
     private static final Acquirer CHANGE_STATE_ACQUIRER = Acquirer.builder()
             .acquirerName("%s acquirer activate and deactivate".formatted(RUN_ID))
+            .acquirerDisplayName("%s display name activation check".formatted(RUN_ID))
             .acquirerMidMcc("4321")
             .build();
 
@@ -74,8 +75,8 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify: Add acquirer button is visible");
         assertThat(acquirersPage.getAddAcquirerButton()).isVisible();
 
-        Allure.step("Verify: Acquirer selector is visible");
-        assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirerField()).isVisible();
+        Allure.step("Verify: Acquirer MID selector is visible");
+        assertThat(acquirersPage.getSelectAcquirerMid().getSelectAcquirerMidField()).isVisible();
 
         Allure.step("Verify: Status selector is visible");
         assertThat(acquirersPage.getSelectStatus().getStatusSelector()).isVisible();
@@ -113,10 +114,10 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().clickSelectAcquirerField();
+                .getSelectAcquirerMid().clickSelectAcquirerMidField();
 
         Allure.step("Verify: Dropdown list is not empty");
-        assertThat(acquirersPage.getSelectAcquirer().getDropdownOptionList()).not().hasCount(0);
+        assertThat(acquirersPage.getSelectAcquirerMid().getDropdownOptionList()).not().hasCount(0);
     }
 
     @Test
@@ -258,7 +259,6 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getColumnHeaders()).hasText(COLUMNS_HEADERS);
     }
 
-    @Ignore("Failed on 01.08.2025 because the 'Select Acquirer Code' field was added")
     @Test
     @TmsLink("463")
     @Epic("System/Acquirers")
@@ -270,7 +270,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName());
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName());
 
         Allure.step("Verify: List of acquirers has only 1 row in the table");
         assertThat(acquirersPage.getTable().getRows()).hasCount(1);
@@ -373,7 +373,7 @@ public class AcquirersPageTest extends BaseTest {
                 .clickCheckboxCurrency("USD")
                 .clickCreateButton()
                 .waitForAcquirerPresence(getApiRequestContext(), acquirerName)
-                .getSelectAcquirer().selectAcquirer(acquirerName);
+                .getSelectAcquirerMid().selectAcquirerMid(acquirerName);
 
         Allure.step("Verify: Acquirer status");
         assertThat(acquirersPage.getTable().getFirstRowCell("Status")).hasText(status);
@@ -381,7 +381,6 @@ public class AcquirersPageTest extends BaseTest {
         TestUtils.deleteAcquirer(getApiRequestContext(), acquirerName);
     }
 
-    @Ignore("Failed on 01.08.2025 because the 'Select Acquirer Code' field was added")
     @Test
     @TmsLink("588")
     @Epic("System/Acquirers")
@@ -391,7 +390,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMid(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
                 .getTable().clickDeactivateButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
                 .clickDeactivateButton();
 
@@ -422,7 +421,6 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("Active");
     }
 
-    @Ignore("Failed 01.08.2025 due to Adding 'Select Acquirer code' field'")
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("708")
     @Epic("System/Acquirers")
@@ -432,18 +430,19 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
                 .getSelectStatus().select(status)
                 .clickResetFilterButton();
 
+        //TODO add 'Select acquirer code' assert when component would be realized
+
         Allure.step("Verify: the selected acquirer filter is cleared");
-        assertThat(acquirersPage.getSelectAcquirer().getSelectAcquirerField()).isEmpty();
+        assertThat(acquirersPage.getSelectAcquirerMid().getSelectAcquirerMidField()).isEmpty();
 
         Allure.step("Verify: the status filter is reset to 'All'");
         assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText("All");
     }
 
-    @Ignore("Failed on 01.08.2025 because the 'Select Acquirer Code' field was added")
     @Test(priority = 1)
     @TmsLink("726")
     @Epic("System/Acquirers")
@@ -453,7 +452,7 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new AcquirersPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirer().selectAcquirer(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
                 .clickDeleteAcquirer()
                 .clickDeleteButton();
 
@@ -469,7 +468,7 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getTableContent()).hasText("No rows to display.");
 
         Allure.step("Verify: the deleted acquirer is no longer present in the dropdown list");
-        assertFalse(acquirersPage.getSelectAcquirer().isAcquirerPresent(ACQUIRER.getAcquirerName()));
+        assertFalse(acquirersPage.getSelectAcquirerMid().isAcquirerPresent(ACQUIRER.getAcquirerName()));
     }
 
     @AfterClass
