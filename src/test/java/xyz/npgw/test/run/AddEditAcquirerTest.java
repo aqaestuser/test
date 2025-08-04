@@ -38,9 +38,14 @@ public class AddEditAcquirerTest extends BaseTest {
             .acquirerMidMcc("5411")
             .build();
 
-    private static final String ACQUIRER_FOR_EDIT = "%s acquirer for edit form".formatted(RUN_ID);
+    private static final Acquirer ACQUIRER_FOR_EDIT = Acquirer.builder()
+            .acquirerName("%s acquirer for edit form".formatted(RUN_ID))
+            .acquirerDisplayName("%s acquirer for edit form".formatted(RUN_ID))
+            .acquirerMidMcc("5411")
+            .build();
+
     private static final Acquirer ACQUIRER_EDITED = Acquirer.builder()
-            .acquirerName(ACQUIRER_FOR_EDIT)
+            .acquirerName(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
             .acquirerDisplayName("new display name")
             .acquirerCode("NGenius")
             .acquirerMid("new mid name")
@@ -59,7 +64,7 @@ public class AddEditAcquirerTest extends BaseTest {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createAcquirer(getApiRequestContext(), Acquirer.builder().acquirerName(EXISTING_ACQUIRER).build());
-        TestUtils.createAcquirer(getApiRequestContext(), Acquirer.builder().acquirerName(ACQUIRER_FOR_EDIT).build());
+        TestUtils.createAcquirer(getApiRequestContext(), ACQUIRER_FOR_EDIT);
     }
 
     @Test
@@ -266,7 +271,6 @@ public class AddEditAcquirerTest extends BaseTest {
         assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
     }
 
-    @Ignore("Failed on 01.08.2025 because the 'Select Acquirer Code' field was added")
     @Test
     @TmsLink("239")
     @Epic("System/Acquirers")
@@ -289,16 +293,14 @@ public class AddEditAcquirerTest extends BaseTest {
         List<String> actualPlaceholders = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirerMid().typeName(ACQUIRER_FOR_EDIT)
-                .getSelectAcquirerMid().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
-                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
+                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
         assertEquals(actualPlaceholders, expectedPlaceholders);
     }
 
-    @Ignore("Failed on 01.08.2025 because the 'Select Acquirer Code' field was added")
     @Test
     @TmsLink("450")
     @Epic("System/Acquirers")
@@ -308,9 +310,8 @@ public class AddEditAcquirerTest extends BaseTest {
         AcquirersPage acquirersPage = new DashboardPage(getPage())
                 .clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
-                .getSelectAcquirerMid().typeName(ACQUIRER_FOR_EDIT)
-                .getSelectAcquirerMid().clickAcquirerInDropdown(ACQUIRER_FOR_EDIT)
-                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT)
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
+                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
 //      TODO - change after fixing bug
 //                .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())
                 .fillAcquirerMidField(ACQUIRER_EDITED.getAcquirerMid())
@@ -337,31 +338,38 @@ public class AddEditAcquirerTest extends BaseTest {
 //                .hasText(ACQUIRER_EDITED.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "Acquirer code"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "Acquirer code"))
                 .hasText("NGenius");
 
         Allure.step("Verify: Acquirer MID matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "MID"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "MID"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMid());
 
         Allure.step("Verify: Acquirer MID MCC matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "MCC"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "MCC"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMidMcc());
 
         Allure.step("Verify: Currencies column contains expected currency");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "Currencies"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "Currencies"))
                 .hasText(ACQUIRER_EDITED.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "Acquirer config"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "Acquirer config"))
                 .hasText(ACQUIRER_EDITED.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "System config"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "System config"))
                 .hasText(ACQUIRER_EDITED.getSystemConfig().toString());
 
         Allure.step("Verify: Status matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "Status"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
+                "Status"))
                 .hasText(ACQUIRER_EDITED.getStatus());
     }
 
@@ -370,7 +378,7 @@ public class AddEditAcquirerTest extends BaseTest {
     protected void afterClass() {
         TestUtils.deleteAcquirer(getApiRequestContext(), EXISTING_ACQUIRER);
         TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER.getAcquirerName());
-        TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_FOR_EDIT);
+        TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_FOR_EDIT.getAcquirerName());
         super.afterClass();
     }
 }
