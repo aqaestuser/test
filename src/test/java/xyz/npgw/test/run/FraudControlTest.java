@@ -790,7 +790,8 @@ public class FraudControlTest extends BaseTest {
         Assert.assertEquals(actualStatusList, sortedStatusListAsc);
     }
 
-    @Test(dependsOnMethods = {"testAddActiveFraudControl", "testEditFraudControl"})
+    @Test(dependsOnMethods = {"testAddActiveFraudControl", "testEditFraudControl",
+            "testPriorityIconsDisableForOnlyOneBusinessUnitControl"})
     @TmsLink("1013")
     @Epic("System/Fraud control")
     @Feature("Control business unit controls table entries sorting")
@@ -979,6 +980,25 @@ public class FraudControlTest extends BaseTest {
                 .hasText(FRAUD_CONTROL_ADD_ONE.getControlDisplayName());
         assertThat(page.getTableBusinessUnitControls().getCell(1, "Display name"))
                 .hasText(FRAUD_CONTROL_ADD_TWO.getControlDisplayName());
+    }
+
+    @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit"})
+    @TmsLink("1064")
+    @Epic("System/Fraud Control")
+    @Feature("Business Unit Control table")
+    @Description("Priority icons for only one Business unit control")
+    public void testPriorityIconsDisableForOnlyOneBusinessUnitControl() {
+        FraudControlPage page = new DashboardPage(getPage())
+                .clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+
+        Allure.step("Verify Up button is disabled on Business Unit Control table because of one control");
+        assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlUpButton("0")).isDisabled();
+
+        Allure.step("Verify Down button is disabled on Business Unit Control table because of one control");
+        assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlDownButton("0")).isDisabled();
     }
 
     @AfterClass

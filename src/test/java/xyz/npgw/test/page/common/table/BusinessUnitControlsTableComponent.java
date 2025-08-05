@@ -1,5 +1,6 @@
 package xyz.npgw.test.page.common.table;
 
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.control.ActivateBusinessUnitControlDialog;
@@ -31,6 +32,16 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Fraud
         getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton").click();
 
         return getCurrentPage();
+    }
+
+    @Step("Get 'Move business unit control down' button")
+    public Locator getMoveBusinessUnitControlDownButton(String priority) {
+        return getRowByDataKey(priority).getByTestId("MoveMerchantControlDownButton");
+    }
+
+    @Step("Get 'Move business unit control up' button")
+    public Locator getMoveBusinessUnitControlUpButton(String priority) {
+        return getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton");
     }
 
     @Step("Click 'Activate business unit control' button")
