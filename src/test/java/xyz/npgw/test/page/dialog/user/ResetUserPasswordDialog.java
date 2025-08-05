@@ -4,17 +4,17 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.TeamPage;
+import xyz.npgw.test.page.system.SuperTeamPage;
 
-public class ResetUserPasswordDialog extends BaseDialog<TeamPage, ResetUserPasswordDialog> {
+public class ResetUserPasswordDialog extends BaseDialog<SuperTeamPage, ResetUserPasswordDialog> {
 
     public ResetUserPasswordDialog(Page page) {
         super(page);
     }
 
     @Override
-    protected TeamPage getReturnPage() {
-        return new TeamPage(getPage());
+    protected SuperTeamPage getReturnPage() {
+        return new SuperTeamPage(getPage());
     }
 
     @Step("Enter new password in the 'New password' field")
@@ -25,9 +25,9 @@ public class ResetUserPasswordDialog extends BaseDialog<TeamPage, ResetUserPassw
     }
 
     @Step("Click 'Reset' button")
-    public TeamPage clickResetButton() {
+    public SuperTeamPage clickResetButton() {
         getByRole(AriaRole.BUTTON, "Reset").click();
 
-        return new TeamPage(getPage());
+        return new SuperTeamPage(getPage());
     }
 }

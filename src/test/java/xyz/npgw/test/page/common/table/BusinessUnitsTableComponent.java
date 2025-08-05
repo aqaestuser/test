@@ -8,8 +8,8 @@ import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
 public class BusinessUnitsTableComponent extends BaseTableComponent<CompaniesAndBusinessUnitsPage> {
 
-    public BusinessUnitsTableComponent(Page page) {
-        super(page);
+    public BusinessUnitsTableComponent(Page page, CompaniesAndBusinessUnitsPage currentPage) {
+        super(page, currentPage);
     }
 
     @Override

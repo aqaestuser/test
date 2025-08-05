@@ -5,8 +5,8 @@ import xyz.npgw.test.page.ReportsPage;
 
 public class ReportsTableComponent extends BaseTableComponent<ReportsPage> {
 
-    public ReportsTableComponent(Page page) {
-        super(page);
+    public ReportsTableComponent(Page page, ReportsPage currentPage) {
+        super(page, currentPage);
     }
 
     @Override

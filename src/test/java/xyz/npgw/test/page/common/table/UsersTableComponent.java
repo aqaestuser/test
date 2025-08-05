@@ -8,17 +8,17 @@ import xyz.npgw.test.page.dialog.user.DeactivateUserDialog;
 import xyz.npgw.test.page.dialog.user.DeleteUserDialog;
 import xyz.npgw.test.page.dialog.user.EditUserDialog;
 import xyz.npgw.test.page.dialog.user.ResetUserPasswordDialog;
-import xyz.npgw.test.page.system.TeamPage;
+import xyz.npgw.test.page.system.SuperTeamPage;
 
-public class UsersTableComponent extends BaseTableComponent<TeamPage> {
+public class UsersTableComponent extends BaseTableComponent<SuperTeamPage> {
 
-    public UsersTableComponent(Page page) {
-        super(page);
+    public UsersTableComponent(Page page, SuperTeamPage currentPage) {
+        super(page, currentPage);
     }
 
     @Override
-    protected TeamPage getCurrentPage() {
-        return new TeamPage(getPage());
+    protected SuperTeamPage getCurrentPage() {
+        return new SuperTeamPage(getPage());
     }
 
     public Locator getUserActivityIcon(String userEmail) {

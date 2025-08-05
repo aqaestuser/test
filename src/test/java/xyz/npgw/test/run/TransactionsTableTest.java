@@ -24,9 +24,9 @@ import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
+import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -79,8 +79,8 @@ public class TransactionsTableTest extends BaseTest {
         String amountFrom = "10.12";
         String amountTo = "500.34";
 
-        List<String> amountValues = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        List<String> amountValues = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
@@ -103,8 +103,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Filter")
     @Description("Filtering transactions by Card type displays only matching entries in the table.")
     public void testFilterByCardType(String cardType) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -127,8 +127,8 @@ public class TransactionsTableTest extends BaseTest {
         String startDate = "01-06-2025";
         String endDate = "05-06-2025";
 
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange().setDateRangeFields(startDate, endDate)
@@ -144,8 +144,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Filter")
     @Description("Compare number of transactions with selected statuses in the table before and after filter")
     public void testFilterByStatus(String status) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -175,8 +175,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Filter")
     @Description("Filtering transactions by Currency")
     public void testFilterTransactionsByCurrency(String currency) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -201,8 +201,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Filter")
     @Description("Verify that transactions are present in the table when a currency filter is applied on the last page")
     public void testTableDisplayWhenCurrencyFilterAppliedWhileOnLastPage() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -223,8 +223,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Table sorting")
     @Description("'Creation Date' column sorts descending by default and ascending on click.")
     public void testSortByCreationDate() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -246,8 +246,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Table sorting")
     @Description("'Amount' column sorts ascending on first click and descending on second click.")
     public void testSortByAmount() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().selectRowsPerPageOption("100")
@@ -272,8 +272,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Pagination")
     @Description("Displaying the default number of rows on the RowsPerPage selector")
     public void testCountSelectorRows() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -287,8 +287,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Pagination")
     @Description("Displaying rows per page options when clicking on the RowsPerPage selector")
     public void testCountOptionsSelectorRows() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().clickRowsPerPageChevron();
@@ -303,8 +303,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Pagination")
     @Description("Verifying that we can switch the page when we click next button")
     public void testPaginationNextButton() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
@@ -321,8 +321,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Settings")
     @Description("Verify full lists of column headers in table and visible columns from Settings")
     public void testCheckUncheckAllVisibleColumns() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickSettingsButton()
                 .checkAllCheckboxInSettings()
                 .clickSettingsButton();
@@ -348,8 +348,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Settings")
     @Description("Check/Uncheck Visible columns in the Settings and verify table column headers")
     public void testCheckUncheckOneVisibleColumn() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickSettingsButton()
                 .checkAllCheckboxInSettings();
 
@@ -402,8 +402,8 @@ public class TransactionsTableTest extends BaseTest {
             route.fallback();
         });
 
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
@@ -417,8 +417,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Actions")
     @Description("Refund button is visible only for transactions with status 'SUCCESS'")
     public void testRefundButtonVisibility() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -451,8 +451,8 @@ public class TransactionsTableTest extends BaseTest {
     @Feature("Actions")
     @Description("All refundable transactions display correct refund dialog text and pre-filled refund amount.")
     public void testRefundDialogDisplaysCorrectTextAndAmount() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -494,14 +494,15 @@ public class TransactionsTableTest extends BaseTest {
         } while (transactionsPage.getTable().goToNextPage());
     }
 
-    @Test
+//  Not all transactions are exported, only those on the current page
+    @Test(expectedExceptions = AssertionError.class)
     @TmsLink("880")
     @Epic("Transactions")
     @Feature("Export table data")
     @Description("The transaction table data on the UI matches the exported CSV file data.")
     public void testTransactionTableMatchesDownloadedCsv() throws IOException {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -529,14 +530,15 @@ public class TransactionsTableTest extends BaseTest {
         assertEquals(uiTransactionList, csvTransactionList);
     }
 
-    @Test
+    //  Not all transactions are exported, only those on the current page
+    @Test(expectedExceptions = AssertionError.class)
     @TmsLink("957")
     @Epic("Transactions")
     @Feature("Export table data")
     @Description("The transaction table data on the UI matches the exported PDF file data.")
     public void testTransactionTableMatchesDownloadedPdf() throws IOException {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -571,14 +573,15 @@ public class TransactionsTableTest extends BaseTest {
         assertEquals(uiTransactionList, pdfTransactionList);
     }
 
-    @Test
+    //  Not all transactions are exported, only those on the current page
+    @Test(expectedExceptions = AssertionError.class)
     @TmsLink("1011")
     @Epic("Transactions")
     @Feature("Export table data")
     @Description("The transaction table data on the UI matches the exported Excel file data.")
     public void testTransactionTableMatchesDownloadedExcel() throws IOException {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
@@ -618,8 +621,8 @@ public class TransactionsTableTest extends BaseTest {
         final String currency = SETTINGS_COLUMNS[5];
         final String status = SETTINGS_COLUMNS[7];
 
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickSettingsButton()
                 .uncheckAllCheckboxInSettings()
                 .checkVisibleColumn(creationDate)

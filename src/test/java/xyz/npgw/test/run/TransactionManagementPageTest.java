@@ -9,10 +9,10 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.adjustment.AddAdjustmentDialog;
 import xyz.npgw.test.page.system.TransactionManagementPage;
+import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
@@ -28,8 +28,8 @@ public class TransactionManagementPageTest extends BaseTest {
     @Description("Verify possibility to add adjustment with Transaction adjustment")
     public void testAddTransactionAdjustment() {
         TransactionManagementPage page = new TransactionManagementPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .getHeader().clickSystemAdministrationLink()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCreateButton();
@@ -45,8 +45,8 @@ public class TransactionManagementPageTest extends BaseTest {
     @Description("Close button with no changes performed")
     public void testClickCloseButtonWithNoChanges() {
         TransactionManagementPage page = new TransactionManagementPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .getHeader().clickSystemAdministrationLink()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCloseButton();
@@ -61,8 +61,8 @@ public class TransactionManagementPageTest extends BaseTest {
     @Description("Create button is disabled if nothing is selected")
     public void testCreateButtonIsDisabledByDefault() {
         AddAdjustmentDialog page = new TransactionManagementPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .getHeader().clickSystemAdministrationLink()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         assertThat(page.getCreateButton()).hasAttribute("data-disabled", "true");
@@ -75,16 +75,16 @@ public class TransactionManagementPageTest extends BaseTest {
     @Feature("Add adjustment")
     @Description("Search by NPGW reference within Add adjustment dialog and check placeholders")
     public void testPlaceholdersAndSearchNpgwInAddAdjustment() {
-        String referenceFromTable = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        String referenceFromTable = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().getFirstRowReference();
 
-        AddAdjustmentDialog addAdjustmentDialog = new TransactionsPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+        AddAdjustmentDialog addAdjustmentDialog = new SuperTransactionsPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         Allure.step("Verify: check placeholder in the 'NPGW reference' search field.");

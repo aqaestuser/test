@@ -11,10 +11,10 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.provider.TestDataProvider;
-import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
+import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 import java.util.regex.Pattern;
 
@@ -28,17 +28,17 @@ public class HeaderTest extends BaseTest {
     @Feature("Logo")
     @Description("Check that Logo in header contains text 'NPGW' and image")
     public void testLogoContainsTextAndImage() {
-        DashboardPage dashboardPage = new DashboardPage(getPage());
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage());
 
         Allure.step("Verify: Logo contains text 'NPGW'");
-        assertThat(dashboardPage.getLogo()).hasText("NPGW");
+        assertThat(dashboardPage.getHeader().getLogo()).hasText("NPGW");
 
         Allure.step("Verify: Logo contains image");
-        assertThat(dashboardPage.getLogoImg()).isVisible();
-        assertThat(dashboardPage.getLogoImg()).hasAttribute("src", Pattern.compile("/assets/.*png"));
+        assertThat(dashboardPage.getHeader().getLogoImg()).isVisible();
+        assertThat(dashboardPage.getHeader().getLogoImg()).hasAttribute("src", Pattern.compile("/assets/.*png"));
 
         Allure.step("Verify: Image inside logo is fully loaded");
-        Assert.assertTrue(dashboardPage.isLogoImageLoaded(), "Image inside logo should be fully loaded");
+        Assert.assertTrue(dashboardPage.getHeader().isLogoImageLoaded(), "Image inside logo should be fully loaded");
     }
 
     @Test
@@ -47,8 +47,8 @@ public class HeaderTest extends BaseTest {
     @Feature("Transactions menu item")
     @Description("Check after clicking on Transactions user redirected to Transactions page")
     public void testTransactionsLink() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
         assertThat(transactionsPage.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
@@ -60,9 +60,9 @@ public class HeaderTest extends BaseTest {
     @Feature("Logo")
     @Description("Check that click on Logo return user to the dashboard page from other pages")
     public void testClickLogoReturnToDashboardPage() {
-        DashboardPage dashboardPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
-                .clickLogoButton();
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
+                .getHeader().clickLogoButton();
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
@@ -76,7 +76,7 @@ public class HeaderTest extends BaseTest {
     public void testChangePassword(String userRole) {
         String newPassword = "QWEdsa123@";
 
-        DashboardPage dashboardPage = new DashboardPage(getPage())
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickProfileSettingsButton()
                 .fillPasswordField(newPassword)
@@ -101,7 +101,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Log out via button in the user menu")
     public void testLogOutViaButtonInUserMenu() {
-        LoginPage loginPage = new DashboardPage(getPage())
+        LoginPage loginPage = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickLogOutButtonUserMenu();
 
@@ -115,7 +115,7 @@ public class HeaderTest extends BaseTest {
     @Feature("Log Out")
     @Description("Log out via button in the Header")
     public void testLogOutViaButtonInHeader() {
-        LoginPage loginPage = new DashboardPage(getPage())
+        LoginPage loginPage = new SuperDashboardPage(getPage())
                 .clickLogOutButton();
 
         Allure.step("Verify: Login Page URL");
@@ -128,7 +128,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Verify that the user can switch to the dark theme")
     public void testDarkColorThemeSwitch() {
-        DashboardPage dashboardPage = new DashboardPage(getPage())
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickDarkRadioButton();
 
@@ -142,7 +142,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Verify that the user can switch to the light theme")
     public void testLightColorThemeSwitch() {
-        DashboardPage dashboardPage = new DashboardPage(getPage())
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickLightRadioButton();
 
@@ -156,7 +156,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Verify that the color theme matching with the default browser theme")
     public void testDefaultThemeMatching() {
-        DashboardPage dashboardPage = new DashboardPage(getPage());
+        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage());
 
         Allure.step("Verify that the current color theme matches the default browser theme");
         assertThat(dashboardPage.getHtmlTag()).hasClass(ProjectProperties.getColorScheme().name().toLowerCase());
@@ -168,7 +168,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Check password policy validation error messages when changing password in user menu")
     public void testChangePasswordValidationMessages(String userRole) {
-        ProfileSettingsDialog<DashboardPage> profileSettingsDialog = new DashboardPage(getPage())
+        ProfileSettingsDialog<SuperDashboardPage> profileSettingsDialog = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickProfileSettingsButton()
                 .fillPasswordField("QWERTY1!")
@@ -216,7 +216,7 @@ public class HeaderTest extends BaseTest {
     @Feature("User menu")
     @Description("Verify Minimum and Maximum Password Length Restrictions (negative)")
     public void testPasswordLengthRestrictionsOnChange(String userRole) {
-        ProfileSettingsDialog<DashboardPage> profileSettingsDialog = new DashboardPage(getPage())
+        ProfileSettingsDialog<SuperDashboardPage> profileSettingsDialog = new SuperDashboardPage(getPage())
                 .clickUserMenuButton()
                 .clickProfileSettingsButton()
                 .fillPasswordField("A".repeat(7))

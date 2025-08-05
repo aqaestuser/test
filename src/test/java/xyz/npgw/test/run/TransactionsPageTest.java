@@ -17,8 +17,8 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.DashboardPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 import java.util.List;
 import java.util.Random;
@@ -51,8 +51,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Navigation")
     @Description("User navigate to 'Transactions page' after clicking on 'Transactions' link on the header")
     public void testNavigateToTransactionsPage() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
         assertThat(transactionsPage.getPage()).hasURL(Constants.TRANSACTIONS_PAGE_URL);
@@ -69,8 +69,8 @@ public class TransactionsPageTest extends BaseTest {
             + " Business unit, Date range, Currency, Card type, Status, Trx Ids, Amount, Reset filter, "
             + "Apply data, Download file, Settings.")
     public void testVisibilityOfControlPanelElements() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Company selector is visible");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isVisible();
@@ -115,8 +115,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Status")
     @Description("Verify that user can see selector Status Options")
     public void testTheVisibilityOfTheStatusSelectorOptions() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectStatus().clickSelector();
 
         Allure.step("Verify: Selector Status Options are visible");
@@ -142,8 +142,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Choose amount popup functionality")
     public void testChooseAmountPopUp() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("10")
                 .fillAmountFromField("20")
@@ -175,8 +175,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Error message 'From should be lesser than To' appears")
     public void testErrorMessageByAmount() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
                 .fillAmountToField("10");
@@ -191,8 +191,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Card type")
     @Description("Verify that user can see 'Card type' options")
     public void testTheVisibilityOfTheCardTypeOptions() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickCardTypeSelector();
 
         Allure.step("Verify: Payment Method Options are visible");
@@ -208,8 +208,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Date range")
     @Description("Error message is displayed when start date is after end date.")
     public void testErrorMessageForReversedDateRange() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
@@ -226,8 +226,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Edit Amount")
     public void testEditAmount() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
                 .fillAmountToField("10000")
@@ -246,8 +246,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Amount")
     @Description("Reset Amount Values")
     public void testResetAmountValues() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
                 .fillAmountToField("10000")
@@ -275,8 +275,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Export table data")
     @Description("The presence of the dropdown options export table data to file")
     public void testPresenceOfDownloadFilesOptions() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
@@ -298,8 +298,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Export table data")
     @Description("Download files: PDF, Excel, CSV")
     public void testDownloadFiles(String fileType) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
@@ -316,8 +316,8 @@ public class TransactionsPageTest extends BaseTest {
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
             + "dropdown list")
     public void testTheVisibilityOfTheAvailableBusinessUnitOptions(@Optional("ADMIN") String userRole) {
-        TransactionsPage transactionsPage = new DashboardPage((getPage()))
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage((getPage()))
+                .getHeader().clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
         Allure.step("Verify: Company's business units are visible");
@@ -331,8 +331,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Currency' to default value ( ALL)")
     public void testResetCurrency(String currency) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCurrencySelector()).containsText("ALL");
@@ -358,8 +358,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Refresh data")
     @Description("Verify the request to server contains all the information from the filter")
     public void testRequestToServer() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields("01-05-2025", "07-05-2025")
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
@@ -400,8 +400,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Refresh data")
     @Description("Verify the status is sent to the server")
     public void testStatusRequestServer() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .getSelectStatus().clickSelector()
@@ -419,8 +419,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Card Type' to default value ( ALL)")
     public void testResetCardType(String cardType) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
@@ -445,8 +445,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' to default value ( ALL)")
     public void testResetStatus(String status) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
@@ -471,8 +471,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' (two options are checked) to default value ( ALL)")
     public void testResetMultiStatus(String status1, String status2) {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
@@ -501,8 +501,8 @@ public class TransactionsPageTest extends BaseTest {
         final String amountTo = "20";
         final String chosenAmount = "Amount: " + amountFrom + " - " + amountTo;
 
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
         assertThat(transactionsPage.getAmountButton()).isVisible();
@@ -533,8 +533,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' clean 'Company' input field")
     public void testResetCompany() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: the 'Company' input field is empty by default");
         assertThat(transactionsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
@@ -558,8 +558,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' clean 'Business Unit' input field")
     public void testResetBusinessUnit() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: the 'Business Unit' input field is empty by default");
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
@@ -592,8 +592,8 @@ public class TransactionsPageTest extends BaseTest {
         final String selectedRange = "Date range" + dataFrom + "-" + dataTo;
         final String currentRange = TestUtils.getCurrentRange();
 
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink();
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: the 'Data' input field value is current month by default");
         assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
@@ -617,8 +617,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Transactions Search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testSearchOptionsVisibleAfterClickingTrxIds() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .clickSearchTrxIdsButton();
 
         Allure.step("Verify: 'NPGW reference' is visible ");
@@ -634,8 +634,8 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Transactions Search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testTransactionSearchByNpgwReference() {
-        TransactionsPage transactionsPage = new DashboardPage(getPage())
-                .clickTransactionsLink()
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN);
 

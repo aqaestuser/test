@@ -6,8 +6,8 @@ import xyz.npgw.test.page.dialog.adjustment.AddAdjustmentDialog;
 
 public class AddAdjustmentTableComponent extends BaseTableComponent<AddAdjustmentDialog> {
 
-    public AddAdjustmentTableComponent(Page page) {
-        super(page, page.getByRole(AriaRole.DIALOG));
+    public AddAdjustmentTableComponent(Page page, AddAdjustmentDialog currentPage) {
+        super(page, currentPage, page.getByRole(AriaRole.DIALOG));
     }
 
     @Override

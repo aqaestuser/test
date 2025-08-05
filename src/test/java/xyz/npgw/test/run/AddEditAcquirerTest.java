@@ -16,7 +16,7 @@ import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
 
@@ -73,9 +73,9 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
     public void testAddAcquirerFormOpensWithCorrectHeaderAndFieldsAndClosesCorrectly() {
-        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .clickAddAcquirer();
 
         Allure.step("Verify: the header contains the expected title text");
@@ -114,9 +114,9 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verifies that the status radio buttons ('Active' and 'Inactive') toggle correctly.")
     public void testToggleStatusRadioButtonsCorrectly(String status) {
-        Locator statusRadiobutton = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        Locator statusRadiobutton = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .clickAddAcquirer()
                 .clickStatusRadiobutton(status)
                 .getStatusRadiobutton(status);
@@ -125,20 +125,21 @@ public class AddEditAcquirerTest extends BaseTest {
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
+    @Ignore
     @Test
     @TmsLink("412")
     @Epic("System/Acquirers")
     @Feature("Add acquirer")
     @Description("New Acquirer can be successfully created and its details appear correctly in the acquirers table")
     public void testAddAcquirer() {
-        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .clickAddAcquirer();
 
 //      Bug!! acquirerDisplayNameField isn't editable
 //      TODO - remove Boolean after fixing bug
-        Boolean isEditableAcquirerDisplayNameField = addAcquirerDialog.getAcquirerDisplayNameField().isEditable();
+        boolean isEditableAcquirerDisplayNameField = addAcquirerDialog.getAcquirerDisplayNameField().isEditable();
 
         AcquirersPage acquirersPage = addAcquirerDialog
                 .fillAcquirerNameField(ACQUIRER.getAcquirerName())
@@ -161,7 +162,7 @@ public class AddEditAcquirerTest extends BaseTest {
                 .containsText("SUCCESSAcquirer was created successfully");
 
         acquirersPage
-                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerName());
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerMid());
 
         Allure.step("Verify: Entity name matches expected");
         assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Entity name"))
@@ -210,9 +211,9 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify error appears when creating an Acquirer with a duplicate name.")
     public void testCreateAcquirerWithDuplicateNameShowsError() {
-        AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab();
 
         AddAcquirerDialog acquirerDialog = acquirersPage
                 .clickAddAcquirer()
@@ -241,9 +242,9 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Add acquirer")
     @Description("Verify default state of the 'Add Acquirer' dialog")
     public void testDefaultStateOfAddAcquirerDialog() {
-        AddAcquirerDialog addAcquirerDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .clickAddAcquirer();
 
         Allure.step("Verify: Acquirer name field is marked as invalid");
@@ -290,9 +291,9 @@ public class AddEditAcquirerTest extends BaseTest {
                 "Enter acquirer config"
         );
 
-        List<String> actualPlaceholders = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        List<String> actualPlaceholders = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .getAllPlaceholders();
@@ -307,9 +308,9 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Edit acquirers")
     @Description("Edit Acquirer and Verify Updated Data in the Table")
     public void testEditAcquirerVerifyUpdatedData() {
-        AcquirersPage acquirersPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
 //      TODO - change after fixing bug

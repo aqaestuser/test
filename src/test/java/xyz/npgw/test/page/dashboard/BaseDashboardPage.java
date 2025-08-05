@@ -1,4 +1,4 @@
-package xyz.npgw.test.page;
+package xyz.npgw.test.page.dashboard;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -7,9 +7,7 @@ import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
-import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,11 +15,10 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 @Getter
-public final class DashboardPage extends HeaderPage<DashboardPage> implements
-        SelectDateRangeTrait<DashboardPage>,
-        AlertTrait<DashboardPage>,
-        SelectBusinessUnitTrait<DashboardPage>,
-        SelectCompanyTrait<DashboardPage> {
+public abstract class BaseDashboardPage<CurrentPageT extends BaseDashboardPage<CurrentPageT>>
+        extends HeaderPage<CurrentPageT>
+        implements SelectDateRangeTrait<CurrentPageT>,
+                   SelectBusinessUnitTrait<CurrentPageT> {
 
     private final Locator htmlTag = locator("html");
     @Getter(AccessLevel.NONE)
@@ -30,7 +27,6 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
     private final Locator xAxisTexts = locator(".apexcharts-xaxis tspan");
     private final Locator currencyLegendLabels = locator("span.apexcharts-legend-text");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonDashboardPage");
-    @Getter
     private final Locator currencySelector = getByRole(AriaRole.BUTTON, "Currency");
 
     private final Locator initiatedBlock = getByLabelExact("INITIATED").first();
@@ -47,52 +43,51 @@ public final class DashboardPage extends HeaderPage<DashboardPage> implements
     private final Locator amountButton = getByTextExact("Amount");
     private final Locator countButton = getByTextExact("Count");
 
-
-    public DashboardPage(Page page) {
+    public BaseDashboardPage(Page page) {
         super(page);
-        assertThat(getDashboardButton().locator("..")).hasAttribute("data-active", "true");
+        assertThat(getByRole(AriaRole.LINK, "Dashboard").locator("..")).hasAttribute("data-active", "true");
     }
 
     @Step("Click 'Refresh data' button")
-    public DashboardPage clickRefreshDataButton() {
+    public CurrentPageT clickRefreshDataButton() {
         refreshDataButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Reset filter' button")
-    public DashboardPage clickResetFilterButton() {
+    public CurrentPageT clickResetFilterButton() {
         resetFilterButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click Currency Selector")
-    public DashboardPage clickCurrencySelector() {
+    public CurrentPageT clickCurrencySelector() {
         currencySelector.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select currency from dropdown menu")
-    public DashboardPage selectCurrency(String value) {
+    public CurrentPageT selectCurrency(String value) {
         getByRole(AriaRole.OPTION, value).click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Amount' button")
-    public DashboardPage clickAmountButton() {
+    public CurrentPageT clickAmountButton() {
         amountButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Count' button")
-    public DashboardPage clickCountButton() {
+    public CurrentPageT clickCountButton() {
         countButton.click();
 
-        return this;
+        return self();
     }
 
     public String getRequestData() {

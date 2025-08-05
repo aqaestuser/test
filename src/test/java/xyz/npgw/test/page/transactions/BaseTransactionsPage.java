@@ -1,4 +1,4 @@
-package xyz.npgw.test.page;
+package xyz.npgw.test.page.transactions;
 
 import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
@@ -17,9 +17,7 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
-import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
@@ -37,12 +35,12 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 @Getter
-public class TransactionsPage extends HeaderPage<TransactionsPage> implements TransactionsTableTrait,
-        SelectDateRangeTrait<TransactionsPage>,
-        SelectCompanyTrait<TransactionsPage>,
-        SelectBusinessUnitTrait<TransactionsPage>,
-        SelectStatusTrait<TransactionsPage>,
-        AlertTrait<TransactionsPage> {
+public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactionsPage<CurrentPageT>>
+        extends HeaderPage<CurrentPageT>
+        implements TransactionsTableTrait<CurrentPageT>,
+                   SelectBusinessUnitTrait<CurrentPageT>,
+                   SelectDateRangeTrait<CurrentPageT>,
+                   SelectStatusTrait<CurrentPageT> {
 
     private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
     private final Locator currencySelector = getByLabelExact("Currency");
@@ -90,7 +88,7 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     private final Locator dialog = locator("[role='dialog']");
     private final Locator dropdownMenuContent = locator("[data-slot='content'][data-open='true']");
 
-    public TransactionsPage(Page page) {
+    public BaseTransactionsPage(Page page) {
         super(page);
     }
 
@@ -99,126 +97,126 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     @Step("Click Currency Selector")
-    public TransactionsPage clickCurrencySelector() {
+    public CurrentPageT clickCurrencySelector() {
         currencySelector.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select currency {value} from dropdown menu")
-    public TransactionsPage selectCurrency(String value) {
+    public CurrentPageT selectCurrency(String value) {
         Locator option = getByRole(AriaRole.OPTION, value);
         option.waitFor();
         option.click();
         dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 //        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Refresh Data' button")
-    public TransactionsPage clickRefreshDataButton() {
+    public CurrentPageT clickRefreshDataButton() {
         refreshDataButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Amount' button")
-    public TransactionsPage clickAmountButton() {
+    public CurrentPageT clickAmountButton() {
         amountButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Fill 'From' amount value")
-    public TransactionsPage fillAmountFromField(String value) {
+    public CurrentPageT fillAmountFromField(String value) {
         amountFromInputField.click();
         amountFromInputField.clear();
         amountFromInputField.fill(value);
         amountFromField.press("Enter");
 
-        return this;
+        return self();
     }
 
     @Step("Fill 'To' amount value")
-    public TransactionsPage fillAmountToField(String value) {
+    public CurrentPageT fillAmountToField(String value) {
         amountToInputField.click();
         amountToInputField.clear();
         amountToInputField.fill(value);
         amountToField.press("Enter");
 
-        return this;
+        return self();
     }
 
     @Step("Clear 'From' amount input field ")
-    public TransactionsPage clickClearAmountFromButton() {
+    public CurrentPageT clickClearAmountFromButton() {
         clearAmountFromButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Clear 'To' amount input field ")
-    public TransactionsPage clickClearAmountToButton() {
+    public CurrentPageT clickClearAmountToButton() {
         clearAmountToButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'From' amount increase arrow ")
-    public TransactionsPage clickAmountFromIncreaseArrow() {
+    public CurrentPageT clickAmountFromIncreaseArrow() {
         amountFromIncreaseArrow.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'From' amount decrease arrow ")
-    public TransactionsPage clickAmountFromDecreaseArrow() {
+    public CurrentPageT clickAmountFromDecreaseArrow() {
         amountFromDecreaseArrow.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'To' amount increase arrow ")
-    public TransactionsPage clickAmountToIncreaseArrow() {
+    public CurrentPageT clickAmountToIncreaseArrow() {
         amountToIncreaseArrow.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'To' amount decrease arrow ")
-    public TransactionsPage clickAmountToDecreaseArrow() {
+    public CurrentPageT clickAmountToDecreaseArrow() {
         amountToDecreaseArrow.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Apply' amount button")
-    public TransactionsPage clickAmountApplyButton() {
+    public CurrentPageT clickAmountApplyButton() {
         amountApplyButton.click();
         dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Clear' amount button")
-    public TransactionsPage clickAmountClearButton() {
+    public CurrentPageT clickAmountClearButton() {
         amountClearButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click clear applied amount button")
-    public TransactionsPage clickAmountAppliedClearButton() {
+    public CurrentPageT clickAmountAppliedClearButton() {
         amountAppliedClearButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Card type' selector")
-    public TransactionsPage clickCardTypeSelector() {
+    public CurrentPageT clickCardTypeSelector() {
         cardTypeSelector.click();
 
-        return this;
+        return self();
     }
 
     public List<String> getCardTypeOptions() {
@@ -226,11 +224,11 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     @Step("Click on the Settings button")
-    public TransactionsPage clickSettingsButton() {
+    public CurrentPageT clickSettingsButton() {
         settingsButton.click();
         getByTextExact("Visible columns").waitFor();
 
-        return this;
+        return self();
     }
 
 
@@ -238,29 +236,17 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return getByRole(AriaRole.MENUITEM).getByRole(AriaRole.BUTTON);
     }
 
-    private void uncheckIfSelected(Locator checkbox) {
-        if ((boolean) checkbox.evaluate("el => el.checked")) {
-            checkbox.dispatchEvent("click");
-        }
-    }
-
-    private void checkIfNotSelected(Locator checkbox) {
-        if (!(boolean) checkbox.evaluate("el => el.checked")) {
-            checkbox.dispatchEvent("click");
-        }
-    }
-
     @Step("Uncheck all 'Visible columns' in Settings")
-    public TransactionsPage uncheckAllCheckboxInSettings() {
+    public CurrentPageT uncheckAllCheckboxInSettings() {
         settingsVisibleColumnCheckbox
                 .all()
                 .forEach(this::uncheckIfSelected);
 
-        return this;
+        return self();
     }
 
     @Step("Uncheck Visible column '{name}' in Settings")
-    public TransactionsPage uncheckVisibleColumn(String name) {
+    public CurrentPageT uncheckVisibleColumn(String name) {
         settingsVisibleColumnCheckbox
                 .all()
                 .stream()
@@ -268,20 +254,20 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
                 .findFirst()
                 .ifPresent(this::uncheckIfSelected);
 
-        return this;
+        return self();
     }
 
     @Step("Check all 'Visible columns' in Settings")
-    public TransactionsPage checkAllCheckboxInSettings() {
+    public CurrentPageT checkAllCheckboxInSettings() {
         settingsVisibleColumnCheckbox
                 .all()
                 .forEach(this::checkIfNotSelected);
 
-        return this;
+        return self();
     }
 
     @Step("Check visible column '{name}' in Settings")
-    public TransactionsPage checkVisibleColumn(String name) {
+    public CurrentPageT checkVisibleColumn(String name) {
         settingsVisibleColumnCheckbox
                 .all()
                 .stream()
@@ -289,21 +275,21 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
                 .findFirst()
                 .ifPresent(this::checkIfNotSelected);
 
-        return this;
+        return self();
     }
 
     @Step("Click amount 'Edit' button")
-    public TransactionsPage clickAmountEditButton() {
+    public CurrentPageT clickAmountEditButton() {
         amountEditButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Download' button")
-    public TransactionsPage clickDownloadButton() {
+    public CurrentPageT clickDownloadButton() {
         downloadButton.click();
 
-        return this;
+        return self();
     }
 
     public boolean isFileAvailableAndNotEmpty(String fileType) {
@@ -321,60 +307,60 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     @Step("Click 'Reset filter' button")
-    public TransactionsPage clickResetFilterButton() {
+    public CurrentPageT clickResetFilterButton() {
         resetFilterButton.click();
 //        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
-        return this;
+        return self();
     }
 
     @Step("Click Search 'Trx IDs' button")
-    public TransactionsPage clickSearchTrxIdsButton() {
+    public CurrentPageT clickSearchTrxIdsButton() {
         searchTrxIdsButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Fill '{value}' into 'NPGW reference' field")
-    public TransactionsPage fillNpgwReference(String value) {
+    public CurrentPageT fillNpgwReference(String value) {
         npgwReferenceField.fill(value);
-        return this;
+        return self();
     }
 
     @Step("Click 'Trx Id' button")
-    public TransactionsPage clickTrxIdAppliedButton() {
+    public CurrentPageT clickTrxIdAppliedButton() {
         trxIdAppliedButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click TrxId Clear Icon")
-    public TransactionsPage clickTrxIdClearIcon() {
+    public CurrentPageT clickTrxIdClearIcon() {
         trxIdClearIcon.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click TrxId Pencil Icon")
-    public TransactionsPage clickTrxIdPencilIcon() {
+    public CurrentPageT clickTrxIdPencilIcon() {
         trxIdPencil.click();
 
-        return this;
+        return self();
     }
 
     @Step("Click 'Npgw reference' Clear Icon")
-    public TransactionsPage clickNpgwReferenceClearIcon() {
+    public CurrentPageT clickNpgwReferenceClearIcon() {
         npgwReferenceFieldClearIcon.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select Card type '{value}' from dropdown menu")
-    public TransactionsPage selectCardType(String value) {
+    public CurrentPageT selectCardType(String value) {
         cardTypeSelector.click();
         getByRole(AriaRole.OPTION, value).click();
 
-        return this;
+        return self();
     }
 
     public String getRequestData() {
@@ -390,31 +376,31 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
     }
 
     @Step("Click 'Export table data to file' button")
-    public TransactionsPage clickExportTableDataToFileButton() {
+    public CurrentPageT clickExportTableDataToFileButton() {
         downloadButton.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select 'CSV' option")
-    public TransactionsPage selectCsv() {
+    public CurrentPageT selectCsv() {
         downloadCsvOption.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select 'PDF' option")
-    public TransactionsPage selectPdf() {
+    public CurrentPageT selectPdf() {
         downloadPdfOption.click();
 
-        return this;
+        return self();
     }
 
     @Step("Select 'Excel' option")
-    public TransactionsPage selectExcel() {
+    public CurrentPageT selectExcel() {
         downloadExcelOption.click();
 
-        return this;
+        return self();
     }
 
     @Step("Read and parse transactions from CSV file: {csvFilePath}")
@@ -573,22 +559,40 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
         return transactionList;
     }
 
-    public TransactionsPage dragArrows(String from, String to) {
+    public CurrentPageT dragArrows(String from, String to) {
         dragAndDrop(getArrowsUpDown(from), getSettingsVisibleColumnCheckbox(to));
 
-        return this;
+        return self();
     }
 
-    public TransactionsPage dragArrowsToFirstPosition(String from) {
+    public CurrentPageT dragArrowsToFirstPosition(String from) {
         dragAndDrop(getArrowsUpDown(from), settingsVisibleColumnCheckbox.first());
 
-        return this;
+        return self();
     }
 
-    public TransactionsPage dragArrowsToLastPosition(String from) {
+    public CurrentPageT dragArrowsToLastPosition(String from) {
         dragAndDrop(getArrowsUpDown(from), settingsVisibleColumnCheckbox.last());
 
-        return this;
+        return self();
+    }
+
+    public CurrentPageT pressEscapeKey() {
+        getPage().keyboard().press("Escape");
+
+        return self();
+    }
+
+    private void uncheckIfSelected(Locator checkbox) {
+        if ((boolean) checkbox.evaluate("el => el.checked")) {
+            checkbox.dispatchEvent("click");
+        }
+    }
+
+    private void checkIfNotSelected(Locator checkbox) {
+        if (!(boolean) checkbox.evaluate("el => el.checked")) {
+            checkbox.dispatchEvent("click");
+        }
     }
 
     private void dragAndDrop(Locator source, Locator target) {
@@ -601,11 +605,5 @@ public class TransactionsPage extends HeaderPage<TransactionsPage> implements Tr
 
     private Locator getSettingsVisibleColumnCheckbox(String name) {
         return getByRole(AriaRole.BUTTON, name).locator(settingsVisibleColumnCheckbox);
-    }
-
-    public TransactionsPage pressEscapeKey() {
-        getPage().keyboard().press("Escape");
-
-        return this;
     }
 }

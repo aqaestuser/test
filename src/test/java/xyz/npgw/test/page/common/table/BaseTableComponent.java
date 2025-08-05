@@ -9,7 +9,6 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.BaseComponent;
-import xyz.npgw.test.page.base.BaseModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +21,9 @@ import java.util.regex.Pattern;
 
 @Log4j2
 @Getter
-public abstract class BaseTableComponent<CurrentPageT extends BaseModel> extends BaseComponent {
+public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
 
+    protected CurrentPageT currentPage;
     private final Locator root;
 
     private final Locator columnHeaders;
@@ -40,12 +40,13 @@ public abstract class BaseTableComponent<CurrentPageT extends BaseModel> extends
 
     private final Locator noRowsToDisplayMessage;
 
-    public BaseTableComponent(Page page) {
-        this(page, page.locator("body"));
+    public BaseTableComponent(Page page, CurrentPageT currentPage) {
+        this(page, currentPage, page.locator("body"));
     }
 
-    public BaseTableComponent(Page page, Locator root) {
+    public BaseTableComponent(Page page, CurrentPageT currentPage, Locator root) {
         super(page);
+        this.currentPage = currentPage;
         this.root = root;
 
         this.columnHeaders = root.getByRole(AriaRole.COLUMNHEADER);

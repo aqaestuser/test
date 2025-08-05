@@ -5,11 +5,11 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.BaseDialog;
+import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 @Getter
-public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, TransactionDetailsDialog> {
+public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, TransactionDetailsDialog> {
 
     private static final String CARD_DETAILS_SECTION = "Card details";
     private static final String CUSTOMER_DETAILS_SECTION = "Customer details";
@@ -56,8 +56,8 @@ public class TransactionDetailsDialog extends BaseDialog<TransactionsPage, Trans
     }
 
     @Override
-    protected TransactionsPage getReturnPage() {
-        return new TransactionsPage(getPage());
+    protected SuperTransactionsPage getReturnPage() {
+        return new SuperTransactionsPage(getPage());
     }
 
     @Step("Click on chevron in Card details section")

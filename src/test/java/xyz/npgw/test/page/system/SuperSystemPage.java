@@ -1,20 +1,17 @@
-package xyz.npgw.test.page.common;
+package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.BaseComponent;
-import xyz.npgw.test.page.system.AcquirersPage;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
-import xyz.npgw.test.page.system.FraudControlPage;
-import xyz.npgw.test.page.system.GatewayPage;
-import xyz.npgw.test.page.system.TeamPage;
-import xyz.npgw.test.page.system.TransactionManagementPage;
+import xyz.npgw.test.page.base.HeaderPage;
+import xyz.npgw.test.page.common.table.header.SuperHeaderMenuTrait;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class MenuComponent extends BaseComponent {
+public abstract class SuperSystemPage<CurrentPageT extends SuperSystemPage<CurrentPageT>>
+        extends HeaderPage<CurrentPageT>
+        implements SuperHeaderMenuTrait<CurrentPageT> {
 
     private final Locator teamTab = getByRole(AriaRole.TAB, "Team");
     private final Locator companiesAndBusinessUnitsTab = getByRole(AriaRole.TAB, "Companies and business units");
@@ -23,55 +20,54 @@ public class MenuComponent extends BaseComponent {
     private final Locator fraudControlTab = getByRole(AriaRole.TAB, "Fraud control");
     private final Locator transactionManagementTab = getByRole(AriaRole.TAB, "Transaction management");
 
-    public MenuComponent(Page page) {
+    public SuperSystemPage(Page page) {
         super(page);
     }
 
     @Step("Click 'Team' tab")
-    public TeamPage clickTeamTab() {
-        teamTab.click();
-        assertThat(teamTab).hasAttribute("data-selected", "true");
+    public SuperTeamPage clickTeamTab() {
+        clickAndCheckActive(teamTab);
 
-        return new TeamPage(getPage());
+        return new SuperTeamPage(getPage());
     }
 
     @Step("Click 'Companies and business units' tab")
     public CompaniesAndBusinessUnitsPage clickCompaniesAndBusinessUnitsTab() {
-        companiesAndBusinessUnitsTab.click();
-        assertThat(companiesAndBusinessUnitsTab).hasAttribute("data-selected", "true");
+        clickAndCheckActive(companiesAndBusinessUnitsTab);
 
         return new CompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Click 'Acquirers' tab")
     public AcquirersPage clickAcquirersTab() {
-        acquirersTab.click();
-        assertThat(acquirersTab).hasAttribute("data-selected", "true");
+        clickAndCheckActive(acquirersTab);
 
         return new AcquirersPage(getPage());
     }
 
     @Step("Click 'Gateway' tab")
     public GatewayPage clickGatewayTab() {
-        gatewayTab.click();
-        assertThat(gatewayTab).hasAttribute("data-selected", "true");
+        clickAndCheckActive(gatewayTab);
 
         return new GatewayPage(getPage());
     }
 
     @Step("click 'Fraud control' tab")
     public FraudControlPage clickFraudControlTab() {
-        fraudControlTab.click();
-        assertThat(fraudControlTab).hasAttribute("data-selected", "true");
+        clickAndCheckActive(fraudControlTab);
 
         return new FraudControlPage(getPage());
     }
 
     @Step("click 'Transaction management' tab")
     public TransactionManagementPage clickTransactionManagementTab() {
-        transactionManagementTab.click();
-        assertThat(transactionManagementTab).hasAttribute("data-selected", "true");
+        clickAndCheckActive(transactionManagementTab);
 
         return new TransactionManagementPage(getPage());
+    }
+
+    private void clickAndCheckActive(Locator button) {
+        button.click();
+        assertThat(button).hasAttribute("data-selected", "true");
     }
 }

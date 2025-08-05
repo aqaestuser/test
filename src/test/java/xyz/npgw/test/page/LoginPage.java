@@ -8,6 +8,7 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
@@ -57,10 +58,10 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     }
 
     @Step("Press 'Login' button")
-    public DashboardPage clickLoginButton() {
+    public SuperDashboardPage clickLoginButton() {
         loginButton.click();
 
-        return new DashboardPage(getPage());
+        return new SuperDashboardPage(getPage());
     }
 
     @Step("Press 'Login' button to change password")
@@ -99,7 +100,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     }
 
     @Step("Login to the site as '{email}'")
-    public DashboardPage loginAs(String email, String password) {
+    public SuperDashboardPage loginAs(String email, String password) {
         fillEmailField(email);
         fillPasswordField(password);
         clickLoginButton();
@@ -107,7 +108,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         getPage().waitForURL("**/dashboard");
 //        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
-        return new DashboardPage(getPage());
+        return new SuperDashboardPage(getPage());
     }
 
     @Step("Login as disabled user with '{email}'")

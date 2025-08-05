@@ -11,9 +11,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
-import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.common.trait.AcquirersTableTrait;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
@@ -24,10 +22,10 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Getter
-public class AcquirersPage extends BaseSystemPage<AcquirersPage> implements AcquirersTableTrait,
-        SelectAcquirerTrait<AcquirersPage>,
-        AlertTrait<AcquirersPage>,
-        SelectStatusTrait<AcquirersPage> {
+public class AcquirersPage extends SuperSystemPage<AcquirersPage>
+        implements AcquirersTableTrait,
+                   SelectAcquirerTrait<AcquirersPage>,
+                   SelectStatusTrait<AcquirersPage> {
 
     private final Locator addAcquirerButton = getByTestId("AddAcquirerButton");
     private final Locator addAcquirerDialog = getByRole(AriaRole.DIALOG);

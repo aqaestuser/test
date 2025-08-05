@@ -6,7 +6,6 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.TransactionsPage;
 import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
 import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
 
@@ -19,21 +18,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class TransactionsTableComponent extends BaseTableComponent<TransactionsPage> {
+public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent<CurrentPageT> {
 
     private final String refundTransactionButtonSelector;
     private final Locator cardTypeImage;
 
-    public TransactionsTableComponent(Page page) {
-        super(page);
+    public TransactionsTableComponent(Page page, CurrentPageT currentPage) {
+        super(page, currentPage);
 
         this.refundTransactionButtonSelector = "[data-testid='RefundTransactionButton']";
         this.cardTypeImage = locator("img[alt='logo']");
     }
 
     @Override
-    protected TransactionsPage getCurrentPage() {
-        return new TransactionsPage(getPage());
+    protected CurrentPageT getCurrentPage() {
+        return currentPage;
     }
 
     @Step("Click on the first transaction from the table")

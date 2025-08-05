@@ -5,16 +5,19 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.HeaderPage;
+import xyz.npgw.test.page.common.table.header.SuperHeaderMenuTrait;
 import xyz.npgw.test.page.common.trait.ReportsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
 import xyz.npgw.test.page.dialog.reports.ReportsParametersDialog;
 
-public class ReportsPage extends HeaderPage<ReportsPage> implements ReportsTableTrait,
-        SelectDateRangeTrait<ReportsPage>,
-        SelectCompanyTrait<ReportsPage>,
-        SelectBusinessUnitTrait<ReportsPage> {
+public class ReportsPage extends HeaderPage<ReportsPage>
+        implements ReportsTableTrait,
+                   SelectDateRangeTrait<ReportsPage>,
+                   SelectCompanyTrait<ReportsPage>,
+                   SelectBusinessUnitTrait<ReportsPage>,
+                   SuperHeaderMenuTrait<ReportsPage> {
 
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
     private final Locator generateReportButton = getByRole(AriaRole.BUTTON, "Generate report");

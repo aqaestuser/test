@@ -3,7 +3,7 @@ package xyz.npgw.test.page.dialog.user;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.system.TeamPage;
+import xyz.npgw.test.page.system.SuperTeamPage;
 
 public class EditUserDialog extends UserDialog<EditUserDialog> {
 
@@ -12,9 +12,9 @@ public class EditUserDialog extends UserDialog<EditUserDialog> {
     }
 
     @Step("Click 'Save changes' button")
-    public TeamPage clickSaveChangesButton() {
+    public SuperTeamPage clickSaveChangesButton() {
         getByRole(AriaRole.BUTTON, "Save changes").click();
 
-        return new TeamPage(getPage());
+        return new SuperTeamPage(getPage());
     }
 }

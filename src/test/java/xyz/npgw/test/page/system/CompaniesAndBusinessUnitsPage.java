@@ -11,7 +11,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Company;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.BusinessUnitsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
@@ -24,10 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Getter
-public class CompaniesAndBusinessUnitsPage extends BaseSystemPage<CompaniesAndBusinessUnitsPage> implements
-        SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
-        AlertTrait<CompaniesAndBusinessUnitsPage>,
-        BusinessUnitsTableTrait {
+public class CompaniesAndBusinessUnitsPage extends SuperSystemPage<CompaniesAndBusinessUnitsPage>
+        implements SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
+                   BusinessUnitsTableTrait {
 
     private final Locator addCompanyButton = getByTestId("AddCompanyButton");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");

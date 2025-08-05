@@ -6,25 +6,16 @@ import com.microsoft.playwright.options.AriaRole;
 import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.DashboardPage;
 import xyz.npgw.test.page.LoginPage;
-import xyz.npgw.test.page.ReportsPage;
-import xyz.npgw.test.page.TransactionsPage;
+import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
-import xyz.npgw.test.page.system.TeamPage;
 
-import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 @Getter
 @SuppressWarnings("unchecked")
-public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage {
+public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage
+        implements AlertTrait<CurrentPageT> {
 
-    private final Locator logoImg = getPage().getByAltText("logo");
-    private final Locator logo = getByRole(AriaRole.LINK).filter(new Locator.FilterOptions().setHas(logoImg));
-    private final Locator dashboardButton = getByRole(AriaRole.LINK, "Dashboard");
-    private final Locator transactionsButton = getByRole(AriaRole.LINK, "Transactions");
-    private final Locator reportsButton = getByRole(AriaRole.LINK, "Reports");
-    private final Locator systemAdministrationButton = getByRole(AriaRole.LINK, "System administration");
     private final Locator logOutButton = getByRole(AriaRole.BUTTON, "Log out");
     private final Locator userMenuButton = getByTestId("userMenuToggle");
     private final Locator profileSettingsButton = getByTextExact("Profile Settings");
@@ -36,37 +27,10 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
         super(page);
     }
 
-    @Step("Click on 'Transactions' menu in Header")
-    public TransactionsPage clickTransactionsLink() {
-        transactionsButton.click();
-        getByRole(AriaRole.GRIDCELL, "No rows to display.")
-                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
-        assertThat(transactionsButton.locator("..")).hasAttribute("data-active", "true");
-
-        return new TransactionsPage(getPage());
+    protected CurrentPageT self() {
+        return (CurrentPageT) this;
     }
 
-    @Step("Click on 'Reports' menu in Header")
-    public ReportsPage clickReportsLink() {
-        reportsButton.click();
-        getByRole(AriaRole.GRIDCELL, "No rows to display.")
-                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
-
-        return new ReportsPage(getPage());
-    }
-
-    @Step("Click on 'System administration' menu in Header")
-    public TeamPage clickSystemAdministrationLink() {
-        systemAdministrationButton.click();
-
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-        assertThat(systemAdministrationButton.locator("..")).hasAttribute("data-active", "true");
-        getByRole(AriaRole.GRIDCELL, "No rows to display.")
-                .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
-
-        return new TeamPage(getPage());
-    }
 
     @Step("Click 'Log out' button")
     public LoginPage clickLogOutButton() {
@@ -75,19 +39,12 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
         return new LoginPage(getPage());
     }
 
-    @Step("Click 'Logo' button")
-    public DashboardPage clickLogoButton() {
-        logo.click();
-
-        return new DashboardPage(getPage());
-    }
-
     @Step("Click 'User menu' button")
     public CurrentPageT clickUserMenuButton() {
         getPage().waitForLoadState(LoadState.NETWORKIDLE);
         userMenuButton.click();
 
-        return (CurrentPageT) this;
+        return self();
     }
 
     @Step("Click 'Profile Settings' button")
@@ -110,19 +67,13 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
     public CurrentPageT clickLightRadioButton() {
         lightRadioButtonInUserMenu.click();
 
-        return (CurrentPageT) this;
+        return self();
     }
 
     @Step("Click the 'Dark' radio button in the user menu")
     public CurrentPageT clickDarkRadioButton() {
         darkRadioButtonInUserMenu.click();
 
-        return (CurrentPageT) this;
-    }
-
-    public boolean isLogoImageLoaded() {
-        return (boolean) getLogoImg().evaluate(
-                "img => img.complete && img.naturalWidth > 0 && img.naturalHeight > 0"
-                        + " && !img.src.includes('base64') && !img.src.endsWith('.svg') && !img.src.endsWith('.ico')");
+        return self();
     }
 }

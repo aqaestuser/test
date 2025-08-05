@@ -8,7 +8,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.User;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
 import xyz.npgw.test.page.common.trait.UsersTableTrait;
@@ -18,13 +17,12 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
-public class TeamPage extends BaseSystemPage<TeamPage> implements
-        UsersTableTrait,
-        SelectCompanyTrait<TeamPage>,
-        AlertTrait<TeamPage>,
-        SelectStatusTrait<TeamPage> {
+public class SuperTeamPage extends SuperSystemPage<SuperTeamPage>
+        implements UsersTableTrait,
+                   SelectCompanyTrait<SuperTeamPage>,
+                   SelectStatusTrait<SuperTeamPage> {
 
-    public TeamPage(Page page) {
+    public SuperTeamPage(Page page) {
         super(page);
     }
 
@@ -36,21 +34,21 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     }
 
     @Step("Click 'Refresh data' button")
-    public TeamPage clickRefreshDataButton() {
+    public SuperTeamPage clickRefreshDataButton() {
         getPage().waitForResponse("**/portal-v1/user/list/*", getByTestId("ApplyFilterButtonTeamPage")::click);
 
         return this;
     }
 
     @Step("Click 'Reset filter' button")
-    public TeamPage clickResetFilterButton() {
+    public SuperTeamPage clickResetFilterButton() {
         getByTestId("ResetFilterButtonTeamPage").click();
 
         return this;
     }
 
     @SneakyThrows
-    public TeamPage waitForUserPresence(APIRequestContext request, String email, String companyName) {
+    public SuperTeamPage waitForUserPresence(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
@@ -66,7 +64,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     }
 
     @SneakyThrows
-    public TeamPage waitForUserAbsence(APIRequestContext request, String email, String companyName) {
+    public SuperTeamPage waitForUserAbsence(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName)).anyMatch(user -> user.email().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
@@ -82,7 +80,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     }
 
     @SneakyThrows
-    public TeamPage waitForUserActivation(APIRequestContext request, String email, String companyName) {
+    public SuperTeamPage waitForUserActivation(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName))
                 .noneMatch(user -> user.email().equals(email) && user.enabled())) {
@@ -99,7 +97,7 @@ public class TeamPage extends BaseSystemPage<TeamPage> implements
     }
 
     @SneakyThrows
-    public TeamPage waitForUserDeactivation(APIRequestContext request, String email, String companyName) {
+    public SuperTeamPage waitForUserDeactivation(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName))
                 .noneMatch(user -> user.email().equals(email) && !user.enabled())) {

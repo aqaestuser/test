@@ -13,7 +13,7 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.DashboardPage;
+import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
@@ -45,9 +45,9 @@ public class AddEditBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Verify that a new business unit wasn't added once click 'Close' button")
     public void testCloseButtonAndDiscardChanges() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company241.companyName())
                 .fillCompanyTypeField(company241.companyType())
@@ -69,9 +69,9 @@ public class AddEditBusinessUnitTest extends BaseTest {
     @Feature("Add business unit")
     @Description("Validates successful business unit addition to company (E2E test).")
     public void testAddBusinessUnitEndToEndTest() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
@@ -122,9 +122,9 @@ public class AddEditBusinessUnitTest extends BaseTest {
     @Feature("Edit business unit")
     @Description("Verify that all elements of dialog are displayed properly")
     public void testElementsOfEditBusinessUnitDialog() {
-        EditBusinessUnitDialog editBusinessUnitDialog = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+        EditBusinessUnitDialog editBusinessUnitDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_FOR_EDIT)
                 .getTable().clickEditBusinessUnitButton(MERCHANT_TITLE);
 
@@ -162,9 +162,9 @@ public class AddEditBusinessUnitTest extends BaseTest {
     public void testEditBusinessUnit() {
         String originalBusinessUnitId = businessUnitForEdit.merchantId();
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_FOR_EDIT)
                 .getTable().clickEditBusinessUnitButton(MERCHANT_TITLE)
                 .fillBusinessUnitNameField(MERCHANT_TITLE_EDITED)
@@ -187,9 +187,9 @@ public class AddEditBusinessUnitTest extends BaseTest {
     @Feature("Delete business unit")
     @Description("Verify that business unit can be deleted")
     public void testDeleteBusinessUnit() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new DashboardPage(getPage())
-                .clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_FOR_EDIT)
                 .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE_EDITED)
                 .clickDeleteButton();

@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.system.TeamPage;
+import xyz.npgw.test.page.system.SuperTeamPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
@@ -32,10 +32,10 @@ public class AddUserDialog extends UserDialog<AddUserDialog> {
     }
 
     @Step("Click 'Create' button")
-    public TeamPage clickCreateButton() {
+    public SuperTeamPage clickCreateButton() {
         createButton.click();
 
-        return new TeamPage(getPage());
+        return new SuperTeamPage(getPage());
     }
 
     @Step("Click on the 'Create' button and trigger an error")

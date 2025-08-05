@@ -10,8 +10,9 @@ import xyz.npgw.test.page.system.FraudControlPage;
 
 public class BusinessUnitControlsTableComponent extends BaseTableComponent<FraudControlPage> {
 
-    public BusinessUnitControlsTableComponent(Page page) {
-        super(page, page.getByText("Business unit controls", new Page.GetByTextOptions().setExact(true))
+    public BusinessUnitControlsTableComponent(Page page, FraudControlPage currentPage) {
+        super(page, currentPage,
+                page.getByText("Business unit controls", new Page.GetByTextOptions().setExact(true))
                 .locator("../.."));
     }
 

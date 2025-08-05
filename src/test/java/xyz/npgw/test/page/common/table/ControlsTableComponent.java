@@ -14,8 +14,9 @@ public class ControlsTableComponent extends BaseTableComponent<FraudControlPage>
 
     private final Locator tooltip = locator("//div[@data-slot='content']").last();
 
-    public ControlsTableComponent(Page page) {
-        super(page, page.getByText("Controls", new Page.GetByTextOptions().setExact(true)).locator("../.."));
+    public ControlsTableComponent(Page page, FraudControlPage currentPage) {
+        super(page, currentPage,
+                page.getByText("Controls", new Page.GetByTextOptions().setExact(true)).locator("../.."));
     }
 
     @Override

@@ -9,8 +9,8 @@ import xyz.npgw.test.page.system.GatewayPage;
 
 public class BusinessUnitAcquirersTableComponent extends BaseTableComponent<GatewayPage> {
 
-    public BusinessUnitAcquirersTableComponent(Page page) {
-        super(page);
+    public BusinessUnitAcquirersTableComponent(Page page, GatewayPage currentPage) {
+        super(page, currentPage);
     }
 
     @Override
