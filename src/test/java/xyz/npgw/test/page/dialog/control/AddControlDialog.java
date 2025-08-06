@@ -12,7 +12,7 @@ import xyz.npgw.test.page.system.FraudControlPage;
 public class AddControlDialog extends ControlDialog<AddControlDialog> implements
         AlertTrait<AddControlDialog> {
 
-    private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
+    private final Locator setupButton = getByRole(AriaRole.BUTTON, "Setup");
 
     public AddControlDialog(Page page) {
         super(page);
@@ -20,14 +20,14 @@ public class AddControlDialog extends ControlDialog<AddControlDialog> implements
 
     @Step("Click on the 'Create' button and trigger an error")
     public AddControlDialog clickCreateButtonAndTriggerError() {
-        createButton.click();
+        setupButton.click();
 
         return this;
     }
 
     @Step("Click on the 'Create' button")
-    public FraudControlPage clickCreateButton() {
-        createButton.click();
+    public FraudControlPage clickSetupButton() {
+        setupButton.click();
 
         return getReturnPage();
     }

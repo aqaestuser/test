@@ -12,6 +12,8 @@ public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<Curre
 
     @Getter
     private final Locator selectAcquirerMidField = locator("input[aria-label='Select acquirer MID']");
+    private final Locator dialogSelectAcquirerMidField = getByRole(AriaRole.DIALOG)
+            .locator("input[aria-label='Select acquirer MID']");
     private final Locator selectAcquirerDialogField = locator("input[aria-label='Select acquirer']");
     @Getter
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
@@ -63,6 +65,13 @@ public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<Curre
     @Step("Select '{acquirerName}' acquirer within dialog")
     public CurrentPageT selectAcquirerInDialog(String acquirerName) {
         select(selectAcquirerDialogField, acquirerName);
+
+        return currentPage;
+    }
+
+    @Step("Select '{acquirerName}' acquirer MID within dialog")
+    public CurrentPageT selectAcquirerMidInDialog(String acquirerName) {
+        select(dialogSelectAcquirerMidField, acquirerName);
 
         return currentPage;
     }

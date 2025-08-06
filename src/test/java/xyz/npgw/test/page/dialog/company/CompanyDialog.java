@@ -162,4 +162,8 @@ public abstract class CompanyDialog<CurrentDialogT extends CompanyDialog<Current
 
         return (CurrentDialogT) this;
     }
+
+    public String getCompanyNameValue() {
+        return companyNameField.inputValue();
+    }
 }

@@ -43,6 +43,13 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         return currentPage;
     }
 
+    @Step("Set start and end date: {oneDate} to {oneDate}")
+    public CurrentPageT setDateRangeFields(String oneDate) {
+        setDateRangeFields(oneDate, oneDate);
+
+        return currentPage;
+    }
+
     public CurrentPageT setDateRangeFields(ZonedDateTime startDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return setDateRangeFields(startDate.format(formatter), startDate.format(formatter));

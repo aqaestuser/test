@@ -23,22 +23,21 @@ import java.util.regex.Pattern;
 @Getter
 public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
 
-    protected CurrentPageT currentPage;
     private final Locator root;
-
     private final Locator columnHeaders;
     private final Locator rows;
     private final Locator headerRow;
     private final Locator firstRow;
     private final Locator lastRow;
-
     private final Locator rowsPerPage;
     private final Locator rowsPerPageDropdown;
     private final Locator paginationItems;
     private final Locator nextPageButton;
     private final Locator previousPageButton;
-
+    private final Locator leftDotsButton;
+    private final Locator firstPageButton;
     private final Locator noRowsToDisplayMessage;
+    protected CurrentPageT currentPage;
 
     public BaseTableComponent(Page page, CurrentPageT currentPage) {
         this(page, currentPage, page.locator("body"));
@@ -62,6 +61,9 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
                 .setName("next page button"));
         this.previousPageButton = root.getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions()
                 .setName("previous page button"));
+        this.leftDotsButton = root.locator("li[aria-label='previous page button'] + li[aria-label='dots element']");
+        this.firstPageButton = root.getByLabel("pagination item 1", new Locator.GetByLabelOptions().setExact(true));
+
         this.noRowsToDisplayMessage = root.getByText("No rows to display.",
                 new Locator.GetByTextOptions().setExact(true));
 
@@ -69,8 +71,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
                 .or(lastRow)
                 .waitFor();
     }
-
-    protected abstract CurrentPageT getCurrentPage();
 
     public Locator getColumnHeader(String name) {
         return columnHeaders.getByText(name, new Locator.GetByTextOptions().setExact(true));
@@ -243,12 +243,18 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         } while (goToNextPage());
     }
 
+    @Step("Click pagination page button #1")
     public boolean goToFirstPageIfNeeded() {
         if (hasNoPagination()) {
             return false;
         }
+
+        while (leftDotsButton.count() > 0 && leftDotsButton.isVisible()) {
+            leftDotsButton.click();
+        }
+
         if (isNotCurrentPage("1")) {
-            clickPaginationPageButton("1");
+            firstPageButton.click();
         }
 
         return true;
@@ -263,10 +269,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         return true;
     }
 
-    private boolean isNotCurrentPage(String number) {
-        return !getActivePageButton().innerText().equals(number);
-    }
-
     public boolean goToNextPage() {
         if (nextPageButton.isDisabled()) {
             return false;
@@ -274,12 +276,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         clickNextPageButton();
 
         return true;
-    }
-
-    protected String columnSelector(String columnHeader) {
-        int index = ((Number) getColumnHeader(columnHeader).evaluate("el => el.cellIndex")).intValue() + 1;
-
-        return "td:nth-child(" + index + ")";
     }
 
     public boolean hasNoPagination() {
@@ -299,6 +295,14 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         );
     }
 
+    protected abstract CurrentPageT getCurrentPage();
+
+    protected String columnSelector(String columnHeader) {
+        int index = ((Number) getColumnHeader(columnHeader).evaluate("el => el.cellIndex")).intValue() + 1;
+
+        return "td:nth-child(" + index + ")";
+    }
+
     protected <T> List<T> collectAllPages(Supplier<List<T>> currentPageExtractor) {
 //        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         if (hasNoPagination()) {
@@ -315,6 +319,10 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         } while (goToNextPage());
 
         return allValues;
+    }
+
+    private boolean isNotCurrentPage(String number) {
+        return !getActivePageButton().innerText().equals(number);
     }
 
     public interface PageCallback {

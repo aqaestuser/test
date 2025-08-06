@@ -15,7 +15,7 @@ public class AddBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, AddBu
         implements SelectAcquirerTrait<AddBusinessUnitAcquirerDialog>, AlertTrait<AddBusinessUnitAcquirerDialog> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
-    private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
+    private final Locator connectButton = getByRole(AriaRole.BUTTON, "Connect");
 
     public AddBusinessUnitAcquirerDialog(Page page) {
         super(page);
@@ -27,8 +27,8 @@ public class AddBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, AddBu
     }
 
     @Step("Click 'Create' button")
-    public GatewayPage clickCreateButton() {
-        createButton.click();
+    public GatewayPage clickConnectButton() {
+        connectButton.click();
 
         return getReturnPage();
     }

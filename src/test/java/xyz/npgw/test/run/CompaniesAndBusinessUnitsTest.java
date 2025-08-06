@@ -364,23 +364,38 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField()).isEmpty();
     }
 
-    @Test(dataProvider = "getInvalidCompanyNameLengths", dataProviderClass = TestDataProvider.class)
+
+    @Test
     @TmsLink("191")
     @Epic("System/Companies and business units")
     @Feature("Add company")
     @Description("Error message is shown for company name is shorter than 4 or longer than 100 characters.")
-    public void testVerifyErrorMessageForInvalidCompanyNameLength(String name) {
+    public void testVerifyErrorMessageForInvalidCompanyNameLength() {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(name)
-                .fillCompanyTypeField(COMPANY_TYPE)
-                .clickCreateButtonAndTriggerError();
+                .fillCompanyNameField("1");
 
-        Allure.step("Verify: error message for invalid company name is displayed");
-        assertThat(addCompanyDialog.getAlert().getMessage()).containsText(
-                "Invalid companyName: '%s'. It must contain between 4 and 100 characters".formatted(name));
+        Allure.step("Verify: 'Create' button is disabled for name length = 1");
+        assertThat(addCompanyDialog.getCreateButton()).isDisabled();
+
+        addCompanyDialog.fillCompanyNameField("123");
+
+        Allure.step("Verify: 'Create' button is disabled for name length = 3");
+        assertThat(addCompanyDialog.getCreateButton()).isDisabled();
+
+        addCompanyDialog.fillCompanyNameField("1234");
+
+        Allure.step("Verify: 'Create' button is enabled for name length = 4");
+        assertThat(addCompanyDialog.getCreateButton()).isEnabled();
+
+        addCompanyDialog.fillCompanyNameField("1".repeat(120));
+
+        Allure.step("Verify: 'Create' button is enabled for name length = 100");
+        assertThat(addCompanyDialog.getCreateButton()).isEnabled();
+        Allure.step("Verify: 'Maximal Company name length = 100");
+        assertEquals(addCompanyDialog.getCompanyNameValue().length(), 100);
     }
 
     @Test

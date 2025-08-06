@@ -94,7 +94,7 @@ public class FraudControlTest extends BaseTest {
                 .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig())
                 .fillFraudControlDisplayNameField(FRAUD_CONTROL.getControlDisplayName())
                 .checkActiveRadiobutton()
-                .clickCreateButton();
+                .clickSetupButton();
 
         Locator row = page.getTableControls().getRow(FRAUD_CONTROL.getControlName());
 
@@ -342,7 +342,7 @@ public class FraudControlTest extends BaseTest {
                 .fillFraudControlConfigField(FRAUD_CONTROL_INACTIVE.getControlConfig())
                 .fillFraudControlDisplayNameField(FRAUD_CONTROL_INACTIVE.getControlDisplayName())
                 .checkInactiveRadiobutton()
-                .clickCreateButton();
+                .clickSetupButton();
 
         Locator row = page.getTableControls().getRow(FRAUD_CONTROL_INACTIVE.getControlName());
 
@@ -511,7 +511,7 @@ public class FraudControlTest extends BaseTest {
                 "The '*' symbol is not displayed in the 'Control name' label");
 
         Allure.step("Verify that the 'Create' button is disabled if the 'Control name field is empty");
-        assertThat(addControlDialog.getCreateButton()).hasAttribute("data-disabled", "true");
+        assertThat(addControlDialog.getSetupButton()).hasAttribute("data-disabled", "true");
     }
 
     @Test
@@ -525,11 +525,11 @@ public class FraudControlTest extends BaseTest {
                 .clickFraudControlTab()
                 .clickAddFraudControl()
                 .fillFraudControlNameField(FRAUD_CONTROL_NAME)
-                .clickCreateButton()
+                .clickSetupButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .clickAddFraudControl()
                 .fillFraudControlNameField(FRAUD_CONTROL_NAME)
-                .clickCreateButton();
+                .clickSetupButton();
 
         Allure.step("Verify that the error message ‘ERROR Entity with name … already exists.’ is displayed.");
 
