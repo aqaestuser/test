@@ -20,6 +20,7 @@ import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.FraudControlPage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -999,6 +1000,37 @@ public class FraudControlTest extends BaseTest {
 
         Allure.step("Verify Down button is disabled on Business Unit Control table because of one control");
         assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlDownButton("0")).isDisabled();
+    }
+
+    @Test
+    @TmsLink("1079")
+    @Epic("System/Fraud Control")
+    @Feature("Add Fraud control")
+    @Description("Verify that error message is displayed when special symbols are entered in the Control name field"
+            + " after clicking create button")
+    public void testSpecialSymbolsInControlNameNotAllowed() {
+        List<String> invalidSymbols = Arrays.asList(
+                "@", "#", "$", "%", "*", "=", "/", "\\", ":", "|", "^", "~", "!", "\"", "<", ">", "[", "]", "{", "}",
+                "?", "(", ")", "_", "`", "+", ";"
+        );
+
+        AddControlDialog addControlDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickFraudControlTab()
+                .clickAddFraudControl();
+
+        for (String symbol : invalidSymbols) {
+            String input = "a" + symbol.repeat(4);
+            String expectedMessage = "ERRORInvalid name: '" + input + "'. It may only contain letters, digits,"
+                    + " ampersands (&), hyphens (-), commas (,), periods (.), apostrophes ('), and spaces.";
+
+            addControlDialog
+                    .fillFraudControlNameField(input)
+                    .clickSetupButton();
+
+            Allure.step("Verify error message for symbol: " + symbol);
+            assertThat(addControlDialog.getAlert().getMessage()).containsText(expectedMessage);
+        }
     }
 
     @AfterClass
