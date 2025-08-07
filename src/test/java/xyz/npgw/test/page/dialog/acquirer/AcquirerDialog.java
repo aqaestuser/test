@@ -28,7 +28,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     private final Locator acquirerCodeField = getByPlaceholder("Enter acquirer code");
     private final Locator acquirerDisplayNameField = getByPlaceholder("Enter display name");
     private final Locator acquirerMidField = getByPlaceholder("Enter MID");
-    private final Locator acquirerMidMccField = getByPlaceholder("Enter MCC");
+    private final Locator acquirerMccField = getByPlaceholder("Enter MCC");
 
     public AcquirerDialog(Page page) {
         super(page);
@@ -135,9 +135,9 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         return (CurrentDialogT) this;
     }
 
-    @Step("Enter 'Acquirer MID MCC'")
-    public CurrentDialogT fillAcquirerMidMccField(String acquirerMid) {
-        acquirerMidMccField.fill(acquirerMid);
+    @Step("Enter 'Acquirer MCC'")
+    public CurrentDialogT fillAcquirerMccField(String acquirerMid) {
+        acquirerMccField.fill(acquirerMid);
 
         return (CurrentDialogT) this;
     }

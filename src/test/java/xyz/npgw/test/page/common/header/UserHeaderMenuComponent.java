@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.common.table.header;
+package xyz.npgw.test.page.common.header;
 
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;

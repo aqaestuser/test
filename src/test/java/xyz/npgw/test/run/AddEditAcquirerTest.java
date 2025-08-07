@@ -8,7 +8,6 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -17,14 +16,13 @@ import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
-import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
 public class AddEditAcquirerTest extends BaseTest {
 
@@ -33,6 +31,7 @@ public class AddEditAcquirerTest extends BaseTest {
     private static final Acquirer ACQUIRER = Acquirer.builder()
             .acquirerMid("123456")
             .acquirerCode("ACQ001")
+            .acquirerDisplayName("%s display acquirer".formatted(TestUtils.now()))
             .currencyList(new Currency[]{Currency.USD})
             .acquirerName("%s my-acquirer".formatted(TestUtils.now()))
             .acquirerMidMcc("5411")
@@ -40,13 +39,13 @@ public class AddEditAcquirerTest extends BaseTest {
 
     private static final Acquirer ACQUIRER_FOR_EDIT = Acquirer.builder()
             .acquirerName("%s acquirer for edit form".formatted(RUN_ID))
-            .acquirerDisplayName("%s acquirer for edit form".formatted(RUN_ID))
+            .acquirerDisplayName("%s display acquirer for edit form".formatted(RUN_ID))
             .acquirerMidMcc("5411")
             .build();
 
     private static final Acquirer ACQUIRER_EDITED = Acquirer.builder()
             .acquirerName(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
-            .acquirerDisplayName("new display name")
+            .acquirerDisplayName("%s display acquirer edited".formatted(RUN_ID))
             .acquirerCode("NGenius")
             .acquirerMid("new mid name")
             .acquirerMidMcc("2222")
@@ -70,19 +69,19 @@ public class AddEditAcquirerTest extends BaseTest {
     @Test
     @TmsLink("249")
     @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("Verify 'Add Acquirer' form opens with the correct header and input fields, and closes correctly.")
-    public void testAddAcquirerFormOpensWithCorrectHeaderAndFieldsAndClosesCorrectly() {
-        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+    @Feature("Setup acquirer MID")
+    @Description("Validate correct layout and behavior of the 'Setup acquirer MID' dialog.")
+    public void testSetupAcquirerMidDialogDisplaysCorrectlyAndCloses() {
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .clickAddAcquirer();
+                .clickSetupAcquirerMidButton();
 
         Allure.step("Verify: the header contains the expected title text");
-        assertThat(addAcquirerDialog.getDialogHeader()).hasText("Setup acquirer MID");
+        assertThat(setupAcquirerMidDialog.getDialogHeader()).hasText("Setup acquirer MID");
 
         Allure.step("Verify: all placeholders are correct for each field");
-        assertEquals(addAcquirerDialog.getAllPlaceholders(), List.of(
+        assertEquals(setupAcquirerMidDialog.getAllPlaceholders(), List.of(
                 "Enter entity name",
                 "Enter acquirer code",
                 "Enter display name",
@@ -96,28 +95,28 @@ public class AddEditAcquirerTest extends BaseTest {
         ));
 
         Allure.step("Verify: the Status Switch visible and contains switch Active&Inactive");
-        assertThat(addAcquirerDialog.getStatusSwitch()).hasText("StatusActiveInactive");
+        assertThat(setupAcquirerMidDialog.getStatusSwitch()).hasText("StatusActiveInactive");
 
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
-        assertThat(addAcquirerDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currencyEURUSDGBP");
+        assertThat(setupAcquirerMidDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currencyEURUSDGBP");
 
-        AcquirersPage acquirersPage = addAcquirerDialog
+        AcquirersPage acquirersPage = setupAcquirerMidDialog
                 .clickCloseButton();
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
-        assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
+        assertThat(acquirersPage.getSetupAcquirerMidDialog()).isHidden();
     }
 
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("255")
     @Epic("System/Acquirers")
-    @Feature("Add acquirer")
+    @Feature("Setup acquirer MID")
     @Description("Verifies that the status radio buttons ('Active' and 'Inactive') toggle correctly.")
     public void testToggleStatusRadioButtonsCorrectly(String status) {
         Locator statusRadiobutton = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .clickAddAcquirer()
+                .clickSetupAcquirerMidButton()
                 .clickStatusRadiobutton(status)
                 .getStatusRadiobutton(status);
 
@@ -125,27 +124,20 @@ public class AddEditAcquirerTest extends BaseTest {
         assertThat(statusRadiobutton).hasAttribute("data-selected", "true");
     }
 
-    @Ignore
     @Test
     @TmsLink("412")
     @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("New Acquirer can be successfully created and its details appear correctly in the acquirers table")
-    public void testAddAcquirer() {
-        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+    @Feature("Setup acquirer MID")
+    @Description("New acquirer MID can be successfully set up and displayed correctly in the acquirers table.")
+    public void testSetupAcquirerMid() {
+        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .clickAddAcquirer();
-
-//      Bug!! acquirerDisplayNameField isn't editable
-//      TODO - remove Boolean after fixing bug
-        boolean isEditableAcquirerDisplayNameField = addAcquirerDialog.getAcquirerDisplayNameField().isEditable();
-
-        AcquirersPage acquirersPage = addAcquirerDialog
+                .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(ACQUIRER.getAcquirerName())
-//                .fillAcquirerDisplayNameField(ACQUIRER.getAcquirerDisplayName())
+                .fillAcquirerDisplayNameField(ACQUIRER.getAcquirerDisplayName())
                 .fillAcquirerMidField(ACQUIRER.getAcquirerMid())
-                .fillAcquirerMidMccField(ACQUIRER.getAcquirerMidMcc())
+                .fillAcquirerMccField(ACQUIRER.getAcquirerMidMcc())
                 .fillChallengeUrlField(ACQUIRER.getSystemConfig().challengeUrl())
                 .fillFingerprintUrlField(ACQUIRER.getSystemConfig().fingerprintUrl())
                 .fillResourceUrlField(ACQUIRER.getSystemConfig().resourceUrl())
@@ -155,22 +147,22 @@ public class AddEditAcquirerTest extends BaseTest {
                 .clickCreateButton();
 
         Allure.step("Verify: The 'Add acquirer' dialog is no longer visible");
-        assertThat(acquirersPage.getAddAcquirerDialog()).isHidden();
+        assertThat(acquirersPage.getSetupAcquirerMidDialog()).isHidden();
 
         Allure.step("Verify: Acquirer creation success message is displayed");
         assertThat(acquirersPage.getAlert().getMessage())
                 .containsText("SUCCESSAcquirer was created successfully");
 
         acquirersPage
-                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerMid());
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName());
 
         Allure.step("Verify: Entity name matches expected");
         assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Entity name"))
                 .hasText(ACQUIRER.getAcquirerName());
 
-//        Allure.step("Verify: Display name matches expected");
-//        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Display name"))
-//                .hasText(ACQUIRER.getAcquirerDisplayName());
+        Allure.step("Verify: Display name matches expected");
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Display name"))
+                .hasText(ACQUIRER.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
         assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Acquirer code"))
@@ -199,83 +191,72 @@ public class AddEditAcquirerTest extends BaseTest {
         Allure.step("Verify: Status matches expected");
         assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Status"))
                 .hasText("Active");
-
-//    TODO - remove after fixing bug
-        Allure.step("Verify: The 'Acquirer Display Name Field' is editable");
-        assertTrue(isEditableAcquirerDisplayNameField);
     }
 
     @Test
     @TmsLink("427")
     @Epic("System/Acquirers")
-    @Feature("Add acquirer")
+    @Feature("Setup acquirer MID")
     @Description("Verify error appears when creating an Acquirer with a duplicate name.")
     public void testCreateAcquirerWithDuplicateNameShowsError() {
-        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab();
-
-        AddAcquirerDialog acquirerDialog = acquirersPage
-                .clickAddAcquirer()
+                .clickAcquirersTab()
+                .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(EXISTING_ACQUIRER)
                 .fillAcquirerMidField("1234")
-                .fillAcquirerMidMccField("1234")
+                .fillAcquirerMccField("1234")
                 .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
                 .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl())
-                .clickCheckboxCurrency("USD");
-
-        acquirerDialog
-                .clickCreateButton();
+                .clickCheckboxCurrency("USD")
+                .clickCreateButtonAndTriggerError();
 
         Allure.step("Verify: Acquirer Error message is displayed");
-        assertThat(acquirerDialog.getAlert().getMessage())
+        assertThat(setupAcquirerMidDialog.getAlert().getMessage())
                 .containsText("Acquirer with name {" + EXISTING_ACQUIRER + "} already exists.");
-
-        Allure.step("Verify: the 'Add acquirer' dialog is not closed");
-        assertThat(acquirersPage.getAddAcquirerDialog()).isVisible();
     }
 
     @Test
     @TmsLink("526")
     @Epic("System/Acquirers")
-    @Feature("Add acquirer")
-    @Description("Verify default state of the 'Add Acquirer' dialog")
-    public void testDefaultStateOfAddAcquirerDialog() {
-        AddAcquirerDialog addAcquirerDialog = new SuperDashboardPage(getPage())
+    @Feature("Setup acquirer MID")
+    @Description("Verify default state of the 'Setup acquirer MID' dialog")
+    public void testDefaultStateOfSetupAcquirerMidDialog() {
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .clickAddAcquirer();
+                .clickSetupAcquirerMidButton();
 
         Allure.step("Verify: Acquirer name field is marked as invalid");
-        assertThat(addAcquirerDialog.getAcquirerNameField()).hasAttribute("aria-invalid", "true");
+        assertThat(setupAcquirerMidDialog.getAcquirerNameField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: Acquirer code field is read-only");
-        assertThat(addAcquirerDialog.getAcquirerCodeField()).hasAttribute("aria-readonly", "true");
+        assertThat(setupAcquirerMidDialog.getAcquirerCodeField()).hasAttribute("aria-readonly", "true");
 
         Allure.step("Verify: Challenge URL field is marked as invalid");
-        assertThat(addAcquirerDialog.getChallengeURLField()).hasAttribute("aria-invalid", "true");
+        assertThat(setupAcquirerMidDialog.getChallengeURLField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: Fingerprint URL field is marked as invalid");
-        assertThat(addAcquirerDialog.getFingerprintUrlField()).hasAttribute("aria-invalid", "true");
+        assertThat(setupAcquirerMidDialog.getFingerprintUrlField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: Resource URL field is marked as invalid");
-        assertThat(addAcquirerDialog.getResourceUrlField()).hasAttribute("aria-invalid", "true");
+        assertThat(setupAcquirerMidDialog.getResourceUrlField()).hasAttribute("aria-invalid", "true");
 
         Allure.step("Verify: 'Active' status is selected by default");
-        assertThat(addAcquirerDialog.getStatusRadiobutton("Active")).isChecked();
+        assertThat(setupAcquirerMidDialog.getStatusRadiobutton("Active")).isChecked();
 
         Allure.step("Verify: 'EUR' is selected as the default allowed currency");
-        assertThat(addAcquirerDialog.getAllowedCurrencyRadio("EUR")).isChecked();
+        assertThat(setupAcquirerMidDialog.getAllowedCurrencyRadio("EUR")).isChecked();
 
         Allure.step("Verify: 'Create' button is disabled when required fields are not filled");
-        assertThat(addAcquirerDialog.getCreateButton()).isDisabled();
+        assertThat(setupAcquirerMidDialog.getCreateButton()).isDisabled();
     }
 
-    @Test
+    @Test(dependsOnMethods = "testSetupAcquirerMid")
     @TmsLink("239")
     @Epic("System/Acquirers")
-    @Feature("Edit acquirers")
+    @Feature("Edit acquirer MID")
     @Description("Verifies that all form field placeholders are set correctly")
     public void testVerifyPlaceholdersEditForm() {
         List<String> expectedPlaceholders = List.of(
@@ -294,8 +275,8 @@ public class AddEditAcquirerTest extends BaseTest {
         List<String> actualPlaceholders = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
-                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
+                .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
+                .getTable().clickEditAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
@@ -305,18 +286,17 @@ public class AddEditAcquirerTest extends BaseTest {
     @Test
     @TmsLink("450")
     @Epic("System/Acquirers")
-    @Feature("Edit acquirers")
-    @Description("Edit Acquirer and Verify Updated Data in the Table")
+    @Feature("Edit acquirer MID")
+    @Description("Edit Acquirer Mid and Verify Updated Data in the Table")
     public void testEditAcquirerVerifyUpdatedData() {
         AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
-                .getTable().clickEditAcquirerButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
-//      TODO - change after fixing bug
-//                .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())
+                .getTable().clickEditAcquirerMidButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
+                .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())
                 .fillAcquirerMidField(ACQUIRER_EDITED.getAcquirerMid())
-                .fillAcquirerMidMccField(ACQUIRER_EDITED.getAcquirerMidMcc())
+                .fillAcquirerMccField(ACQUIRER_EDITED.getAcquirerMidMcc())
                 .fillChallengeUrlField(ACQUIRER_EDITED.getSystemConfig().challengeUrl())
                 .fillFingerprintUrlField(ACQUIRER_EDITED.getSystemConfig().fingerprintUrl())
                 .fillResourceUrlField(ACQUIRER_EDITED.getSystemConfig().resourceUrl())
@@ -331,46 +311,39 @@ public class AddEditAcquirerTest extends BaseTest {
                 .hasText("SUCCESSAcquirer was updated successfully");
 
         Allure.step("Verify: The 'Edit acquirer' dialog is no longer visible");
-        assertThat(acquirersPage.getEditAcquirerDialog()).isHidden();
+        assertThat(acquirersPage.getEditAcquirerMidDialog()).isHidden();
 
-//      TODO - change after fixing bug
-//        Allure.step("Verify: Acquirer display name matches expected");
-//        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT, "Display name"))
-//                .hasText(ACQUIRER_EDITED.getAcquirerDisplayName());
+
+        Allure.step("Verify: Acquirer display name matches expected");
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "Display name"))
+                .hasText(ACQUIRER_EDITED.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "Acquirer code"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "Acquirer code"))
                 .hasText("NGenius");
 
         Allure.step("Verify: Acquirer MID matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "MID"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "MID"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMid());
 
         Allure.step("Verify: Acquirer MID MCC matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "MCC"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "MCC"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMidMcc());
 
         Allure.step("Verify: Currencies column contains expected currency");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "Currencies"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "Currencies"))
                 .hasText(ACQUIRER_EDITED.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "Acquirer config"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "Acquirer config"))
                 .hasText(ACQUIRER_EDITED.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "System config"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "System config"))
                 .hasText(ACQUIRER_EDITED.getSystemConfig().toString());
 
         Allure.step("Verify: Status matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerDisplayName(),
-                "Status"))
+        assertThat(acquirersPage.getTable().getCell(ACQUIRER_FOR_EDIT.getAcquirerName(), "Status"))
                 .hasText(ACQUIRER_EDITED.getStatus());
     }
 

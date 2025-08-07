@@ -1,4 +1,4 @@
-package xyz.npgw.test.page.common.table.header;
+package xyz.npgw.test.page.common.header;
 
 import xyz.npgw.test.page.base.BaseTrait;
 import xyz.npgw.test.page.base.HeaderPage;

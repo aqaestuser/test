@@ -6,7 +6,7 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.acquirer.ActivateAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.DeactivateAcquirerDialog;
-import xyz.npgw.test.page.dialog.acquirer.EditAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.EditAcquirerMidDialog;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 @Getter
@@ -23,7 +23,7 @@ public class AcquirersTableComponent extends BaseTableComponent<AcquirersPage> {
         return new AcquirersPage(getPage());
     }
 
-    public Locator getEditAcquirerButton(String acquirerName) {
+    public Locator getEditAcquirerMidButton(String acquirerName) {
         return getRow(acquirerName).getByTestId("EditAcquirerButton");
     }
 
@@ -31,22 +31,22 @@ public class AcquirersTableComponent extends BaseTableComponent<AcquirersPage> {
         return getRow(acquirerName).getByTestId("ChangeAcquirerActivityButton").locator("svg");
     }
 
-    @Step("Click 'Edit' button to edit acquirer")
-    public EditAcquirerDialog clickEditAcquirerButton(String acquirerName) {
-        getEditAcquirerButton(acquirerName).click();
+    @Step("Click 'Edit acquirer MID' button to edit acquirer")
+    public EditAcquirerMidDialog clickEditAcquirerMidButton(String acquirerName) {
+        getEditAcquirerMidButton(acquirerName).click();
 
-        return new EditAcquirerDialog(getPage());
+        return new EditAcquirerMidDialog(getPage());
     }
 
-    @Step("Click 'Activate acquirer' button")
-    public ActivateAcquirerDialog clickActivateButton(String acquirerName) {
+    @Step("Click 'Activate acquirer MID' button")
+    public ActivateAcquirerDialog clickActivateAcquirerMidButton(String acquirerName) {
         getRow(acquirerName).locator("//*[@data-icon='check']/..").click();
 
         return new ActivateAcquirerDialog(getPage());
     }
 
-    @Step("Click 'Deactivate acquirer' button")
-    public DeactivateAcquirerDialog clickDeactivateButton(String acquirerName) {
+    @Step("Click 'Deactivate acquirer MID' button")
+    public DeactivateAcquirerDialog clickDeactivateAcquirerMidButton(String acquirerName) {
         getRow(acquirerName).locator("//*[@data-icon='ban']/..").click();
 
         return new DeactivateAcquirerDialog(getPage());

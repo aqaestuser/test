@@ -8,11 +8,11 @@ import lombok.Getter;
 import xyz.npgw.test.page.system.AcquirersPage;
 
 @Getter
-public class AddAcquirerDialog extends AcquirerDialog<AddAcquirerDialog> {
+public class SetupAcquirerMidDialog extends AcquirerDialog<SetupAcquirerMidDialog> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
-    public AddAcquirerDialog(Page page) {
+    public SetupAcquirerMidDialog(Page page) {
         super(page);
     }
 
@@ -21,5 +21,12 @@ public class AddAcquirerDialog extends AcquirerDialog<AddAcquirerDialog> {
         createButton.click();
 
         return getReturnPage();
+    }
+
+    @Step("Click on the 'Create' button and trigger an error")
+    public SetupAcquirerMidDialog clickCreateButtonAndTriggerError() {
+        createButton.click();
+
+        return this;
     }
 }

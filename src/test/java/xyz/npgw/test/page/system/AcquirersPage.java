@@ -14,8 +14,8 @@ import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.page.common.trait.AcquirersTableTrait;
 import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
 import xyz.npgw.test.page.common.trait.SelectStatusTrait;
-import xyz.npgw.test.page.dialog.acquirer.AddAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.DeleteAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -27,22 +27,22 @@ public class AcquirersPage extends SuperSystemPage<AcquirersPage>
                    SelectAcquirerTrait<AcquirersPage>,
                    SelectStatusTrait<AcquirersPage> {
 
-    private final Locator addAcquirerButton = getByTestId("AddAcquirerButton");
-    private final Locator addAcquirerDialog = getByRole(AriaRole.DIALOG);
-    private final Locator editAcquirerDialog = getByRole(AriaRole.DIALOG);
+    private final Locator setupAcquirerMidButton = getByTestId("AddAcquirerButton");
+    private final Locator setupAcquirerMidDialog = getByRole(AriaRole.DIALOG);
+    private final Locator editAcquirerMidDialog = getByRole(AriaRole.DIALOG);
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
-    private final Locator deleteAcquirerButton = getByTestId("DeleteAcquirerButton");
+    private final Locator deleteAcquirerMidButton = getByTestId("DeleteAcquirerButton");
 
     public AcquirersPage(Page page) {
         super(page);
     }
 
-    @Step("Click Add Acquirer")
-    public AddAcquirerDialog clickAddAcquirer() {
-        addAcquirerButton.click();
+    @Step("Click 'Setup acquirer MID' button")
+    public SetupAcquirerMidDialog clickSetupAcquirerMidButton() {
+        setupAcquirerMidButton.click();
 
-        return new AddAcquirerDialog(getPage());
+        return new SetupAcquirerMidDialog(getPage());
     }
 
     @Step("Click 'Reset filter' button")
@@ -52,9 +52,9 @@ public class AcquirersPage extends SuperSystemPage<AcquirersPage>
         return this;
     }
 
-    @Step("Click 'Delete acquirer' button")
-    public DeleteAcquirerDialog clickDeleteAcquirer() {
-        deleteAcquirerButton.click();
+    @Step("Click 'Delete acquirer MID' button")
+    public DeleteAcquirerDialog clickDeleteAcquirerMidButton() {
+        deleteAcquirerMidButton.click();
 
         return new DeleteAcquirerDialog(getPage());
     }

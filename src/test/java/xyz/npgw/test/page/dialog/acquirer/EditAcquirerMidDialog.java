@@ -6,11 +6,11 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.system.AcquirersPage;
 
-public class EditAcquirerDialog extends AcquirerDialog<EditAcquirerDialog> {
+public class EditAcquirerMidDialog extends AcquirerDialog<EditAcquirerMidDialog> {
 
     private final Locator saveChangesButton = getByRole(AriaRole.BUTTON, "Save changes");
 
-    public EditAcquirerDialog(Page page) {
+    public EditAcquirerMidDialog(Page page) {
         super(page);
     }
 

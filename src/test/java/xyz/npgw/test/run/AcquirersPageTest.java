@@ -73,7 +73,7 @@ public class AcquirersPageTest extends BaseTest {
                 .clickAcquirersTab();
 
         Allure.step("Verify: Add acquirer button is visible");
-        assertThat(acquirersPage.getAddAcquirerButton()).isVisible();
+        assertThat(acquirersPage.getSetupAcquirerMidButton()).isVisible();
 
         Allure.step("Verify: Acquirer MID selector is visible");
         assertThat(acquirersPage.getSelectAcquirerMid().getSelectAcquirerMidField()).isVisible();
@@ -308,7 +308,7 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText(ACQUIRER.getStatus());
 
         Allure.step("Verify: Edit button is visible");
-        assertThat(acquirersPage.getTable().getEditAcquirerButton(ACQUIRER.getAcquirerName())).isVisible();
+        assertThat(acquirersPage.getTable().getEditAcquirerMidButton(ACQUIRER.getAcquirerName())).isVisible();
 
         Allure.step("Verify: 'Activate acquirer' icon is visible for the acquirer");
         Locator activityIcon = acquirersPage.getTable().getAcquirerActivityIcon(ACQUIRER.getAcquirerName());
@@ -362,10 +362,10 @@ public class AcquirersPageTest extends BaseTest {
         AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
-                .clickAddAcquirer()
+                .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(acquirerName)
                 .fillAcquirerMidField("1234")
-                .fillAcquirerMidMccField("1234")
+                .fillAcquirerMccField("1234")
                 .fillChallengeUrlField(systemConfig.challengeUrl())
                 .fillFingerprintUrlField(systemConfig.fingerprintUrl())
                 .fillResourceUrlField(systemConfig.resourceUrl())
@@ -391,7 +391,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
-                .getTable().clickDeactivateButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getTable().clickDeactivateAcquirerMidButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
                 .clickDeactivateButton();
 
         Allure.step("Verify: Successful message");
@@ -406,7 +406,7 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("Inactive");
 
         acquirersPage
-                .getTable().clickActivateButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getTable().clickActivateAcquirerMidButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
                 .clickActivateButton();
 
         Allure.step("Verify: Successful message");
@@ -453,7 +453,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
-                .clickDeleteAcquirer()
+                .clickDeleteAcquirerMidButton()
                 .clickDeleteButton();
 
         Allure.step("Verify: a success message appears after deleting the acquirer");
