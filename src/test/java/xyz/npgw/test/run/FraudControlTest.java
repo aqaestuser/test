@@ -1033,6 +1033,51 @@ public class FraudControlTest extends BaseTest {
         }
     }
 
+    @Test
+    @TmsLink("1091")
+    @Epic("System/Fraud Control")
+    @Feature("Add Fraud control")
+    @Description("Verify that the Control Name field requires between 4 and 100 characters")
+    public void testControlNameLengthRestrictions() {
+        String invalidControlName3Chars = "a".repeat(3);
+        String validControlName4Chars = "a".repeat(4);
+        String validControlName100Chars = "a".repeat(100);
+        String invalidControlName101Chars = "a".repeat(101);
+
+        AddControlDialog addControlDialog = new SuperDashboardPage(getPage())
+                 .getHeader().clickSystemAdministrationLink()
+                 .getSystemMenu().clickFraudControlTab()
+                 .clickAddFraudControl()
+                 .fillFraudControlNameField(invalidControlName3Chars);
+
+        String ariaInvalid = addControlDialog.getControlNameInput().getAttribute("aria-invalid");
+
+        Allure.step("Verify that the 'Control Name' field is highlighted in red");
+        Assert.assertEquals(ariaInvalid, "true", "The 'Control Name' field should be"
+                + " highlighted in red");
+
+        Allure.step("Verify that the Setup button is disabled if Control name contains 3 characters");
+        assertThat(addControlDialog.getSetupButton()).isDisabled();
+
+        addControlDialog
+                .fillFraudControlNameField(validControlName4Chars);
+
+        Allure.step("Verify that the Setup button is enabled if  Control name contains 4 characters");
+        assertThat(addControlDialog.getSetupButton()).isEnabled();
+
+        addControlDialog
+                .fillFraudControlNameField(validControlName100Chars);
+
+        Allure.step("Verify that the Setup button is enabled if Control name contains 100 characters");
+        assertThat(addControlDialog.getSetupButton()).isEnabled();
+
+        addControlDialog
+                .fillFraudControlNameField(invalidControlName101Chars);
+
+        Allure.step("Verify that a Control name field has limit of 100 characters");
+        Assert.assertEquals(addControlDialog.getControlNameInput().inputValue().length(), 100);
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
