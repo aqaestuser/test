@@ -6,9 +6,9 @@ import xyz.npgw.test.page.dialog.merchant.DeleteBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
 
-public class BusinessUnitsTableComponent extends BaseTableComponent<CompaniesAndBusinessUnitsPage> {
+public class SuperBusinessUnitsTableComponent extends BaseTableComponent<CompaniesAndBusinessUnitsPage> {
 
-    public BusinessUnitsTableComponent(Page page, CompaniesAndBusinessUnitsPage currentPage) {
+    public SuperBusinessUnitsTableComponent(Page page, CompaniesAndBusinessUnitsPage currentPage) {
         super(page, currentPage);
     }
 

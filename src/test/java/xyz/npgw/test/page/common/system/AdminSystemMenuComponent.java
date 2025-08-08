@@ -1,22 +1,20 @@
-package xyz.npgw.test.page.system;
+package xyz.npgw.test.page.common.system;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.header.AdminHeaderMenuTrait;
+import xyz.npgw.test.page.base.BaseComponent;
+import xyz.npgw.test.page.system.AdminBusinessUnitsPage;
+import xyz.npgw.test.page.system.AdminTeamPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public abstract class AdminSystemPage<CurrentPageT extends AdminSystemPage<CurrentPageT>>
-        extends HeaderPage<CurrentPageT>
-        implements AdminHeaderMenuTrait<CurrentPageT> {
-
+public class AdminSystemMenuComponent extends BaseComponent {
     private final Locator teamTab = getByRole(AriaRole.TAB, "Team");
     private final Locator businessUnitsTab = getByRole(AriaRole.TAB, "Business units");
 
-    public AdminSystemPage(Page page) {
+    public AdminSystemMenuComponent(Page page) {
         super(page);
     }
 
@@ -38,5 +36,4 @@ public abstract class AdminSystemPage<CurrentPageT extends AdminSystemPage<Curre
         button.click();
         assertThat(button).hasAttribute("data-selected", "true");
     }
-
 }

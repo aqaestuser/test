@@ -74,7 +74,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testSetupAcquirerMidDialogDisplaysCorrectlyAndCloses() {
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton();
 
         Allure.step("Verify: the header contains the expected title text");
@@ -115,7 +115,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testToggleStatusRadioButtonsCorrectly(String status) {
         Locator statusRadiobutton = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .clickStatusRadiobutton(status)
                 .getStatusRadiobutton(status);
@@ -132,7 +132,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testSetupAcquirerMid() {
         AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(ACQUIRER.getAcquirerName())
                 .fillAcquirerDisplayNameField(ACQUIRER.getAcquirerDisplayName())
@@ -201,7 +201,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testCreateAcquirerWithDuplicateNameShowsError() {
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(EXISTING_ACQUIRER)
                 .fillAcquirerMidField("1234")
@@ -225,7 +225,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testDefaultStateOfSetupAcquirerMidDialog() {
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton();
 
         Allure.step("Verify: Acquirer name field is marked as invalid");
@@ -274,7 +274,7 @@ public class AddEditAcquirerTest extends BaseTest {
 
         List<String> actualPlaceholders = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .getAllPlaceholders();
@@ -291,7 +291,7 @@ public class AddEditAcquirerTest extends BaseTest {
     public void testEditAcquirerVerifyUpdatedData() {
         AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickAcquirersTab()
+                .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerMidButton(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())
                 .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())

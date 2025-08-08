@@ -29,7 +29,7 @@ public class TransactionManagementPageTest extends BaseTest {
     public void testAddTransactionAdjustment() {
         TransactionManagementPage page = new TransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickTransactionManagementTab()
+                .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCreateButton();
@@ -46,7 +46,7 @@ public class TransactionManagementPageTest extends BaseTest {
     public void testClickCloseButtonWithNoChanges() {
         TransactionManagementPage page = new TransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickTransactionManagementTab()
+                .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCloseButton();
@@ -62,7 +62,7 @@ public class TransactionManagementPageTest extends BaseTest {
     public void testCreateButtonIsDisabledByDefault() {
         AddAdjustmentDialog page = new TransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickTransactionManagementTab()
+                .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         assertThat(page.getCreateButton()).hasAttribute("data-disabled", "true");
@@ -84,7 +84,7 @@ public class TransactionManagementPageTest extends BaseTest {
 
         AddAdjustmentDialog addAdjustmentDialog = new SuperTransactionsPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .clickTransactionManagementTab()
+                .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         Allure.step("Verify: check placeholder in the 'NPGW reference' search field.");
