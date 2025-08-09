@@ -28,6 +28,7 @@ import xyz.npgw.test.common.entity.Credentials;
 import xyz.npgw.test.common.entity.Token;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.entity.UserRole;
+import xyz.npgw.test.common.util.BrowserUtils;
 import xyz.npgw.test.common.util.CleanupUtils;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -91,7 +92,8 @@ public abstract class BaseTest {
     protected void beforeClass() {
         playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
         initApiRequestContext();
-        browser = BrowserFactory.getBrowser(playwright);
+//        browser = BrowserFactory.getBrowser(playwright);
+        browser = BrowserUtils.createBrowser(playwright);
 
         uid = "%s.%s".formatted(RUN_ID, Thread.currentThread().getId());
         companyName = "%s test run company".formatted(uid);
@@ -122,7 +124,8 @@ public abstract class BaseTest {
                     .setRecordVideoSize(ProjectProperties.getVideoWidth(), ProjectProperties.getVideoHeight());
         }
 
-        context = browser.newContext(options);
+//        context = browser.newContext(options);
+        context = BrowserUtils.createContext(browser);
 
         if (ProjectProperties.isTracingMode()) {
             context.tracing().start(new Tracing
