@@ -171,6 +171,19 @@ public abstract class BaseTest {
         });
 
         initApiRequestContext();
+
+        if (method.getName().endsWith("AsTestUser")) {
+            new AboutBlankPage(page)
+                    .navigate("/")
+                    .loginAsUser("testUser@email.com", ProjectProperties.getPassword());
+            return;
+        }
+        if (method.getName().endsWith("AsTestAdmin")) {
+            new AboutBlankPage(page)
+                    .navigate("/")
+                    .loginAsAdmin("testAdmin@email.com", ProjectProperties.getPassword());
+            return;
+        }
         openSite(args);
     }
 
@@ -204,7 +217,7 @@ public abstract class BaseTest {
             User.passChallenge(apiRequestContext, user.email(), user.password());
         }
 
-        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getPassword());
+        new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getPassword(), userRole.getName());
 //        initPageRequestContext();
     }
 

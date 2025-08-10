@@ -213,7 +213,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getHeader().clickTransactionsLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
-                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
+                .getSelectDateRange().setDateRangeFields("01/04/2025 - 01/04/2024")
                 .clickSettingsButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
@@ -278,7 +278,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testPresenceOfDownloadFilesOptions() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE)
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .clickDownloadButton();
@@ -362,7 +362,7 @@ public class TransactionsPageTest extends BaseTest {
     public void testRequestToServer() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields("01-05-2025", "07-05-2025")
+                .getSelectDateRange().setDateRangeFields("01/05/2025 - 07/05/2025")
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .clickCurrencySelector()
@@ -580,37 +580,32 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
-    @Ignore("Right now Refresh button is unavailable for only data range changed")
     @Test
     @TmsLink("736")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that ")
+    @Description("Verify, that date picker contains default value before and after reset filter")
     public void testResetData() {
-        final String startDate = "01-04-2025";
-        final String endDate = "30-04-2025";
-        final String dataFrom = startDate.replaceAll("-", "/");
-        final String dataTo = endDate.replaceAll("-", "/");
-        final String selectedRange = "Date range" + dataFrom + "-" + dataTo;
-        final String currentRange = TestUtils.getCurrentRange();
+        final String dateRange = "01/04/2025-30/04/2025";
+        final String defaultRange = TestUtils.getCurrentRange();
 
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: the 'Data' input field value is current month by default");
-        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).containsText(defaultRange);
 
         transactionsPage
-                .getSelectDateRange().setDateRangeFields(startDate, endDate);
+                .getSelectDateRange().setDateRangeFields(dateRange);
 
         Allure.step("Verify: the 'Data' input field value is checked period");
-        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(selectedRange);
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).containsText(dateRange);
 
         transactionsPage
                 .clickResetFilterButton();
 
         Allure.step("Verify: the 'Data' input field value is current month after reset");
-        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).hasText(currentRange);
+        assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).containsText(defaultRange);
     }
 
     @Test
@@ -623,10 +618,10 @@ public class TransactionsPageTest extends BaseTest {
                 .getHeader().clickTransactionsLink()
                 .clickSearchTrxIdsButton();
 
-        Allure.step("Verify: 'NPGW reference' is visible ");
+        Allure.step("Verify: 'NPGW reference' is visible");
         assertThat(transactionsPage.getNpgwReferenceField()).isVisible();
 
-        Allure.step("Verify: 'Business unit reference' is visible ");
+        Allure.step("Verify: 'Business unit reference' is visible");
         assertThat(transactionsPage.getBusinessUnitReference()).isVisible();
     }
 

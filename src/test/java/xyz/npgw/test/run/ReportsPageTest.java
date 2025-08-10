@@ -63,7 +63,7 @@ public class ReportsPageTest extends BaseTest {
     public void testErrorMessageForReversedDateRange() {
         ReportsPage reportsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickReportsLink()
-                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-04-2024")
+                .getSelectDateRange().setDateRangeFields("01/04/2025 - 01/04/2024")
                 .clickRefreshDataButton();
 
         Allure.step("Verify: error message is shown for invalid date range");
@@ -184,7 +184,7 @@ public class ReportsPageTest extends BaseTest {
         reportsPage
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
-                .getSelectDateRange().setDateRangeFields("01-04-2025", "01-05-2025")
+                .getSelectDateRange().setDateRangeFields("01/04/2025 - 01/05/2025")
                 .clickResetFilterButton();
 
         Allure.step("Verify: the selected company field is empty after reset");

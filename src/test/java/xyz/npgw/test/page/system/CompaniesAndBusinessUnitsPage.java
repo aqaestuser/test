@@ -12,8 +12,8 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.page.common.header.SuperHeaderMenuTrait;
 import xyz.npgw.test.page.common.system.SuperSystemMenuTrait;
-import xyz.npgw.test.page.common.trait.SuperBusinessUnitsTableTrait;
 import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
+import xyz.npgw.test.page.common.trait.SuperBusinessUnitsTableTrait;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
 import xyz.npgw.test.page.dialog.company.DeleteCompanyDialog;
 import xyz.npgw.test.page.dialog.company.EditCompanyDialog;
@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public class CompaniesAndBusinessUnitsPage extends BaseBusinessUnitsPage<CompaniesAndBusinessUnitsPage>
         implements SuperHeaderMenuTrait<CompaniesAndBusinessUnitsPage>,
-                   SuperSystemMenuTrait,
-                   SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
-                   SuperBusinessUnitsTableTrait {
+        SuperSystemMenuTrait,
+        SelectCompanyTrait<CompaniesAndBusinessUnitsPage>,
+        SuperBusinessUnitsTableTrait {
 
     private final Locator addCompanyButton = getByTestId("AddCompanyButton");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");

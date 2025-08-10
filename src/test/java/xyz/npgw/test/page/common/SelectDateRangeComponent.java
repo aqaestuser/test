@@ -7,10 +7,8 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
 
-import java.time.LocalDate;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAdjusters;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
@@ -26,53 +24,23 @@ public class SelectDateRangeComponent<CurrentPageT> extends BaseComponent {
         this.currentPage = currentPage;
     }
 
-    @Step("Set start and end date: {startDate} to {endDate}")
-    public CurrentPageT setDateRangeFields(String startDate, String endDate) {
-        String[] startParts = startDate.split("-");
-        String[] endParts = endDate.split("-");
+    @Step("Set date range: {dateRange}")
+    public CurrentPageT setDateRangeFields(String dateRange) {
+        String[] dates = dateRange.split("-");
+        List<String> startDate = Arrays.stream(dates[0].split("/")).map(String::trim).toList();
+        List<String> endDate = Arrays.stream(dates.length == 1 ? dates[0].split("/") : dates[1].split("/"))
+                .map(String::trim)
+                .toList();
 
-        getByRole(AriaRole.SPINBUTTON).nth(0).fill(startParts[0]);
-        getByRole(AriaRole.SPINBUTTON).nth(1).fill(startParts[1]);
-        getByRole(AriaRole.SPINBUTTON).nth(2).fill(startParts[2]);
+        getByRole(AriaRole.SPINBUTTON).nth(0).fill(startDate.get(0));
+        getByRole(AriaRole.SPINBUTTON).nth(1).fill(startDate.get(1));
+        getByRole(AriaRole.SPINBUTTON).nth(2).fill(startDate.get(2));
 
 
-        getByRole(AriaRole.SPINBUTTON).nth(3).fill(endParts[0]);
-        getByRole(AriaRole.SPINBUTTON).nth(4).fill(endParts[1]);
-        getByRole(AriaRole.SPINBUTTON).nth(5).fill(endParts[2]);
-
-        return currentPage;
-    }
-
-    @Step("Set start and end date: {oneDate} to {oneDate}")
-    public CurrentPageT setDateRangeFields(String oneDate) {
-        setDateRangeFields(oneDate, oneDate);
+        getByRole(AriaRole.SPINBUTTON).nth(3).fill(endDate.get(0));
+        getByRole(AriaRole.SPINBUTTON).nth(4).fill(endDate.get(1));
+        getByRole(AriaRole.SPINBUTTON).nth(5).fill(endDate.get(2));
 
         return currentPage;
-    }
-
-    public CurrentPageT setDateRangeFields(ZonedDateTime startDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return setDateRangeFields(startDate.format(formatter), startDate.format(formatter));
-    }
-
-    public CurrentPageT setOneDayBeforeBuildRange(ZonedDateTime endDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return setDateRangeFields(endDate.minusDays(1).format(formatter), endDate.format(formatter));
-    }
-
-    public CurrentPageT setCurrentMonthRange() {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return setDateRangeFields(
-                now.with(TemporalAdjusters.firstDayOfMonth()).format(formatter),
-                now.with(TemporalAdjusters.lastDayOfMonth()).format(formatter));
-    }
-
-    public CurrentPageT setOneWeekBeforeNowRange() {
-        LocalDate now = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return setDateRangeFields(
-                now.with(TemporalAdjusters.previous(now.getDayOfWeek())).format(formatter),
-                now.format(formatter));
     }
 }

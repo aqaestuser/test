@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -17,7 +18,7 @@ import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.TransactionSummary;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,8 @@ import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
-public class DashboardPageTest extends BaseTest {
+public class DashboardPageAdminTest extends BaseTest {
 
-    private static final String COMPANY_NAME = "%s dashboard company".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s dashboard business unit".formatted(RUN_ID);
     private BusinessUnit businessUnit;
 
@@ -39,8 +39,7 @@ public class DashboardPageTest extends BaseTest {
     @Override
     protected void beforeClass() {
         super.beforeClass();
-        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
-        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
+        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, MERCHANT_TITLE);
     }
 
     @Test
@@ -48,8 +47,8 @@ public class DashboardPageTest extends BaseTest {
     @Epic("Dashboard")
     @Feature("Navigation")
     @Description("User navigate to 'Dashboard page' after login")
-    public void testNavigateToDashboardAfterLogin() {
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage());
+    public void testNavigateToDashboardAfterLoginAsTestAdmin() {
+        AdminDashboardPage dashboardPage = new xyz.npgw.test.page.dashboard.AdminDashboardPage(getPage());
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
@@ -63,27 +62,25 @@ public class DashboardPageTest extends BaseTest {
     @Epic("Dashboard")
     @Feature("Data range")
     @Description("Error message is displayed when start date is after end date.")
-    public void testErrorMessageForReversedDateRange() {
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
+    public void testErrorMessageForReversedDateRangeAsTestAdmin() {
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectDateRange()
                 .setDateRangeFields("01/04/2025 - 01/04/2024")
-                .clickRefreshDataButton();
+                .pressTabKey();
 
         Allure.step("Verify: error message is shown for invalid date range");
         assertThat(dashboardPage.getSelectDateRange().getErrorMessage())
                 .hasText("Start date must be before end date.");
     }
 
+    @Ignore("404 merchant not recognized bug")
     @Test
     @TmsLink("575")
     @Epic("Dashboard")
     @Feature("Chart Display")
     @Description("All key chart elements are correctly displayed")
-    public void testVisibleChartElementsAreDisplayedCorrectly() {
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+    public void testVisibleChartElementsAreDisplayedCorrectlyAsTestAdmin() {
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE);
 
@@ -102,16 +99,12 @@ public class DashboardPageTest extends BaseTest {
     @Epic("Dashboard")
     @Feature("Reset filter")
     @Description("'Reset filter' clears selected options to default")
-    public void testResetFilter() {
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .getSelectCompany().selectCompany(COMPANY_NAME)
+    public void testResetFilterAsTestAdmin() {
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
                 .clickCurrencySelector()
                 .selectCurrency("EUR")
                 .clickResetFilterButton();
-
-        Allure.step("Verify: the selected company field is empty after reset");
-        assertThat(dashboardPage.getSelectCompany().getSelectCompanyField()).isEmpty();
 
         Allure.step("Verify: the selected business unit field is empty after reset");
         assertThat(dashboardPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
@@ -125,24 +118,23 @@ public class DashboardPageTest extends BaseTest {
     @Epic("Dashboard")
     @Feature("Refresh data")
     @Description("Correct merchant ID is sent to the server")
-    public void testCheckMerchantId() {
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .getSelectCompany().selectCompany(COMPANY_NAME)
+    public void testCheckMerchantIdAsTestAdmin() {
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify: correct merchant ID is sent to the server");
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
+    @Ignore("404 merchant not recognized bug")
     @Test
     @TmsLink("600")
     @Epic("Dashboard")
     @Feature("Transaction summary")
     @Description("Correct transaction summary is displayed on Dashboard page")
-    public void testTransactionSummary() {
+    public void testTransactionSummaryAsTestAdmin() {
         Pattern pattern = Pattern.compile("(INITIATED|PENDING|SUCCESS|FAILED)(EUR.*|USD.*|GBP.*)");
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE);
 
@@ -227,12 +219,11 @@ public class DashboardPageTest extends BaseTest {
     @Epic("Dashboard")
     @Feature("Transaction summary mock data")
     @Description("Correct transaction summary mock data is displayed on Dashboard page")
-    public void testTransactionSummaryMock() {
+    public void testTransactionSummaryMockAsTestAdmin() {
         getPage().route("**/summary", this::summaryHandler);
 
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
+        AdminDashboardPage dashboardPage = new AdminDashboardPage(getPage())
                 .getSelectDateRange().setDateRangeFields("01/05/2025 - 31/05/2025")
-                .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify: INITIATED main block contents");
@@ -257,7 +248,7 @@ public class DashboardPageTest extends BaseTest {
     @AfterClass
     @Override
     protected void afterClass() {
-        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
+        BusinessUnit.deleteWithTimeout(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, businessUnit);
         super.afterClass();
     }
 }

@@ -8,7 +8,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
-import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.adjustment.AddAdjustmentDialog;
 import xyz.npgw.test.page.system.TransactionManagementPage;
@@ -17,6 +16,7 @@ import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
 public class TransactionManagementPageTest extends BaseTest {
 
@@ -77,7 +77,7 @@ public class TransactionManagementPageTest extends BaseTest {
     public void testPlaceholdersAndSearchNpgwInAddAdjustment() {
         String referenceFromTable = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(TestUtils.lastBuildDate(getApiRequestContext()))
+                .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE)
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().getFirstRowReference();

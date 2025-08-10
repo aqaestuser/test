@@ -8,6 +8,9 @@ import lombok.CustomLog;
 import lombok.SneakyThrows;
 import xyz.npgw.test.common.util.TestUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
@@ -35,10 +38,46 @@ public record User(
         return response.ok() && response.text().contains(email);
     }
 
+    public static User getOne(APIRequestContext request, String email) {
+        APIResponse response = request.get("portal-v1/user?email=%s".formatted(encode(email)));
+        log.response(response, "get user %s".formatted(email));
+        return new Gson().fromJson(response.text(), User.class);
+    }
+
     public static User[] getAll(APIRequestContext request, String companyName) {
         APIResponse response = request.get("portal-v1/user/list/%s".formatted(encode(companyName)));
         log.response(response, "get all users for company %s".formatted(companyName));
         return response.status() == 404 ? new User[]{} : new Gson().fromJson(response.text(), User[].class);
+    }
+
+    public static void addMerchant(APIRequestContext request, String email, String merchantId) {
+        User user = getOne(request, email);
+        List<String> merchantIdsList = new ArrayList<>(Arrays.asList(user.merchantIds));
+        merchantIdsList.add(merchantId);
+        APIResponse response = request.patch("portal-v1/user?email=%s".formatted(encode(email)),
+                RequestOptions.create().setData(new User(
+                        user.companyName,
+                        user.enabled,
+                        user.userRole,
+                        merchantIdsList.toArray(String[]::new),
+                        user.email,
+                        user.password)));
+        log.response(response, "update user %s".formatted(email));
+    }
+
+    public static void removeMerchant(APIRequestContext request, String email, String merchantId) {
+        User user = getOne(request, email);
+        List<String> merchantIdsList = new ArrayList<>(Arrays.asList(user.merchantIds));
+        merchantIdsList.remove(merchantId);
+        APIResponse response = request.patch("portal-v1/user?email=%s".formatted(encode(email)),
+                RequestOptions.create().setData(new User(
+                        user.companyName,
+                        user.enabled,
+                        user.userRole,
+                        merchantIdsList.toArray(String[]::new),
+                        user.email,
+                        user.password)));
+        log.response(response, "update user %s".formatted(email));
     }
 
     public static void delete(APIRequestContext request, String email) {

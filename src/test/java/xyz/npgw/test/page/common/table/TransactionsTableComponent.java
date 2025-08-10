@@ -64,7 +64,7 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
     }
 
     public boolean isBetween(String dateFrom, String dateTo) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime dateTimeFrom = LocalDate.parse(dateFrom, formatter).atStartOfDay();
         LocalDateTime dateTimeTo = LocalDate.parse(dateTo, formatter).plusDays(1).atStartOfDay();
 

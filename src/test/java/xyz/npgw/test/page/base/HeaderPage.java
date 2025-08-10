@@ -76,4 +76,11 @@ public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> 
 
         return self();
     }
+
+    @Step("Press 'Tab' to change focus")
+    public CurrentPageT pressTabKey() {
+        getPage().keyboard().press("Tab");
+
+        return self();
+    }
 }

@@ -3,8 +3,13 @@ package xyz.npgw.test.common.entity;
 import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
+import com.microsoft.playwright.TimeoutError;
 import com.microsoft.playwright.options.RequestOptions;
 import lombok.CustomLog;
+import lombok.SneakyThrows;
+import xyz.npgw.test.common.ProjectProperties;
+
+import java.util.concurrent.TimeUnit;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
 
@@ -34,7 +39,19 @@ public record BusinessUnit(
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
 
-    public static int delete(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+    @SneakyThrows
+    public static void deleteWithTimeout(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (204 != delete(request, companyName, businessUnit)) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Delete '%s'".formatted(businessUnit.merchantTitle));
+            }
+        }
+    }
+
+    private static int delete(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
         APIResponse response = request.delete(
                 "portal-v1/company/%s/merchant/%s".formatted(encode(companyName), businessUnit.merchantId()));
         log.response(response, "delete merchant %s".formatted(businessUnit.merchantId()));

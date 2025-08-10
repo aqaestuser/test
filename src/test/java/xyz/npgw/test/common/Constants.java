@@ -16,6 +16,7 @@ public class Constants {
 
     public static final String COMPANY_NAME_FOR_TEST_RUN = "CompanyForTestRunOnly Inc.";
     public static final String BUSINESS_UNIT_FOR_TEST_RUN = "MerchantCompanyForTestRunOnly Inc.";
+    public static final String MERCHANT_ID_FOR_TEST_RUN = "merchant-server-ngenius";
 
-    public static final String ONE_DATE_FOR_TABLE = "05-08-2025";
+    public static final String ONE_DATE_FOR_TABLE = "05/08/2025";
 }

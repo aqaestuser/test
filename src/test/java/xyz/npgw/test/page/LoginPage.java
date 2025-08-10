@@ -6,9 +6,12 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.page.base.BasePage;
 import xyz.npgw.test.page.common.trait.AlertTrait;
+import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.dashboard.UserDashboardPage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
@@ -99,16 +102,26 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         return this;
     }
 
-    @Step("Login to the site as '{email}'")
-    public SuperDashboardPage loginAs(String email, String password) {
+    @Step("Login to the site as '{userRole}' with '{email}'")
+    public void loginAs(String email, String password, String userRole) {
         fillEmailField(email);
         fillPasswordField(password);
         clickLoginButton();
 
         getPage().waitForURL("**/dashboard");
 //        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+    }
 
-        return new SuperDashboardPage(getPage());
+    public UserDashboardPage loginAsUser(String email, String password) {
+        loginAs(email, password, UserRole.USER.getName());
+
+        return new UserDashboardPage(getPage());
+    }
+
+    public AdminDashboardPage loginAsAdmin(String email, String password) {
+        loginAs(email, password, UserRole.ADMIN.getName());
+
+        return new AdminDashboardPage(getPage());
     }
 
     @Step("Login as disabled user with '{email}'")
