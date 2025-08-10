@@ -2,8 +2,8 @@ package xyz.npgw.test.page.transactions;
 
 import com.microsoft.playwright.Page;
 import lombok.Getter;
-import xyz.npgw.test.page.common.header.SuperHeaderMenuTrait;
-import xyz.npgw.test.page.common.trait.SelectCompanyTrait;
+import xyz.npgw.test.page.component.header.SuperHeaderMenuTrait;
+import xyz.npgw.test.page.component.select.SelectCompanyTrait;
 
 @Getter
 public class SuperTransactionsPage extends BaseTransactionsPage<SuperTransactionsPage>

@@ -5,11 +5,14 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.system.SuperTeamPage;
+import xyz.npgw.test.page.base.BasePage;
 
 import static io.qameta.allure.model.Parameter.Mode.MASKED;
 
-public class AddUserDialog extends UserDialog<AddUserDialog> {
+public abstract class AddUserDialog<
+        ReturnPageT extends BasePage,
+        CurrentDialogT extends AddUserDialog<ReturnPageT, CurrentDialogT>>
+        extends UserDialog<ReturnPageT, CurrentDialogT> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
@@ -18,30 +21,30 @@ public class AddUserDialog extends UserDialog<AddUserDialog> {
     }
 
     @Step("Enter user email")
-    public AddUserDialog fillEmailField(String email) {
+    public CurrentDialogT fillEmailField(String email) {
         getByPlaceholder("Enter user email").fill(email);
 
-        return this;
+        return getCurrentDialog();
     }
 
     @Step("Enter user password")
-    public AddUserDialog fillPasswordField(@Param(name = "Password", mode = MASKED) String password) {
+    public CurrentDialogT fillPasswordField(@Param(name = "Password", mode = MASKED) String password) {
         getByPlaceholder("Enter user password").fill(password);
 
-        return this;
+        return getCurrentDialog();
     }
 
     @Step("Click 'Create' button")
-    public SuperTeamPage clickCreateButton() {
+    public ReturnPageT clickCreateButton() {
         createButton.click();
 
-        return new SuperTeamPage(getPage());
+        return getReturnPage();
     }
 
     @Step("Click on the 'Create' button and trigger an error")
-    public AddUserDialog clickCreateButtonAndTriggerError() {
+    public CurrentDialogT clickCreateButtonAndTriggerError() {
         createButton.click();
 
-        return this;
+        return getCurrentDialog();
     }
 }

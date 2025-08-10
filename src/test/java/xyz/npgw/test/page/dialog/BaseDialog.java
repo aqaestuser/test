@@ -8,13 +8,15 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseModel;
 import xyz.npgw.test.page.base.BasePage;
-import xyz.npgw.test.page.common.trait.AlertTrait;
+import xyz.npgw.test.page.component.AlertTrait;
 
 import java.util.List;
 
 @Getter
 @SuppressWarnings("unchecked")
-public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT extends BaseDialog<?, ?>>
+public abstract class BaseDialog<
+        ReturnPageT extends BasePage,
+        CurrentDialogT extends BaseDialog<ReturnPageT, CurrentDialogT>>
         extends BaseModel implements AlertTrait<CurrentDialogT> {
 
     private final Locator dialog = getByRole(AriaRole.DIALOG);
@@ -39,12 +41,16 @@ public abstract class BaseDialog<ReturnPageT extends BasePage, CurrentDialogT ex
         return allPlaceholdersWithoutSearch.all().stream().map(l -> l.getAttribute("placeholder")).toList();
     }
 
+    protected CurrentDialogT getCurrentDialog() {
+        return (CurrentDialogT) this;
+    }
+
     @Step("Clear '{label}' input field")
     public CurrentDialogT clearInput(String label) {
         inputFields.last().waitFor();
         inputFields.getByLabel(label).clear();
 
-        return (CurrentDialogT) this;
+        return getCurrentDialog();
     }
 
     @Step("Click on the 'Close' button to close form")

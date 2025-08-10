@@ -4,21 +4,22 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.FraudControlPage;
+import xyz.npgw.test.page.system.SuperFraudControlPage;
 
-public class DeleteBusinessUnitControlDialog extends BaseDialog<FraudControlPage, DeleteBusinessUnitControlDialog> {
+public class DeleteBusinessUnitControlDialog
+        extends BaseDialog<SuperFraudControlPage, DeleteBusinessUnitControlDialog> {
 
     public DeleteBusinessUnitControlDialog(Page page) {
         super(page);
     }
 
     @Override
-    protected FraudControlPage getReturnPage() {
-        return new FraudControlPage(getPage());
+    protected SuperFraudControlPage getReturnPage() {
+        return new SuperFraudControlPage(getPage());
     }
 
     @Step("Click 'Delete' button")
-    public FraudControlPage clickDeleteButton() {
+    public SuperFraudControlPage clickDeleteButton() {
         getByRole(AriaRole.BUTTON, "Delete").click();
 
         return getReturnPage();

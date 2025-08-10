@@ -5,9 +5,9 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.AcquirersPage;
+import xyz.npgw.test.page.system.SuperAcquirersPage;
 
-public class DeleteAcquirerDialog extends BaseDialog<AcquirersPage, DeleteAcquirerDialog> {
+public class DeleteAcquirerDialog extends BaseDialog<SuperAcquirersPage, DeleteAcquirerDialog> {
 
     private final Locator deleteButton = getByRole(AriaRole.BUTTON, "Delete");
 
@@ -16,12 +16,12 @@ public class DeleteAcquirerDialog extends BaseDialog<AcquirersPage, DeleteAcquir
     }
 
     @Override
-    protected AcquirersPage getReturnPage() {
-        return new AcquirersPage(getPage());
+    protected SuperAcquirersPage getReturnPage() {
+        return new SuperAcquirersPage(getPage());
     }
 
     @Step("Click 'Delete' button")
-    public AcquirersPage clickDeleteButton() {
+    public SuperAcquirersPage clickDeleteButton() {
         deleteButton.click();
 
         return getReturnPage();

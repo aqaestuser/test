@@ -4,21 +4,21 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.FraudControlPage;
+import xyz.npgw.test.page.system.SuperFraudControlPage;
 
-public class ActivateControlDialog extends BaseDialog<FraudControlPage, ActivateControlDialog> {
+public class ActivateControlDialog extends BaseDialog<SuperFraudControlPage, ActivateControlDialog> {
 
     public ActivateControlDialog(Page page) {
         super(page);
     }
 
     @Override
-    protected FraudControlPage getReturnPage() {
-        return new FraudControlPage(getPage());
+    protected SuperFraudControlPage getReturnPage() {
+        return new SuperFraudControlPage(getPage());
     }
 
     @Step("Click 'Activate' button")
-    public FraudControlPage clickActivateButton() {
+    public SuperFraudControlPage clickActivateButton() {
         getByRole(AriaRole.BUTTON, "Activate").click();
 
         return getReturnPage();

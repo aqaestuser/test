@@ -6,11 +6,11 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 
 @SuppressWarnings("unchecked")
 public abstract class CompanyDialog<CurrentDialogT extends CompanyDialog<CurrentDialogT>>
-        extends BaseDialog<CompaniesAndBusinessUnitsPage, CurrentDialogT> {
+        extends BaseDialog<SuperCompaniesAndBusinessUnitsPage, CurrentDialogT> {
 
     @Getter
     private final Locator companyNameField = getByPlaceholder("Enter name");
@@ -36,9 +36,9 @@ public abstract class CompanyDialog<CurrentDialogT extends CompanyDialog<Current
     }
 
     @Override
-    protected CompaniesAndBusinessUnitsPage getReturnPage() {
+    protected SuperCompaniesAndBusinessUnitsPage getReturnPage() {
 
-        return new CompaniesAndBusinessUnitsPage(getPage());
+        return new SuperCompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Fill company name field")

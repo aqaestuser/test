@@ -4,29 +4,29 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.FraudControlPage;
+import xyz.npgw.test.page.system.SuperFraudControlPage;
 
 public class ConnectControlToBusinessUnitDialog
-        extends BaseDialog<FraudControlPage, ConnectControlToBusinessUnitDialog> {
+        extends BaseDialog<SuperFraudControlPage, ConnectControlToBusinessUnitDialog> {
 
     public ConnectControlToBusinessUnitDialog(Page page) {
         super(page);
     }
 
     @Override
-    protected FraudControlPage getReturnPage() {
-        return new FraudControlPage(getPage());
+    protected SuperFraudControlPage getReturnPage() {
+        return new SuperFraudControlPage(getPage());
     }
 
     @Step("Click 'Connect' button")
-    public FraudControlPage clickConnectButton() {
+    public SuperFraudControlPage clickConnectButton() {
         getByRole(AriaRole.BUTTON, "Connect").click();
 
         return getReturnPage();
     }
 
     @Step("Click 'Cancel' button")
-    public FraudControlPage clickCancelButton() {
+    public SuperFraudControlPage clickCancelButton() {
         getByRole(AriaRole.BUTTON, "Cancel").click();
 
         return getReturnPage();

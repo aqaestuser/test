@@ -15,7 +15,7 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Settings")
     @Description("The company info block can be hidden and shown via settings.")
     public void testToggleCompanyInfoVisibilityViaSettings() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
@@ -97,7 +97,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         Allure.step("Verify: 'Create' button is disabled before filling required fields");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
                 .fillCompanyDescriptionField(company.description())
@@ -174,7 +174,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Edit company")
     @Description("Edit company info and save")
     public void testEditCompanyInfoAndSave() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
@@ -254,7 +254,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Delete Company")
     @Description("Verify that company can be deleted")
     public void testDeleteCompany() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
@@ -304,7 +304,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Delete Company")
     @Description("Verify that company cannot be deleted if there are associated business units")
     public void testCannotDeleteCompanyWithAssociatedBusinessUnit() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
@@ -325,7 +325,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     public void testCannotDeleteCompanyWithAssignedUser() {
         String email = "%s.admin123@email.com".formatted(TestUtils.now());
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
                 .clickAddUserButton()
@@ -350,7 +350,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify default filter state was applied once reset")
     public void testResetAppliedFilter() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
@@ -435,7 +435,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         Allure.step("Verify: 'Create' button is disabled when required fields are not filled.");
         assertThat(addCompanyDialog.getCreateButton()).isDisabled();
 
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = addCompanyDialog
                 .clickCloseButton();
 
         Allure.step("Verify: the 'Add Company' dialog is no longer visible");
@@ -488,7 +488,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Add company")
     @Description("Company can be added by filling out required fields")
     public void testAddCompanyByFillRequiredFields() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()

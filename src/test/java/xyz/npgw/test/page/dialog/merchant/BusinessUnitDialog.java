@@ -5,12 +5,12 @@ import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class BusinessUnitDialog<CurrentDialogT extends BusinessUnitDialog<CurrentDialogT>>
-        extends BaseDialog<CompaniesAndBusinessUnitsPage, CurrentDialogT> {
+        extends BaseDialog<SuperCompaniesAndBusinessUnitsPage, CurrentDialogT> {
 
     private final Locator companyNameField = getByLabelExact("Company name");
     private final Locator businessUnitNameField = getByPlaceholder("Enter business unit name");
@@ -20,8 +20,8 @@ public abstract class BusinessUnitDialog<CurrentDialogT extends BusinessUnitDial
     }
 
     @Override
-    protected CompaniesAndBusinessUnitsPage getReturnPage() {
-        return new CompaniesAndBusinessUnitsPage(getPage());
+    protected SuperCompaniesAndBusinessUnitsPage getReturnPage() {
+        return new SuperCompaniesAndBusinessUnitsPage(getPage());
     }
 
     @Step("Fill in merchant name: {merchantName}")

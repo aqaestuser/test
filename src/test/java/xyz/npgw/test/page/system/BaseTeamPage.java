@@ -1,6 +1,7 @@
 package xyz.npgw.test.page.system;
 
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Step;
@@ -9,27 +10,24 @@ import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.SelectStatusTrait;
-import xyz.npgw.test.page.common.trait.UsersTableTrait;
-import xyz.npgw.test.page.dialog.user.AddUserDialog;
+import xyz.npgw.test.page.component.select.SelectStatusTrait;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
 public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends HeaderPage<CurrentPageT>
-        implements SelectStatusTrait<CurrentPageT>,
-                   UsersTableTrait {
+        implements SelectStatusTrait<CurrentPageT> {
+
+    public final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
 
     public BaseTeamPage(Page page) {
         super(page);
     }
 
     @Step("Click 'Add user' button")
-    public AddUserDialog clickAddUserButton() {
-        getByTestId("AddUserButtonTeamPage").click();
-
-        return new AddUserDialog(getPage());
+    public void clickAddUser() {
+        addUserButton.click();
     }
 
     @Step("Click 'Refresh data' button")

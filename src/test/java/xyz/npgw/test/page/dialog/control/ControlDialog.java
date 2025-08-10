@@ -6,12 +6,12 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.FraudControlPage;
+import xyz.npgw.test.page.system.SuperFraudControlPage;
 
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class ControlDialog<CurrentDialogT extends ControlDialog<CurrentDialogT>>
-        extends BaseDialog<FraudControlPage, CurrentDialogT> {
+        extends BaseDialog<SuperFraudControlPage, CurrentDialogT> {
 
     private final Locator controlNameInput = getByPlaceholder("Enter control name");
     private final Locator controlNameLabel = getByTextExact("Control name");
@@ -21,9 +21,9 @@ public abstract class ControlDialog<CurrentDialogT extends ControlDialog<Current
     }
 
     @Override
-    protected FraudControlPage getReturnPage() {
+    protected SuperFraudControlPage getReturnPage() {
 
-        return new FraudControlPage(getPage());
+        return new SuperFraudControlPage(getPage());
     }
 
     @Step("Fill in fraud control name: {controlName}")

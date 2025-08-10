@@ -5,9 +5,9 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.FraudControlPage;
+import xyz.npgw.test.page.system.SuperFraudControlPage;
 
-public class DeactivateControlDialog extends BaseDialog<FraudControlPage, DeactivateControlDialog> {
+public class DeactivateControlDialog extends BaseDialog<SuperFraudControlPage, DeactivateControlDialog> {
 
     private final Locator cancelButton = getDialog().getByText("Cancel");
 
@@ -16,19 +16,19 @@ public class DeactivateControlDialog extends BaseDialog<FraudControlPage, Deacti
     }
 
     @Override
-    protected FraudControlPage getReturnPage() {
-        return new FraudControlPage(getPage());
+    protected SuperFraudControlPage getReturnPage() {
+        return new SuperFraudControlPage(getPage());
     }
 
     @Step("Click 'Deactivate' button")
-    public FraudControlPage clickDeactivateButton() {
+    public SuperFraudControlPage clickDeactivateButton() {
         getByRole(AriaRole.BUTTON, "Deactivate").click();
 
         return getReturnPage();
     }
 
     @Step("Click on the 'Cancel' button to close form")
-    public FraudControlPage clickCancelButton() {
+    public SuperFraudControlPage clickCancelButton() {
         cancelButton.click();
 
         return getReturnPage();

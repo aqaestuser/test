@@ -17,10 +17,10 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
-import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
-import xyz.npgw.test.page.common.trait.SelectStatusTrait;
-import xyz.npgw.test.page.common.trait.TransactionsTableTrait;
+import xyz.npgw.test.page.component.select.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.component.select.SelectDateRangeTrait;
+import xyz.npgw.test.page.component.select.SelectStatusTrait;
+import xyz.npgw.test.page.component.table.TransactionsTableTrait;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

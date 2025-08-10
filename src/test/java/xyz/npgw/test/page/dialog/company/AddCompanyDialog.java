@@ -5,12 +5,10 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.common.trait.AlertTrait;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 
 @Getter
-public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog>
-        implements AlertTrait<AddCompanyDialog> {
+public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog> {
 
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");
 
@@ -26,7 +24,7 @@ public final class AddCompanyDialog extends CompanyDialog<AddCompanyDialog>
     }
 
     @Step("Click on the 'Create' button")
-    public CompaniesAndBusinessUnitsPage clickCreateButton() {
+    public SuperCompaniesAndBusinessUnitsPage clickCreateButton() {
         createButton.click();
 
         return getReturnPage();

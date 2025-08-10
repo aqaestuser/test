@@ -17,7 +17,7 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
-import xyz.npgw.test.page.system.AcquirersPage;
+import xyz.npgw.test.page.system.SuperAcquirersPage;
 
 import java.util.List;
 
@@ -100,7 +100,7 @@ public class AddEditAcquirerTest extends BaseTest {
         Allure.step("Verify: the 'Allowed Currencies' Checkboxes visible");
         assertThat(setupAcquirerMidDialog.getAllowedCurrenciesCheckboxes()).hasText("Allowed currencyEURUSDGBP");
 
-        AcquirersPage acquirersPage = setupAcquirerMidDialog
+        SuperAcquirersPage acquirersPage = setupAcquirerMidDialog
                 .clickCloseButton();
 
         Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
@@ -130,7 +130,7 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Setup acquirer MID")
     @Description("New acquirer MID can be successfully set up and displayed correctly in the acquirers table.")
     public void testSetupAcquirerMid() {
-        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
+        SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
@@ -289,7 +289,7 @@ public class AddEditAcquirerTest extends BaseTest {
     @Feature("Edit acquirer MID")
     @Description("Edit Acquirer Mid and Verify Updated Data in the Table")
     public void testEditAcquirerVerifyUpdatedData() {
-        AcquirersPage acquirersPage = new SuperDashboardPage(getPage())
+        SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_FOR_EDIT.getAcquirerDisplayName())

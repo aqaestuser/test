@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 
 public final class EditCompanyDialog extends CompanyDialog<EditCompanyDialog> {
 
@@ -15,7 +15,7 @@ public final class EditCompanyDialog extends CompanyDialog<EditCompanyDialog> {
     }
 
     @Step("Click 'Save changes' button")
-    public CompaniesAndBusinessUnitsPage clickSaveChangesButton() {
+    public SuperCompaniesAndBusinessUnitsPage clickSaveChangesButton() {
         saveChangesButton.click();
 
         return getReturnPage();

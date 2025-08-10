@@ -5,7 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.system.AcquirersPage;
+import xyz.npgw.test.page.system.SuperAcquirersPage;
 
 @Getter
 public class SetupAcquirerMidDialog extends AcquirerDialog<SetupAcquirerMidDialog> {
@@ -17,7 +17,7 @@ public class SetupAcquirerMidDialog extends AcquirerDialog<SetupAcquirerMidDialo
     }
 
     @Step("Click on the 'Create' button")
-    public AcquirersPage clickCreateButton() {
+    public SuperAcquirersPage clickCreateButton() {
         createButton.click();
 
         return getReturnPage();

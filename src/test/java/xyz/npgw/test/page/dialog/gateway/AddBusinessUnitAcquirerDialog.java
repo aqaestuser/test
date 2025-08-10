@@ -5,13 +5,13 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.common.trait.AlertTrait;
-import xyz.npgw.test.page.common.trait.SelectAcquirerTrait;
+import xyz.npgw.test.page.component.AlertTrait;
+import xyz.npgw.test.page.component.select.SelectAcquirerTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.GatewayPage;
+import xyz.npgw.test.page.system.SuperGatewayPage;
 
 @Getter
-public class AddBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, AddBusinessUnitAcquirerDialog>
+public class AddBusinessUnitAcquirerDialog extends BaseDialog<SuperGatewayPage, AddBusinessUnitAcquirerDialog>
         implements SelectAcquirerTrait<AddBusinessUnitAcquirerDialog>, AlertTrait<AddBusinessUnitAcquirerDialog> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
@@ -22,12 +22,12 @@ public class AddBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, AddBu
     }
 
     @Override
-    protected GatewayPage getReturnPage() {
-        return new GatewayPage(getPage());
+    protected SuperGatewayPage getReturnPage() {
+        return new SuperGatewayPage(getPage());
     }
 
     @Step("Click 'Create' button")
-    public GatewayPage clickConnectButton() {
+    public SuperGatewayPage clickConnectButton() {
         connectButton.click();
 
         return getReturnPage();

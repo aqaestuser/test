@@ -16,9 +16,9 @@ import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
-import xyz.npgw.test.page.dialog.user.AddUserDialog;
-import xyz.npgw.test.page.dialog.user.EditUserDialog;
-import xyz.npgw.test.page.system.CompaniesAndBusinessUnitsPage;
+import xyz.npgw.test.page.dialog.user.SuperAddUserDialog;
+import xyz.npgw.test.page.dialog.user.SuperEditUserDialog;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.SuperTeamPage;
 
 import java.util.ArrayList;
@@ -160,7 +160,7 @@ public class TeamPageTest extends BaseTest {
     public void testAddCompanyAnalyst() {
         companyAnalystEmail = "%s.newuser@email.com".formatted(TestUtils.now());
 
-        AddUserDialog addUserDialog = new SuperDashboardPage(getPage())
+        SuperAddUserDialog addUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton();
@@ -207,7 +207,7 @@ public class TeamPageTest extends BaseTest {
     @Feature("Delete Business unit")
     @Description("Verify that business unit cannot be deleted if there are users associated with it")
     public void testDeletingBusinessUnitWithUsersFailsWithError() {
-        CompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(getCompanyName())
@@ -250,7 +250,7 @@ public class TeamPageTest extends BaseTest {
     public void testEditUser() {
         String email = "%s.edit.analyst@email.com".formatted(TestUtils.now());
 
-        EditUserDialog editUserDialog = new SuperDashboardPage(getPage())
+        SuperEditUserDialog editUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
@@ -445,7 +445,8 @@ public class TeamPageTest extends BaseTest {
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable().clickResetUserPasswordIcon(email)
+                .getTable()
+                .clickResetUserPasswordIcon(email)
                 .fillPasswordField("NewPassword1!")
                 .clickResetButton();
 
@@ -622,7 +623,7 @@ public class TeamPageTest extends BaseTest {
     public void testAddUserWithExistingEmail() {
         final String companyAdmin = "%s.companydmin@email.com".formatted(TestUtils.now());
 
-        AddUserDialog addUserDialog = new SuperDashboardPage(getPage())
+        SuperAddUserDialog addUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()

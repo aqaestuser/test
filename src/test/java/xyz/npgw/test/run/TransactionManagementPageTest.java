@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.adjustment.AddAdjustmentDialog;
-import xyz.npgw.test.page.system.TransactionManagementPage;
+import xyz.npgw.test.page.system.SuperTransactionManagementPage;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -27,7 +27,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Feature("Add adjustment")
     @Description("Verify possibility to add adjustment with Transaction adjustment")
     public void testAddTransactionAdjustment() {
-        TransactionManagementPage page = new TransactionManagementPage(getPage())
+        SuperTransactionManagementPage page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
@@ -44,7 +44,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Feature("Add adjustment")
     @Description("Close button with no changes performed")
     public void testClickCloseButtonWithNoChanges() {
-        TransactionManagementPage page = new TransactionManagementPage(getPage())
+        SuperTransactionManagementPage page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
@@ -60,7 +60,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Feature("Add adjustment")
     @Description("Create button is disabled if nothing is selected")
     public void testCreateButtonIsDisabledByDefault() {
-        AddAdjustmentDialog page = new TransactionManagementPage(getPage())
+        AddAdjustmentDialog page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickTransactionManagementTab()
                 .clickAddAdjustmentButton();

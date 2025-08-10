@@ -5,12 +5,12 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import xyz.npgw.test.page.common.trait.AddAdjustmentTableTrait;
+import xyz.npgw.test.page.component.table.AddAdjustmentTableTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.TransactionManagementPage;
+import xyz.npgw.test.page.system.SuperTransactionManagementPage;
 
 @Getter
-public class AddAdjustmentDialog extends BaseDialog<TransactionManagementPage, AddAdjustmentDialog> implements
+public class AddAdjustmentDialog extends BaseDialog<SuperTransactionManagementPage, AddAdjustmentDialog> implements
         AddAdjustmentTableTrait {
 
     private final Locator npgwReferenceInput = locator("input[aria-label='NPGW reference']");
@@ -23,8 +23,8 @@ public class AddAdjustmentDialog extends BaseDialog<TransactionManagementPage, A
     }
 
     @Override
-    protected TransactionManagementPage getReturnPage() {
-        return new TransactionManagementPage(getPage());
+    protected SuperTransactionManagementPage getReturnPage() {
+        return new SuperTransactionManagementPage(getPage());
     }
 
     @Step("Fill NPGW reference input field")
@@ -34,9 +34,9 @@ public class AddAdjustmentDialog extends BaseDialog<TransactionManagementPage, A
         return this;
     }
 
-    public TransactionManagementPage clickCreateButton() {
+    public SuperTransactionManagementPage clickCreateButton() {
         createButton.click();
 
-        return new TransactionManagementPage(getPage());
+        return new SuperTransactionManagementPage(getPage());
     }
 }

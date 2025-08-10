@@ -4,23 +4,23 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.GatewayPage;
+import xyz.npgw.test.page.system.SuperGatewayPage;
 
-public class DeleteBusinessUnitAcquirerDialog extends BaseDialog<GatewayPage, DeleteBusinessUnitAcquirerDialog> {
+public class DeleteBusinessUnitAcquirerDialog extends BaseDialog<SuperGatewayPage, DeleteBusinessUnitAcquirerDialog> {
 
     public DeleteBusinessUnitAcquirerDialog(Page page) {
         super(page);
     }
 
     @Override
-    protected GatewayPage getReturnPage() {
-        return new GatewayPage(getPage());
+    protected SuperGatewayPage getReturnPage() {
+        return new SuperGatewayPage(getPage());
     }
 
     @Step("Click 'Delete' button")
-    public GatewayPage clickDeleteButton() {
+    public SuperGatewayPage clickDeleteButton() {
         getByRole(AriaRole.BUTTON, "Delete").click();
 
-        return new GatewayPage(getPage());
+        return new SuperGatewayPage(getPage());
     }
 }

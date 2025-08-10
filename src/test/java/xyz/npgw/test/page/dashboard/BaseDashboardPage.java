@@ -7,8 +7,8 @@ import io.qameta.allure.Step;
 import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.page.base.HeaderPage;
-import xyz.npgw.test.page.common.trait.SelectBusinessUnitTrait;
-import xyz.npgw.test.page.common.trait.SelectDateRangeTrait;
+import xyz.npgw.test.page.component.select.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.component.select.SelectDateRangeTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
 

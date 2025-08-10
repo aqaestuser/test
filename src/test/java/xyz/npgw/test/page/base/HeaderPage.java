@@ -7,7 +7,7 @@ import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.LoginPage;
-import xyz.npgw.test.page.common.trait.AlertTrait;
+import xyz.npgw.test.page.component.AlertTrait;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 
 

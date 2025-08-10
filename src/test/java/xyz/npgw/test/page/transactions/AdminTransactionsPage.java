@@ -1,7 +1,7 @@
 package xyz.npgw.test.page.transactions;
 
 import com.microsoft.playwright.Page;
-import xyz.npgw.test.page.common.header.AdminHeaderMenuTrait;
+import xyz.npgw.test.page.component.header.AdminHeaderMenuTrait;
 
 public class AdminTransactionsPage extends BaseTransactionsPage<AdminTransactionsPage>
         implements AdminHeaderMenuTrait<AdminTransactionsPage> {

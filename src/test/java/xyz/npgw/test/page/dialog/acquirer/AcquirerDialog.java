@@ -7,15 +7,13 @@ import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.Currency;
-import xyz.npgw.test.page.common.trait.AlertTrait;
 import xyz.npgw.test.page.dialog.BaseDialog;
-import xyz.npgw.test.page.system.AcquirersPage;
+import xyz.npgw.test.page.system.SuperAcquirersPage;
 
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<CurrentDialogT>>
-        extends BaseDialog<AcquirersPage, CurrentDialogT>
-        implements AlertTrait<CurrentDialogT> {
+        extends BaseDialog<SuperAcquirersPage, CurrentDialogT> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter entity name");
     private final Locator statusSwitch = getByRole(AriaRole.RADIOGROUP, "Status");
@@ -35,8 +33,8 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     }
 
     @Override
-    protected AcquirersPage getReturnPage() {
-        return new AcquirersPage(getPage());
+    protected SuperAcquirersPage getReturnPage() {
+        return new SuperAcquirersPage(getPage());
     }
 
     @Step("Click on the '{option}' radiobutton")
