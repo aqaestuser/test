@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.select.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.component.select.SelectCurrencyTrait;
 import xyz.npgw.test.page.component.select.SelectDateRangeTrait;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,7 +19,8 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 public abstract class BaseDashboardPage<CurrentPageT extends BaseDashboardPage<CurrentPageT>>
         extends HeaderPage<CurrentPageT>
         implements SelectDateRangeTrait<CurrentPageT>,
-                   SelectBusinessUnitTrait<CurrentPageT> {
+                   SelectBusinessUnitTrait<CurrentPageT>,
+                   SelectCurrencyTrait<CurrentPageT> {
 
     private final Locator htmlTag = locator("html");
     @Getter(AccessLevel.NONE)
@@ -27,7 +29,6 @@ public abstract class BaseDashboardPage<CurrentPageT extends BaseDashboardPage<C
     private final Locator xAxisTexts = locator(".apexcharts-xaxis tspan");
     private final Locator currencyLegendLabels = locator("span.apexcharts-legend-text");
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonDashboardPage");
-    private final Locator currencySelector = getByRole(AriaRole.BUTTON, "Currency");
 
     private final Locator initiatedBlock = getByLabelExact("INITIATED").first();
     private final Locator pendingBlock = getByLabelExact("PENDING").first();
@@ -58,20 +59,6 @@ public abstract class BaseDashboardPage<CurrentPageT extends BaseDashboardPage<C
     @Step("Click 'Reset filter' button")
     public CurrentPageT clickResetFilterButton() {
         resetFilterButton.click();
-
-        return self();
-    }
-
-    @Step("Click Currency Selector")
-    public CurrentPageT clickCurrencySelector() {
-        currencySelector.click();
-
-        return self();
-    }
-
-    @Step("Select currency from dropdown menu")
-    public CurrentPageT selectCurrency(String value) {
-        getByRole(AriaRole.OPTION, value).click();
 
         return self();
     }

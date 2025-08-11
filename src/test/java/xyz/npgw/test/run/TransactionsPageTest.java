@@ -83,7 +83,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectDateRange().getDateRangeField()).isVisible();
 
         Allure.step("Verify: Currency selector is visible");
-        assertThat(transactionsPage.getCurrencySelector()).isVisible();
+        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).isVisible();
 
         Allure.step("Verify: Card type selector is visible");
         assertThat(transactionsPage.getCardTypeSelector()).isVisible();
@@ -337,20 +337,18 @@ public class TransactionsPageTest extends BaseTest {
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
-        assertThat(transactionsPage.getCurrencySelector()).containsText("ALL");
+        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
 
-        transactionsPage
-                .clickCurrencySelector()
-                .selectCurrency(currency);
+        transactionsPage.getSelectCurrency().select(currency);
 
         Allure.step("Verify: Filter displays the selected currency");
-        assertThat(transactionsPage.getCurrencySelector()).containsText(currency);
+        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
 
         transactionsPage
                 .clickResetFilterButton();
 
         Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
-        assertThat(transactionsPage.getCurrencySelector()).containsText("ALL");
+        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
     }
 
     @Test(expectedExceptions = TimeoutError.class)
@@ -364,8 +362,7 @@ public class TransactionsPageTest extends BaseTest {
                 .getSelectDateRange().setDateRangeFields("01/05/2025 - 07/05/2025")
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
-                .clickCurrencySelector()
-                .selectCurrency("USD")
+                .getSelectCurrency().select("USD")
                 .selectCardType("VISA")
                 .clickAmountButton()
                 .fillAmountFromField("500")

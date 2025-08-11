@@ -82,10 +82,10 @@ public class GatewayPageTest extends BaseTest {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickGatewayTab()
-                .clickCurrencyValue();
+                .getSelectCurrency().clickCurrencySelector();
 
         Allure.step("Verify: The 'Currency' dropdown toggles and contains options");
-        assertThat(gatewayPage.getCurrencyOptions()).hasText(expectedOptions);
+        assertThat(gatewayPage.getSelectCurrency().getCurrencyOptions()).hasText(expectedOptions);
     }
 
     @Test
@@ -99,19 +99,15 @@ public class GatewayPageTest extends BaseTest {
                 .getSystemMenu().clickGatewayTab();
 
         Locator actualCurrency = gatewayPage
-                .getCurrencyValue();
+                .getSelectCurrency().getCurrencySelector();
 
         for (String currency : expectedOptions) {
-            gatewayPage
-                    .clickCurrencyValue()
-                    .selectCurrency(currency);
+            gatewayPage.getSelectCurrency().select(currency);
 
             Allure.step("Verify currency has value: " + currency);
             assertThat(actualCurrency).hasText(currency);
 
-            gatewayPage
-                    .clickCurrencyValue()
-                    .selectCurrency(currency);
+            gatewayPage.getSelectCurrency().select(currency);
 
             Allure.step("Verify currency has the same value: " + currency);
             assertThat(actualCurrency).hasText(currency);
@@ -213,11 +209,10 @@ public class GatewayPageTest extends BaseTest {
                 .getSystemMenu().clickGatewayTab()
                 .getSelectCompany().selectCompany(company.companyName())
                 .getSelectBusinessUnit().selectBusinessUnit(company.companyType())
-                .clickCurrencyValue()
-                .selectCurrency(selectedCurrency);
+                .getSelectCurrency().select(selectedCurrency);
 
         Allure.step("Verify that all the values are presented in filter's filter");
-        assertThat(gatewayPage.getCurrencyValue()).containsText(selectedCurrency);
+        assertThat(gatewayPage.getSelectCurrency().getCurrencySelector()).containsText(selectedCurrency);
         assertThat(gatewayPage.getSelectBusinessUnit().getSelectBusinessUnitField()).hasValue(company.companyType());
         assertThat(gatewayPage.getSelectCompany().getSelectCompanyField()).hasValue(company.companyName());
 
@@ -225,7 +220,7 @@ public class GatewayPageTest extends BaseTest {
                 .clickResetFilterButton();
 
         Allure.step("Verify that all the filter are cleaned");
-        assertThat(gatewayPage.getCurrencyValue()).containsText("ALL");
+        assertThat(gatewayPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
         assertThat(gatewayPage.getSelectBusinessUnit().getSelectBusinessUnitField())
                 .hasAttribute("placeholder", "Select business unit");
         assertThat(gatewayPage.getSelectCompany().getSelectCompanyField())

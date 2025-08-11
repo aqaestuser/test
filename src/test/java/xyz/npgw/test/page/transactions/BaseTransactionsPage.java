@@ -18,6 +18,7 @@ import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.select.SelectBusinessUnitTrait;
+import xyz.npgw.test.page.component.select.SelectCurrencyTrait;
 import xyz.npgw.test.page.component.select.SelectDateRangeTrait;
 import xyz.npgw.test.page.component.select.SelectStatusTrait;
 import xyz.npgw.test.page.component.table.TransactionsTableTrait;
@@ -37,13 +38,13 @@ import java.util.regex.Pattern;
 @Getter
 public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactionsPage<CurrentPageT>>
         extends HeaderPage<CurrentPageT>
-        implements TransactionsTableTrait<CurrentPageT>,
-                   SelectBusinessUnitTrait<CurrentPageT>,
+        implements SelectBusinessUnitTrait<CurrentPageT>,
                    SelectDateRangeTrait<CurrentPageT>,
-                   SelectStatusTrait<CurrentPageT> {
+                   SelectCurrencyTrait<CurrentPageT>,
+                   SelectStatusTrait<CurrentPageT>,
+                   TransactionsTableTrait<CurrentPageT> {
 
     private final Locator businessUnitSelector = getByTextExact("Business unit").locator("../../..");
-    private final Locator currencySelector = getByLabelExact("Currency");
     private final Locator cardTypeSelector = getByLabelExact("Card type");
     private final Locator cardTypeValue = getByRole(AriaRole.BUTTON, "Card type");
 
@@ -94,24 +95,6 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
 
     public Locator amountApplied(String amount) {
         return getByTextExact(amount);
-    }
-
-    @Step("Click Currency Selector")
-    public CurrentPageT clickCurrencySelector() {
-        currencySelector.click();
-
-        return self();
-    }
-
-    @Step("Select currency {value} from dropdown menu")
-    public CurrentPageT selectCurrency(String value) {
-        Locator option = getByRole(AriaRole.OPTION, value);
-        option.waitFor();
-        option.click();
-        dropdownMenuContent.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
-
-        return self();
     }
 
     @Step("Click 'Refresh Data' button")
