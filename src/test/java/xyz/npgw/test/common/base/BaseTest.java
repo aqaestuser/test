@@ -39,9 +39,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Log4j2
@@ -178,10 +180,22 @@ public abstract class BaseTest {
                     .loginAsUser("testUser@email.com", ProjectProperties.getPassword());
             return;
         }
+        if (method.getName().endsWith("AsUser")) {
+            List<Object> arguments = new ArrayList<>(Arrays.asList(args));
+            arguments.add(0, "USER");
+            openSite(arguments.toArray());
+            return;
+        }
         if (method.getName().endsWith("AsTestAdmin")) {
             new AboutBlankPage(page)
                     .navigate("/")
                     .loginAsAdmin("testAdmin@email.com", ProjectProperties.getPassword());
+            return;
+        }
+        if (method.getName().endsWith("AsAdmin")) {
+            List<Object> arguments = new ArrayList<>(Arrays.asList(args));
+            arguments.add(0, "ADMIN");
+            openSite(arguments.toArray());
             return;
         }
         openSite(args);

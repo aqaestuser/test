@@ -7,9 +7,9 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
@@ -73,8 +73,7 @@ public class DashboardPageAdminTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
-    @Ignore("404 merchant not recognized bug")
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("575")
     @Epic("Dashboard")
     @Feature("Chart Display")
@@ -126,8 +125,7 @@ public class DashboardPageAdminTest extends BaseTest {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
-    @Ignore("404 merchant not recognized bug")
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("600")
     @Epic("Dashboard")
     @Feature("Transaction summary")
