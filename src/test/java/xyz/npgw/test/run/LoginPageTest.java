@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.Optional;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
@@ -22,8 +21,8 @@ public class LoginPageTest extends BaseTest {
     @TmsLink("149")
     @Epic("Login")
     @Feature("Navigation")
-    @Description("User navigate to 'Login page'")
-    public void testNavigateToLoginPage(@Optional("UNAUTHORISED") String userRole) {
+    @Description("Unauthenticated user navigate to 'Login page'")
+    public void testNavigateToLoginPageUnauthenticated() {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/");
 
@@ -39,7 +38,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Remember me")
     @Description("User email is remembered after first successful login with checked 'Remember me'")
-    public void testRememberMeCheckedSavesUserEmail(@Optional("UNAUTHORISED") String userRole) {
+    public void testRememberMeCheckedSavesUserEmailUnauthenticated() {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/login")
                 .fillEmailField(ProjectProperties.getEmail())
@@ -57,7 +56,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Remember me")
     @Description("User email is NOT remembered after first successful login with unchecked 'Remember me'")
-    public void testRememberMeUncheckedDontSaveUserEmail(@Optional("UNAUTHORISED") String userRole) {
+    public void testRememberMeUncheckedDontSaveUserEmailUnauthenticated() {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate("/")
                 .fillEmailField(ProjectProperties.getEmail())
@@ -75,7 +74,7 @@ public class LoginPageTest extends BaseTest {
     @Epic("Login")
     @Feature("Navigation")
     @Description("Unauthenticated users are automatically redirected to the 'Login page'")
-    public void testUnauthenticatedUserRedirectionToLoginPage(String userRole, String endpoint) {
+    public void testUnauthenticatedUserRedirectionToLoginPageUnauthenticated(String endpoint) {
         LoginPage loginPage = new AboutBlankPage(getPage())
                 .navigate(endpoint);
 

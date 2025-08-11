@@ -103,7 +103,7 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     }
 
     @Step("Login to the site as '{userRole}' with '{email}'")
-    public void loginAs(String email, String password, String userRole) {
+    public void loginAs(String email, String password, @SuppressWarnings("unused") String userRole) {
         fillEmailField(email);
         fillPasswordField(password);
         clickLoginButton();
@@ -122,6 +122,12 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
         loginAs(email, password, UserRole.ADMIN.getName());
 
         return new AdminDashboardPage(getPage());
+    }
+
+    public SuperDashboardPage loginAsSuper(String email, String password) {
+        loginAs(email, password, UserRole.ADMIN.getName());
+
+        return new SuperDashboardPage(getPage());
     }
 
     @Step("Login as disabled user with '{email}'")

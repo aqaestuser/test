@@ -148,18 +148,13 @@ public abstract class BaseTest {
         });
 
         context.route("**/*", route -> {
-//            log.info("request -> {}", route.request().url());
             if (route.request().url().endsWith(".css")
                     || route.request().url().endsWith(".js")
                     || route.request().url().endsWith(".png")) {
-//                log.info("request ready to handle");
                 if (requestMap.get(route.request().url()) == null) {
-//                    log.info("request map entry not found - > fetching and storing");
                     APIResponse apiResponse = route.fetch();
                     requestMap.put(route.request().url(),
                             new Response(apiResponse.status(), apiResponse.headers(), apiResponse.body()));
-                } else {
-//                    log.info("fulfill request with stored data - {}", route.request().url());
                 }
                 Response r = requestMap.get(route.request().url());
                 route.fulfill(new Route.FulfillOptions()
@@ -167,13 +162,15 @@ public abstract class BaseTest {
                         .setHeaders(r.headers)
                         .setBodyBytes(r.body));
             } else {
-//                log.info("fallback request - {}", route.request().url());
                 route.fallback();
             }
         });
 
         initApiRequestContext();
 
+        if (method.getName().endsWith("Unauthenticated")) {
+            return;
+        }
         if (method.getName().endsWith("AsTestUser")) {
             new AboutBlankPage(page)
                     .navigate("/")
@@ -208,7 +205,7 @@ public abstract class BaseTest {
                 userRole = UserRole.valueOf((String) args[0]);
             } catch (IllegalArgumentException e) {
                 if (args[0].equals("UNAUTHORISED")) {
-                    new AboutBlankPage(page).navigate("/");
+//                    new AboutBlankPage(page).navigate("/");
                     return;
                 }
             }
