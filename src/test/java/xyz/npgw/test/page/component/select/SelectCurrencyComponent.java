@@ -32,7 +32,7 @@ public class SelectCurrencyComponent<CurrentPageT extends HeaderPage<?>> extends
         return currentPage;
     }
 
-    @Step("Select currency {value} from dropdown menu")
+    @Step("Select currency {currency} from dropdown menu")
     public CurrentPageT select(String currency) {
         clickCurrencySelector();
         Locator option = getByRole(AriaRole.OPTION, currency);

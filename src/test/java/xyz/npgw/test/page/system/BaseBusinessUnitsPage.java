@@ -14,6 +14,7 @@ public abstract class BaseBusinessUnitsPage<CurrentPageT extends HeaderPage<Curr
         extends HeaderPage<CurrentPageT> {
 
     private final Locator settings = getByTestId("SettingsButtonMerchantsPage");
+    private final Locator viewDocumentation = getByTestId("ViewDocumentationButtonMerchantsPage");
 
     private final Locator pageContent = locator("div.contentBlock");
 
@@ -46,7 +47,6 @@ public abstract class BaseBusinessUnitsPage<CurrentPageT extends HeaderPage<Curr
 
     @Step("Click 'Settings'")
     public CurrentPageT clickSettings() {
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         settings.click();
 
         return self();

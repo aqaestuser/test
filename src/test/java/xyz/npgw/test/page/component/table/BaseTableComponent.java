@@ -306,13 +306,11 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
     }
 
     protected <T> List<T> collectAllPages(Supplier<List<T>> currentPageExtractor) {
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         if (hasNoPagination()) {
             return Collections.emptyList();
         }
 
         selectRowsPerPageOption("100");
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
         goToFirstPageIfNeeded();
 
         List<T> allValues = new ArrayList<>();

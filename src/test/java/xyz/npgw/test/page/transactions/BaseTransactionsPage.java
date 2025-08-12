@@ -292,7 +292,6 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
     @Step("Click 'Reset filter' button")
     public CurrentPageT clickResetFilterButton() {
         resetFilterButton.click();
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
 
         return self();
     }
