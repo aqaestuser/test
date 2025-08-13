@@ -11,6 +11,7 @@ import xyz.npgw.test.common.entity.CardType;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.FraudControl;
+import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.entity.User;
@@ -64,10 +65,10 @@ public final class TestUtils {
                     .forEach(user -> User.delete(request, user.email()));
             Arrays.stream(BusinessUnit.getAll(request, companyName))
                     .forEach(businessUnit -> {
-                        BusinessUnit.deleteWithTimeout(request, companyName, businessUnit);
-//                        while (BusinessUnit.delete(request, companyName, businessUnit) == 409) {
-//                            MerchantAcquirer.delete(request, businessUnit.merchantId());
-//                        }
+//                        BusinessUnit.deleteWithTimeout(request, companyName, businessUnit);
+                        while (BusinessUnit.delete(request, companyName, businessUnit) == 409) {
+                            MerchantAcquirer.delete(request, businessUnit.merchantId());
+                        }
                     });
         }
     }
@@ -107,6 +108,21 @@ public final class TestUtils {
         }
         log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
     }
+
+    @SneakyThrows
+    public static void waitForCompanyPresent(APIRequestContext request, String companyName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(Company.getAll(request))
+                .noneMatch(item -> item.companyName().equals(companyName))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for company '%s' present".formatted(companyName));
+            }
+        }
+        log.info("Company present wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+    }
+
 
     public static Transaction mapToTransaction(List<String> cells) {
         return new Transaction(

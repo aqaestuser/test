@@ -32,14 +32,20 @@ public class SelectCurrencyComponent<CurrentPageT extends HeaderPage<?>> extends
         return currentPage;
     }
 
-    @Step("Select currency {currency} from dropdown menu")
-    public CurrentPageT select(String currency) {
-        clickCurrencySelector();
-        Locator option = getByRole(AriaRole.OPTION, currency);
+    @Step("Select currency {value} from dropdown menu")
+    public CurrentPageT selectCurrency(String value) {
+        Locator option = getByRole(AriaRole.OPTION, value);
         option.waitFor();
         option.click();
         currencyDropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
-//        getPage().waitForCondition(() -> LocalTime.now().isAfter(THREAD_LAST_ACTIVITY.get()));
+
+        return currentPage;
+    }
+
+    @Step("Select currency {currency}")
+    public CurrentPageT select(String currency) {
+        clickCurrencySelector();
+        selectCurrency(currency);
 
         return currentPage;
     }

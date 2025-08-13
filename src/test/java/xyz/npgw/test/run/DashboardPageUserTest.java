@@ -14,6 +14,7 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Currency;
+import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.TransactionSummary;
 import xyz.npgw.test.common.entity.User;
@@ -247,6 +248,7 @@ public class DashboardPageUserTest extends BaseTest {
     @Override
     protected void afterClass() {
         User.removeMerchant(getApiRequestContext(), "testUser@email.com", businessUnit.merchantId());
+        MerchantAcquirer.delete(getApiRequestContext(), businessUnit.merchantId());
         BusinessUnit.deleteWithTimeout(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, businessUnit);
         super.afterClass();
     }

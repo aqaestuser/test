@@ -92,8 +92,8 @@ public class FraudControlTest extends BaseTest {
                 .clickAddFraudControl()
                 .fillFraudControlNameField(FRAUD_CONTROL.getControlName())
                 .fillFraudControlCodeField(FRAUD_CONTROL.getControlCode())
-                .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig())
                 .fillFraudControlDisplayNameField(FRAUD_CONTROL.getControlDisplayName())
+                .fillFraudControlConfigField(FRAUD_CONTROL.getControlConfig())
                 .checkActiveRadiobutton()
                 .clickSetupButton();
 

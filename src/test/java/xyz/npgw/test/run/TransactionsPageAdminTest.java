@@ -61,17 +61,7 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .getSelectStatus().clickSelector();
 
         Allure.step("Verify: Selector Status Options are visible");
-        assertThat(transactionsPage.getSelectStatus().getStatusOptions()).hasText(new String[]{
-                "ALL",
-                "INITIATED",
-                "PENDING",
-                "SUCCESS",
-                "FAILED",
-                "CANCELLED",
-                "EXPIRED",
-                "PARTIAL_REFUND",
-                "REFUND",
-        });
+        assertThat(transactionsPage.getSelectStatus().getStatusOptions()).hasText(Constants.TRANSACTION_STATUSES);
 
         Allure.step("Verify: Default selected option in status selector is 'ALL'");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");

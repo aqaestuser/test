@@ -7,7 +7,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -15,8 +14,10 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Currency;
+import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.TransactionSummary;
+import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 
@@ -73,7 +74,7 @@ public class DashboardPageAdminTest extends BaseTest {
                 .hasText("Start date must be before end date.");
     }
 
-    @Test(expectedExceptions = AssertionFailedError.class)
+    @Test
     @TmsLink("575")
     @Epic("Dashboard")
     @Feature("Chart Display")
@@ -124,7 +125,7 @@ public class DashboardPageAdminTest extends BaseTest {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
-    @Test(expectedExceptions = AssertionFailedError.class)
+    @Test
     @TmsLink("600")
     @Epic("Dashboard")
     @Feature("Transaction summary")
@@ -245,6 +246,8 @@ public class DashboardPageAdminTest extends BaseTest {
     @AfterClass
     @Override
     protected void afterClass() {
+        User.removeMerchant(getApiRequestContext(), "testUser@email.com", businessUnit.merchantId());
+        MerchantAcquirer.delete(getApiRequestContext(), businessUnit.merchantId());
         BusinessUnit.deleteWithTimeout(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, businessUnit);
         super.afterClass();
     }

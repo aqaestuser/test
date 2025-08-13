@@ -16,7 +16,8 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
 
     public ControlsTableComponent(Page page, SuperFraudControlPage currentPage) {
         super(page, currentPage,
-                page.getByText("Controls", new Page.GetByTextOptions().setExact(true)).locator("../.."));
+                page.getByText("Integrated third party controls", new Page.GetByTextOptions().setExact(true))
+                        .locator("../.."));
     }
 
     @Override

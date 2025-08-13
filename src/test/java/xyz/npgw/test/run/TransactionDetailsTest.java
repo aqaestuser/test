@@ -20,6 +20,7 @@ import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
 public class TransactionDetailsTest extends BaseTest {
 
+    // TODO - Refactor after will know which Customer details are mandatory fpr each transaction type
     @Test
     @TmsLink("638")
     @Epic("Transactions")
@@ -28,6 +29,7 @@ public class TransactionDetailsTest extends BaseTest {
     public void testCheckTransactionDetails() {
         TransactionDetailsDialog transactionDetailsDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
+                .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE)
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().clickOnFirstTransaction();
@@ -46,10 +48,8 @@ public class TransactionDetailsTest extends BaseTest {
 
         Allure.step("Verify: The Customer details labels");
         assertThat(transactionDetailsDialog.getCustomerDetailsLabels())
-                .hasText(new String[]{"External ID", "E-Mail", "Name", "Address", "City", "State", "ZIP", "Country",
-                        "Phone", "Date of birth"});
+                .hasText(new String[]{"E-Mail", "Name", "Address", "City", "ZIP", "Country", "Phone", "Date of birth"});
     }
-
 
     @Test
     @TmsLink("661")

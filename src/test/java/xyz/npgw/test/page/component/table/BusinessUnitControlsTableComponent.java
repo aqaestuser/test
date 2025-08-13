@@ -12,7 +12,7 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
 
     public BusinessUnitControlsTableComponent(Page page, SuperFraudControlPage currentPage) {
         super(page, currentPage,
-                page.getByText("Business unit controls", new Page.GetByTextOptions().setExact(true))
+                page.getByText("Connected business unit controls", new Page.GetByTextOptions().setExact(true))
                 .locator("../.."));
     }
 

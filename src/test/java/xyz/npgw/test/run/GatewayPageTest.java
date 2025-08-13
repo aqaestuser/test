@@ -17,6 +17,7 @@ import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.system.SuperCompaniesAndBusinessUnitsPage;
 import xyz.npgw.test.page.system.SuperGatewayPage;
 
 import java.util.ArrayList;
@@ -56,7 +57,6 @@ public class GatewayPageTest extends BaseTest {
     private final String[] expectedBusinessUnitsList = new String[]{"Merchant 1 for C112172", "Merchant 2 for C112172",
             "MerchantAcquirer"};
     private final String[] expectedOptions = new String[]{"ALL", "EUR", "USD", "GBP"};
-    private final Company company = new Company("%s company for 602".formatted(RUN_ID), "first");
 
     @BeforeClass
     @Override
@@ -152,34 +152,37 @@ public class GatewayPageTest extends BaseTest {
     @Feature("Currency")
     @Description("Verify that if company is selected all it's business units are presented in the list")
     public void testCompaniesBusinessUnitsPresence() {
-        String merchantTitle = "second";
+        String companyName = "%s company for 602".formatted(TestUtils.now());
 
-        SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
-                .fillCompanyNameField(company.companyName())
-                .fillCompanyTypeField(company.companyType())
+                .fillCompanyNameField(companyName)
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone();
+
+        TestUtils.waitForCompanyPresent(getApiRequestContext(), companyName);
+
+        SuperGatewayPage gatewayPage = companiesAndBusinessUnitsPage
+                .getSelectCompany().selectCompany(companyName)
+                .clickOnAddBusinessUnitButton()
+                .fillBusinessUnitNameField("First")
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
-                .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton()
-                .fillBusinessUnitNameField(company.companyType())
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .clickOnAddBusinessUnitButton()
-                .fillBusinessUnitNameField(merchantTitle)
+                .fillBusinessUnitNameField("Second")
                 .clickCreateButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getSystemMenu().clickGatewayTab()
-                .getSelectCompany().selectCompany(company.companyName())
+                .getSelectCompany().selectCompany(companyName)
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
         Allure.step("Verify that all the Business units are presented in the list");
         assertThat(gatewayPage.getSelectBusinessUnit().getDropdownOptionList())
-                .hasText(new String[]{"first", "second"});
+                .hasText(new String[]{"First", "Second"});
 
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
+        TestUtils.deleteCompany(getApiRequestContext(), companyName);
     }
 
     @Test
@@ -539,7 +542,6 @@ public class GatewayPageTest extends BaseTest {
     @Override
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
-        TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME_DELETION_TEST);
         TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER.getAcquirerName());
         TestUtils.deleteAcquirer(getApiRequestContext(), ACQUIRER_MOVE.getAcquirerName());
