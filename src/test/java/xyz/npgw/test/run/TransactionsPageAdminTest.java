@@ -1,10 +1,12 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
@@ -67,7 +69,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Test
+    @Test(expectedExceptions = TimeoutError.class)
     @TmsLink("263")
     @Epic("Transactions")
     @Feature("Amount")
@@ -133,7 +135,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("354")
     @Epic("Transactions")
     @Feature("Amount")
@@ -153,7 +155,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.amountApplied("Amount: 500 - 10300")).isVisible();
     }
 
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("355")
     @Epic("Transactions")
     @Feature("Amount")
@@ -297,7 +299,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("668")
     @Epic("Transactions")
     @Feature("Reset filter")

@@ -72,11 +72,10 @@ public class TeamPageTest extends BaseTest {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSelectCompany().selectCompany(getCompanyName())
+                .getSelectCompany().selectCompany("super")
                 .clickAddUserButton()
                 .fillEmailField(systemAdminEmail)
                 .fillPasswordField("Qwerty123!")
-                .checkSystemAdminRadiobutton()
                 .clickCreateButton();
 
         Allure.step("Verify: success message is displayed");

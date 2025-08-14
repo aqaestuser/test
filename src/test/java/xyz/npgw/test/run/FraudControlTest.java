@@ -22,6 +22,7 @@ import xyz.npgw.test.page.system.SuperFraudControlPage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
@@ -508,7 +509,7 @@ public class FraudControlTest extends BaseTest {
 
         Allure.step("Verify that the 'Control name' field is marked with '*'");
         Assert.assertTrue(((String) addControlDialog.getControlNameLabel()
-                .evaluate("el => getComputedStyle(el, '::after').content")).contains("*"),
+                        .evaluate("el => getComputedStyle(el, '::after').content")).contains("*"),
                 "The '*' symbol is not displayed in the 'Control name' label");
 
         Allure.step("Verify that the 'Create' button is disabled if the 'Control name field is empty");
@@ -681,7 +682,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(editControlDialog.getControlNameInput()).not().isEditable();
     }
 
-    @Ignore("not working Assert.assertEquals(actualDisplayNameList, sortedDisplayNameListAsc);")
     @Test
     @TmsLink("969")
     @Epic("System/Fraud control")
@@ -690,105 +690,34 @@ public class FraudControlTest extends BaseTest {
     public void testControlTableEntriesSorting() {
         SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickFraudControlTab()
-                .getTableControls().clickColumnHeader("Name");
+                .getSystemMenu().clickFraudControlTab();
 
-        List<String> actualNameList = fraudControlPage
-                .getTableControls().getColumnValues("Name");
-        List<String> sortedNameListDesc = new ArrayList<>(actualNameList);
-        sortedNameListDesc.sort(Collections.reverseOrder());
+        List<String> defaultColumnValues = fraudControlPage
+                .getTableControls().getColumnValuesFromAllPages("Name");
 
-        Allure.step("Verify that entries are sorted by Name in Desc order ");
-        Assert.assertEquals(actualNameList, sortedNameListDesc);
+        Allure.step("Entries are by default sorted ascending by Name");
+        Assert.assertEquals(defaultColumnValues, defaultColumnValues.stream().sorted().toList());
 
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Name");
-        actualNameList = fraudControlPage
-                .getTableControls().getColumnValues("Name");
+        List<String> columns = List.of(/*"Type", */"Display name", "Name", "Code", "Config" /*, "Status"*/);
+        //TODO sort by "Type" broken --- atm not sorting - [Fraud Screen, BIN Check, Fraud Screen] on first click
+        //TODO sort by "Status" broken --- atm wrong order - [Inactive, Active] on first click
 
-        List<String> sortedNameListAsc = new ArrayList<>(actualNameList);
-        Collections.sort(sortedNameListAsc);
+        columns.forEach(columnName -> {
+            List<String> columnValues = fraudControlPage
+                    .getTableControls().clickColumnHeader(columnName)
+                    .getTableControls().getColumnValuesFromAllPages(columnName);
 
-        Allure.step("Verify that entries are sorted by Name in Asc order ");
-        Assert.assertEquals(actualNameList, sortedNameListAsc);
+            Allure.step("Verify that entries are now sorted ascending by %s".formatted(columnName));
+            System.out.println(columnName + "--->" + columnValues);
+            Assert.assertEquals(columnValues, columnValues.stream().sorted().toList());
 
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Display name");
-        List<String> actualDisplayNameList = fraudControlPage
-                .getTableControls().getColumnValues("Display name");
-        List<String> sortedDisplayNameListAsc = new ArrayList<>(actualDisplayNameList);
-        Collections.sort(sortedDisplayNameListAsc);
+            columnValues = fraudControlPage
+                    .getTableControls().clickColumnHeader(columnName)
+                    .getTableControls().getColumnValuesFromAllPages(columnName);
 
-        Allure.step("Verify that entries are sorted by Display name in Asc order ");
-        Assert.assertEquals(actualDisplayNameList, sortedDisplayNameListAsc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Display name");
-        actualDisplayNameList = fraudControlPage
-                .getTableControls().getColumnValues("Display name");
-        List<String> sortedDisplayNameListDesc = new ArrayList<>(actualDisplayNameList);
-        sortedDisplayNameListDesc.sort(Collections.reverseOrder());
-
-        Allure.step("Verify that entries are sorted by Display name in Desc order ");
-        Assert.assertEquals(actualDisplayNameList, sortedDisplayNameListDesc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Code");
-        List<String> actualCodeList = fraudControlPage
-                .getTableControls().getColumnValues("Code");
-        List<String> sortedCodeListAsc = new ArrayList<>(actualCodeList);
-        Collections.sort(sortedCodeListAsc);
-
-        Allure.step("Verify that entries are sorted by Code in Asc order ");
-        Assert.assertEquals(actualCodeList, sortedCodeListAsc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Code");
-        actualCodeList = fraudControlPage
-                .getTableControls().getColumnValues("Code");
-        List<String> sortedCodeListDesc = new ArrayList<>(actualCodeList);
-        sortedCodeListDesc.sort(Collections.reverseOrder());
-
-        Allure.step("Verify that entries are sorted by Code in Desc order ");
-        Assert.assertEquals(actualCodeList, sortedCodeListDesc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Config");
-        List<String> actualConfigList = fraudControlPage.getTableControls().getColumnValues("Config");
-        List<String> sortedConfigListAsc = new ArrayList<>(actualConfigList);
-        Collections.sort(sortedConfigListAsc);
-
-        Allure.step("Verify that entries are sorted by Config in Asc order ");
-        Assert.assertEquals(actualConfigList, sortedConfigListAsc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Config");
-        actualConfigList = fraudControlPage
-                .getTableControls().getColumnValues("Config");
-        List<String> sortedConfigListDesc = new ArrayList<>(actualConfigList);
-        sortedConfigListDesc.sort(Collections.reverseOrder());
-
-        Allure.step("Verify that entries are sorted by Config in Desc order ");
-        Assert.assertEquals(actualConfigList, sortedConfigListDesc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Status");
-        List<String> actualStatusList = fraudControlPage.getTableControls().getColumnValues("Status");
-        List<String> sortedStatusListDesc = new ArrayList<>(actualStatusList);
-        sortedStatusListDesc.sort(Collections.reverseOrder());
-
-        Allure.step("Verify that entries are sorted by Status in Desc order ");
-        Assert.assertEquals(actualStatusList, sortedStatusListDesc);
-
-        fraudControlPage
-                .getTableControls().clickColumnHeader("Status");
-        actualStatusList = fraudControlPage
-                .getTableControls().getColumnValues("Status");
-        List<String> sortedStatusListAsc = new ArrayList<>(actualStatusList);
-        Collections.sort(sortedStatusListAsc);
-
-        Allure.step("Verify that entries are sorted by Status in Asc order ");
-        Assert.assertEquals(actualStatusList, sortedStatusListAsc);
+            Allure.step("Verify that entries are now sorted descending by %s".formatted(columnName));
+            Assert.assertEquals(columnValues, columnValues.stream().sorted(Comparator.reverseOrder()).toList());
+        });
     }
 
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testEditFraudControl",
@@ -1045,10 +974,10 @@ public class FraudControlTest extends BaseTest {
         String invalidControlName101Chars = "a".repeat(101);
 
         AddControlDialog addControlDialog = new SuperDashboardPage(getPage())
-                 .getHeader().clickSystemAdministrationLink()
-                 .getSystemMenu().clickFraudControlTab()
-                 .clickAddFraudControl()
-                 .fillFraudControlNameField(invalidControlName3Chars);
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .clickAddFraudControl()
+                .fillFraudControlNameField(invalidControlName3Chars);
 
         String ariaInvalid = addControlDialog.getControlNameInput().getAttribute("aria-invalid");
 
