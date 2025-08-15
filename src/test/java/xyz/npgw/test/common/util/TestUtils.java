@@ -14,6 +14,7 @@ import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
+import xyz.npgw.test.common.entity.Type;
 import xyz.npgw.test.common.entity.User;
 
 import java.net.URLEncoder;
@@ -127,12 +128,13 @@ public final class TestUtils {
     public static Transaction mapToTransaction(List<String> cells) {
         return new Transaction(
                 cells.get(0),
-                cells.get(1),
+                Type.valueOf(cells.get(1)),
                 cells.get(2),
-                Double.parseDouble(cells.get(3)),
-                Currency.valueOf(cells.get(4)),
-                CardType.valueOf(cells.get(5)),
-                Status.valueOf(cells.get(6))
+                cells.get(3),
+                Double.parseDouble(cells.get(4)),
+                Currency.valueOf(cells.get(5)),
+                CardType.valueOf(cells.get(6)),
+                Status.valueOf(cells.get(7))
         );
     }
 }

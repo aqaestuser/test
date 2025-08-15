@@ -23,6 +23,7 @@ import xyz.npgw.test.common.entity.CardType;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
+import xyz.npgw.test.common.entity.Type;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
@@ -396,6 +397,7 @@ public class TransactionsTableTest extends BaseTest {
             if (route.request().postData().contains(businessUnit.merchantId())) {
                 List<Transaction> transactionList = new ArrayList<>();
                 transactionList.add(new Transaction("2025-06-02T04:18:09.047146423Z",
+                        Type.SALE,
                         "12345", "", 100,
                         Currency.USD, CardType.VISA, Status.FAILED));
                 route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(transactionList)));
@@ -496,7 +498,6 @@ public class TransactionsTableTest extends BaseTest {
         } while (transactionsPage.getTable().goToNextPage());
     }
 
-    @Ignore
     @Test
     @TmsLink("880")
     @Epic("Transactions")
@@ -577,7 +578,6 @@ public class TransactionsTableTest extends BaseTest {
         assertEquals(uiTransactionList, pdfTransactionList);
     }
 
-    @Ignore
     @Test
     @TmsLink("1011")
     @Epic("Transactions")

@@ -137,6 +137,7 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
     private List<String> getRowData(Locator row) {
         List<String> rowData = new ArrayList<>();
         rowData.add(getCell(row, "Creation Date (GMT)").innerText().trim());
+        rowData.add(getCell(row, "Type").innerText().trim());
         rowData.add(getCell(row, "NPGW reference").innerText().trim());
         rowData.add(getCell(row, "Business unit reference").innerText().trim());
         rowData.add(getCell(row, "Amount").innerText().trim());

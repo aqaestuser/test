@@ -5,6 +5,7 @@ public record Transaction(
         Currency currency,
         String merchantId,
         String externalTransactionId,
+        Type type,
         String redirectUrlSuccess,
         String redirectUrlCancel,
         String redirectUrlFail,
@@ -18,13 +19,14 @@ public record Transaction(
 
     public Transaction(
             String createdOn,
+            Type type,
             String npgwReference,
             String merchantReference,
             double amount,
             Currency currency,
             CardType cardType,
             Status status) {
-        this(amount, currency, "", merchantReference, "", "", "",
+        this(amount, currency, "", merchantReference, type, "", "", "",
                 "", new PaymentDetails(cardType), npgwReference, status, new Error(), createdOn, "");
     }
 }
