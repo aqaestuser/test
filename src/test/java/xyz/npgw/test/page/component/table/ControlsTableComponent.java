@@ -27,8 +27,9 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
 
     @Step("Hover over Edit Control icon to get Tooltip")
     public Locator hoverOverEditIcon(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).getByTestId("EditControlButton").hover();
+        Locator row = getRow(controlName);
+        row.hover();
+        row.getByTestId("EditControlButton").hover();
 
         tooltip.waitFor();
 
@@ -36,40 +37,42 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
     }
 
     @Step("Hover over Deactivate Control icon to get Tooltip")
-    public Locator hoverOverDeactivateControlIcon(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).locator("//*[@data-icon='ban']/..").hover();
+    public SuperFraudControlPage hoverOverDeactivateControlIcon(String controlName) {
+        Locator row = getRow(controlName);
+        row.hover();
+        row.locator("//*[@data-icon='ban']/..").hover();
 
-        tooltip.waitFor();
-
-        return tooltip;
+        return getCurrentPage();
     }
 
     @Step("Hover over Activate Control icon to get Tooltip")
-    public Locator hoverOverActivateControlIcon(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).locator("//*[@data-icon='check']/..").hover();
+    public SuperFraudControlPage hoverOverActivateControlIcon(String controlName) {
+        Locator row = getRow(controlName);
+        row.hover();
+        row.locator("//*[@data-icon='check']/..").hover();
 
-        tooltip.waitFor();
-
-        return tooltip;
+        return getCurrentPage();
     }
 
-    @Step("Hover over Activate Control icon to get Tooltip")
-    public Locator hoverOverDeleteIcon(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).getByTestId("DeleteControlButton").hover();
+    @Step("Hover over Delete Control icon to get Tooltip")
+    public SuperFraudControlPage hoverOverDeleteIcon(String controlName) {
+        Locator row = getRow(controlName);
+        row.hover();
+        row.getByTestId("DeleteControlButton").hover();
 
-        tooltip.waitFor();
-
-        return tooltip;
+        return getCurrentPage();
     }
 
-    @Step("Hover over Activate Control icon to get Tooltip")
-    public Locator hoverOverConnectControlIcon(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).getByTestId("ConnectControlButton").hover();
+    @Step("Hover over Connect Control icon to get Tooltip")
+    public SuperFraudControlPage hoverOverConnectControlIcon(String controlName) {
+        Locator row = getRow(controlName);
+        row.hover();
+        row.getByTestId("ConnectControlButton").hover();
 
+        return getCurrentPage();
+    }
+
+    public Locator getTooltip() {
         tooltip.waitFor();
 
         return tooltip;
