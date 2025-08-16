@@ -6,6 +6,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -17,6 +18,7 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
+import xyz.npgw.test.page.dialog.control.AddControlDialog;
 import xyz.npgw.test.page.system.SuperAcquirersPage;
 
 import java.util.List;
@@ -215,6 +217,59 @@ public class AddEditAcquirerTest extends BaseTest {
         Allure.step("Verify: Acquirer Error message is displayed");
         assertThat(setupAcquirerMidDialog.getAlert().getMessage())
                 .containsText("Acquirer with name {" + EXISTING_ACQUIRER + "} already exists.");
+    }
+
+    @Test
+    @TmsLink("1119")
+    @Epic("System/Acquirer")
+    @Feature("Setup Acquirer MID")
+    @Description("Verify that the 'Entity name' field requires between 4 and 100 characters")
+    public void testEntityNameIsMandatoryLengthRestrictions() {
+        String invalidControlName3Chars = "a".repeat(3);
+        String validControlName4Chars = "a".repeat(4);
+        String validControlName100Chars = "a".repeat(100);
+        String invalidControlName101Chars = "a".repeat(101);
+
+        SetupAcquirerMidDialog setupAcquirerMidDialog  = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .clickSetupAcquirerMidButton()
+                .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
+                .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
+                .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl())
+                .fillAcquirerNameField(invalidControlName3Chars);
+
+        String ariaInvalid = setupAcquirerMidDialog.getAcquirerNameField().getAttribute("aria-invalid");
+
+        Allure.step("Verify that the 'Entity name' field is highlighted in red");
+        Assert.assertEquals(ariaInvalid, "true", "The 'Entity name' field should be"
+                + " highlighted in red");
+
+        Allure.step("Verify that the 'Entity name' field is marked with '*'");
+        Assert.assertTrue(((String) setupAcquirerMidDialog.getAcquirerNameLabel()
+                        .evaluate("el => getComputedStyle(el, '::after').content")).contains("*"),
+                "The '*' symbol is not displayed in the 'Entity name' label");
+
+        Allure.step("Verify that the Create button is disabled if the 'Entity name' contains 3 characters");
+        assertThat(setupAcquirerMidDialog.getCreateButton()).isDisabled();
+
+        setupAcquirerMidDialog
+                .fillAcquirerNameField(validControlName4Chars);
+
+        Allure.step("Verify that the Create button is enabled if the 'Entity name' field contains 4 characters");
+        assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+
+        setupAcquirerMidDialog
+                .fillAcquirerNameField(validControlName100Chars);
+
+        Allure.step("Verify that the Setup button is enabled if the 'Entity name' field contains 100 characters");
+        assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+
+        setupAcquirerMidDialog
+                .fillAcquirerNameField(invalidControlName101Chars);
+
+        Allure.step("Verify that the 'Entity name' field has limit of 100 characters");
+        Assert.assertEquals(setupAcquirerMidDialog.getAcquirerNameField().inputValue().length(), 100);
     }
 
     @Test

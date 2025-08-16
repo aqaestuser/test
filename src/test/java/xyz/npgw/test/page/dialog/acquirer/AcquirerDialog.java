@@ -16,6 +16,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         extends BaseDialog<SuperAcquirersPage, CurrentDialogT> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter entity name");
+    private final Locator acquirerNameLabel = locator("//label[text()='Entity name']");
     private final Locator statusSwitch = getByRole(AriaRole.RADIOGROUP, "Status");
     private final Locator allowedCurrenciesCheckboxes = getByRole(AriaRole.RADIOGROUP, "Allowed currency");
     private final Locator challengeURLField = getByPlaceholder("Enter challenge URL");
