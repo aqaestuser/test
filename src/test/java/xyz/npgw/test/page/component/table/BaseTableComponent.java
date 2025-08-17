@@ -30,13 +30,15 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
     private final Locator firstRow;
     private final Locator lastRow;
     private final Locator rowsPerPage;
-    private final Locator rowsPerPageDropdown;
+    private final Locator rowsPerPageDropdown = locator("div[data-slot='listbox']");
     private final Locator paginationItems;
     private final Locator nextPageButton;
     private final Locator previousPageButton;
     private final Locator leftDotsButton;
     private final Locator firstPageButton;
     private final Locator noRowsToDisplayMessage;
+    private final Locator tooltip = locator("//div[@data-slot='content']").last();
+
     protected CurrentPageT currentPage;
 
     public BaseTableComponent(Page page, CurrentPageT currentPage) {
@@ -55,7 +57,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         this.lastRow = root.locator("tr[data-last='true']");
 
         this.rowsPerPage = root.getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions().setName("Rows Per Page"));
-        this.rowsPerPageDropdown = locator("div[data-slot='listbox']");
         this.paginationItems = root.getByLabel("pagination item");
         this.nextPageButton = root.getByRole(AriaRole.BUTTON, new Locator.GetByRoleOptions()
                 .setName("next page button"));
@@ -294,6 +295,13 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
                         .toList()
         );
     }
+
+    public Locator getTooltip() {
+        tooltip.waitFor();
+
+        return tooltip;
+    }
+
 
     protected CurrentPageT getCurrentPage() {
         return currentPage;

@@ -473,6 +473,49 @@ public class AcquirersPageTest extends BaseTest {
         assertFalse(acquirersPage.getSelectAcquirerMid().isAcquirerPresent(ACQUIRER.getAcquirerName()));
     }
 
+    @Test
+    @TmsLink("1101")
+    @Epic("System/Acquirers")
+    @Feature("Acquirers table")
+    @Description("Tooltips for available actions check")
+    public void testTooltipsForAcquirersTable() {
+        SuperAcquirersPage page = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab();
+
+        Locator editIconTooltip = page
+                .getTable().hoverOverEditIcon()
+                .getTable().getTooltip();
+
+        Allure.step("Verify that Edit icon Tooltip is appears on the Acquirers table");
+        assertThat(editIconTooltip).isVisible();
+        assertThat(editIconTooltip).hasText("Edit acquirer MID");
+
+        Locator deactivateIconTooltip = page
+                .getTable().hoverOverChangeActivityIcon()
+                .getTable().getTooltip();
+
+        Allure.step("Verify that Deactivate icon Tooltip is appears on the Acquirers table");
+        assertThat(deactivateIconTooltip).isVisible();
+        assertThat(deactivateIconTooltip).hasText("Deactivate acquirer MID");
+
+        Locator deleteIconTooltip = page
+                .getTable().hoverOverDeleteIcon()
+                .getTable().getTooltip();
+
+        Allure.step("Verify that Delete icon Tooltip is appears on the Acquirers table");
+        assertThat(deleteIconTooltip).isVisible();
+        assertThat(deleteIconTooltip).hasText("Delete acquirer MID");
+
+        Locator bulkActionsIconTooltip = page
+                .getTable().hoverOverBulkActionsIcon()
+                .getTable().getTooltip();
+
+        Allure.step("Verify that Bulk actions icon Tooltip is appears on the Acquirers table");
+        assertThat(bulkActionsIconTooltip).isVisible();
+        assertThat(bulkActionsIconTooltip).hasText("Bulk actions");
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {

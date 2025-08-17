@@ -10,8 +10,6 @@ import xyz.npgw.test.page.system.SuperFraudControlPage;
 
 public class BusinessUnitControlsTableComponent extends BaseTableComponent<SuperFraudControlPage> {
 
-    private final Locator tooltip = locator("//div[@data-slot='content']").last();
-
     public BusinessUnitControlsTableComponent(Page page, SuperFraudControlPage currentPage) {
         super(page, currentPage,
                 page.getByText("Connected business unit controls", new Page.GetByTextOptions().setExact(true))
@@ -118,11 +116,5 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
         row.locator("//*[@data-icon='circle-arrow-up']/..").hover();
 
         return getCurrentPage();
-    }
-
-    public Locator getTooltip() {
-        tooltip.waitFor();
-
-        return tooltip;
     }
 }

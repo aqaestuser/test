@@ -12,8 +12,6 @@ import xyz.npgw.test.page.system.SuperFraudControlPage;
 
 public class ControlsTableComponent extends BaseTableComponent<SuperFraudControlPage> {
 
-    private final Locator tooltip = locator("//div[@data-slot='content']").last();
-
     public ControlsTableComponent(Page page, SuperFraudControlPage currentPage) {
         super(page, currentPage,
                 page.getByText("Integrated third party controls", new Page.GetByTextOptions().setExact(true))
@@ -26,14 +24,12 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
     }
 
     @Step("Hover over Edit Control icon to get Tooltip")
-    public Locator hoverOverEditIcon(String controlName) {
+    public SuperFraudControlPage hoverOverEditIcon(String controlName) {
         Locator row = getRow(controlName);
         row.hover();
         row.getByTestId("EditControlButton").hover();
 
-        tooltip.waitFor();
-
-        return tooltip;
+        return getCurrentPage();
     }
 
     @Step("Hover over Deactivate Control icon to get Tooltip")
@@ -70,12 +66,6 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
         row.getByTestId("ConnectControlButton").hover();
 
         return getCurrentPage();
-    }
-
-    public Locator getTooltip() {
-        tooltip.waitFor();
-
-        return tooltip;
     }
 
     @Step("Click 'Edit control' button")

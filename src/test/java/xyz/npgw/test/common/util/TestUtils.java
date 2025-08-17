@@ -124,6 +124,19 @@ public final class TestUtils {
         log.info("Company present wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
     }
 
+    @SneakyThrows
+    public static void waitForFraudControlPresent(APIRequestContext request, String fraudControlName) {
+        double timeout = ProjectProperties.getDefaultTimeout();
+        while (Arrays.stream(FraudControl.getAll(request))
+                .noneMatch(item -> item.getControlName().equals(fraudControlName))) {
+            TimeUnit.MILLISECONDS.sleep(300);
+            timeout -= 300;
+            if (timeout <= 0) {
+                throw new TimeoutError("Waiting for Fraud Control '%s' present".formatted(fraudControlName));
+            }
+        }
+        log.info("Fraud Control present wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+    }
 
     public static Transaction mapToTransaction(List<String> cells) {
         return new Transaction(

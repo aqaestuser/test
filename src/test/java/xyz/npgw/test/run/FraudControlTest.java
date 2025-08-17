@@ -9,7 +9,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.FraudControl;
@@ -276,7 +275,9 @@ public class FraudControlTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
 
-        Locator editIconTooltip = page.getTableControls().hoverOverEditIcon(FRAUD_CONTROL.getControlName());
+        Locator editIconTooltip = page
+                .getTableControls().hoverOverEditIcon(FRAUD_CONTROL.getControlName())
+                .getTableControls().getTooltip();
 
         Allure.step("Verify that Edit icon Tooltip is presented on Control table");
         assertThat(editIconTooltip).isVisible();
@@ -579,7 +580,7 @@ public class FraudControlTest extends BaseTest {
     @Feature("Add fraud control")
     @Description("Verify the error message when attempting to create a Fraud Control with the existing name")
     public void testErrorMessageForExistingControlName() {
-        SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
+        SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .clickAddFraudControl()
@@ -651,7 +652,7 @@ public class FraudControlTest extends BaseTest {
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Remove inactive Fraud control added to Business unit")
     public void testDeleteInactiveFraudControlAddedToBusinessUnit() {
-        SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
+        SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
@@ -745,7 +746,7 @@ public class FraudControlTest extends BaseTest {
     @Feature("Control table entries sorting")
     @Description("Verify that entries can be sorted by Name, DisplayName, Code, Config, Status  in Asc and Desc order")
     public void testControlTableEntriesSorting() {
-        SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
+        SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab();
 
@@ -785,7 +786,7 @@ public class FraudControlTest extends BaseTest {
     @Description("Verify that entries can be sorted by Priority, DisplayName, Code, Config, Status"
             + "in Asc and Desc order")
     public void testBusinessUnitControlTableEntriesSorting() {
-        SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
+        SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
@@ -921,7 +922,7 @@ public class FraudControlTest extends BaseTest {
     @Feature("Reset filter")
     @Description("'Reset filter' clears selected options")
     public void testResetFilter() {
-        SuperFraudControlPage fraudControlPage = new SuperFraudControlPage(getPage())
+        SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)

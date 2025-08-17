@@ -1,5 +1,6 @@
 package xyz.npgw.test.common.entity;
 
+import com.google.gson.Gson;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.APIResponse;
 import com.microsoft.playwright.options.RequestOptions;
@@ -33,5 +34,11 @@ public class FraudControl {
     public static void delete(APIRequestContext request, String fraudControlName) {
         APIResponse response = request.delete("portal-v1/control/%s".formatted(encode(fraudControlName)));
         log.response(response, "delete control %s".formatted(fraudControlName));
+    }
+
+    public static FraudControl[] getAll(APIRequestContext request) {
+        APIResponse response = request.get("portal-v1/control");
+        log.response(response, "get all Fraud Control");
+        return new Gson().fromJson(response.text(), FraudControl[].class);
     }
 }

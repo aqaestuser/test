@@ -51,4 +51,32 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
 
         return new DeactivateAcquirerDialog(getPage());
     }
+
+    @Step("Hover over 'Edit acquirer MID' icon")
+    public SuperAcquirersPage hoverOverEditIcon() {
+        getByTestId("EditAcquirerButton").first().hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over 'Deactivate acquirer MID' icon")
+    public SuperAcquirersPage hoverOverChangeActivityIcon() {
+        getByTestId("ChangeAcquirerActivityButton").first().hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over 'Delete acquirer MID' icon")
+    public SuperAcquirersPage hoverOverDeleteIcon() {
+        getByTestId("DeleteAcquirerButton").first().hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over 'Bulk actions' icon")
+    public SuperAcquirersPage hoverOverBulkActionsIcon() {
+        locator("svg[data-icon='wand-magic-sparkles']").first().hover();
+
+        return getCurrentPage();
+    }
 }
