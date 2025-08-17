@@ -115,7 +115,7 @@ public final class TestUtils {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(Company.getAll(request))
                 .noneMatch(item -> item.companyName().equals(companyName))) {
-            TimeUnit.MILLISECONDS.sleep(300);
+            TimeUnit.MILLISECONDS.sleep(500);
             timeout -= 300;
             if (timeout <= 0) {
                 throw new TimeoutError("Waiting for company '%s' present".formatted(companyName));

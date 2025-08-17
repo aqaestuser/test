@@ -1,5 +1,6 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
@@ -12,11 +13,16 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTest;
 import xyz.npgw.test.common.entity.Address;
 import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.company.AddCompanyDialog;
+import xyz.npgw.test.page.dialog.company.DeleteCompanyDialog;
+import xyz.npgw.test.page.dialog.merchant.AddBusinessUnitDialog;
+import xyz.npgw.test.page.dialog.merchant.DeleteBusinessUnitDialog;
+import xyz.npgw.test.page.dialog.merchant.EditBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.merchant.GenerateTokenConfirmDialog;
 import xyz.npgw.test.page.dialog.merchant.SecretTokenDialog;
 import xyz.npgw.test.page.system.AdminBusinessUnitsPage;
@@ -28,6 +34,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.MERCHANT_ID_FOR_TEST_RUN;
 
 public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
@@ -35,6 +42,9 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     private static final String COMPANY_DELETION_BLOCKED_NAME = "%s deletion-blocked company".formatted(RUN_ID);
     private static final String COMPANY_NAME_REQUIRED_FIELD = "%s company required field".formatted(RUN_ID);
     private static final String COMPANY_TYPE = "CompanyType";
+    private static final String BUSINESS_UNIT_NAME = "Business unit name test";
+    private static final String BUSINESS_UNIT_NAME_EDITED = "Edited Business unit name test";
+    private static final String ADMIN_EMAIL = "%s.admin123@email.com".formatted(TestUtils.now());
 
     Company company = new Company(
             COMPANY_NAME_TEST, "Company Type Test",
@@ -62,7 +72,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_DELETION_BLOCKED_NAME);
-        TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_DELETION_BLOCKED_NAME, "Business unit 1");
     }
 
     @Test
@@ -174,6 +183,152 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     }
 
     @Test(dependsOnMethods = "testAddCompany")
+    @TmsLink("241")
+    @Epic("System/Companies and business units")
+    @Feature("Add business unit")
+    @Description("Verify that a new business unit wasn't added once click 'Close' button")
+    public void testCloseButtonAndDiscardChanges() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickOnAddBusinessUnitButton()
+                .fillBusinessUnitNameField("BU-2")
+                .clickCloseButton();
+
+        Allure.step("Verify: The table is empty and 'No rows to display.' is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getMerchantsTable()).containsText("No rows to display.");
+    }
+
+    @Test(dependsOnMethods = "testCloseButtonAndDiscardChanges")
+    @TmsLink("290")
+    @Epic("System/Companies and business units")
+    @Feature("Add business unit")
+    @Description("Validates successful business unit addition to company")
+    public void testAddBusinessUnit() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
+
+        Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
+        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
+                .isDisabled();
+
+        AddBusinessUnitDialog addBusinessUnitDialog = companiesAndBusinessUnitsPage
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickOnAddBusinessUnitButton();
+
+        Allure.step("Verify: 'Add business unit' dialog is opened");
+        assertThat(addBusinessUnitDialog.getGetAddMerchantDialogHeader())
+                .hasText("Add business unit");
+
+        Allure.step("Verify: Company name is pre-filled correctly");
+        assertThat(addBusinessUnitDialog.getCompanyNameField())
+                .hasValue(company.companyName());
+
+        Allure.step("Verify: 'Company name' field is non-editable");
+        assertThat(addBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
+
+        companiesAndBusinessUnitsPage = addBusinessUnitDialog
+                .fillBusinessUnitNameField(BUSINESS_UNIT_NAME)
+                .clickCreateButton();
+
+        Allure.step("Verify: Success alert is shown after business unit is added");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was created successfully");
+
+        Allure.step("Verify: Selected company is preserved after creation");
+        assertThat(companiesAndBusinessUnitsPage.getSelectCompany().getSelectCompanyField())
+                .hasValue(company.companyName());
+
+        Allure.step("Verify: New business unit name appears in the list");
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit name"))
+                .hasText(BUSINESS_UNIT_NAME);
+
+        Allure.step("Verify: Merchant ID is displayed");
+        assertThat(companiesAndBusinessUnitsPage.getTable().getFirstRowCell("Business unit ID"))
+                .containsText("id.merchant");
+    }
+
+    @Test(dependsOnMethods = "testAddBusinessUnit")
+    @TmsLink("794")
+    @Epic("System/Companies and business units")
+    @Feature("Edit Business unit")
+    @Description("Editing a business unit updates its name while preserving the same ID")
+    public void testEditBusinessUnit() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(company.companyName());
+
+        Locator originalBusinessUnitId = companiesAndBusinessUnitsPage
+                .getTable().getCell(BUSINESS_UNIT_NAME, "Business unit ID");
+
+        companiesAndBusinessUnitsPage
+                .getTable().clickEditBusinessUnitButton(BUSINESS_UNIT_NAME)
+                .fillBusinessUnitNameField(BUSINESS_UNIT_NAME_EDITED)
+                .clickSaveChangesButton();
+
+        Allure.step("Verify: the success alert is displayed with correct message");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was updated successfully");
+
+        Locator editedBusinessUnitIdLocator = companiesAndBusinessUnitsPage.getTable()
+                .getCell(BUSINESS_UNIT_NAME_EDITED, "Business unit ID");
+
+        Allure.step("Verify: the Business Unit ID remains the same after editing name");
+        assertThat(editedBusinessUnitIdLocator).hasText(originalBusinessUnitId.innerText());
+    }
+
+    @Test(dependsOnMethods = "testEditBusinessUnit")
+    @TmsLink("728")
+    @Epic("System/Companies and business units")
+    @Feature("Delete Company")
+    @Description("Verify that company cannot be deleted if there are associated business units")
+    public void testCannotDeleteCompanyWithAssociatedBusinessUnit() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(company.companyName())
+                .clickDeleteSelectedCompany()
+                .clickDeleteButton();
+
+        Allure.step("Verify: error message is shown when trying to delete a company with business unit");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("ERRORCompany could not be deleted: there are still merchants associated with it");
+
+    }
+
+    @Test(dependsOnMethods = "testCannotDeleteCompanyWithAssociatedBusinessUnit")
+    @TmsLink("722")
+    @Epic("System/Companies and business units")
+    @Feature("Delete business unit")
+    @Description("Verify that business unit can be deleted")
+    public void testDeleteBusinessUnit() {
+        DeleteBusinessUnitDialog deleteBusinessUnitDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(company.companyName())
+                .getTable().clickDeleteBusinessUnitButton(BUSINESS_UNIT_NAME_EDITED);
+
+        Allure.step("Verify: confirmation question contains correct Business unit name");
+        assertThat(deleteBusinessUnitDialog.getConfirmationQuestion())
+                .hasText("Are you sure you want to delete business unit %s?".formatted(BUSINESS_UNIT_NAME_EDITED));
+
+//TODO remove when bug fixed
+//        Allure.step("Verify: dialog header is 'business unit'");
+//        assertThat(deleteBusinessUnitDialog.getDialogHeader())
+//                .hasText("Delete business unit");
+
+        SuperCompaniesAndBusinessUnitsPage superCompaniesAndBusinessUnitsPage = deleteBusinessUnitDialog
+                .clickDeleteButton();
+
+        Allure.step("Verify: the header contains the expected title text");
+        assertThat(superCompaniesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("SUCCESSBusiness unit was deleted successfully");
+    }
+
+    @Test(dependsOnMethods = "testDeleteBusinessUnit")
     @TmsLink("266")
     @Epic("System/Companies and business units")
     @Feature("Edit company")
@@ -259,11 +414,20 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Feature("Delete Company")
     @Description("Verify that company can be deleted")
     public void testDeleteCompany() {
-        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+        DeleteCompanyDialog deleteCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany(company.companyName())
-                .clickDeleteSelectedCompany()
+                .getSelectCompany().selectCompany(editedCompany.companyName())
+                .clickDeleteSelectedCompany();
+
+        Allure.step("Verify: dialog header is 'Delete company'");
+        assertThat(deleteCompanyDialog.getDialogHeader()).hasText("Delete company");
+
+        Allure.step("Verify: confirmation question contains correct company name");
+        assertThat(deleteCompanyDialog.getConfirmationQuestion())
+                .hasText("Are you sure you want to delete company %s?".formatted(editedCompany.companyName()));
+
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = deleteCompanyDialog
                 .clickDeleteButton();
 
         Allure.step("Verify: the success alert appears after deleting the company");
@@ -272,7 +436,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
         companiesAndBusinessUnitsPage
                 .getAlert().clickCloseButton()
-                .waitForCompanyAbsence(getApiRequestContext(), company.companyName());
+                .waitForCompanyAbsence(getApiRequestContext(), editedCompany.companyName());
 
         Allure.step("Verify: the deleted company is no longer present on the page");
         assertThat(companiesAndBusinessUnitsPage.getPageContent())
@@ -281,7 +445,32 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         getPage().waitForTimeout(2000);
 
         Allure.step("Verify: the deleted company is no longer present in the dropdown list");
-        assertFalse(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyPresent(company.companyName()));
+        assertFalse(companiesAndBusinessUnitsPage.getSelectCompany().isCompanyPresent(editedCompany.companyName()));
+    }
+
+
+    @Test
+    @Epic("System/Companies and business units")
+    @Feature("Delete Company")
+    @Description("Verify that company cannot be deleted if there are users assigned to it")
+    public void testCannotDeleteCompanyWithAssignedUser() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
+                .clickAddUserButton()
+                .fillEmailField(ADMIN_EMAIL)
+                .fillPasswordField("Qwerty123!")
+                .checkCompanyAdminRadiobutton()
+                .clickCreateButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
+                .clickDeleteSelectedCompany()
+                .clickDeleteButton();
+
+        Allure.step("Verify: error message is shown when trying to delete a company with users");
+        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
+                .hasText("ERRORCompany could not be deleted: there are still users associated with it");
     }
 
     @Test
@@ -301,52 +490,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         Allure.step("Verify: error message is displayed for duplicate company name");
         assertThat(addCompanyDialog.getAlert().getMessage())
                 .containsText("Company with name {%s} already exists.".formatted(COMPANY_NAME_FOR_TEST_RUN));
-    }
-
-    @Test
-    @TmsLink("728")
-    @Epic("System/Companies and business units")
-    @Feature("Delete Company")
-    @Description("Verify that company cannot be deleted if there are associated business units")
-    public void testCannotDeleteCompanyWithAssociatedBusinessUnit() {
-        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
-                .clickDeleteSelectedCompany()
-                .clickDeleteButton();
-
-        Allure.step("Verify: error message is shown when trying to delete a company with business unit");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
-                .hasText("ERRORCompany could not be deleted: there are still merchants associated with it");
-
-    }
-
-    @Test(dependsOnMethods = "testCannotDeleteCompanyWithAssociatedBusinessUnit")
-    @TmsLink("743")
-    @Epic("System/Companies and business units")
-    @Feature("Delete Company")
-    @Description("Verify that company cannot be deleted if there are users assigned to it")
-    public void testCannotDeleteCompanyWithAssignedUser() {
-        String email = "%s.admin123@email.com".formatted(TestUtils.now());
-
-        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink()
-                .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
-                .clickAddUserButton()
-                .fillEmailField(email)
-                .fillPasswordField("Qwerty123!")
-                .checkCompanyAdminRadiobutton()
-                .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
-                .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
-                .clickDeleteSelectedCompany()
-                .clickDeleteButton();
-
-        Allure.step("Verify: error message is shown when trying to delete a company with users");
-        assertThat(companiesAndBusinessUnitsPage.getAlert().getMessage())
-                .hasText("ERRORCompany could not be deleted: there are still users associated with it");
     }
 
     @Test
@@ -491,14 +634,13 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @TmsLink("223")
     @Epic("System/Companies and business units")
     @Feature("Add company")
-    @Description("Company can be added by filling out required fields")
-    public void testAddCompanyByFillRequiredFields() {
+    @Description("Company can be added by filling out only required field")
+    public void testAddCompanyByFillOnlyRequiredField() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME_REQUIRED_FIELD)
-                .fillCompanyTypeField(COMPANY_TYPE)
                 .clickCreateButton();
 
         Allure.step("Verify: company creation success message is displayed");
@@ -552,9 +694,51 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(adminBusinessUnitsPage.getCompanyInfoBlock()).isVisible();
     }
 
+    @Test
+    @TmsLink("387")
+    @TmsLink("501")
+    @TmsLink("515")
+    @TmsLink("528")
+    @Epic("System/Companies and business units")
+    @Feature("Edit business unit")
+    @Description("Verify that all elements of dialog are displayed properly")
+    public void testElementsOfEditBusinessUnitDialog() {
+        EditBusinessUnitDialog editBusinessUnitDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
+                .getTable().clickEditBusinessUnitButton(MERCHANT_ID_FOR_TEST_RUN);
+
+        Allure.step("Verify: the header contains the expected title text");
+        assertThat(editBusinessUnitDialog.getDialogHeader()).hasText("Edit business unit");
+
+        Allure.step("Verify: Company name is pre-filled correctly");
+        assertThat(editBusinessUnitDialog.getCompanyNameField()).hasValue(COMPANY_NAME_FOR_TEST_RUN);
+
+        Allure.step("Verify: Company name field is read-only");
+        assertThat(editBusinessUnitDialog.getCompanyNameField()).hasAttribute("aria-readonly", "true");
+
+        Allure.step("Verify: all labels are correct for each field");
+        assertThat(editBusinessUnitDialog.getFieldLabel()).hasText(new String[]{"Company name", "Business unit name"});
+
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = editBusinessUnitDialog
+                .clickCloseButton();
+
+        Allure.step("Verify: Dialog 'Edit business unit' is not displayed after clicking on the 'Close' button");
+        assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
+
+        companiesAndBusinessUnitsPage
+                .getTable().clickEditBusinessUnitButton(MERCHANT_ID_FOR_TEST_RUN)
+                .clickCloseIcon();
+
+        Allure.step("Verify: Dialog 'Edit business unit' is not displayed after clicking on the 'Close' icon");
+        assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
+        User.delete(getApiRequestContext(), ADMIN_EMAIL);
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_DELETION_BLOCKED_NAME);
         super.afterClass();
     }

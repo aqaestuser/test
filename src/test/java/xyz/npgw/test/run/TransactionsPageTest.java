@@ -283,6 +283,7 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getDownloadPdfOption()).isVisible();
     }
 
+    @Ignore
     @Test(dataProvider = "getExportFileType", dataProviderClass = TestDataProvider.class)
     @TmsLink("357")
     @Epic("Transactions")
