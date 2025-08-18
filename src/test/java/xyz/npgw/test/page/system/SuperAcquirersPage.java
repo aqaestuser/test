@@ -27,10 +27,10 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
         implements SuperHeaderMenuTrait<SuperAcquirersPage>,
-                   SuperSystemMenuTrait,
-                   SelectAcquirerTrait<SuperAcquirersPage>,
-                   SelectStatusTrait<SuperAcquirersPage>,
-                   AcquirersTableTrait {
+        SuperSystemMenuTrait,
+        SelectAcquirerTrait<SuperAcquirersPage>,
+        SelectStatusTrait<SuperAcquirersPage>,
+        AcquirersTableTrait {
 
     private final Locator setupAcquirerMidButton = getByTestId("AddAcquirerButton");
     private final Locator setupAcquirerMidDialog = getByRole(AriaRole.DIALOG);

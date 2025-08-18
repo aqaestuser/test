@@ -253,7 +253,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Test(dependsOnMethods = "testAddBusinessUnit")
     @TmsLink("794")
     @Epic("System/Companies and business units")
-    @Feature("Edit Business unit")
+    @Feature("Edit business unit")
     @Description("Editing a business unit updates its name while preserving the same ID")
     public void testEditBusinessUnit() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())

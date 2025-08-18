@@ -21,13 +21,13 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-import xyz.npgw.test.common.BrowserFactory;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Credentials;
 import xyz.npgw.test.common.entity.Token;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.entity.UserRole;
+import xyz.npgw.test.common.util.BrowserUtils;
 import xyz.npgw.test.common.util.CleanupUtils;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.AboutBlankPage;
@@ -67,13 +67,13 @@ public abstract class BaseTest {
     private String companyName;
     private BusinessUnit businessUnit;
 
-    private HashMap<String, Response> requestMap = new HashMap<>();
+    private final HashMap<String, Response> requestMap = new HashMap<>();
 
     @BeforeSuite
     protected void beforeSuite() {
-        Playwright playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
+        Playwright playwright = BrowserUtils.createPlaywright();
         APIRequestContext apiRequestContext = playwright.request()
-                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseUrl()));
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
         Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
         Token token = User.getTokenResponse(apiRequestContext, credentials).token();
         apiRequestContext.dispose();
@@ -81,7 +81,7 @@ public abstract class BaseTest {
         if (token != null && !token.idToken().isEmpty()) {
             apiRequestContext = playwright.request()
                     .newContext(new APIRequest.NewContextOptions()
-                            .setBaseURL(ProjectProperties.getBaseUrl())
+                            .setBaseURL(ProjectProperties.getBaseURL())
                             .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
             CleanupUtils.clean(apiRequestContext);
             apiRequestContext.dispose();
@@ -91,9 +91,9 @@ public abstract class BaseTest {
 
     @BeforeClass
     protected void beforeClass() {
-        playwright = Playwright.create(new Playwright.CreateOptions().setEnv(ProjectProperties.getEnv()));
+        playwright = BrowserUtils.createPlaywright();
         initApiRequestContext();
-        browser = BrowserFactory.getBrowser(playwright);
+        browser = BrowserUtils.createBrowser(playwright);
 
         uid = "%s.%s".formatted(RUN_ID, Thread.currentThread().getId());
         companyName = "%s test run company".formatted(uid);
@@ -102,48 +102,22 @@ public abstract class BaseTest {
 
     @BeforeMethod
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
-        testId = "%s/%s/%s/%s(%d)%s".formatted(
+        testId = "%s/%s/%s(%d)%s".formatted(
                 ProjectProperties.getArtefactDir(),
-                ProjectProperties.getBrowserType(),
                 method.getDeclaringClass().getSimpleName(),
                 method.getName(),
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
 //        log.info(">>> {}", testId);
 
-        Browser.NewContextOptions options = new Browser
-                .NewContextOptions()
-                .setLocale("en-GB")
-                .setTimezoneId("Europe/Paris")
-                .setColorScheme(ProjectProperties.getColorScheme())
-                .setViewportSize(ProjectProperties.getViewportWidth(), ProjectProperties.getViewportHeight())
-                .setBaseURL(ProjectProperties.getBaseUrl());
-
-        if (ProjectProperties.isVideoMode()) {
-            options.setRecordVideoDir(Paths.get(ProjectProperties.getArtefactDir()))
-                    .setRecordVideoSize(ProjectProperties.getVideoWidth(), ProjectProperties.getVideoHeight());
-        }
-
-        context = browser.newContext(options);
+        context = BrowserUtils.createContext(browser);
 
         if (ProjectProperties.isTracingMode()) {
-            context.tracing().start(new Tracing
-                    .StartOptions()
-                    .setScreenshots(true)
-                    .setSnapshots(true)
-                    .setSources(true));
+            BrowserUtils.startTracing(context);
         }
 
         page = context.newPage();
-        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout()); // * 6);
-//        PlaywrightAssertions.setDefaultAssertionTimeout(ProjectProperties.getDefaultTimeout() * 6);
-
-//        page.addLocatorHandler(page.getByText("Loading..."),
-//                locator -> page.getByText("Loading...").waitFor(
-//                        new Locator.WaitForOptions()
-//                                .setState(WaitForSelectorState.HIDDEN)
-//                                .setTimeout(ProjectProperties.getDefaultTimeout() * 5)),
-//                new Page.AddLocatorHandlerOptions().setNoWaitAfter(true));
+        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
         page.addLocatorHandler(page.getByText("Loading..."), locator -> {
         });
 
@@ -234,12 +208,14 @@ public abstract class BaseTest {
 
     @AfterMethod
     protected void afterMethod(Method method, ITestResult testResult) throws IOException {
-        if (!testResult.isSuccess() && !ProjectProperties.closeBrowserIfError()) {
+        if (!testResult.isSuccess() && !ProjectProperties.isCloseBrowserIfError()) {
             page.pause();
         }
 
         long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-//        log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
+        if (testResult.getStatus() == ITestResult.FAILURE) {
+            log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
+        }
 
         if (page != null) {
             page.close();
@@ -290,7 +266,7 @@ public abstract class BaseTest {
             return;
         }
         APIRequestContext request = playwright.request()
-                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseUrl()));
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
         Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
         Token token = User.getTokenResponse(request, credentials).token();
         request.dispose();
@@ -298,7 +274,7 @@ public abstract class BaseTest {
         if (token != null && !token.idToken().isEmpty()) {
             apiRequestContext = playwright.request()
                     .newContext(new APIRequest.NewContextOptions()
-                            .setBaseURL(ProjectProperties.getBaseUrl())
+                            .setBaseURL(ProjectProperties.getBaseURL())
                             .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
             bestBefore = LocalTime.now().plusSeconds(token.expiresIn()).minusMinutes(3);
         }

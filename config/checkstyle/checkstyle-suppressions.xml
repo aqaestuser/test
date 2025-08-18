@@ -12,4 +12,5 @@
     <suppress checks="CommentsIndentationCheck"/>
     <suppress checks="HideUtilityClassConstructor"/>
     <suppress checks="VariableDeclarationUsageDistance"/>
+    <suppress checks="ConstantName"/>
 </suppressions>

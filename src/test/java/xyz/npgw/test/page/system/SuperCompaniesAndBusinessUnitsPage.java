@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
 @Getter
 public class SuperCompaniesAndBusinessUnitsPage extends BaseBusinessUnitsPage<SuperCompaniesAndBusinessUnitsPage>
         implements SuperHeaderMenuTrait<SuperCompaniesAndBusinessUnitsPage>,
-                   SuperSystemMenuTrait,
-                   SelectCompanyTrait<SuperCompaniesAndBusinessUnitsPage>,
-                   SuperBusinessUnitsTableTrait {
+        SuperSystemMenuTrait,
+        SelectCompanyTrait<SuperCompaniesAndBusinessUnitsPage>,
+        SuperBusinessUnitsTableTrait {
 
     private final Locator addCompanyButton = getByTestId("AddCompanyButton");
     private final Locator editCompanyButton = getByTestId("EditCompanyButton");

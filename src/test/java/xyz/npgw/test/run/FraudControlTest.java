@@ -83,7 +83,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test
     @TmsLink("891")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Add Active Fraud Control")
     public void testAddActiveFraudControl() {
@@ -109,7 +109,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("920")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Add Fraud Control to Business Unit with Cancel button"
             + "Add Fraud Control to Business Unit with 'Cross'"
@@ -144,7 +144,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("972")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Delete Fraud Control with Cancel button"
             + "Delete Fraud Control with 'Cross'"
@@ -174,7 +174,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("987")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Deactivate Fraud Control with Cancel button"
             + "Deactivate Fraud Control with 'Cross'"
@@ -208,7 +208,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("999")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Edit Fraud Control with Cancel button"
             + "Edit Fraud Control with 'Cross'"
@@ -266,7 +266,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1001")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Tooltips for available actions check")
     public void testTooltipsForActionsControlTable() {
@@ -319,7 +319,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testBusinessUnitControlTableEntriesSorting"})
     @TmsLink("1123")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
     @Description("Tooltips for available actions check")
     public void testTooltipsForActionsBusinessUnitControlTable() {
@@ -375,7 +375,7 @@ public class FraudControlTest extends BaseTest {
             "testTooltipsForActionsControlTable", "testBusinessUnitControlTableEntriesSorting",
             "testVerifyWarningModalWindowChangeActivityForControlTable"})
     @TmsLink("949")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Delete Active Fraud Control not added to Business Unit")
     public void testDeleteActiveFraudControlNotAddedToBusinessUnit() {
@@ -391,7 +391,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test
     @TmsLink("904")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Add Inactive Fraud Control")
     public void testAddInactiveFraudControl() {
@@ -417,7 +417,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddInactiveFraudControl")
     @TmsLink("955")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Activate Fraud Control not added to Business Unit"
             + "Deactivate Fraud Control not added to Business Unit")
@@ -444,7 +444,7 @@ public class FraudControlTest extends BaseTest {
     @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit",
             "testDeleteInactiveFraudControlAddedToBusinessUnit"})
     @TmsLink("910")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Add Fraud Control to Business Unit (No Fraud Control)"
             + "Add Fraud Control to Business Unit (Business unit has Fraud Control)")
@@ -475,7 +475,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("967")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Control table")
     @Description("Activate Fraud Control added to Business Unit"
             + "Deactivate Fraud Control added to Business Unit")
@@ -517,7 +517,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("1009")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
     @Description("Activate Business unit control" + "Deactivate Business unit control")
     public void testChangeBusinessUnitFraudControlActivity() {
@@ -602,7 +602,7 @@ public class FraudControlTest extends BaseTest {
     @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority",
             "testChangeBusinessUnitFraudControlActivity", "testChangeBusinessControlPriorityRestrictions"})
     @TmsLink("950")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Delete Active Fraud Control added to Business Unit")
     public void testDeleteActiveFraudControlAddedToBusinessUnit() {
@@ -622,7 +622,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("960")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
     @Description("Move Business unit control up" + "Move Business unit control down")
     public void testChangeFraudControlPriority() {
@@ -691,7 +691,7 @@ public class FraudControlTest extends BaseTest {
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
             "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("986")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Edit Fraud Control")
     public void testEditFraudControl() {
@@ -728,7 +728,7 @@ public class FraudControlTest extends BaseTest {
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
             "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("993")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
     @Description("Verify,Control name is immutable")
     public void testNotEditControlName() {
@@ -768,7 +768,6 @@ public class FraudControlTest extends BaseTest {
                     .getTableControls().getColumnValuesFromAllPages(columnName);
 
             Allure.step("Verify that entries are now sorted ascending by %s".formatted(columnName));
-            System.out.println(columnName + "--->" + columnValues);
             Assert.assertEquals(columnValues, columnValues.stream().sorted().toList());
 
             columnValues = fraudControlPage
@@ -940,7 +939,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
     @TmsLink("1018")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
     @Description("Move the first Business unit control up" + "Move the last Business unit control down")
     public void testChangeBusinessControlPriorityRestrictions() {
@@ -974,7 +973,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit"})
     @TmsLink("1064")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
     @Description("Priority icons for only one Business unit control")
     public void testPriorityIconsDisableForOnlyOneBusinessUnitControl() {
@@ -993,7 +992,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test
     @TmsLink("1079")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add Fraud control")
     @Description("Verify that error message is displayed when special symbols are entered in the Control name field"
             + " after clicking create button")
@@ -1024,7 +1023,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test
     @TmsLink("1091")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Add Fraud control")
     @Description("Verify that the Control Name field requires between 4 and 100 characters")
     public void testControlNameLengthRestrictions() {
@@ -1069,7 +1068,7 @@ public class FraudControlTest extends BaseTest {
 
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1143")
-    @Epic("System/Fraud Control")
+    @Epic("System/Fraud control")
     @Feature("Change control activity dialog Control table")
     @Description("Warning message text")
     public void testVerifyWarningModalWindowChangeActivityForControlTable() {

@@ -23,7 +23,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Ignore("Invalid key=value pair (missing equal-sign) in Authorization header ERROR with Create button")
     @Test
     @TmsLink("874")
-    @Epic("System/Transaction Management")
+    @Epic("System/Transaction management")
     @Feature("Add adjustment")
     @Description("Verify possibility to add adjustment with Transaction adjustment")
     public void testAddTransactionAdjustment() {
@@ -40,7 +40,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Ignore("There is no longer a default transaction")
     @Test
     @TmsLink("873")
-    @Epic("System/Transaction Management")
+    @Epic("System/Transaction management")
     @Feature("Add adjustment")
     @Description("Close button with no changes performed")
     public void testClickCloseButtonWithNoChanges() {
@@ -56,7 +56,7 @@ public class TransactionManagementPageTest extends BaseTest {
 
     @Test
     @TmsLink("884")
-    @Epic("System/Transaction Management")
+    @Epic("System/Transaction management")
     @Feature("Add adjustment")
     @Description("Create button is disabled if nothing is selected")
     public void testCreateButtonIsDisabledByDefault() {
@@ -71,7 +71,7 @@ public class TransactionManagementPageTest extends BaseTest {
     @Ignore("getFirstRowCell(NPGW reference) is not there as for now)")
     @Test
     @TmsLink("886")
-    @Epic("System/Transaction Management")
+    @Epic("System/Transaction management")
     @Feature("Add adjustment")
     @Description("Search by NPGW reference within Add adjustment dialog and check placeholders")
     public void testPlaceholdersAndSearchNpgwInAddAdjustment() {

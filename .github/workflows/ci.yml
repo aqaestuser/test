@@ -40,25 +40,40 @@ jobs:
       - name: Run tests
         run: mvn test
         env:
-          APP_OPTIONS:
-            baseURL=${{ secrets.BASE_URL }};
-            email=${{ secrets.USER_EMAIL }};
-            password=${{ secrets.USER_PASSWORD }};
-            browserType=CHROMIUM;
-            headlessMode=true;
-            slowMoMode=0;
-            viewportWidth=1920;
-            viewportHeight=964;
-            tracingMode=true;
-            videoMode=true;
-            videoWidth=1920;
-            videoHeight=957;
-            closeBrowserIfError=true;
-            artefactDir=target/artefact;
-            defaultTimeout=5000;
-            additionalRetries=0;
-            colorScheme=DARK;
-            DEBUG='';
+          PROJECT_PROPERTIES:
+            setBaseURL=https://test.npgw.xyz;
+            setEmail=${{ secrets.USER_EMAIL }};
+            setPassword=${{ secrets.USER_PASSWORD }};
+            setTracingMode=true;
+            setVideoMode=true;
+            setCloseBrowserIfError=true;
+            setColorScheme=DARK;
+            setArtefactDir=target/artefact;
+            setDefaultTimeout=5000;
+            setAdditionalRetries=0
+          PLAYWRIGHT_BROWSER:
+            chromium
+          PLAYWRIGHT_OPTIONS_CREATE:
+            setEnv=PLAYWRIGHT_JAVA_SRC:src/test/java;
+          PLAYWRIGHT_OPTIONS_LAUNCH:
+            setHeadless=true;
+            setSlowMo=0.0;
+            setArgs=;
+            setEnv=
+          PLAYWRIGHT_OPTIONS_CONTEXT:
+            setLocale=en-GB;
+            setTimezoneId=Europe/Paris;
+            setColorScheme=DARK;
+            setViewportSize=1920,964;
+            setBaseURL=https://test.npgw.xyz;
+            setRecordVideoDir=target/artefact;
+            setRecordVideoSize=1920,957
+          PLAYWRIGHT_OPTIONS_TRACING:
+            setName=;
+            setScreenshots=true;
+            setSnapshots=true;
+            setSources=true;
+            setTitle=
           CI_RUN: true
 
       - name: Create test report

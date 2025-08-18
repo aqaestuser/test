@@ -16,15 +16,17 @@ import static xyz.npgw.test.common.util.TestUtils.encode;
 public class FraudControl {
 
     @Builder.Default
+    private String controlName = "";
+    @Builder.Default
     private String controlDisplayName = "";
+    @Builder.Default
+    private String controlType = "bin_check";
     @Builder.Default
     private String controlCode = "";
     @Builder.Default
     private String controlConfig = "";
     @Builder.Default
     private boolean isActive = true;
-    @Builder.Default
-    private String controlName = "";
 
     public static void create(APIRequestContext request, FraudControl fraudControl) {
         APIResponse response = request.post("portal-v1/control", RequestOptions.create().setData(fraudControl));
