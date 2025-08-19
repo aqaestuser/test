@@ -14,7 +14,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.Assert;
 import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.entity.CardType;
+import xyz.npgw.test.common.entity.Currency;
+import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.Transaction;
+import xyz.npgw.test.common.entity.Type;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.select.SelectBusinessUnitTrait;
@@ -33,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Getter
@@ -416,99 +421,60 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
         List<Transaction> transactions = new ArrayList<>();
 
         String[] lines = text.split("\\R");
-        int i = 0;
+        Pattern dateTypePattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+(AUTH|SALE)");
+        Pattern amountLinePattern = Pattern.compile("^(\\S+) (\\d+\\.\\d{2}) (\\w+) (\\w+) (\\w+)$");
 
-        Pattern datePattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}");
-        Pattern amountLinePattern = Pattern.compile(
-                ".*\\d+\\.\\d{2} (EUR|USD|GBT) (MASTERCARD|VISA) "
-                        + "(INITIATED|PENDING|SUCCESS|FAILED|CANCELLED|EXPIRED|PARTIAL_REFUND|REFUNDED)");
+        String creationDate = null;
+        String type = null;
+        List<String> middleLines = new ArrayList<>();
 
-        while (i < lines.length && (lines[i].trim().isEmpty() || lines[i].contains("Creation Date (GMT)"))) {
-            i++;
-        }
-
-        while (i < lines.length) {
-            String creationDate = lines[i].trim();
-            if (!datePattern.matcher(creationDate).matches()) {
-                i++;
-                continue;
-            }
-            i++;
-
-            StringBuilder npgwReferenceBuilder = new StringBuilder();
-            while (i < lines.length) {
-                String line = lines[i].trim();
-                if (line.isEmpty()) {
-                    break;
-                }
-                npgwReferenceBuilder.append(line);
-                i++;
-                if (npgwReferenceBuilder.length() >= 101) {
-                    break;
-                }
-            }
-            String npgwReference = npgwReferenceBuilder.toString().trim();
-
-            StringBuilder businessUnitReferenceBuilder = new StringBuilder();
-            String amountLine = null;
-
-            while (i < lines.length) {
-                String line = lines[i].trim();
-                if (line.isEmpty() || datePattern.matcher(line).matches()) {
-                    break;
-                }
-
-                if (amountLinePattern.matcher(line).matches()) {
-                    String[] parts = line.split("\\s+", 2);
-                    businessUnitReferenceBuilder.append(parts[0]);
-                    amountLine = parts.length > 1 ? parts[1].trim() : "";
-                    i++;
-                    break;
-                } else {
-                    businessUnitReferenceBuilder.append(line);
-                    i++;
-                    if (businessUnitReferenceBuilder.length() >= 50) {
-                        break;
-                    }
-                }
-            }
-
-            String businessUnitReference = businessUnitReferenceBuilder.toString().trim();
-            if (amountLine == null && i < lines.length) {
-                amountLine = lines[i].trim();
-                i++;
-            }
-
-            if (amountLine == null || !amountLinePattern.matcher(amountLine).matches()) {
+        for (String line : lines) {
+            line = line.trim();
+            if (line.isEmpty()) {
                 continue;
             }
 
-            String[] tokens = amountLine.split("\\s+");
-            if (tokens.length < 4) {
+            Matcher dtMatcher = dateTypePattern.matcher(line);
+            if (dtMatcher.find()) {
+                creationDate = dtMatcher.group(1);
+                type = dtMatcher.group(2);
+                middleLines.clear();
                 continue;
             }
 
-            double amount;
-            try {
-                amount = Double.parseDouble(tokens[0]);
-            } catch (NumberFormatException e) {
+            Matcher amountMatcher = amountLinePattern.matcher(line);
+            if (amountMatcher.find() && creationDate != null) {
+                String businessUnitReference = middleLines.isEmpty() ? "" : middleLines.get(middleLines.size() - 1);
+                String npgwReference = String.join("", middleLines.subList(0, Math.max(0, middleLines.size() - 1)));
+
+                String buCode = amountMatcher.group(1);
+                double amount = Double.parseDouble(amountMatcher.group(2));
+                String currency = amountMatcher.group(3);
+                String cardType = amountMatcher.group(4);
+                String status = amountMatcher.group(5);
+
+                businessUnitReference = businessUnitReference + buCode;
+
+                Transaction transaction = new Transaction(
+                        creationDate,
+                        Type.valueOf(type),
+                        npgwReference,
+                        businessUnitReference,
+                        amount,
+                        Currency.valueOf(currency),
+                        CardType.valueOf(cardType),
+                        Status.valueOf(status)
+                );
+                transactions.add(transaction);
+
+                creationDate = null;
+                type = null;
+                middleLines.clear();
                 continue;
             }
 
-            List<String> fields = List.of(
-                    creationDate,
-                    npgwReference,
-                    businessUnitReference,
-                    String.valueOf(amount),
-                    tokens[1], // currency
-                    tokens[2], // cardType
-                    tokens[3]  // status
-            );
-
-            try {
-                transactions.add(TestUtils.mapToTransaction(fields));
-            } catch (IllegalArgumentException e) {
-                // intentionally ignored - invalid enum value
+            if (creationDate != null) {
+                middleLines.add(line);
             }
         }
 
