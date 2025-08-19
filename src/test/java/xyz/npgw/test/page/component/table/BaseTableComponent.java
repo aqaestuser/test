@@ -134,14 +134,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         return getCurrentPage();
     }
 
-    @Step("Click sort icon in '{columnName}' column")
-    public CurrentPageT clickSortIcon(String columnName) {
-        getColumnHeader(columnName).locator("svg").click();
-        lastRow.waitFor();
-
-        return getCurrentPage();
-    }
-
     @Step("Click the 'Rows per page' dropdown Chevron")
     public CurrentPageT clickRowsPerPageChevron() {
         rowsPerPage.locator("svg").click();

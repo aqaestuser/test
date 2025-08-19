@@ -500,7 +500,7 @@ public class TeamPageAdminTest extends BaseTest {
     public void testCheckSortingListOfUsersAlphabeticallyAsAdmin() {
         List<String> sortedUsersAlphabetically = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getTable().clickSortIcon("Username")
+                .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
 
         List<String> expectedSortedList = new ArrayList<>(sortedUsersAlphabetically);
@@ -518,8 +518,8 @@ public class TeamPageAdminTest extends BaseTest {
     public void testCheckSortingListOfUsersReverseAsAdmin() {
         List<String> sortedUsersReverseAlphabetically = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getTable().clickSortIcon("Username")
-                .getTable().clickSortIcon("Username")
+                .getTable().clickColumnHeader("Username")
+                .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
 
         List<String> expectedSortedList = new ArrayList<>(sortedUsersReverseAlphabetically);

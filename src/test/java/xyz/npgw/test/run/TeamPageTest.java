@@ -587,7 +587,7 @@ public class TeamPageTest extends BaseTest {
         List<String> sortedUsersAlphabetically = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
-                .getTable().clickSortIcon("Username")
+                .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
 
         List<String> expectedSortedList = new ArrayList<>(sortedUsersAlphabetically);
@@ -606,8 +606,8 @@ public class TeamPageTest extends BaseTest {
         List<String> sortedUsersReverseAlphabetically = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
-                .getTable().clickSortIcon("Username")
-                .getTable().clickSortIcon("Username")
+                .getTable().clickColumnHeader("Username")
+                .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
 
         List<String> expectedSortedList = new ArrayList<>(sortedUsersReverseAlphabetically);
