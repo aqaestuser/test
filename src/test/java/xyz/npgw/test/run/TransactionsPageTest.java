@@ -21,6 +21,7 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -28,8 +29,11 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.CARD_TYPES;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.CURRENCY_OPTIONS;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
+import static xyz.npgw.test.common.Constants.TRANSACTION_STATUSES;
 
 public class TransactionsPageTest extends BaseTest {
 
@@ -318,28 +322,31 @@ public class TransactionsPageTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
     }
 
-    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("567")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Currency' to default value ( ALL)")
-    public void testResetCurrency(String currency) {
+    @Description("Verify, that 'Reset filter' button change 'Currency' to default value (ALL)")
+    public void testResetCurrency() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
 
-        transactionsPage.getSelectCurrency().select(currency);
+        for (String currency : Arrays.copyOfRange(CURRENCY_OPTIONS, 1, CURRENCY_OPTIONS.length)) {
+            transactionsPage
+                    .getSelectCurrency().select(currency);
 
-        Allure.step("Verify: Filter displays the selected currency");
-        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
+            Allure.step("Verify: Filter displays the selected currency");
+            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
-        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
+            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
+        }
     }
 
     @Test
@@ -348,106 +355,97 @@ public class TransactionsPageTest extends BaseTest {
     @Feature("Refresh data")
     @Description("Verify the request to server contains all the information from the filter")
     public void testRequestToServer() {
-        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+        String requestData = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .getSelectDateRange().setDateRangeFields("01/05/2025 - 07/05/2025")
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
+                .getSelectBusinessUnit().selectBusinessUnit(businessUnit.merchantTitle())
                 .getSelectCurrency().select("USD")
                 .selectCardType("VISA")
                 .clickAmountButton()
                 .fillAmountFromField("500")
                 .fillAmountToField("10000")
-                .clickAmountApplyButton();
+                .clickAmountApplyButton()
+                .getSelectStatus().select("SUCCESS")
+                .getRequestData();
 
         Allure.step("Verify: merchant ID is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains(businessUnit.merchantId())); //TODO - bug refresh data
+        assertTrue(requestData.contains(businessUnit.merchantId()));
 
         Allure.step("Verify: dateFrom is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("2025-05-01T00:00:00.000Z"));
+        assertTrue(requestData.contains("2025-05-01T00:00:00.000Z"));
 
         Allure.step("Verify: dateTo is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("2025-05-07T23:59:59.999Z"));
+        assertTrue(requestData.contains("2025-05-07T23:59:59.999Z"));
 
         Allure.step("Verify: currency is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("USD"));
+        assertTrue(requestData.contains("USD"));
 
         Allure.step("Verify: paymentMethod is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("VISA"));
+        assertTrue(requestData.contains("VISA"));
 
         Allure.step("Verify:amountFrom is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("500"));
+        assertTrue(requestData.contains("500"));
 
         Allure.step("Verify: amountTo is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("10000"));
+        assertTrue(requestData.contains("10000"));
+
+        Allure.step("Verify: status is sent to the server");
+        assertTrue(requestData.contains("SUCCESS"));
     }
 
     @Test
-    @TmsLink("621")
-    @Epic("Transactions")
-    @Feature("Refresh data")
-    @Description("Verify the status is sent to the server")
-    public void testStatusRequestServer() {
-        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
-                .getHeader().clickTransactionsLink()
-                .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE)
-                .getSelectStatus().clickSelector()
-                .getSelectStatus().clickValue("SUCCESS")
-                .getSelectStatus().clickSelector();
-
-        Allure.step("Verify: status is sent to the server");
-        assertTrue(transactionsPage.getRequestData().contains("SUCCESS"));
-    }
-
-    @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
     @TmsLink("598")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Card Type' to default value ( ALL)")
-    public void testResetCardType(String cardType) {
+    @Description("Verify, that 'Reset filter' button change 'Card Type' to default value (ALL)")
+    public void testResetCardType() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
-        transactionsPage
-                .selectCardType(cardType);
+        for (String cardType : Arrays.copyOfRange(CARD_TYPES, 1, CARD_TYPES.length)) {
+            transactionsPage
+                    .selectCardType(cardType);
 
-        Allure.step("Verify: Filter displays the selected payment method");
-        assertThat(transactionsPage.getCardTypeValue()).containsText(cardType);
+            Allure.step("Verify: Filter displays the selected payment method");
+            assertThat(transactionsPage.getCardTypeValue()).containsText(cardType);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
-        assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+            assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
+        }
     }
 
-    @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("639")
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' to default value ( ALL)")
-    public void testResetStatus(String status) {
+    public void testResetStatus() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
 
-        transactionsPage
-                .getSelectStatus().selectTransactionStatuses(status);
+        for (String status : Arrays.copyOfRange(TRANSACTION_STATUSES, 1, TRANSACTION_STATUSES.length)) {
+            transactionsPage
+                    .getSelectStatus().selectTransactionStatuses(status);
 
-        Allure.step("Verify: Filter displays the selected Status");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status);
+            Allure.step("Verify: Filter displays the selected Status");
+            assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+            assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+        }
     }
 
     @Ignore("multistatus not working atm")
@@ -593,7 +591,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("851")
     @Epic("Transactions")
-    @Feature("Transactions Search")
+    @Feature("Transactions search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testSearchOptionsVisibleAfterClickingTrxIds() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
@@ -610,7 +608,7 @@ public class TransactionsPageTest extends BaseTest {
     @Test
     @TmsLink("853")
     @Epic("Transactions")
-    @Feature("Transactions Search")
+    @Feature("Transactions search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testTransactionSearchByNpgwReference() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())

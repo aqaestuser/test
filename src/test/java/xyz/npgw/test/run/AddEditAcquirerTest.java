@@ -18,7 +18,6 @@ import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
-import xyz.npgw.test.page.dialog.control.AddControlDialog;
 import xyz.npgw.test.page.system.SuperAcquirersPage;
 
 import java.util.List;
@@ -221,8 +220,8 @@ public class AddEditAcquirerTest extends BaseTest {
 
     @Test
     @TmsLink("1119")
-    @Epic("System/Acquirer")
-    @Feature("Setup Acquirer MID")
+    @Epic("System/Acquirers")
+    @Feature("Setup acquirer MID")
     @Description("Verify that the 'Entity name' field requires between 4 and 100 characters")
     public void testEntityNameIsMandatoryLengthRestrictions() {
         String invalidControlName3Chars = "a".repeat(3);
@@ -230,7 +229,7 @@ public class AddEditAcquirerTest extends BaseTest {
         String validControlName100Chars = "a".repeat(100);
         String invalidControlName101Chars = "a".repeat(101);
 
-        SetupAcquirerMidDialog setupAcquirerMidDialog  = new SuperDashboardPage(getPage())
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .clickSetupAcquirerMidButton()

@@ -112,7 +112,7 @@ public class HeaderTest extends BaseTest {
     @Test
     @TmsLink("308")
     @Epic("Header")
-    @Feature("Log Out")
+    @Feature("Logout")
     @Description("Log out via button in the Header")
     public void testLogOutViaButtonInHeader() {
         LoginPage loginPage = new SuperDashboardPage(getPage())

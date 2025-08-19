@@ -283,7 +283,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Test(dependsOnMethods = "testEditBusinessUnit")
     @TmsLink("728")
     @Epic("System/Companies and business units")
-    @Feature("Delete Company")
+    @Feature("Delete company")
     @Description("Verify that company cannot be deleted if there are associated business units")
     public void testCannotDeleteCompanyWithAssociatedBusinessUnit() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
@@ -411,7 +411,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     @Test(dependsOnMethods = "testEditCompanyInfoAndSave")
     @TmsLink("723")
     @Epic("System/Companies and business units")
-    @Feature("Delete Company")
+    @Feature("Delete company")
     @Description("Verify that company can be deleted")
     public void testDeleteCompany() {
         DeleteCompanyDialog deleteCompanyDialog = new SuperDashboardPage(getPage())
@@ -451,7 +451,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
     @Test
     @Epic("System/Companies and business units")
-    @Feature("Delete Company")
+    @Feature("Delete company")
     @Description("Verify that company cannot be deleted if there are users assigned to it")
     public void testCannotDeleteCompanyWithAssignedUser() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
@@ -494,7 +494,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
 
     @Test
     @TmsLink("480")
-    @Epic("Companies and business units")
+    @Epic("System/Companies and business units")
     @Feature("Reset filter")
     @Description("Verify default filter state was applied once reset")
     public void testResetAppliedFilter() {

@@ -60,37 +60,6 @@ public class TestDataProvider {
     }
 
     @DataProvider
-    public static Object[][] getCurrency() {
-        return new Object[][]{
-                {"EUR"},
-                {"USD"},
-                {"GBP"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getCardType() {
-        return new Object[][]{
-                {"VISA"},
-                {"MASTERCARD"},
-        };
-    }
-
-    @DataProvider
-    public static Object[][] getStatus() {
-        return new Object[][]{
-                {"PENDING"},
-                {"INITIATED"},
-                {"SUCCESS"},
-                {"FAILED"},
-                {"CANCELLED"},
-                {"EXPIRED"},
-                {"PARTIAL_REFUND"},
-                {"REFUND"},
-        };
-    }
-
-    @DataProvider
     public static Object[][] getMultiStatus2() {
         return new Object[][]{
                 {"PENDING", "INITIATED"},

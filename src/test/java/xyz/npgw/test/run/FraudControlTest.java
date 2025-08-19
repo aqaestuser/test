@@ -559,7 +559,7 @@ public class FraudControlTest extends BaseTest {
     @Test
     @TmsLink("1024")
     @Epic("System/Fraud control")
-    @Feature("Add fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
     @Description("Verify the 'Control name' field is mandatory and marked with '*'")
     public void testControlNameIsMandatory() {
         AddControlDialog addControlDialog = new SuperDashboardPage(getPage())
@@ -579,7 +579,7 @@ public class FraudControlTest extends BaseTest {
     @Test
     @TmsLink("895")
     @Epic("System/Fraud control")
-    @Feature("Add fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
     @Description("Verify the error message when attempting to create a Fraud Control with the existing name")
     public void testErrorMessageForExistingControlName() {
         SuperFraudControlPage fraudControlPage = new SuperDashboardPage(getPage())
@@ -993,7 +993,7 @@ public class FraudControlTest extends BaseTest {
     @Test
     @TmsLink("1079")
     @Epic("System/Fraud control")
-    @Feature("Add Fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
     @Description("Verify that error message is displayed when special symbols are entered in the Control name field"
             + " after clicking create button")
     public void testSpecialSymbolsInControlNameNotAllowed() {
@@ -1024,7 +1024,7 @@ public class FraudControlTest extends BaseTest {
     @Test
     @TmsLink("1091")
     @Epic("System/Fraud control")
-    @Feature("Add Fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
     @Description("Verify that the Control Name field requires between 4 and 100 characters")
     public void testControlNameLengthRestrictions() {
         String invalidControlName3Chars = "a".repeat(3);

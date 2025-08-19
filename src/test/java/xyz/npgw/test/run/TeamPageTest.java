@@ -201,7 +201,7 @@ public class TeamPageTest extends BaseTest {
     @Test(dependsOnMethods = "testAddCompanyAnalyst")
     @TmsLink("908")
     @Epic("System/Companies and business units")
-    @Feature("Delete Business unit")
+    @Feature("Delete business unit")
     @Description("Verify that business unit cannot be deleted if there are users associated with it")
     public void testDeletingBusinessUnitWithUsersFailsWithError() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())

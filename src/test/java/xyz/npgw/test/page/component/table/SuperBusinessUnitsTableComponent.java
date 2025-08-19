@@ -17,14 +17,14 @@ public class SuperBusinessUnitsTableComponent extends BaseTableComponent<SuperCo
         return new SuperCompaniesAndBusinessUnitsPage(getPage());
     }
 
-    @Step("Click 'Edit Business Unit' button")
+    @Step("Click 'Edit business unit' button")
     public EditBusinessUnitDialog clickEditBusinessUnitButton(String businessUnitName) {
         getRow(businessUnitName).getByTestId("EditBusinessUnitButton").click();
 
         return new EditBusinessUnitDialog(getPage());
     }
 
-    @Step("Click 'Delete Business Unit' button")
+    @Step("Click 'Delete business unit' button")
     public DeleteBusinessUnitDialog clickDeleteBusinessUnitButton(String businessUnitName) {
         getRow(businessUnitName).getByTestId("DeleteBusinessUnitButton").click();
 

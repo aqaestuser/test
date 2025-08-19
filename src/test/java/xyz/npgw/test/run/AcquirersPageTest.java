@@ -179,14 +179,14 @@ public class AcquirersPageTest extends BaseTest {
     @Test
     @TmsLink("380")
     @Epic("System/Acquirers")
-    @Feature("Rows Per Page")
-    @Description("Verify the default 'Rows Per Page' value is 25 and the dropdown contains the correct options.")
+    @Feature("Rows per page")
+    @Description("Verify the default 'Rows per page' value is 25 and the dropdown contains the correct options.")
     public void testRowsPerPageDropdownOptions() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab();
 
-        Allure.step("Verify: The default 'Rows Per Page' value is set to 25");
+        Allure.step("Verify: The default 'Rows per page' value is set to 25");
         assertThat(acquirersPage.getTable().getRowsPerPage()).hasText("25");
 
         acquirersPage.getTable().clickRowsPerPageChevron();
@@ -201,8 +201,8 @@ public class AcquirersPageTest extends BaseTest {
     @Test
     @TmsLink("382")
     @Epic("System/Acquirers")
-    @Feature("Rows Per Page")
-    @Description("Verify Selecting 'Rows Per Page' Option Updates the Field Value.")
+    @Feature("Rows per page")
+    @Description("Verify Selecting 'Rows per page' Option Updates the Field Value.")
     public void testSelectingRowsPerPageOptionUpdatesFieldValue() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -211,7 +211,7 @@ public class AcquirersPageTest extends BaseTest {
         for (String option : ROWS_PER_PAGE_OPTIONS) {
             acquirersPage.getTable().selectRowsPerPageOption(option);
 
-            Allure.step(String.format("Verify: The Rows Per Page' value is set to '%s'", option));
+            Allure.step(String.format("Verify: The 'Rows per page' value is set to '%s'", option));
             assertThat(acquirersPage.getTable().getRowsPerPage()).hasText(option);
         }
     }
@@ -219,8 +219,8 @@ public class AcquirersPageTest extends BaseTest {
     @Test
     @TmsLink("385")
     @Epic("System/Acquirers")
-    @Feature("Rows Per Page")
-    @Description("Verify that selecting a 'Rows Per Page' option displays the correct number of rows in the table.")
+    @Feature("Rows per page")
+    @Description("Verify that selecting a 'Rows per page' option displays the correct number of rows in the table.")
     public void testRowsPerPageSelectionDisplaysCorrectNumberOfRows() {
         List<Integer> totalRowsForDifferentPaginations = new ArrayList<>();
 
@@ -229,20 +229,19 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab();
 
         for (String option : ROWS_PER_PAGE_OPTIONS) {
-            acquirersPage.getTable().selectRowsPerPageOption(option);
-
-            List<Integer> rowsCountPerPage = acquirersPage.getTable().getRowCountsPerPage();
-            int rowsSum = acquirersPage.getTable().countAllRows(rowsCountPerPage);
-            boolean allValid = rowsCountPerPage.stream().allMatch(count -> count <= Integer.parseInt(option));
+            List<Integer> rowsCountPerPage = acquirersPage
+                    .getTable().selectRowsPerPageOption(option)
+                    .getTable().getRowCountsPerPage();
 
             Allure.step(String.format("Verify: The table contains rows less than or equal to '%s' per page", option));
-            assertTrue(allValid, "Not all row counts are less than or equal to " + option);
+            assertTrue(rowsCountPerPage.stream().allMatch(count -> count <= Integer.parseInt(option)),
+                    "Not all row counts are less than or equal to " + option);
 
-            totalRowsForDifferentPaginations.add(rowsSum);
+            totalRowsForDifferentPaginations.add(rowsCountPerPage.stream().mapToInt(Integer::intValue).sum());
         }
 
         Assert.assertEquals(totalRowsForDifferentPaginations.stream().distinct().count(), 1,
-                "Total rows should be the same for all 'Rows Per Page' options");
+                "Total rows should be the same for all 'Rows per page' options");
     }
 
     @Test

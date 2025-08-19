@@ -18,10 +18,14 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.UserDashboardPage;
 import xyz.npgw.test.page.transactions.UserTransactionsPage;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertEquals;
+import static xyz.npgw.test.common.Constants.CARD_TYPES;
+import static xyz.npgw.test.common.Constants.CURRENCY_OPTIONS;
+import static xyz.npgw.test.common.Constants.TRANSACTION_STATUSES;
 
 public class TransactionsPageUserTest extends BaseTest {
 
@@ -108,7 +112,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Feature("Amount")
     @Description("Error message 'From should be lesser than To' appears")
     public void testErrorMessageByAmountAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -124,7 +128,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Feature("Card type")
     @Description("Verify that user can see 'Card type' options")
     public void testTheVisibilityOfTheCardTypeOptionsAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickCardTypeSelector();
 
@@ -141,7 +145,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Feature("Amount")
     @Description("Edit Amount")
     public void testEditAmountAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -161,7 +165,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Feature("Amount")
     @Description("Reset Amount Values")
     public void testResetAmountValuesAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -190,7 +194,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
             + "dropdown list")
     public void testTheVisibilityOfTheAvailableBusinessUnitOptionsAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage((getPage()))
+        UserTransactionsPage transactionsPage = new UserDashboardPage((getPage()))
                 .getHeader().clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
@@ -198,78 +202,85 @@ public class TransactionsPageUserTest extends BaseTest {
         assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText("default");
     }
 
-    @Test(dataProvider = "getCurrency", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("567")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Currency' to default value ( ALL)")
-    public void testResetCurrencyAsUser(String currency) {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+    @Description("Verify, that 'Reset filter' button change 'Currency' to default value (ALL)")
+    public void testResetCurrencyAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
 
-        transactionsPage.getSelectCurrency().select(currency);
+        for (String currency : Arrays.copyOfRange(CURRENCY_OPTIONS, 1, CURRENCY_OPTIONS.length)) {
+            transactionsPage
+                    .getSelectCurrency().select(currency);
 
-        Allure.step("Verify: Filter displays the selected currency");
-        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
+            Allure.step("Verify: Filter displays the selected currency");
+            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
-        assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button ");
+            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText("ALL");
+        }
     }
 
-    @Test(dataProvider = "getCardType", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("598")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Card Type' to default value ( ALL)")
-    public void testResetCardTypeAsUser(String cardType) {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+    @Description("Verify, that 'Reset filter' button change 'Card Type' to default value (ALL)")
+    public void testResetCardTypeAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
-        transactionsPage
-                .selectCardType(cardType);
+        for (String cardType : Arrays.copyOfRange(CARD_TYPES, 1, CARD_TYPES.length)) {
+            transactionsPage
+                    .selectCardType(cardType);
 
-        Allure.step("Verify: Filter displays the selected payment method");
-        assertThat(transactionsPage.getCardTypeValue()).containsText(cardType);
+            Allure.step("Verify: Filter displays the selected payment method");
+            assertThat(transactionsPage.getCardTypeValue()).containsText(cardType);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
-        assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+            assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
+        }
     }
 
-    @Test(dataProvider = "getStatus", dataProviderClass = TestDataProvider.class)
+    @Test
     @TmsLink("639")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Status' to default value ( ALL)")
-    public void testResetStatusAsUser(String status) {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+    @Description("Verify, that 'Reset filter' button change 'Status' to default value (ALL)")
+    public void testResetStatusAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
 
-        transactionsPage
-                .getSelectStatus().selectTransactionStatuses(status);
+        for (String status : Arrays.copyOfRange(TRANSACTION_STATUSES, 1, TRANSACTION_STATUSES.length)) {
+            transactionsPage
+                    .getSelectStatus().selectTransactionStatuses(status);
 
-        Allure.step("Verify: Filter displays the selected Status");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status);
+            Allure.step("Verify: Filter displays the selected Status");
+            assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText(status);
 
-        transactionsPage
-                .clickResetFilterButton();
+            transactionsPage
+                    .clickResetFilterButton();
 
-        Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
-        assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+            Allure.step("Verify: Filter displays 'ALL' after applying 'Reset filter' button");
+            assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
+        }
     }
 
     @Ignore("multistatus not working atm")
@@ -279,7 +290,7 @@ public class TransactionsPageUserTest extends BaseTest {
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' (two options are checked) to default value ( ALL)")
     public void testResetMultiStatusAsUser(String status1, String status2) {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
@@ -308,7 +319,7 @@ public class TransactionsPageUserTest extends BaseTest {
         final String amountTo = "20";
         final String chosenAmount = "Amount: " + amountFrom + " - " + amountTo;
 
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
@@ -321,7 +332,7 @@ public class TransactionsPageUserTest extends BaseTest {
                 .fillAmountToField(amountTo)
                 .clickAmountApplyButton();
 
-        Allure.step("Verify: Filter 'Amount' displays 'Amount: {amountFrom}- {amountTo}'");
+        Allure.step("Verify: Filter 'Amount' displays 'Amount: {amountFrom} - {amountTo}'");
         assertThat(transactionsPage.amountApplied(chosenAmount)).isVisible();
         assertThat(transactionsPage.amountApplied(chosenAmount)).hasText(chosenAmount);
 
@@ -364,10 +375,10 @@ public class TransactionsPageUserTest extends BaseTest {
     @Test
     @TmsLink("851")
     @Epic("Transactions")
-    @Feature("Transactions Search")
+    @Feature("Transactions search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
     public void testSearchOptionsVisibleAfterClickingTrxIdsAsUser() {
-        UserTransactionsPage transactionsPage = new UserTransactionsPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickSearchTrxIdsButton();
 

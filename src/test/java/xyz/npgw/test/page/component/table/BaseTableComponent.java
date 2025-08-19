@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -143,7 +142,7 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         return getCurrentPage();
     }
 
-    @Step("Click the 'Rows Per Page' dropdown Chevron")
+    @Step("Click the 'Rows per page' dropdown Chevron")
     public CurrentPageT clickRowsPerPageChevron() {
         rowsPerPage.locator("svg").click();
 
@@ -154,7 +153,7 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         return rowsPerPageDropdown.locator("li");
     }
 
-    @Step("Select Rows Per Page '{option}'")
+    @Step("Select 'Rows per page' '{option}'")
     public CurrentPageT selectRowsPerPageOption(String option) {
         clickRowsPerPageChevron();
         rowsPerPageDropdown.getByText(option, new Locator.GetByTextOptions().setExact(true)).click();
@@ -185,20 +184,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         return firstRow.locator(columnSelector(columnHeader));
     }
 
-    public int countAllRows() {
-
-        return getRowCountsPerPage().stream()
-                .mapToInt(Integer::intValue)
-                .sum();
-    }
-
-    public int countAllRows(List<Integer> rowCountsPerPage) {
-
-        return rowCountsPerPage.stream()
-                .mapToInt(Integer::intValue)
-                .sum();
-    }
-
     public List<Integer> getRowCountsPerPage() {
         List<Integer> rowsPerPage = new ArrayList<>();
 
@@ -215,24 +200,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         goToFirstPageIfNeeded();
 
         return rowsPerPage;
-    }
-
-    @Step("Count rows with {columnHeader} = {values}")
-    public int countValues(String columnHeader, String... values) {
-        long count = 0;
-        Set<String> valueSet = Set.of(values);
-
-        if (goToFirstPageIfNeeded()) {
-            do {
-                count += getColumnCells(columnHeader).stream()
-                        .map(locator -> locator.innerText().trim())
-                        .filter(valueSet::contains)
-                        .count();
-            } while (goToNextPage());
-        }
-        goToFirstPageIfNeeded();
-
-        return (int) count;
     }
 
     public void forEachPage(String rowsPerPageOption, PageCallback callback) {
@@ -254,7 +221,7 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
             leftDotsButton.click();
         }
 
-        if (isNotCurrentPage("1")) {
+        if (!getActivePageButton().innerText().equals("1")) {
             firstPageButton.click();
         }
 
@@ -327,10 +294,6 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
         } while (goToNextPage());
 
         return allValues;
-    }
-
-    private boolean isNotCurrentPage(String number) {
-        return !getActivePageButton().innerText().equals(number);
     }
 
     public interface PageCallback {
