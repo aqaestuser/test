@@ -5,6 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
+import xyz.npgw.test.common.entity.ControlType;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.SuperFraudControlPage;
 
@@ -15,6 +16,7 @@ public abstract class ControlDialog<CurrentDialogT extends ControlDialog<Current
 
     private final Locator controlNameInput = getByPlaceholder("Enter control name");
     private final Locator controlNameLabel = getByTextExact("Control name");
+    private final Locator controlTypeLabel = getByLabelExact("Control type").last();
 
     public ControlDialog(Page page) {
         super(page);
@@ -64,6 +66,14 @@ public abstract class ControlDialog<CurrentDialogT extends ControlDialog<Current
     @Step("Fill in fraud control config: {controlConfig}")
     public CurrentDialogT fillFraudControlConfigField(String controlConfig) {
         getByPlaceholder("Enter control config").fill(controlConfig);
+
+        return (CurrentDialogT) this;
+    }
+
+    @Step("Fill in fraud control type: {controlType}")
+    public CurrentDialogT selectFraudControlTypeField(ControlType controlType) {
+        controlTypeLabel.click();
+        locator("role=option >> text=" + controlType.getDisplayText()).click();
 
         return (CurrentDialogT) this;
     }
