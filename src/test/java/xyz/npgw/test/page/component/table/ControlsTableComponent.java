@@ -68,45 +68,53 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
         return getCurrentPage();
     }
 
+    @Step("Click 'List icon' button")
+    public void clickListIconButton(String controlName) {
+        getRow(controlName).locator("//*[@data-icon='list']/..").click();
+    }
+
     @Step("Click 'Edit control' button")
     public EditControlDialog clickEditControlButton(String controlName) {
-        getRow(controlName).getByTestId("EditControlButton").click();
+        clickListIconButton(controlName);
+        getByTextExact("Edit control").click();
+//        getRow(controlName).getByTestId("EditControlButton").click();
 
         return new EditControlDialog(getPage());
     }
 
     @Step("Click 'Activate control' button")
     public ActivateControlDialog clickActivateControlButton(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).locator("//*[@data-icon='check']/..").click();
+        clickListIconButton(controlName);
+        getByTextExact("Activate control").click();
+//        getRow(controlName).locator("//*[@data-icon='check']/..").click();
 
         return new ActivateControlDialog(getPage());
     }
 
     @Step("Click 'Deactivate control' button")
     public DeactivateControlDialog clickDeactivateControlButton(String controlName) {
-        getRow(controlName).hover();
-        getRow(controlName).locator("//*[@data-icon='ban']/..").click();
+        clickListIconButton(controlName);
+        getByTextExact("Deactivate control").click();
+//        getRow(controlName).locator("//*[@data-icon='ban']/..").click();
 
         return new DeactivateControlDialog(getPage());
     }
 
     @Step("Click 'Delete control' button")
     public DeleteControlDialog clickDeleteControlButton(String controlName) {
-        getRow(controlName).getByTestId("DeleteControlButton").click();
+        clickListIconButton(controlName);
+        getByTextExact("Delete control").click();
+//        getRow(controlName).getByTestId("DeleteControlButton").click();
 
         return new DeleteControlDialog(getPage());
     }
 
     @Step("Click 'Connect control' button")
     public ConnectControlToBusinessUnitDialog clickConnectControlButton(String controlName) {
-        getRow(controlName).getByTestId("ConnectControlButton").click();
+        clickListIconButton(controlName);
+        getByTextExact("Connect control to business unit").click();
+//        getRow(controlName).getByTestId("ConnectControlButton").click();
 
         return new ConnectControlToBusinessUnitDialog(getPage());
-    }
-
-    @Step("Get 'Connect control' button locator")
-    public Locator getConnectControlButton(String controlName) {
-        return getRow(controlName).getByTestId("ConnectControlButton");
     }
 }

@@ -305,13 +305,11 @@ public class TransactionsPageTest extends BaseTest {
         Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(fileType));
     }
 
-    @Ignore("Empty bu list")
     @Test
     @TmsLink("503")
     @Epic("Transactions")
     @Feature("Business unit")
-    @Description("Verify that the Super admin can see all the company's business units in the Business unit "
-            + "dropdown list")
+    @Description("Super admin can see all the company's business units in the Business unit dropdown list")
     public void testTheVisibilityOfTheAvailableBusinessUnitOptions() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage((getPage()))
                 .getHeader().clickTransactionsLink()

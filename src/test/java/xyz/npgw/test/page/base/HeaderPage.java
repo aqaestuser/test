@@ -10,7 +10,6 @@ import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.component.AlertTrait;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 
-
 @Getter
 @SuppressWarnings("unchecked")
 public abstract class HeaderPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends BasePage

@@ -5,9 +5,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public class SelectAcquirerComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter

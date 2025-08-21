@@ -4,7 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 
-public class UsersTableComponent<CurrentPageT> extends BaseTableComponent<CurrentPageT> {
+public abstract class UsersTableComponent<CurrentPageT> extends BaseTableComponent<CurrentPageT> {
 
     public UsersTableComponent(Page page, CurrentPageT currentPage) {
         super(page, currentPage);

@@ -128,7 +128,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .fillCompanyMobileField(company.companyAddress().mobile())
                 .fillCompanyFaxField(company.companyAddress().fax())
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
+                .getAlert().clickCloseButton()
                 .clickOnResetFilterButton()
                 .getSelectCompany().selectCompany(company.companyName());
 
@@ -315,15 +315,14 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
         assertThat(deleteBusinessUnitDialog.getConfirmationQuestion())
                 .hasText("Are you sure you want to delete business unit %s?".formatted(BUSINESS_UNIT_NAME_EDITED));
 
-//TODO remove when bug fixed
-//        Allure.step("Verify: dialog header is 'business unit'");
-//        assertThat(deleteBusinessUnitDialog.getDialogHeader())
-//                .hasText("Delete business unit");
+        Allure.step("Verify: dialog header text");
+        assertThat(deleteBusinessUnitDialog.getDialogHeader())
+                .hasText("Delete business unit");
 
         SuperCompaniesAndBusinessUnitsPage superCompaniesAndBusinessUnitsPage = deleteBusinessUnitDialog
                 .clickDeleteButton();
 
-        Allure.step("Verify: the header contains the expected title text");
+        Allure.step("Verify: alert text");
         assertThat(superCompaniesAndBusinessUnitsPage.getAlert().getMessage())
                 .hasText("SUCCESSBusiness unit was deleted successfully");
     }
@@ -360,7 +359,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .hasText("SUCCESSCompany was updated successfully");
 
         companiesAndBusinessUnitsPage
-                .getAlert().waitUntilSuccessAlertIsGone();
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: name field is correctly filled");
         assertThat(companiesAndBusinessUnitsPage.getName()).hasValue(editedCompany.companyName());
@@ -462,7 +461,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
                 .fillPasswordField("Qwerty123!")
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-                .getAlert().waitUntilSuccessAlertIsGone()
+                .getAlert().clickCloseButton()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
                 .clickDeleteSelectedCompany()

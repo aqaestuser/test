@@ -30,7 +30,7 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
 
     @Step("Click 'Move business unit control up' button")
     public SuperFraudControlPage clickMoveBusinessUnitControlUpButton(String priority) {
-        getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton").click();
+        getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton ").click();
 
         return getCurrentPage();
     }
@@ -42,7 +42,7 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
 
     @Step("Get 'Move business unit control up' button")
     public Locator getMoveBusinessUnitControlUpButton(String priority) {
-        return getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton");
+        return getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton ");
     }
 
     @Step("Click 'Activate business unit control' button")

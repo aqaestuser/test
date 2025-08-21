@@ -4,9 +4,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter

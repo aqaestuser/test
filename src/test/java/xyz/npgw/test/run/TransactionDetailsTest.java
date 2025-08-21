@@ -20,7 +20,7 @@ import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
 public class TransactionDetailsTest extends BaseTest {
 
-    // TODO - Refactor after will know which Customer details are mandatory fpr each transaction type
+    // TODO - Refactor after will know which Customer details are mandatory for each transaction type
     @Test
     @TmsLink("638")
     @Epic("Transactions")
@@ -40,7 +40,7 @@ public class TransactionDetailsTest extends BaseTest {
         Allure.step("Verify: The dialog box section names");
         assertThat(transactionDetailsDialog.getSectionNames())
                 .hasText(new String[]{"Amount", "Updated on (GMT)", "NPGW reference", "Business unit reference",
-                        "Transaction lifecycle", "Card details", "Customer details", "3D Secure"});
+                        "Card details", "Customer details", "3D Secure", "Transaction lifecycle"});
 
         Allure.step("Verify: The Card details labels");
         assertThat(transactionDetailsDialog.getCardDetailsLabels())

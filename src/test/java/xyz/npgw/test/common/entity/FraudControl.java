@@ -43,4 +43,10 @@ public class FraudControl {
         log.response(response, "get all Fraud Control");
         return new Gson().fromJson(response.text(), FraudControl[].class);
     }
+
+    @Override
+    public String toString() {
+        return "%s%s%s%s%s%s".formatted(controlType.equals("bin_check") ? "BIN Check" : "Fraud Screen", controlName,
+                controlDisplayName, controlCode, controlConfig, isActive ? "Active" : "Inactive");
+    }
 }

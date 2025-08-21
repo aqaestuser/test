@@ -634,8 +634,7 @@ public class TeamPageTest extends BaseTest {
                 .checkActiveRadiobutton()
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
-//                .getAlert().clickCloseButton() TODO bug - if closed on second time alert is closing immediately
-                .getAlert().waitUntilAlertIsHidden()
+                .getAlert().clickCloseButton()
                 .waitForUserPresence(getApiRequestContext(), companyAdmin, getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)

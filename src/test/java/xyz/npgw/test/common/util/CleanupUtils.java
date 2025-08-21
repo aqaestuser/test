@@ -3,6 +3,7 @@ package xyz.npgw.test.common.util;
 import com.microsoft.playwright.APIRequestContext;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.Company;
+import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.entity.User;
 
 import java.util.Arrays;
@@ -14,11 +15,13 @@ public class CleanupUtils {
             "Amazon", "CompanyForTestRunOnly Inc.", "super", "Luke Company");
     private static final List<String> USER = List.of("test@email.com", "supertest@email.com");
     private static final List<String> ACQUIRER = List.of("Luke EUR MID 1");
+    private static final List<String> CONTROL = List.of("control-for-test", "control-for-test-2");
 
     public static void clean(APIRequestContext request) {
         deleteCompanies(request);
         deleteAcquirers(request);
         deleteUsersFromSuper(request);
+        deleteFraudControl(request);
     }
 
     public static void deleteCompanies(APIRequestContext request) {
@@ -44,5 +47,13 @@ public class CleanupUtils {
                 .filter(user -> user.email().matches("^\\d{4}\\.\\d{6}.*$"))
                 .filter(user -> TestUtils.isOneHourOld(user.email()))
                 .forEach(user -> User.delete(request, user.email()));
+    }
+
+    private static void deleteFraudControl(APIRequestContext request) {
+        Arrays.stream(FraudControl.getAll(request))
+                .filter(control -> !CONTROL.contains(control.getControlName()))
+                .filter(control -> control.getControlName().matches("^\\d{4}\\.\\d{6}.*$"))
+                .filter(control -> TestUtils.isOneHourOld(control.getControlName()))
+                .forEach(control -> FraudControl.delete(request, control.getControlName()));
     }
 }

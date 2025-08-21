@@ -319,13 +319,11 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getTable().getPaginationItems()).hasText("1");
     }
 
-    // TODO 'CC 031200008764 EUR' acquirer MID has horizontal scroll
-    @Test(expectedExceptions = AssertionError.class)
+    @Test
     @TmsLink("487")
     @Epic("System/Acquirers")
     @Feature("Acquirers list")
-    @Description("Verifies that table column headers are displayed correctly on each page when navigating"
-            + " through paginated results.")
+    @Description("Table column headers fit inside viewport on each page when navigating through paginated results")
     public void testColumnHeadersDisplayCorrectlyOnAllPages() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -399,7 +397,7 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("SUCCESSAcquirer was deactivated successfully");
 
         acquirersPage
-                .getAlert().waitUntilSuccessAlertIsGone();
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify: Acquirer status changed to Inactive");
         assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status"))
