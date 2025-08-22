@@ -37,7 +37,6 @@ public abstract class UserDialog<
     @Step("Check 'Company admin' user role radiobutton")
     public CurrentDialogT checkCompanyAdminRadiobutton() {
         getByRole(AriaRole.RADIO, "Company admin").check();
-//        assertThat(getByRole(AriaRole.RADIO, "Company admin")).isChecked();
 
         return getCurrentDialog();
     }
@@ -45,7 +44,6 @@ public abstract class UserDialog<
     @Step("Check 'Company analyst' user role radiobutton")
     public CurrentDialogT checkCompanyAnalystRadiobutton() {
         getByRole(AriaRole.RADIO, "Company analyst").check();
-//        assertThat(getByRole(AriaRole.RADIO, "Company analyst")).isChecked();
 
         return getCurrentDialog();
     }

@@ -38,6 +38,7 @@ public class GatewayPageTest extends BaseTest {
             .acquirerDisplayName("acquirer for gateway Movable")
             .acquirerName("%s acquirer for gateway Movable".formatted(RUN_ID))
             .acquirerMidMcc("4321")
+            .currencyList(new Currency[]{Currency.USD})
             .build();
     private static final Acquirer ACQUIRER_EUR = Acquirer.builder()
             .acquirerDisplayName("acquirer for gateway EUR")

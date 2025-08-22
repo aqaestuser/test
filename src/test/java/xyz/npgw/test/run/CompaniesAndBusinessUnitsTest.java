@@ -739,6 +739,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTest {
     protected void afterClass() {
         User.delete(getApiRequestContext(), ADMIN_EMAIL);
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_DELETION_BLOCKED_NAME);
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME_REQUIRED_FIELD);
         super.afterClass();
     }
 }

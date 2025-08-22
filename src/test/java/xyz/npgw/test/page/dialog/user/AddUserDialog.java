@@ -36,14 +36,14 @@ public abstract class AddUserDialog<
 
     @Step("Click 'Create' button")
     public ReturnPageT clickCreateButton() {
-        createButton.click();
+        getPage().waitForResponse("**/portal-v1/user/create", createButton::click);
 
         return getReturnPage();
     }
 
     @Step("Click on the 'Create' button and trigger an error")
     public CurrentDialogT clickCreateButtonAndTriggerError() {
-        createButton.click();
+        clickCreateButton();
 
         return getCurrentDialog();
     }

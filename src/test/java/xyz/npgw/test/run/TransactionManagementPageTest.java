@@ -66,7 +66,6 @@ public class TransactionManagementPageTest extends BaseTest {
                 .clickAddAdjustmentButton();
 
         assertThat(page.getCreateButton()).isDisabled();
-//        assertThat(page.getCreateButton()).hasAttribute("data-disabled", "true");
     }
 
     @Ignore("getFirstRowCell(NPGW reference) is not there as for now)")

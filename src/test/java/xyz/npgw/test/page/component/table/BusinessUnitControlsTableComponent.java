@@ -13,7 +13,7 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
     public BusinessUnitControlsTableComponent(Page page, SuperFraudControlPage currentPage) {
         super(page, currentPage,
                 page.getByText("Connected business unit controls", new Page.GetByTextOptions().setExact(true))
-                .locator("../.."));
+                        .locator("../.."));
     }
 
     @Override
@@ -21,99 +21,92 @@ public class BusinessUnitControlsTableComponent extends BaseTableComponent<Super
         return new SuperFraudControlPage(getPage());
     }
 
+    public Locator getMoveBusinessUnitControlDownButton(String priority) {
+        return getRowByDataKey(priority).getByTestId("MoveMerchantControlDownButton");
+    }
+
+    public Locator getMoveBusinessUnitControlUpButton(String priority) {
+        return getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton ");
+    }
+
+    public Locator getActivateBusinessUnitControlButton(String priority) {
+        return getRowByDataKey(priority).locator("//*[@data-icon='check']/..");
+    }
+
+    public Locator getDeactivateBusinessUnitControlButton(String priority) {
+        return getRowByDataKey(priority).locator("//*[@data-icon='ban']/..");
+    }
+
+    public Locator getDeleteBusinessUnitControlButton(String priority) {
+        return getRowByDataKey(priority).getByTestId("DeleteBusinessUnitControlButton");
+    }
+
     @Step("Click 'Move business unit control down' button")
     public SuperFraudControlPage clickMoveBusinessUnitControlDownButton(String priority) {
-        getRowByDataKey(priority).getByTestId("MoveMerchantControlDownButton").click();
+        getMoveBusinessUnitControlDownButton(priority).click();
 
         return getCurrentPage();
     }
 
     @Step("Click 'Move business unit control up' button")
     public SuperFraudControlPage clickMoveBusinessUnitControlUpButton(String priority) {
-        getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton ").click();
+        getMoveBusinessUnitControlUpButton(priority).click();
 
         return getCurrentPage();
     }
 
-    @Step("Get 'Move business unit control down' button")
-    public Locator getMoveBusinessUnitControlDownButton(String priority) {
-        return getRowByDataKey(priority).getByTestId("MoveMerchantControlDownButton");
-    }
-
-    @Step("Get 'Move business unit control up' button")
-    public Locator getMoveBusinessUnitControlUpButton(String priority) {
-        return getRowByDataKey(priority).getByTestId("MoveMerchantControlUpButton ");
-    }
-
     @Step("Click 'Activate business unit control' button")
     public ActivateBusinessUnitControlDialog clickActivateBusinessUnitControlButton(String priority) {
-        getRowByDataKey(priority).locator("//*[@data-icon='check']/..").click();
+        getActivateBusinessUnitControlButton(priority).click();
 
         return new ActivateBusinessUnitControlDialog(getPage());
     }
 
     @Step("Click 'Deactivate business unit control' button")
     public DeactivateBusinessUnitControlDialog clickDeactivateBusinessUnitControlButton(String priority) {
-        getRowByDataKey(priority).locator("//*[@data-icon='ban']/..").click();
+        getDeactivateBusinessUnitControlButton(priority).click();
 
         return new DeactivateBusinessUnitControlDialog(getPage());
     }
 
     @Step("Click 'Delete business unit control' button")
     public DeleteBusinessUnitControlDialog clickDeleteBusinessUnitControlButton(String priority) {
-        getRowByDataKey(priority).getByTestId("DeleteBusinessUnitControlButton").click();
+        getDeleteBusinessUnitControlButton(priority).click();
 
         return new DeleteBusinessUnitControlDialog(getPage());
-    }
-
-    @Step("Click 'Delete business unit control' button")
-    public DeleteBusinessUnitControlDialog clickDeleteBusinessUnitControlButtonByName(String displayName) {
-        getRow(displayName).getByTestId("DeleteBusinessUnitControlButton").click();
-
-        return new DeleteBusinessUnitControlDialog(getPage());
-    }
-
-    @Step("Hover over Deactivate Control icon to get Tooltip")
-    public SuperFraudControlPage hoverOverDeactivateControlIcon(String priority) {
-        Locator row = getRowByDataKey(priority);
-        row.hover();
-        row.locator("//*[@data-icon='ban']/..").hover();
-
-        return getCurrentPage();
-    }
-
-    @Step("Hover over Activate Control icon to get Tooltip")
-    public SuperFraudControlPage hoverOverActivateControlIcon(String priority) {
-        Locator row = getRowByDataKey(priority);
-        row.hover();
-        row.locator("//*[@data-icon='check']/..").hover();
-
-        return getCurrentPage();
-    }
-
-    @Step("Hover over Delete Control icon to get Tooltip")
-    public SuperFraudControlPage hoverOverDeleteIcon(String priority) {
-        Locator row = getRowByDataKey(priority);
-        row.hover();
-        row.locator("//*[@data-icon='trash']/..").hover();
-
-        return getCurrentPage();
     }
 
     @Step("Hover over Move Control down icon to get Tooltip")
     public SuperFraudControlPage hoverOverMoveControlDownIcon(String priority) {
-        Locator row = getRowByDataKey(priority);
-        row.hover();
-        row.locator("//*[@data-icon='circle-arrow-down']/..").hover();
+        getMoveBusinessUnitControlDownButton(priority).hover();
 
         return getCurrentPage();
     }
 
     @Step("Hover over Move Control up icon to get Tooltip")
     public SuperFraudControlPage hoverOverMoveControlUpIcon(String priority) {
-        Locator row = getRowByDataKey(priority);
-        row.hover();
-        row.locator("//*[@data-icon='circle-arrow-up']/..").hover();
+        getMoveBusinessUnitControlUpButton(priority).hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over Deactivate Control icon to get Tooltip")
+    public SuperFraudControlPage hoverOverDeactivateControlIcon(String priority) {
+        getDeactivateBusinessUnitControlButton(priority).hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over Activate Control icon to get Tooltip")
+    public SuperFraudControlPage hoverOverActivateControlIcon(String priority) {
+        getActivateBusinessUnitControlButton(priority).hover();
+
+        return getCurrentPage();
+    }
+
+    @Step("Hover over Delete Control icon to get Tooltip")
+    public SuperFraudControlPage hoverOverDeleteIcon(String priority) {
+        getDeleteBusinessUnitControlButton(priority).hover();
 
         return getCurrentPage();
     }
