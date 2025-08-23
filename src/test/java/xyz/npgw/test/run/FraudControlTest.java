@@ -77,6 +77,11 @@ public class FraudControlTest extends BaseTest {
             .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
             .controlDisplayName("ControlDisplayThird")
             .build();
+    private static final FraudControl FRAUD_CONTROL_ACTIVE_TO_INACTIVE = FraudControl.builder()
+            .controlName("%s ControlActiveToInactive".formatted(RUN_ID))
+            .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
+            .controlDisplayName("ControlDisplayActiveToInactive")
+            .build();
     private static final String FRAUD_CONTROL_NAME = "%S Test fraudControl name".formatted(RUN_ID);
 
     private static final String COMPANY_NAME = "%s company to bend Fraud Control".formatted(RUN_ID);
@@ -95,6 +100,7 @@ public class FraudControlTest extends BaseTest {
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_TWO);
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_INACTIVE);
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_THREE);
+        TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ACTIVE_TO_INACTIVE);
     }
 
     @Test
@@ -695,10 +701,7 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .getTableControls().clickActivateControlButton(FRAUD_CONTROL_ADD_INACTIVE.getControlName())
-                .clickActivateButton()
-                .getAlert().clickCloseButton()
-                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_INACTIVE.getControlName())
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ACTIVE_TO_INACTIVE.getControlName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton()
                 .getTableBusinessUnitControls().clickDeactivateBusinessUnitControlButton("0")
@@ -719,12 +722,8 @@ public class FraudControlTest extends BaseTest {
                 .getTableBusinessUnitControls().getColumnValues("Display name");
 
         Allure.step("Verify that the business unit control table doesn't include the deleted control");
-        Assert.assertFalse(actualFraudControlBusinessUnitList.contains(FRAUD_CONTROL_ADD_INACTIVE.getControlDisplayName()));
-
-//        // TODO ????
-//        superFraudControlPage
-//                .getTableControls().clickDeactivateControlButton(FRAUD_CONTROL_ADD_INACTIVE.getControlName())
-//                .clickDeactivateButton();
+        Assert.assertFalse(actualFraudControlBusinessUnitList.contains(
+                FRAUD_CONTROL_ACTIVE_TO_INACTIVE.getControlDisplayName()));
     }
 
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
@@ -1038,6 +1037,7 @@ public class FraudControlTest extends BaseTest {
         TestUtils.deleteFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_INACTIVE.getControlName());
         TestUtils.deleteFraudControl(getApiRequestContext(), FRAUD_CONTROL_FRAUD_SCREEN.getControlName());
         TestUtils.deleteFraudControl(getApiRequestContext(), FRAUD_CONTROL_THREE.getControlName());
+        TestUtils.deleteFraudControl(getApiRequestContext(), FRAUD_CONTROL_ACTIVE_TO_INACTIVE.getControlName());
 
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);
         super.afterClass();
