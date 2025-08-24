@@ -1,5 +1,6 @@
 package xyz.npgw.test.page.system;
 
+import lombok.Getter;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
@@ -11,15 +12,17 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.select.SelectStatusTrait;
-
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
+@Getter
 public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>> extends HeaderPage<CurrentPageT>
         implements SelectStatusTrait<CurrentPageT> {
 
     public final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
+    private final Locator commonIconButton = locator("[role='tabpanel']>div>div:first-child button[data-testid] svg");
+    private final Locator iconButtonModal = locator("[data-slot='content']");
 
     public BaseTeamPage(Page page) {
         super(page);

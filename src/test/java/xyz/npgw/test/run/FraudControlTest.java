@@ -316,6 +316,7 @@ public class FraudControlTest extends BaseTest {
 
         Allure.step("Verify that Edit icon Tooltip is presented on Control table");
         assertThat(editIconTooltip).isVisible();
+
         assertThat(editIconTooltip).hasText("Edit control");
 
         Locator activateIconTooltip = superFraudControlPage

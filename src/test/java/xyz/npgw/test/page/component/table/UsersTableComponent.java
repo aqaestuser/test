@@ -14,6 +14,10 @@ public abstract class UsersTableComponent<CurrentPageT> extends BaseTableCompone
         return getRow(userEmail).getByTestId("ChangeUserActivityButton").locator("svg");
     }
 
+    public Locator getRowIconBtn(String userEmail) {
+        return getRow(userEmail).locator("svg");
+    }
+
     @Step("Click 'Edit user' button")
     public void clickEditUser(String userEmail) {
         getRow(userEmail).getByTestId("EditUserButton").click();
