@@ -1,12 +1,10 @@
 package xyz.npgw.test.run;
 
-import com.microsoft.playwright.TimeoutError;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
@@ -19,11 +17,9 @@ import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 import xyz.npgw.test.page.transactions.AdminTransactionsPage;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static org.testng.Assert.assertEquals;
-import static xyz.npgw.test.common.Constants.CARD_TYPES;
+import static xyz.npgw.test.common.Constants.CARD_OPTIONS;
 import static xyz.npgw.test.common.Constants.CURRENCY_OPTIONS;
 import static xyz.npgw.test.common.Constants.TRANSACTION_STATUSES;
 
@@ -73,7 +69,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Test(expectedExceptions = TimeoutError.class)
+    @Test
     @TmsLink("263")
     @Epic("Transactions")
     @Feature("Amount")
@@ -83,12 +79,14 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("10")
+                .clickClearAmountFromButton()
                 .fillAmountFromField("20")
                 .clickAmountClearButton()
                 .fillAmountFromField("100")
                 .clickAmountFromIncreaseArrow()
                 .clickAmountFromIncreaseArrow()
                 .clickAmountFromDecreaseArrow()
+                .fillAmountToField("123.00")
                 .clickClearAmountToButton()
                 .fillAmountToField("5000")
                 .clickAmountToIncreaseArrow()
@@ -96,8 +94,8 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .clickAmountToDecreaseArrow()
                 .clickAmountApplyButton();
 
-        Allure.step("Verify: Applied amount is visible");
-        assertThat(transactionsPage.amountApplied("Amount: 101 - 4999")).isVisible();
+        Allure.step("Verify: Applied amount text");
+        assertThat(transactionsPage.getAmountApplied()).hasText("Amount: 101.00 - 4999.00");
 
         transactionsPage
                 .clickAmountAppliedClearButton();
@@ -133,13 +131,13 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .clickCardTypeSelector();
 
         Allure.step("Verify: Payment Method Options are visible");
-        assertEquals(transactionsPage.getCardTypeOptions(), List.of("ALL", "VISA", "MASTERCARD"));
+        assertThat(transactionsPage.getCardTypeOptions()).hasText(CARD_OPTIONS);
 
         Allure.step("Verify: Default selected option in Payment Method Options is 'ALL'");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Test(expectedExceptions = AssertionFailedError.class)
+    @Test
     @TmsLink("354")
     @Epic("Transactions")
     @Feature("Amount")
@@ -156,10 +154,10 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .fillAmountToField("10300");
 
         Allure.step("Verify: Edited amount is visible");
-        assertThat(transactionsPage.amountApplied("Amount: 500 - 10300")).isVisible();
+        assertThat(transactionsPage.getAmountApplied()).hasText("Amount: 500.00 - 10300.00");
     }
 
-    @Test(expectedExceptions = AssertionFailedError.class)
+    @Test
     @TmsLink("355")
     @Epic("Transactions")
     @Feature("Amount")
@@ -175,16 +173,18 @@ public class TransactionsPageAdminTest extends BaseTest {
                 .clickAmountButton();
 
         Allure.step("Verify: From Amount is zero");
-        assertThat(transactionsPage.getAmountFromInputField()).hasValue("0.00");
+        assertThat(transactionsPage.getAmountFromInputField()).hasValue("");
 
         Allure.step("Verify: To Amount is zero");
-        assertThat(transactionsPage.getAmountToInputField()).hasValue("0.00");
+        assertThat(transactionsPage.getAmountToInputField()).hasValue("");
 
         transactionsPage
+                .fillAmountFromField("0")
+                .fillAmountToField("0")
                 .clickAmountApplyButton();
 
         Allure.step("Verify: Applied amount is visible");
-        assertThat(transactionsPage.amountApplied("Amount: 0.00 - 0.00")).isVisible();
+        assertThat(transactionsPage.getAmountApplied()).hasText("Amount: 0.00 - 0.00");
     }
 
     @Test
@@ -241,7 +241,7 @@ public class TransactionsPageAdminTest extends BaseTest {
         Allure.step("Verify: Filter displays 'ALL' by default");
         assertThat(transactionsPage.getCardTypeValue()).containsText("ALL");
 
-        for (String cardType : Arrays.copyOfRange(CARD_TYPES, 1, CARD_TYPES.length)) {
+        for (String cardType : Arrays.copyOfRange(CARD_OPTIONS, 1, CARD_OPTIONS.length)) {
             transactionsPage
                     .selectCardType(cardType);
 
@@ -309,16 +309,12 @@ public class TransactionsPageAdminTest extends BaseTest {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).hasText("ALL");
     }
 
-    @Test(expectedExceptions = AssertionFailedError.class)
+    @Test
     @TmsLink("668")
     @Epic("Transactions")
     @Feature("Reset filter")
-    @Description("Verify, that 'Reset filter' button change 'Amount' to default value ( AMOUNT)")
+    @Description("Verify, that 'Reset filter' button change 'Amount' to default")
     public void testResetAmountAsAdmin() {
-        final String amountFrom = "10";
-        final String amountTo = "20";
-        final String chosenAmount = "Amount: " + amountFrom + " - " + amountTo;
-
         AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
@@ -328,13 +324,13 @@ public class TransactionsPageAdminTest extends BaseTest {
 
         transactionsPage
                 .clickAmountButton()
-                .fillAmountFromField(amountFrom)
-                .fillAmountToField(amountTo)
+                .fillAmountFromField("10")
+                .fillAmountToField("20")
                 .clickAmountApplyButton();
 
-        Allure.step("Verify: Filter 'Amount' displays 'Amount: {amountFrom}- {amountTo}'");
-        assertThat(transactionsPage.amountApplied(chosenAmount)).isVisible();
-        assertThat(transactionsPage.amountApplied(chosenAmount)).hasText(chosenAmount);
+        Allure.step("Verify: Filter 'Amount' text");
+        assertThat(transactionsPage.getAmountApplied()).isVisible();
+        assertThat(transactionsPage.getAmountApplied()).hasText("Amount: 10.00 - 20.00");
 
         transactionsPage
                 .clickResetFilterButton();

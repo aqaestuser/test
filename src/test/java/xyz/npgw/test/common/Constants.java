@@ -22,7 +22,7 @@ public class Constants {
     public static final String ONE_DATE_FOR_TABLE = "12/08/2025";
 
     public static final String[] CURRENCY_OPTIONS = {"ALL", "EUR", "USD", "GBP"};
-    public static final String[] CARD_TYPES = {"VISA", "MASTERCARD"};
+    public static final String[] CARD_OPTIONS = {"ALL", "VISA", "MASTERCARD"};
     public static final String[] TRANSACTION_STATUSES = {
             "ALL",
             "INITIATED",
