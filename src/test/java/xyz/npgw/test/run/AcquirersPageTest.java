@@ -372,6 +372,58 @@ public class AcquirersPageTest extends BaseTest {
     }
 
     @Test
+    @TmsLink("1172")
+    @Epic("System/Acquirers")
+    @Feature("Setup acquirer MID")
+    @Description("Verify that the error message is displayed if 'Entity name' contains not allowed special symbol")
+    public void testErrorMessageForNotAllowedSymbolsInEntityName() {
+        String expectedMessage = "ERRORInvalid name: 'AAAA@'. It may only contain letters, digits, ampersands (&),"
+                + " hyphens (-), commas (,), periods (.), apostrophes ('), and spaces.";
+
+        SuperAcquirersPage setupAcquirerMidDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .clickSetupAcquirerMidButton()
+                .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
+                .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
+                .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl())
+                .fillAcquirerNameField("AAAA@")
+                .clickCreateButton();
+
+        Allure.step("Verify that the error message is displayed");
+        assertThat(setupAcquirerMidDialog.getAlert().getMessage()).containsText(expectedMessage);
+    }
+
+    @Test
+    @TmsLink("1179")
+    @Epic("System/Acquirers")
+    @Feature("Setup acquirer MID")
+    @Description("Verify that the 'Entity name' field except (&), (-), (,), (.), ('), ( ) symbols")
+    public void testAllowedSpecialSymbolsInEntityName() {
+        List<String> validSymbols = Arrays.asList(
+                "&", "-", ",", ".", "'", " "
+        );
+
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickAcquirersTab()
+                .clickSetupAcquirerMidButton()
+                .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
+                .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
+                .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl());
+
+        for (String symbol : validSymbols) {
+            String input = "A".repeat(3) + symbol;
+
+            setupAcquirerMidDialog
+                    .fillAcquirerNameField(input);
+
+            Allure.step("Verify that the 'Create' button is active for symbol: " + symbol);
+            assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+        }
+    }
+
+    @Test
     @TmsLink("412")
     @Epic("System/Acquirers")
     @Feature("Setup acquirer MID")
