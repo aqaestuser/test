@@ -550,36 +550,38 @@ public class AcquirersPageTest extends BaseTest {
         assertThat(acquirersPage.getAlert().getMessage())
                 .hasText("SUCCESSAcquirer was updated successfully");
 
+        Locator editedAcquirerRow = acquirersPage.getTable().getRow(ACQUIRER.getAcquirerName());
+
         Allure.step("Verify: Acquirer display name matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Display name"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Display name"))
                 .hasText(ACQUIRER_EDITED.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "Acquirer code"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Acquirer code"))
                 .hasText("NGenius");
 
         Allure.step("Verify: Acquirer MID matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "MID"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "MID"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMid());
 
         Allure.step("Verify: Acquirer MID MCC matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "MCC"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "MCC"))
                 .hasText(ACQUIRER_EDITED.getAcquirerMidMcc());
 
         Allure.step("Verify: Currencies column contains expected currency");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "Currencies"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Currencies"))
                 .hasText(ACQUIRER_EDITED.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "Acquirer config"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Acquirer config"))
                 .hasText(ACQUIRER_EDITED.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "System config"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "System config"))
                 .hasText(ACQUIRER_EDITED.getSystemConfig().toString());
 
         Allure.step("Verify: Status matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER_EDITED.getAcquirerName(), "Status"))
+        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Status"))
                 .hasText(ACQUIRER_EDITED.getStatus());
     }
 

@@ -10,6 +10,7 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.Route;
 import com.microsoft.playwright.Tracing;
+import com.microsoft.playwright.Video;
 import com.microsoft.playwright.options.Cookie;
 import io.qameta.allure.Allure;
 import lombok.AccessLevel;
@@ -39,50 +40,40 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Log4j2
 public abstract class BaseTest {
 
     protected static final String RUN_ID = TestUtils.now();
-
+    private final HashMap<String, Response> requestMap = new HashMap<>();
     private Playwright playwright;
     private Browser browser;
-    private BrowserContext context;
+    private BrowserContext browserContext;
     @Getter(AccessLevel.PROTECTED)
     private Page page;
     @Getter(AccessLevel.PROTECTED)
     private APIRequestContext apiRequestContext;
     private LocalTime bestBefore = LocalTime.now();
     private String testId;
-
     @Getter(AccessLevel.PROTECTED)
     private String uid;
     @Getter(AccessLevel.PROTECTED)
     private String companyName;
     private BusinessUnit businessUnit;
 
-    private final HashMap<String, Response> requestMap = new HashMap<>();
-
     @BeforeSuite
     protected void beforeSuite() {
         Playwright playwright = BrowserUtils.createPlaywright();
-        APIRequestContext apiRequestContext = playwright.request()
-                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
-        Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
-        Token token = User.getTokenResponse(apiRequestContext, credentials).token();
-        apiRequestContext.dispose();
+        Token token = getTokenFromApiResponse(playwright);
 
         if (token != null && !token.idToken().isEmpty()) {
-            apiRequestContext = playwright.request()
-                    .newContext(new APIRequest.NewContextOptions()
-                            .setBaseURL(ProjectProperties.getBaseURL())
-                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+            apiRequestContext = getApiRequestContext(playwright, token);
             CleanupUtils.clean(apiRequestContext);
             apiRequestContext.dispose();
         }
@@ -110,27 +101,25 @@ public abstract class BaseTest {
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
 //        log.info(">>> {}", testId);
 
-        context = BrowserUtils.createContext(browser);
+        browserContext = BrowserUtils.createContext(browser);
 
         if (ProjectProperties.isTracingMode()) {
-            BrowserUtils.startTracing(context);
+            BrowserUtils.startTracing(browserContext);
         }
 
-        page = context.newPage();
+        page = browserContext.newPage();
         page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
         page.addLocatorHandler(page.getByText("Loading..."), locator -> {
         });
 
-        context.route("**/*", route -> {
-            if (route.request().url().endsWith(".css")
-                    || route.request().url().endsWith(".js")
-                    || route.request().url().endsWith(".png")) {
-                if (requestMap.get(route.request().url()) == null) {
+        browserContext.route("**/*", route -> {
+            String url = route.request().url();
+            if (url.endsWith(".css") || url.endsWith(".js") || url.endsWith(".png")) {
+                if (requestMap.get(url) == null) {
                     APIResponse apiResponse = route.fetch();
-                    requestMap.put(route.request().url(),
-                            new Response(apiResponse.status(), apiResponse.headers(), apiResponse.body()));
+                    requestMap.put(url, new Response(apiResponse.status(), apiResponse.headers(), apiResponse.body()));
                 }
-                Response r = requestMap.get(route.request().url());
+                Response r = requestMap.get(url);
                 route.fulfill(new Route.FulfillOptions()
                         .setStatus(r.status)
                         .setHeaders(r.headers)
@@ -142,34 +131,100 @@ public abstract class BaseTest {
 
         initApiRequestContext();
 
-        if (method.getName().endsWith("Unauthenticated")) {
-            return;
+        String methodName = method.getName();
+        String suffix = Stream.of("Unauthenticated", "AsTestUser", "AsTestAdmin", "AsUser", "AsAdmin")
+                .filter(methodName::endsWith)
+                .findFirst()
+                .orElse("");
+
+        switch (suffix) {
+            case "Unauthenticated":
+                return;
+
+            case "AsTestUser":
+                new AboutBlankPage(page)
+                        .navigate("/")
+                        .loginAsUser("testUser@email.com", ProjectProperties.getPassword());
+                return;
+
+            case "AsTestAdmin":
+                new AboutBlankPage(page)
+                        .navigate("/")
+                        .loginAsAdmin("testAdmin@email.com", ProjectProperties.getPassword());
+                return;
+
+            case "AsUser":
+                openSite(new Object[]{"USER"});
+                return;
+
+            case "AsAdmin":
+                openSite(new Object[]{"ADMIN"});
+                return;
+
+            default:
+                openSite(args);
         }
-        if (method.getName().endsWith("AsTestUser")) {
-            new AboutBlankPage(page)
-                    .navigate("/")
-                    .loginAsUser("testUser@email.com", ProjectProperties.getPassword());
-            return;
+    }
+
+    @AfterMethod
+    protected void afterMethod(Method method, ITestResult testResult) throws IOException {
+        if (!testResult.isSuccess() && !ProjectProperties.isCloseBrowserIfError()) {
+            page.pause();
         }
-        if (method.getName().endsWith("AsUser")) {
-            List<Object> arguments = new ArrayList<>(Arrays.asList(args));
-            arguments.add(0, "USER");
-            openSite(arguments.toArray());
-            return;
+
+        int resultStatus = testResult.getStatus();
+        long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
+        if (resultStatus == ITestResult.FAILURE) {
+            log.info("{} <<< {} in {} s", status(resultStatus), testId, testDuration);
         }
-        if (method.getName().endsWith("AsTestAdmin")) {
-            new AboutBlankPage(page)
-                    .navigate("/")
-                    .loginAsAdmin("testAdmin@email.com", ProjectProperties.getPassword());
-            return;
+
+        if (!page.isClosed()) {
+            page.close();
+            attachVideoIfNeeded(page, testId, resultStatus);
         }
-        if (method.getName().endsWith("AsAdmin")) {
-            List<Object> arguments = new ArrayList<>(Arrays.asList(args));
-            arguments.add(0, "ADMIN");
-            openSite(arguments.toArray());
-            return;
+
+        if (browserContext != null) {
+            if (ProjectProperties.isTracingMode()) {
+                if (resultStatus == ITestResult.FAILURE || resultStatus == ITestResult.SKIP) {
+                    Path traceFilePath = Paths.get(testId + ".zip");
+                    browserContext.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
+                    Allure.getLifecycle().addAttachment(
+                            "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
+                } else {
+                    browserContext.tracing().stop();
+                }
+            }
+            browserContext.close();
         }
-        openSite(args);
+    }
+
+    @AfterClass(alwaysRun = true)
+    protected void afterClass() {
+        if (browser != null) {
+            try {
+                browser.close();
+            } catch (Exception ignored) {
+                log.info("Attempt to close the browser that is already closed.");
+            }
+        }
+
+        if (apiRequestContext != null) {
+            try {
+                User.delete(apiRequestContext, "%s.super@email.com".formatted(uid));
+                TestUtils.deleteCompany(apiRequestContext, companyName);
+                apiRequestContext.dispose();
+            } catch (Exception ignored) {
+                log.info("Attempt to dispose the apiRequestContext that is already disposed.");
+            }
+        }
+
+        if (playwright != null) {
+            try {
+                playwright.close();
+            } catch (Exception ignored) {
+                log.info("Attempt to close the playwright that is already closed.");
+            }
+        }
     }
 
     private void openSite(Object[] args) {
@@ -206,82 +261,20 @@ public abstract class BaseTest {
 //        initPageRequestContext();
     }
 
-    @AfterMethod
-    protected void afterMethod(Method method, ITestResult testResult) throws IOException {
-        if (!testResult.isSuccess() && !ProjectProperties.isCloseBrowserIfError()) {
-            page.pause();
-        }
-
-        long testDuration = (testResult.getEndMillis() - testResult.getStartMillis()) / 1000;
-        if (testResult.getStatus() == ITestResult.FAILURE) {
-            log.info("{} <<< {} in {} s", status(testResult.getStatus()), testId, testDuration);
-        }
-
-        if (page != null) {
-            page.close();
-            if (ProjectProperties.isVideoMode() && page.video() != null) {
-                if (testResult.getStatus() == ITestResult.FAILURE || testResult.getStatus() == ITestResult.SKIP) {
-                    Path videoFilePath = Paths.get(testId + ".webm");
-                    page.video().saveAs(videoFilePath);
-                    Allure.getLifecycle().addAttachment(
-                            "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
-                }
-                page.video().delete();
-            }
-        }
-
-        if (context != null) {
-            if (ProjectProperties.isTracingMode()) {
-                if (testResult.getStatus() == ITestResult.FAILURE || testResult.getStatus() == ITestResult.SKIP) {
-                    Path traceFilePath = Paths.get(testId + ".zip");
-                    context.tracing().stop(new Tracing.StopOptions().setPath(traceFilePath));
-                    Allure.getLifecycle().addAttachment(
-                            "tracing", "archive/zip", "zip", Files.readAllBytes(traceFilePath));
-                } else {
-                    context.tracing().stop();
-                }
-            }
-            context.close();
-        }
-    }
-
-    @AfterClass(alwaysRun = true)
-    protected void afterClass() {
-        if (browser != null) {
-            browser.close();
-        }
-        if (apiRequestContext != null) {
-            User.delete(apiRequestContext, "%s.super@email.com".formatted(uid));
-            TestUtils.deleteCompany(apiRequestContext, companyName);
-//            log.info("                 --- Class finished ---                 ");
-            apiRequestContext.dispose();
-        }
-        if (playwright != null) {
-            playwright.close();
-        }
-    }
-
     private void initApiRequestContext() {
         if (LocalTime.now().isBefore(bestBefore)) {
             return;
         }
-        APIRequestContext request = playwright.request()
-                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
-        Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
-        Token token = User.getTokenResponse(request, credentials).token();
-        request.dispose();
+        Token token = getTokenFromApiResponse(playwright);
 
         if (token != null && !token.idToken().isEmpty()) {
-            apiRequestContext = playwright.request()
-                    .newContext(new APIRequest.NewContextOptions()
-                            .setBaseURL(ProjectProperties.getBaseURL())
-                            .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+            apiRequestContext = getApiRequestContext(playwright, token);
             bestBefore = LocalTime.now().plusSeconds(token.expiresIn()).minusMinutes(3);
         }
     }
 
     private void initPageRequestContext() {
-        StorageState storageState = new Gson().fromJson(context.storageState(), StorageState.class);
+        StorageState storageState = new Gson().fromJson(browserContext.storageState(), StorageState.class);
         LocalStorage[] localStorage = storageState.origins()[0].localStorage();
         String tokenData = Arrays.stream(localStorage)
                 .filter(item -> item.name().equals("token_data"))
@@ -290,7 +283,37 @@ public abstract class BaseTest {
                 .orElse("");
         if (!tokenData.isEmpty()) {
             Token token = new Gson().fromJson(tokenData, Token.class);
-            context.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken())));
+            browserContext.setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken())));
+        }
+    }
+
+    private Token getTokenFromApiResponse(Playwright playwright) {
+        APIRequestContext context = playwright.request()
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
+        Credentials credentials = new Credentials(ProjectProperties.getEmail(), ProjectProperties.getPassword());
+        Token token = User.getTokenResponse(context, credentials).token();
+        context.dispose();
+
+        return token;
+    }
+
+    private APIRequestContext getApiRequestContext(Playwright playwright, Token token) {
+        return playwright.request()
+                .newContext(new APIRequest.NewContextOptions()
+                        .setBaseURL(ProjectProperties.getBaseURL())
+                        .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+    }
+
+    private void attachVideoIfNeeded(Page page, String testId, int resultStatus) throws IOException {
+        Video video = page.video();
+        if (video != null) {
+            if (Set.of(ITestResult.FAILURE, ITestResult.SKIP).contains(resultStatus)) {
+                Path videoFilePath = Paths.get(testId + ".webm");
+                video.saveAs(videoFilePath);
+                Allure.getLifecycle().addAttachment(
+                        "video", "video/webm", "webm", Files.readAllBytes(videoFilePath));
+            }
+            video.delete();
         }
     }
 
