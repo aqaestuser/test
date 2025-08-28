@@ -2,10 +2,13 @@ package xyz.npgw.test.page.component.table;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import xyz.npgw.test.page.dialog.acquirer.ActivateAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.ActivateGroupGatewayItemsDialog;
 import xyz.npgw.test.page.dialog.acquirer.DeactivateAcquirerDialog;
+import xyz.npgw.test.page.dialog.acquirer.DeactivateGroupGatewayItemsDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerMidDialog;
 import xyz.npgw.test.page.system.SuperAcquirersPage;
 
@@ -13,6 +16,8 @@ import xyz.npgw.test.page.system.SuperAcquirersPage;
 public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPage> {
 
     private final Locator tableContent = getByLabelExact("merchants table").locator("tbody");
+    private final Locator deactivateGatewayConnectionsButton = getByTextExact("Deactivate gateway connections");
+    private final Locator activateGatewayConnectionsButton = getByTextExact("Activate gateway connections");
 
     public AcquirersTableComponent(Page page, SuperAcquirersPage currentPage) {
         super(page, currentPage);
@@ -50,6 +55,36 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
         getRow(acquirerName).locator("//*[@data-icon='ban']/..").click();
 
         return new DeactivateAcquirerDialog(getPage());
+    }
+
+    @Step("Click 'Bulk actions' button")
+    public AcquirersTableComponent clickBulkActionsButton(String entityName) {
+        Locator bulkButton = getRow(entityName).locator("svg[data-icon='wand-magic-sparkles']");
+        bulkButton.hover();
+        getPage().waitForTimeout(1500);
+
+        bulkButton.click();
+        Locator dropdown = getPage().locator("div[aria-label='Options']");
+        dropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
+//
+//        activateGatewayConnectionsButton.waitFor();
+//        deactivateGatewayConnectionsButton.waitFor();
+
+        return this;
+    }
+
+    @Step("Select 'Activate gateway connections'")
+    public ActivateGroupGatewayItemsDialog selectActivateGatewayConnections() {
+        activateGatewayConnectionsButton.click();
+
+        return new ActivateGroupGatewayItemsDialog(getPage());
+    }
+
+    @Step("Select 'Deactivate gateway connections'")
+    public DeactivateGroupGatewayItemsDialog selectDeactivateGatewayConnections() {
+        deactivateGatewayConnectionsButton.click();
+
+        return new DeactivateGroupGatewayItemsDialog(getPage());
     }
 
     @Step("Hover over 'Edit acquirer MID' icon")

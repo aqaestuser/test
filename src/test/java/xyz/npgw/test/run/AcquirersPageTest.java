@@ -18,8 +18,11 @@ import xyz.npgw.test.common.entity.SystemConfig;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.dialog.acquirer.ActivateGroupGatewayItemsDialog;
+import xyz.npgw.test.page.dialog.acquirer.DeactivateGroupGatewayItemsDialog;
 import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
 import xyz.npgw.test.page.system.SuperAcquirersPage;
+import xyz.npgw.test.page.system.SuperGatewayPage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +37,8 @@ public class AcquirersPageTest extends BaseTest {
 
     private static final String[] STATUS_OPTIONS = {"All", "Active", "Inactive"};
     private static final String[] ROWS_PER_PAGE_OPTIONS = {"10", "25", "50", "100"};
+    private static final String COMPANY_NAME_CHANGE_ACTIVITY_TEST = "%s company name change activity".formatted(RUN_ID);
+    private static final String BUSINESS_UNIT_NAME = "%s business unit name".formatted(RUN_ID);
     private static final String[] COLUMNS_HEADERS = {
             "Entity name",
             "Display name",
@@ -102,6 +107,8 @@ public class AcquirersPageTest extends BaseTest {
         super.beforeClass();
         TestUtils.createAcquirer(getApiRequestContext(), ACQUIRER2);
         TestUtils.createAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER);
+        TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST);
+        TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST, BUSINESS_UNIT_NAME);
     }
 
     @Test
@@ -783,6 +790,75 @@ public class AcquirersPageTest extends BaseTest {
                 .hasText("Active");
     }
 
+    @Test(dependsOnMethods = "testAcquirerCanBeActivatedAndDeactivated")
+    @TmsLink("1167")
+    @Epic("System/Acquirers")
+    @Feature("Bulk actions")
+    @Description("Verify that gateway Acquirer MID can be deactivated and then activated via bulk actions")
+    public void testChangeActivityViaBulkActions() {
+        DeactivateGroupGatewayItemsDialog deactivateGroupGatewayItemsDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickGatewayTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME_CHANGE_ACTIVITY_TEST)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .clickAddBusinessUnitAcquirerButton()
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .clickConnectButton()
+                .getAlert().waitUntilSuccessAlertIsGone()
+                .getSystemMenu().clickAcquirersTab()
+                .getTable().clickBulkActionsButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .selectDeactivateGatewayConnections();
+
+        Allure.step("Verify: Dialog header is correct");
+        assertThat(deactivateGroupGatewayItemsDialog.getDialogHeader())
+                .hasText("Group gateway items activity change");
+
+        Allure.step("Verify: Confirmation question is correct");
+        assertThat(deactivateGroupGatewayItemsDialog.getConfirmationQuestion())
+                .hasText("Are you sure you want to deactivate all gateway items created using %s?"
+                        .formatted(CHANGE_STATE_ACQUIRER.getAcquirerName()));
+
+        SuperAcquirersPage superAcquirersPage = deactivateGroupGatewayItemsDialog
+                .clickDeactivateButton();
+
+        assertThat(superAcquirersPage.getAlert().getSuccessMessage())
+                .hasText("SUCCESSGateway items were deactivated successfully");
+
+        SuperGatewayPage superGatewayPage = superAcquirersPage
+                .getSystemMenu().clickGatewayTab();
+
+        Allure.step("Verify: Acquirer MID status changed to Inactive");
+        assertThat(superGatewayPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName(), "Status"))
+                .hasText("Inactive");
+
+        ActivateGroupGatewayItemsDialog activateGroupGatewayItemsDialog = superAcquirersPage
+                .getSystemMenu().clickAcquirersTab()
+                .getTable().clickBulkActionsButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .selectActivateGatewayConnections();
+
+        Allure.step("Verify: Dialog header is correct");
+        assertThat(activateGroupGatewayItemsDialog.getDialogHeader())
+                .hasText("Group gateway items activity change");
+
+        Allure.step("Verify: Confirmation question is correct");
+        assertThat(activateGroupGatewayItemsDialog.getConfirmationQuestion())
+                .hasText("Are you sure you want to activate all gateway items created using %s?"
+                        .formatted(CHANGE_STATE_ACQUIRER.getAcquirerName()));
+
+        superAcquirersPage = activateGroupGatewayItemsDialog
+                .clickActivateButton();
+
+        assertThat(superAcquirersPage.getAlert().getSuccessMessage())
+                .hasText("SUCCESSGateway items were activated successfully");
+
+        superGatewayPage = superAcquirersPage
+                .getSystemMenu().clickGatewayTab();
+
+        Allure.step("Verify: Acquirer MID status changed to Active");
+        assertThat(superGatewayPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName(), "Status"))
+                .hasText("Active");
+    }
+
     @Test(dataProvider = "getAcquirersStatus", dataProviderClass = TestDataProvider.class)
     @TmsLink("708")
     @Epic("System/Acquirers")
@@ -852,6 +928,7 @@ public class AcquirersPageTest extends BaseTest {
     @Override
     protected void afterClass() {
         TestUtils.deleteAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER.getAcquirerName());
+        TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST);
         super.afterClass();
     }
 }
