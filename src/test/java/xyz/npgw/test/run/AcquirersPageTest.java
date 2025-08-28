@@ -870,9 +870,11 @@ public class AcquirersPageTest extends BaseTest {
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER2.getAcquirerDisplayName())
                 .getSelectStatus().select(status)
+                .getSelectAcquirerCode().selectAcquirerCode("NGenius")
                 .clickResetFilterButton();
 
-        //TODO add 'Select acquirer code' assert when component would be realized
+        Allure.step("Verify: the selected acquirer code filter is cleared");
+        assertThat(acquirersPage.getSelectAcquirerCode().getSelectAcquirerCodeField()).isEmpty();
 
         Allure.step("Verify: the selected acquirer filter is cleared");
         assertThat(acquirersPage.getSelectAcquirerMid().getSelectAcquirerMidField()).isEmpty();

@@ -13,7 +13,8 @@ import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.header.SuperHeaderMenuTrait;
-import xyz.npgw.test.page.component.select.SelectAcquirerTrait;
+import xyz.npgw.test.page.component.select.SelectAcquirerCodeTrait;
+import xyz.npgw.test.page.component.select.SelectAcquirerMidTrait;
 import xyz.npgw.test.page.component.select.SelectStatusTrait;
 import xyz.npgw.test.page.component.system.SuperSystemMenuTrait;
 import xyz.npgw.test.page.component.table.AcquirersTableTrait;
@@ -28,8 +29,9 @@ import java.util.concurrent.TimeUnit;
 public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
         implements SuperHeaderMenuTrait<SuperAcquirersPage>,
         SuperSystemMenuTrait,
-        SelectAcquirerTrait<SuperAcquirersPage>,
+        SelectAcquirerMidTrait<SuperAcquirersPage>,
         SelectStatusTrait<SuperAcquirersPage>,
+        SelectAcquirerCodeTrait<SuperAcquirersPage>,
         AcquirersTableTrait {
 
     private final Locator setupAcquirerMidButton = getByTestId("AddAcquirerButton");
