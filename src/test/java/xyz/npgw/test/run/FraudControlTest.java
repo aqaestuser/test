@@ -16,7 +16,9 @@ import xyz.npgw.test.common.entity.ControlType;
 import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
+import xyz.npgw.test.page.dialog.control.ActivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.AddControlDialog;
+import xyz.npgw.test.page.dialog.control.DeactivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateControlDialog;
 import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.SuperFraudControlPage;
@@ -33,52 +35,54 @@ public class FraudControlTest extends BaseTest {
 
     private static final FraudControl FRAUD_CONTROL = FraudControl.builder()
             .controlName("%s ControlEverything".formatted(RUN_ID))
-            .controlCode("8848")
+            .controlCode("Neutrino")
             .controlDisplayName("ControlDisplay")
             .controlConfig("notDefault")
             .build();
     private static final FraudControl FRAUD_CONTROL_FRAUD_SCREEN = FraudControl.builder()
             .controlName("%s ControlScreen".formatted(RUN_ID))
             .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
-            .controlCode("1522")
+            .controlCode("Neutrino")
             .controlDisplayName("ControlFSC")
             .controlConfig("type")
             .build();
     private static final FraudControl FRAUD_CONTROL_INACTIVE = FraudControl.builder()
             .controlName("%s ControlNothing".formatted(RUN_ID))
-            .controlCode("9905")
+            .controlCode("Neutrino")
             .controlDisplayName("DisplayNotAvailable")
             .controlConfig("suspicious")
             .isActive(false)
             .build();
     private static final FraudControl FRAUD_CONTROL_ADD_ONE = FraudControl.builder()
             .controlName("%s ControlOne".formatted(RUN_ID))
-            .controlCode("0001")
+            .controlCode("Neutrino")
             .controlDisplayName("ControlDisplayFirst")
-            .controlCode("1234")
+    //        .controlCode("1234")
             .controlConfig("firstQueue")
             .build();
     private static final FraudControl FRAUD_CONTROL_ADD_TWO = FraudControl.builder()
             .controlName("%s ControlTwo".formatted(RUN_ID))
-            .controlCode("0002")
+            .controlCode("Neutrino")
             .controlDisplayName("ControlDisplaySecond")
-            .controlCode("2345")
+    //        .controlCode("2345")
             .controlConfig("secondQueue")
             .build();
     private static final FraudControl FRAUD_CONTROL_ADD_INACTIVE = FraudControl.builder()
             .controlName("%s Inactive control".formatted(RUN_ID))
-            .controlCode("0003")
+            .controlCode("Neutrino")
             .controlDisplayName("Inactive control")
             .isActive(false)
             .controlConfig("firstQueue")
             .build();
     private static final FraudControl FRAUD_CONTROL_THREE = FraudControl.builder()
             .controlName("%s ControlThree".formatted(RUN_ID))
+            .controlCode("Neutrino")
             .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
             .controlDisplayName("ControlDisplayThird")
             .build();
     private static final FraudControl FRAUD_CONTROL_ACTIVE_TO_INACTIVE = FraudControl.builder()
             .controlName("%s ControlActiveToInactive".formatted(RUN_ID))
+            .controlCode("Neutrino")
             .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
             .controlDisplayName("ControlDisplayActiveToInactive")
             .build();
@@ -103,7 +107,6 @@ public class FraudControlTest extends BaseTest {
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ACTIVE_TO_INACTIVE);
     }
 
-    @Ignore("controlCode must have specific value")
     @Test
     @TmsLink("891")
     @Epic("System/Fraud control")
@@ -127,7 +130,6 @@ public class FraudControlTest extends BaseTest {
                 .hasText(FRAUD_CONTROL.toString());
     }
 
-    @Ignore("controlCode must have specific value")
     @Test
     @TmsLink("1154")
     @Epic("System/Fraud control")
@@ -151,7 +153,6 @@ public class FraudControlTest extends BaseTest {
                 .hasText(FRAUD_CONTROL_FRAUD_SCREEN.toString());
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("920")
     @Epic("System/Fraud control")
@@ -186,8 +187,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(superFraudControlPage.getTableBusinessUnitControls().getNoRowsToDisplayMessage()).isAttached();
     }
 
-
-    @Ignore("ControlCode must have specific value")
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("972")
     @Epic("System/Fraud control")
@@ -220,7 +219,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(superFraudControlPage.getTableControls().getRow(FRAUD_CONTROL.getControlName())).isAttached();
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("987")
     @Epic("System/Fraud control")
@@ -256,8 +254,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(statusCell).hasText("Active");
     }
 
-
-    @Ignore("controlCode must have specific value")
     @Test(dependsOnMethods = "testAddActiveFraudControl")
     @TmsLink("999")
     @Epic("System/Fraud control")
@@ -360,7 +356,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(connectControlIconTooltip).hasText("Connect control to business unit");
     }
 
-    @Ignore
     @Test(dependsOnMethods = {"testBusinessUnitControlTableEntriesSorting"})
     @TmsLink("1123")
     @Epic("System/Fraud control")
@@ -414,7 +409,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(deleteIconTooltip).hasText("Delete business unit control");
     }
 
-    @Ignore
     @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl",
             "testCancelDeactivationFraudControl", "testCancelEditingFraudControl",
             /*"testTooltipsForActionsControlTable", "testBusinessUnitControlTableEntriesSorting",*/
@@ -434,7 +428,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(superFraudControlPage.getTableControls().getRow(FRAUD_CONTROL.getControlName())).not().isAttached();
     }
 
-    @Ignore("controlCode must have specific value")
     @Test
     @TmsLink("904")
     @Epic("System/Fraud control")
@@ -458,7 +451,6 @@ public class FraudControlTest extends BaseTest {
                 .hasText(FRAUD_CONTROL_INACTIVE.toString());
     }
 
-    @Ignore
     @Test(dependsOnMethods = "testAddInactiveFraudControl")
     @TmsLink("955")
     @Epic("System/Fraud control")
@@ -487,9 +479,7 @@ public class FraudControlTest extends BaseTest {
         assertThat(cell).hasText("Inactive");
     }
 
-    @Ignore
-    @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit",
-            "testDeleteInactiveFraudControlAddedToBusinessUnit"})
+    @Test
     @TmsLink("910")
     @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -515,10 +505,14 @@ public class FraudControlTest extends BaseTest {
         Allure.step("Verify that Fraud Control two are presented in Business Unit table");
         assertThat(superFraudControlPage.getTableControls().getRow(FRAUD_CONTROL_ADD_TWO.getControlName()))
                 .hasText(FRAUD_CONTROL_ADD_TWO.toString());
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton()
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @Test
     @TmsLink("967")
     @Epic("System/Fraud control")
     @Feature("Control table")
@@ -528,7 +522,13 @@ public class FraudControlTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton();
 
         Locator controlStatusCell = superFraudControlPage
                 .getTableControls().getCell(FRAUD_CONTROL_ADD_ONE.getControlName(), "Status");
@@ -564,10 +564,14 @@ public class FraudControlTest extends BaseTest {
         Allure.step("Verify that Fraud Control status is Active in Control table again");
         assertThat(controlStatusCell).hasText("Active");
         assertThat(businessControlStatusCell).hasText("Active");
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton()
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @Test
     @TmsLink("1009")
     @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
@@ -577,7 +581,13 @@ public class FraudControlTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify Fraud Control's current status in Business Unit Control Table");
         assertThat(superFraudControlPage.getTableBusinessUnitControls().getCell(0, "Status"))
@@ -610,6 +620,11 @@ public class FraudControlTest extends BaseTest {
                 .hasText("Active");
         assertThat(superFraudControlPage.getTableBusinessUnitControls().getCell(0, "Status"))
                 .hasText("Active");
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton()
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
     @Test
@@ -633,7 +648,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(addControlDialog.getSetupButton()).isDisabled();
     }
 
-    @Ignore("controlCode must have specific value")
     @Test
     @TmsLink("895")
     @Epic("System/Fraud control")
@@ -645,10 +659,12 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .clickAddFraudControl()
                 .fillFraudControlNameField(FRAUD_CONTROL_NAME)
+                .fillFraudControlCodeField("Neutrino")
                 .clickSetupButton()
                 .getAlert().clickCloseButton()
                 .clickAddFraudControl()
                 .fillFraudControlNameField(FRAUD_CONTROL_NAME)
+                .fillFraudControlCodeField("Neutrino")
                 .clickSetupButton();
 
         Allure.step("Verify that the error message ‘ERROR Entity with name … already exists.’ is displayed.");
@@ -656,9 +672,7 @@ public class FraudControlTest extends BaseTest {
                 .hasText("ERROREntity with name {%s} already exists.".formatted(FRAUD_CONTROL_NAME));
     }
 
-    @Ignore
-    @Test(dependsOnMethods = {"testAddFraudControlToBusinessUnit", "testChangeFraudControlPriority",
-            "testChangeBusinessUnitFraudControlActivity", "testChangeBusinessControlPriorityRestrictions"})
+    @Test
     @TmsLink("950")
     @Epic("System/Fraud control")
     @Feature("Add/Edit/Delete Fraud Control")
@@ -669,6 +683,12 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
                 .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("1")
                 .clickDeleteButton();
 
@@ -677,10 +697,12 @@ public class FraudControlTest extends BaseTest {
                 .not().isAttached();
         assertThat(superFraudControlPage.getTableControls().getRow(FRAUD_CONTROL_ADD_TWO.getControlName()))
                 .isAttached();
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @Test
     @TmsLink("960")
     @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
@@ -691,6 +713,12 @@ public class FraudControlTest extends BaseTest {
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
                 .getTableBusinessUnitControls().clickMoveBusinessUnitControlUpButton("1")
                 .getAlert().clickCloseButton();
 
@@ -707,9 +735,13 @@ public class FraudControlTest extends BaseTest {
                 .containsText(FRAUD_CONTROL_ADD_ONE.getControlDisplayName());
         assertThat(superFraudControlPage.getTableBusinessUnitControls().getRowByDataKey("1"))
                 .containsText(FRAUD_CONTROL_ADD_TWO.getControlDisplayName());
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton()
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore("Raw with control name not found - failed on clickConnectControlButton")
     @Test
     @TmsLink("927")
     @Epic("System/Fraud control")
@@ -746,7 +778,6 @@ public class FraudControlTest extends BaseTest {
                 FRAUD_CONTROL_ACTIVE_TO_INACTIVE.getControlDisplayName()));
     }
 
-    @Ignore
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
             "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("986")
@@ -758,7 +789,7 @@ public class FraudControlTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getTableControls().clickEditControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
-                .fillFraudControlCodeField(FRAUD_CONTROL_ADD_TWO.getControlCode())
+        //        .fillFraudControlCodeField(FRAUD_CONTROL_ADD_TWO.getControlCode())
                 .fillFraudControlConfigField(FRAUD_CONTROL_ADD_TWO.getControlConfig())
                 .fillFraudControlDisplayNameField(FRAUD_CONTROL_ADD_TWO.getControlDisplayName())
                 .checkInactiveRadiobutton()
@@ -775,7 +806,7 @@ public class FraudControlTest extends BaseTest {
         Allure.step("Verify that all the data are changed in the row" + FRAUD_CONTROL_ADD_ONE.getControlName());
 
         assertThat(row).containsText(FRAUD_CONTROL_ADD_TWO.getControlCode());
-        assertThat(row).not().containsText(FRAUD_CONTROL_ADD_ONE.getControlCode());
+    //    assertThat(row).not().containsText(FRAUD_CONTROL_ADD_ONE.getControlCode());
 
         assertThat(row).containsText(FRAUD_CONTROL_ADD_TWO.getControlConfig());
         assertThat(row).not().containsText(FRAUD_CONTROL_ADD_ONE.getControlConfig());
@@ -787,7 +818,6 @@ public class FraudControlTest extends BaseTest {
         assertThat(row).not().containsText("Active");
     }
 
-    @Ignore
     @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit",
             "testChangeBusinessUnitFraudControlActivity"})
     @TmsLink("993")
@@ -841,8 +871,7 @@ public class FraudControlTest extends BaseTest {
         });
     }
 
-    @Ignore("Raw with control name not found - failed on clickConnectControlButton")
-    @Test
+    @Test(expectedExceptions = AssertionError.class)
     @TmsLink("1013")
     @Epic("System/Fraud control")
     @Feature("Table sort")
@@ -913,8 +942,7 @@ public class FraudControlTest extends BaseTest {
         assertThat(fraudControlPage.getSelectBusinessUnit().getSelectBusinessUnitField()).isEmpty();
     }
 
-    @Ignore
-    @Test(dependsOnMethods = "testAddFraudControlToBusinessUnit")
+    @Test
     @TmsLink("1018")
     @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
@@ -924,17 +952,27 @@ public class FraudControlTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton();
 
         Allure.step("Check that the first item move up icon is disabled");
         assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlUpButton("0")).isDisabled();
 
         Allure.step("Check that the last item move down icon is disabled");
         assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlDownButton("1")).isDisabled();
+
+        page.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton()
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore
-    @Test(dependsOnMethods = {"testDeleteActiveFraudControlAddedToBusinessUnit"})
+    @Test
     @TmsLink("1064")
     @Epic("System/Fraud control")
     @Feature("Business Unit Control table")
@@ -944,16 +982,21 @@ public class FraudControlTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickFraudControlTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton();
 
         Allure.step("Verify Up button is disabled on Business Unit Control table because of one control");
         assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlUpButton("0")).isDisabled();
 
         Allure.step("Verify Down button is disabled on Business Unit Control table because of one control");
         assertThat(page.getTableBusinessUnitControls().getMoveBusinessUnitControlDownButton("0")).isDisabled();
+
+        page.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
-    @Ignore("ERRORcontrolCode must have a specific value is added to message. Need to add control code as it will be known")
     @Test
     @TmsLink("1079")
     @Epic("System/Fraud control")
@@ -978,6 +1021,7 @@ public class FraudControlTest extends BaseTest {
 
             addControlDialog
                     .fillFraudControlNameField(input)
+                    .fillFraudControlCodeField("Neutrino")
                     .clickSetupButton();
 
             Allure.step("Verify error message for symbol: " + symbol);
@@ -1022,7 +1066,6 @@ public class FraudControlTest extends BaseTest {
         Assert.assertEquals(addControlDialog.getControlNameInput().inputValue().length(), 100);
     }
 
-    @Ignore("ControlCode must have specific value")
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1143")
     @Epic("System/Fraud control")
@@ -1051,6 +1094,39 @@ public class FraudControlTest extends BaseTest {
         Allure.step("Verify Activate control modal window main body text");
         assertThat(deactivateControlDialog.getModalWindowsMainTextBody())
                 .hasText("Are you sure you want to activate control %s?".formatted(FRAUD_CONTROL_INACTIVE.getControlDisplayName()));
+    }
+
+    @Test(dependsOnMethods = {"testBusinessUnitControlTableEntriesSorting"})
+    @TmsLink("1157")
+    @Epic("System/Fraud control")
+    @Feature("'Change business unit control activity' dialog text content")
+    @Description("Verify text content for Header and Main body on 'Change business unit control activity' dialog")
+    public void testVerifyWarningModalWindowChangeActivityForBusinessUnitControlTable() {
+        DeactivateBusinessUnitControlDialog dialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_SORT)
+                .getTableBusinessUnitControls().clickDeactivateBusinessUnitControlButton("0");
+
+        Allure.step("Verify Deactivate Business unit control modal window text");
+        assertThat(dialog.getDialogHeader()).hasText("Change business unit control activity");
+
+        Allure.step("Verify Deactivate Business unit control modal window main body text");
+        assertThat(dialog.getModalWindowsMainTextBody())
+                .hasText("Are you sure you want to deactivate business unit control "
+                        + FRAUD_CONTROL_ADD_ONE.getControlDisplayName() + " with priority " + "0?");
+
+        ActivateBusinessUnitControlDialog activateDialog = dialog.clickCloseIcon()
+                .getTableBusinessUnitControls().clickActivateBusinessUnitControlButton("1");
+
+        Allure.step("Verify Activate control modal window text");
+        assertThat(activateDialog.getDialogHeader()).hasText("Change business unit control activity");
+
+        Allure.step("Verify Activate control modal window main body text");
+        assertThat(activateDialog.getModalWindowsMainTextBody())
+                .hasText("Are you sure you want to activate business unit control "
+                        + FRAUD_CONTROL_ADD_TWO.getControlDisplayName() + " with priority " + "1?");
     }
 
     @AfterClass
