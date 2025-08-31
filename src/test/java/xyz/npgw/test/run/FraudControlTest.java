@@ -20,6 +20,7 @@ import xyz.npgw.test.page.dialog.control.ActivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.AddControlDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateControlDialog;
+import xyz.npgw.test.page.dialog.control.DeleteControlDialog;
 import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.SuperFraudControlPage;
 
@@ -1069,8 +1070,8 @@ public class FraudControlTest extends BaseTest {
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1143")
     @Epic("System/Fraud control")
-    @Feature("Change control activity dialog Control table")
-    @Description("Warning message text")
+    @Feature("'Change control activity' dialog Control table")
+    @Description("Verify text content for Header and Main body on 'Change control activity' dialog")
     public void testVerifyWarningModalWindowChangeActivityForControlTable() {
         DeactivateControlDialog deactivateControlDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -1127,6 +1128,26 @@ public class FraudControlTest extends BaseTest {
         assertThat(activateDialog.getModalWindowsMainTextBody())
                 .hasText("Are you sure you want to activate business unit control "
                         + FRAUD_CONTROL_ADD_TWO.getControlDisplayName() + " with priority " + "1?");
+    }
+
+    @Test
+    @TmsLink("1185")
+    @Epic("System/Fraud control")
+    @Feature("'Delete control' dialog text content")
+    @Description("Verify text content for Header and Main body on 'Delete control' dialog")
+    public void testVerifyWarningModalWindowDeleteControlTable() {
+        DeleteControlDialog dialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL_ADD_ONE.getControlName());
+
+        Allure.step("Verify Delete control modal window text");
+        assertThat(dialog.getDialogHeader()).hasText("Delete control");
+
+        Allure.step("Verify Delete control modal window main body text");
+        assertThat(dialog.getModalWindowsMainTextBody())
+                .hasText("Are you sure you want to delete control "
+                        + FRAUD_CONTROL_ADD_ONE.getControlName() + "?");
     }
 
     @AfterClass

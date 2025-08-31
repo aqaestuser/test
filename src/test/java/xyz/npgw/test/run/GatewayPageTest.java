@@ -238,7 +238,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton();
 
         Allure.step("Verify the result of adding Acquirer within Gateway page table");
@@ -266,10 +266,10 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton();
 
@@ -307,11 +307,11 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[1])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .clickAddBusinessUnitAcquirerButton()
                 .checkInactiveRadiobutton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton();
 
@@ -339,7 +339,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_DELETION_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME_DELETION_TEST)
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton()
                 .getTable().clickDeleteBusinessUnitAcquirer("0")
@@ -362,7 +362,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickDeactivateButton();
@@ -393,14 +393,14 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .clickAddBusinessUnitAcquirerButton()
                 .checkInactiveRadiobutton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_EUR.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_EUR.getAcquirerDisplayName())
                 .clickConnectButton()
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_GBP.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_GBP.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getTable().clickColumnHeader("Status");
 
@@ -494,7 +494,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickCancelButton();
@@ -518,7 +518,7 @@ public class GatewayPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getTable().clickDeactivateBusinessUnitAcquirerButton("0")
                 .clickCloseIcon();

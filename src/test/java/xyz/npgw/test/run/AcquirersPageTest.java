@@ -804,11 +804,11 @@ public class AcquirersPageTest extends BaseTest {
                 .getSelectCompany().selectCompany(COMPANY_NAME_CHANGE_ACTIVITY_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
                 .clickAddBusinessUnitAcquirerButton()
-                .getSelectAcquirerMid().selectAcquirerMidInDialog(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getSelectAcquirerMid().selectAcquirerMidInDialog(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().waitUntilSuccessAlertIsGone()
                 .getSystemMenu().clickAcquirersTab()
-                .getTable().clickBulkActionsButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
+                .getTable().clickBulkActionsButton(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
                 .selectDeactivateGatewayConnections();
 
         Allure.step("Verify: Dialog header is correct");
