@@ -3,7 +3,6 @@ package xyz.npgw.test.page.component.header;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 import xyz.npgw.test.page.system.AdminTeamPage;
@@ -33,8 +32,8 @@ public class AdminHeaderMenuComponent<CurrentPageT> extends BaseHeaderMenuCompon
 
     @Step("Click on 'System administration' in the Header")
     public AdminTeamPage clickSystemAdministrationLink() {
-        clickAndWaitForTable(systemAdministrationButton);
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
+        systemAdministrationButton.click();
+        clickTeamTabAndWait();
 
         return new AdminTeamPage(getPage());
     }

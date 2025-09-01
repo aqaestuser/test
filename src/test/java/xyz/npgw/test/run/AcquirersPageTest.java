@@ -11,7 +11,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.SystemConfig;
@@ -33,7 +33,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class AcquirersPageTest extends BaseTest {
+public class AcquirersPageTest extends BaseTestForSingleLogin {
 
     private static final String[] STATUS_OPTIONS = {"All", "Active", "Inactive"};
     private static final String[] ROWS_PER_PAGE_OPTIONS = {"10", "25", "50", "100"};
@@ -462,40 +462,42 @@ public class AcquirersPageTest extends BaseTest {
         acquirersPage
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName());
 
+        Locator acquirerRow = acquirersPage.getTable().getRow(ACQUIRER.getAcquirerName());
+
         Allure.step("Verify: Entity name matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Entity name"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Entity name"))
                 .hasText(ACQUIRER.getAcquirerName());
 
         Allure.step("Verify: Display name matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Display name"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Display name"))
                 .hasText(ACQUIRER.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code is 'NGenius' by default");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Acquirer code"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Acquirer code"))
                 .hasText("NGenius");
 
         Allure.step("Verify: Acquirer MID matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "MID"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "MID"))
                 .hasText(ACQUIRER.getAcquirerMid());
 
         Allure.step("Verify: Acquirer MID MCC matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "MCC"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "MCC"))
                 .hasText(ACQUIRER.getAcquirerMidMcc());
 
         Allure.step("Verify: Currencies column contains expected currency");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Currencies"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Currencies"))
                 .hasText(ACQUIRER.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Acquirer config"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Acquirer config"))
                 .hasText(ACQUIRER.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "System config"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "System config"))
                 .hasText(ACQUIRER.getSystemConfig().toString());
 
         Allure.step("Verify: Status matches expected");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER.getAcquirerName(), "Status"))
+        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Status"))
                 .hasText("Active");
     }
 
@@ -595,7 +597,7 @@ public class AcquirersPageTest extends BaseTest {
                 .getHeader().clickSystemAdministrationLink()
                 .getSystemMenu().clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_EDITED.getAcquirerDisplayName())
-                .getTable().clickEditAcquirerMidButton(ACQUIRER_EDITED.getAcquirerName())
+                .getTable().clickEditAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .getAllPlaceholders();
 
         Allure.step("Verify placeholders match expected values for all fields");
@@ -647,49 +649,53 @@ public class AcquirersPageTest extends BaseTest {
         Allure.step("Verify: List of acquirers has only 1 row in the table");
         assertThat(acquirersPage.getTable().getRows()).hasCount(1);
 
+        String acquirer2Name = ACQUIRER2.getAcquirerName();
+        Locator acquirer2Row = acquirersPage.getTable().getRow(acquirer2Name);
+
         Allure.step("Verify: Entity name");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "Entity name"))
-                .hasText(ACQUIRER2.getAcquirerName());
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "Entity name"))
+                .hasText(acquirer2Name);
 
         Allure.step("Verify: Display name");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "Display name"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "Display name"))
                 .hasText(ACQUIRER2.getAcquirerDisplayName());
 
         Allure.step("Verify: Acquirer code");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "Acquirer code"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "Acquirer code"))
                 .hasText(ACQUIRER2.getAcquirerCode());
 
         Allure.step("Verify: MID");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "MID"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "MID"))
                 .hasText(ACQUIRER2.getAcquirerMid());
 
         Allure.step("Verify: MCC");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "MCC"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "MCC"))
                 .hasText(ACQUIRER2.getAcquirerMidMcc());
 
         Allure.step("Verify: Currencies");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "Currencies"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "Currencies"))
                 .hasText(String.join(", ", Arrays.stream(ACQUIRER2.getCurrencyList()).map(Enum::name).toList()));
 
         Allure.step("Verify: System config");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "System config"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "System config"))
                 .hasText(ACQUIRER2.getSystemConfig().toString());
 
         Allure.step("Verify: Status");
-        assertThat(acquirersPage.getTable().getCell(ACQUIRER2.getAcquirerName(), "Status"))
+        assertThat(acquirersPage.getTable().getCell(acquirer2Row, "Status"))
                 .hasText(ACQUIRER2.getStatus());
 
         Allure.step("Verify: Edit button is visible");
-        assertThat(acquirersPage.getTable().getEditAcquirerMidButton(ACQUIRER2.getAcquirerName())).isVisible();
+        assertThat(acquirersPage.getTable().getEditAcquirerMidButton(acquirer2Name)).isVisible();
 
         Allure.step("Verify: 'Activate acquirer' icon is visible for the acquirer");
-        Locator activityIcon = acquirersPage.getTable().getAcquirerActivityIcon(ACQUIRER2.getAcquirerName());
+        Locator activityIcon = acquirersPage.getTable().getAcquirerActivityIcon(acquirer2Name);
         assertThat(activityIcon).isVisible();
         assertThat(activityIcon).hasAttribute("data-icon", "ban");
 
+        Locator pagination = acquirersPage.getTable().getPaginationItems();
         Allure.step("Verify: Pagination shows only one page labeled '1'");
-        assertThat(acquirersPage.getTable().getPaginationItems()).isVisible();
-        assertThat(acquirersPage.getTable().getPaginationItems()).hasText("1");
+        assertThat(pagination).isVisible();
+        assertThat(pagination).hasText("1");
     }
 
     @Test

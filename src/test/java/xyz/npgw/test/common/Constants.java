@@ -20,6 +20,7 @@ public class Constants {
     public static final String MERCHANT_ID_FOR_TEST_RUN = "merchant-server-ngenius";
 
     public static final String ONE_DATE_FOR_TABLE = "12/08/2025";
+    public static final String AUGUST_FOR_TABLE = "01/08/2025 - 31/08/2025";
 
     public static final String[] CURRENCY_OPTIONS = {"ALL", "EUR", "USD", "GBP"};
     public static final String[] CARD_OPTIONS = {"ALL", "VISA", "MASTERCARD"};

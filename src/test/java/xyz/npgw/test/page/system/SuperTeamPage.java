@@ -1,7 +1,7 @@
 package xyz.npgw.test.page.system;
 
-import lombok.Getter;
 import com.microsoft.playwright.Page;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.component.header.SuperHeaderMenuTrait;
 import xyz.npgw.test.page.component.select.SelectCompanyTrait;

@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.ReportsPage;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
@@ -24,7 +24,7 @@ import java.util.List;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class ReportsPageTest extends BaseTest {
+public class ReportsPageTest extends BaseTestForSingleLogin {
 
     private static final String COMPANY_NAME = "%s generate report".formatted(RUN_ID);
     private static final String MERCHANT_TITLE = "%s generate report merchant".formatted(RUN_ID);

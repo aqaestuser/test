@@ -11,7 +11,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.MerchantAcquirer;
@@ -31,7 +31,7 @@ import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
-public class DashboardPageAdminTest extends BaseTest {
+public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
 
     private static final String MERCHANT_TITLE = "%s dashboard business unit".formatted(RUN_ID);
     private BusinessUnit businessUnit;

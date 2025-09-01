@@ -8,14 +8,14 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.page.AboutBlankPage;
 import xyz.npgw.test.page.LoginPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class LoginPageTest extends BaseTest {
+public class UnauthenticatedLoginPageTest extends BaseTestForSingleLogin {
 
     @Test
     @TmsLink("149")

@@ -9,9 +9,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.provider.TestDataProvider;
-import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.ProfileSettingsDialog;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
@@ -20,7 +19,7 @@ import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class HeaderTest extends BaseTest {
+public class HeaderTest extends BaseTestForSingleLogin {
 
     @Test
     @TmsLink("209")
@@ -66,60 +65,6 @@ public class HeaderTest extends BaseTest {
 
         Allure.step("Verify: Dashboard Page URL");
         assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
-    }
-
-    @Test(dataProvider = "getUserRole", dataProviderClass = TestDataProvider.class, priority = 1)
-    @TmsLink("289")
-    @Epic("Header")
-    @Feature("User menu")
-    @Description("Check if the user can change the password through the profile settings in the user menu")
-    public void testChangePassword(String userRole) {
-        String newPassword = "QWEdsa123@";
-
-        SuperDashboardPage dashboardPage = new SuperDashboardPage(getPage())
-                .clickUserMenuButton()
-                .clickProfileSettingsButton()
-                .fillPasswordField(newPassword)
-                .fillRepeatPasswordField(newPassword)
-                .clickSaveButton();
-
-        Allure.step("Verify: success message for changing password");
-        assertThat(dashboardPage.getAlert().getMessage())
-                .hasText("SUCCESSPassword was changed successfully");
-
-        dashboardPage
-                .clickLogOutButton()
-                .loginAs("%s.%s@email.com".formatted(getUid(), userRole.toLowerCase()), newPassword, userRole);
-
-        Allure.step("Verify: Successfully login with changed password");
-        assertThat(dashboardPage.getPage()).hasURL(Constants.DASHBOARD_PAGE_URL);
-    }
-
-    @Test
-    @TmsLink("300")
-    @Epic("Header")
-    @Feature("User menu")
-    @Description("Log out via button in the user menu")
-    public void testLogOutViaButtonInUserMenu() {
-        LoginPage loginPage = new SuperDashboardPage(getPage())
-                .clickUserMenuButton()
-                .clickLogOutButtonUserMenu();
-
-        Allure.step("Verify: Login Page URL");
-        assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
-    }
-
-    @Test
-    @TmsLink("308")
-    @Epic("Header")
-    @Feature("Logout")
-    @Description("Log out via button in the Header")
-    public void testLogOutViaButtonInHeader() {
-        LoginPage loginPage = new SuperDashboardPage(getPage())
-                .clickLogOutButton();
-
-        Allure.step("Verify: Login Page URL");
-        assertThat(loginPage.getPage()).hasURL(Constants.LOGIN_PAGE_URL);
     }
 
     @Test

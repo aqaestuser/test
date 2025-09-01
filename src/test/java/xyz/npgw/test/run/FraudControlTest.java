@@ -11,7 +11,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.ControlType;
 import xyz.npgw.test.common.entity.FraudControl;
 import xyz.npgw.test.common.util.TestUtils;
@@ -32,7 +32,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 
-public class FraudControlTest extends BaseTest {
+public class FraudControlTest extends BaseTestForSingleLogin {
 
     private static final FraudControl FRAUD_CONTROL = FraudControl.builder()
             .controlName("%s ControlEverything".formatted(RUN_ID))

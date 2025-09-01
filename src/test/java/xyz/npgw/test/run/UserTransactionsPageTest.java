@@ -10,11 +10,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.provider.TestDataProvider;
 import xyz.npgw.test.common.util.TestUtils;
-import xyz.npgw.test.page.dashboard.AdminDashboardPage;
-import xyz.npgw.test.page.transactions.AdminTransactionsPage;
+import xyz.npgw.test.page.dashboard.UserDashboardPage;
+import xyz.npgw.test.page.transactions.UserTransactionsPage;
 
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ import static xyz.npgw.test.common.Constants.CARD_OPTIONS;
 import static xyz.npgw.test.common.Constants.CURRENCY_OPTIONS;
 import static xyz.npgw.test.common.Constants.TRANSACTION_STATUSES;
 
-public class TransactionsPageAdminTest extends BaseTest {
+public class UserTransactionsPageTest extends BaseTestForSingleLogin {
 
     private static final String COMPANY_NAME = "%s test request company".formatted(RUN_ID);
     private final String[] businessUnitNames = new String[]{"Business unit 1", "Business unit 2", "Business unit 3"};
@@ -41,8 +41,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Navigation")
     @Description("User navigate to 'Transactions page' after clicking on 'Transactions' link on the header")
-    public void testNavigateToTransactionsPageAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testNavigateToTransactionsPageAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Transactions Page URL");
@@ -57,13 +57,13 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Status")
     @Description("Verify that user can see selector Status Options")
-    public void testTheVisibilityOfTheStatusSelectorOptionsAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testTheVisibilityOfTheStatusSelectorOptionsAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .getSelectStatus().clickSelector();
 
         Allure.step("Verify: Selector Status Options are visible");
-        assertThat(transactionsPage.getSelectStatus().getStatusOptions()).hasText(TRANSACTION_STATUSES);
+        assertThat(transactionsPage.getSelectStatus().getStatusOptions()).hasText(Constants.TRANSACTION_STATUSES);
 
         Allure.step("Verify: Default selected option in status selector is 'ALL'");
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
@@ -74,8 +74,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Amount")
     @Description("Choose amount popup functionality")
-    public void testChooseAmountPopUpAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testChooseAmountPopUpAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("10")
@@ -109,8 +109,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Amount")
     @Description("Error message 'From should be lesser than To' appears")
-    public void testErrorMessageByAmountAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testErrorMessageByAmountAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -125,8 +125,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Card type")
     @Description("Verify that user can see 'Card type' options")
-    public void testTheVisibilityOfTheCardTypeOptionsAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testTheVisibilityOfTheCardTypeOptionsAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickCardTypeSelector();
 
@@ -142,8 +142,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Amount")
     @Description("Edit Amount")
-    public void testEditAmountAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testEditAmountAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -162,8 +162,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Amount")
     @Description("Reset Amount Values")
-    public void testResetAmountValuesAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testResetAmountValuesAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickAmountButton()
                 .fillAmountFromField("500")
@@ -193,13 +193,13 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Feature("Business unit")
     @Description("Verify that the Company admin can see all the company's business units in the Business unit "
             + "dropdown list")
-    public void testTheVisibilityOfTheAvailableBusinessUnitOptionsAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage((getPage()))
+    public void testTheVisibilityOfTheAvailableBusinessUnitOptionsAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage((getPage()))
                 .getHeader().clickTransactionsLink()
                 .getSelectBusinessUnit().clickSelectBusinessUnitPlaceholder();
 
         Allure.step("Verify: Company's business units are visible");
-        assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText(businessUnitNames);
+        assertThat(transactionsPage.getSelectBusinessUnit().getDropdownOptionList()).hasText("default");
     }
 
     @Test
@@ -207,8 +207,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Currency' to default value (ALL)")
-    public void testResetCurrencyAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testResetCurrencyAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
@@ -219,7 +219,7 @@ public class TransactionsPageAdminTest extends BaseTest {
                     .getSelectCurrency().select(currency);
 
             Allure.step("Verify: Filter displays the selected currency");
-            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).hasText(currency);
+            assertThat(transactionsPage.getSelectCurrency().getCurrencySelector()).containsText(currency);
 
             transactionsPage
                     .clickResetFilterButton();
@@ -234,8 +234,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Card Type' to default value (ALL)")
-    public void testResetCardTypeAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminTransactionsPage(getPage())
+    public void testResetCardTypeAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
@@ -261,8 +261,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' to default value (ALL)")
-    public void testResetStatusAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testResetStatusAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
@@ -289,8 +289,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Status' (two options are checked) to default value ( ALL)")
-    public void testResetMultiStatusAsAdmin(String status1, String status2) {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testResetMultiStatusAsUser(String status1, String status2) {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter displays 'ALL' by default");
@@ -314,8 +314,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that 'Reset filter' button change 'Amount' to default")
-    public void testResetAmountAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testResetAmountAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: Filter 'Amount' displays 'Amount' by default");
@@ -345,11 +345,11 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Reset filter")
     @Description("Verify, that date picker contains default value before and after reset filter")
-    public void testResetDataAsTestAdmin() {
+    public void testResetDataAsTestUser() {
         final String dateRange = "01/04/2025-30/04/2025";
         final String defaultRange = TestUtils.getCurrentRange();
 
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink();
 
         Allure.step("Verify: the 'Data' input field value is current month by default");
@@ -373,8 +373,8 @@ public class TransactionsPageAdminTest extends BaseTest {
     @Epic("Transactions")
     @Feature("Transactions search")
     @Description("Verify that 'NPGW reference' and 'Business unit reference' fields appear when clicking on 'Trx IDs'.")
-    public void testSearchOptionsVisibleAfterClickingTrxIdsAsAdmin() {
-        AdminTransactionsPage transactionsPage = new AdminDashboardPage(getPage())
+    public void testSearchOptionsVisibleAfterClickingTrxIdsAsUser() {
+        UserTransactionsPage transactionsPage = new UserDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
                 .clickSearchTrxIdsButton();
 
