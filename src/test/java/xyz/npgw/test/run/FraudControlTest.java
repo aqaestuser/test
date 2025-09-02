@@ -18,6 +18,7 @@ import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.control.ActivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.AddControlDialog;
+import xyz.npgw.test.page.dialog.control.ConnectControlToBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateControlDialog;
 import xyz.npgw.test.page.dialog.control.DeleteControlDialog;
@@ -58,14 +59,12 @@ public class FraudControlTest extends BaseTestForSingleLogin {
             .controlName("%s ControlOne".formatted(RUN_ID))
             .controlCode("Neutrino")
             .controlDisplayName("ControlDisplayFirst")
-    //        .controlCode("1234")
             .controlConfig("firstQueue")
             .build();
     private static final FraudControl FRAUD_CONTROL_ADD_TWO = FraudControl.builder()
             .controlName("%s ControlTwo".formatted(RUN_ID))
             .controlCode("Neutrino")
             .controlDisplayName("ControlDisplaySecond")
-    //        .controlCode("2345")
             .controlConfig("secondQueue")
             .build();
     private static final FraudControl FRAUD_CONTROL_ADD_INACTIVE = FraudControl.builder()
@@ -1145,6 +1144,28 @@ public class FraudControlTest extends BaseTestForSingleLogin {
         assertThat(dialog.getModalWindowsMainTextBody())
                 .hasText("Are you sure you want to delete control "
                         + FRAUD_CONTROL_ADD_ONE.getControlName() + "?");
+    }
+
+    @Test
+    @TmsLink("1190")
+    @Epic("System/Fraud control")
+    @Feature("'Connect control' dialog text content")
+    @Description("Verify text content for Header and Main body on 'Connect control' dialog")
+    public void testVerifyWarningModalWindowConnectControlTable() {
+        ConnectControlToBusinessUnitDialog dialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_SORT)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_TWO.getControlName());
+
+        Allure.step("Verify Connect control modal window text");
+        assertThat(dialog.getDialogHeader()).hasText("Connect control");
+
+        Allure.step("Verify Connect control modal window main body text");
+        assertThat(dialog.getModalWindowsMainTextBody())
+                .hasText("Are you sure you want to connect control "
+                        + FRAUD_CONTROL_ADD_TWO.getControlName() + " to business unit " + BUSINESS_UNIT_SORT + "?");
     }
 
     @AfterClass
