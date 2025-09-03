@@ -25,7 +25,7 @@ public class TestAdminCompaniesAndBusinessUnitsTest extends BaseTestForSingleLog
     public void testGenerateTokenAsTestAdmin() {
         GenerateTokenConfirmDialog generateTokenConfirmDialog = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickBusinessUnitsTab()
+                .clickBusinessUnitsTab()
                 .getTable().clickCopyBusinessUnitIdToClipboardButton(Constants.BUSINESS_UNIT_FOR_TEST_RUN)
                 .getTable().clickGenerateSecretTokenButton(Constants.BUSINESS_UNIT_FOR_TEST_RUN);
 
@@ -49,7 +49,7 @@ public class TestAdminCompaniesAndBusinessUnitsTest extends BaseTestForSingleLog
     public void testToggleCompanyInfoVisibilityViaSettingsAsAdmin() {
         AdminBusinessUnitsPage adminBusinessUnitsPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickBusinessUnitsTab()
+                .clickBusinessUnitsTab()
                 .clickSettings()
                 .checkHideCompanyInfo();
 

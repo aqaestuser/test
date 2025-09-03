@@ -48,7 +48,8 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     @Description("User navigate to 'System administration page'")
     public void testNavigateToSystemAdministrationPageAsAdmin() {
         AdminTeamPage adminTeamPage = new AdminDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink();
+                .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab();
 
         Allure.step("Verify: System administration Page URL");
         assertThat(adminTeamPage.getPage()).hasURL(Constants.SYSTEM_PAGE_URL);
@@ -67,6 +68,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(companyAdminEmail)
                 .fillPasswordField("Qwerty123!")
@@ -85,6 +87,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     public void testDeleteCompanyAdminAsAdmin() {
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getTable().clickDeleteUserIcon(companyAdminEmail)
                 .clickDeleteButton();
 
@@ -109,6 +112,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminAddUserDialog addUserDialog = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton();
 
         Allure.step("Verify: 'Add user' header is displayed");
@@ -152,6 +156,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     public void testDeleteCompanyAnalystAsAdmin() {
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getTable().clickDeleteUserIcon(companyAnalystEmail)
                 .clickDeleteButton();
 
@@ -176,6 +181,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminEditUserDialog editUserDialog = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Qwerty123!")
@@ -227,6 +233,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
@@ -247,6 +254,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Qwerty123!")
@@ -275,6 +283,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
@@ -305,6 +314,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
@@ -356,6 +366,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
@@ -387,6 +398,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     public void testCheckSortingListOfUsersAlphabeticallyAsAdmin() {
         List<String> sortedUsersAlphabetically = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
 
@@ -405,6 +417,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     public void testCheckSortingListOfUsersReverseAsAdmin() {
         List<String> sortedUsersReverseAlphabetically = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getTable().clickColumnHeader("Username")
                 .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
@@ -426,6 +439,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminAddUserDialog addUserDialog = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
                 .fillPasswordField("Qwerty123!")
@@ -451,7 +465,8 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     @Description("'Reset filter' button resets the 'Status' filter to 'All' and clears the selected company")
     public void testResetFilterAsAdmin() {
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink();
+                .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab();
 
         Allure.step("Verify: 'Status' filter displays 'All' by default");
         assertThat(teamPage.getSelectStatus().getStatusValue()).hasText("All");

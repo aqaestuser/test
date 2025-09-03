@@ -77,7 +77,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testToggleCompanyInfoVisibilityViaSettings() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .clickSettings()
                 .checkHideCompanyInfo();
@@ -100,7 +100,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testAddCompany() {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: 'Create' button is disabled before filling required fields");
@@ -185,7 +185,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testCloseButtonAndDiscardChanges() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton()
                 .fillBusinessUnitNameField("BU-2")
@@ -203,7 +203,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testAddBusinessUnit() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
+                .clickCompaniesAndBusinessUnitsTab();
 
         Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
         assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
@@ -253,7 +253,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testEditBusinessUnit() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName());
 
         Locator originalBusinessUnitId = companiesAndBusinessUnitsPage
@@ -283,7 +283,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testCannotDeleteCompanyWithAssociatedBusinessUnit() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickDeleteSelectedCompany()
                 .clickDeleteButton();
@@ -302,7 +302,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testDeleteBusinessUnit() {
         DeleteBusinessUnitDialog deleteBusinessUnitDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
                 .getTable().clickDeleteBusinessUnitButton(BUSINESS_UNIT_NAME_EDITED);
 
@@ -330,7 +330,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testEditCompanyInfoAndSave() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickEditCompanyButton()
                 .fillCompanyTypeField(editedCompany.companyType())
@@ -410,7 +410,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testDeleteCompany() {
         DeleteCompanyDialog deleteCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(editedCompany.companyName())
                 .clickDeleteSelectedCompany();
 
@@ -450,6 +450,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testCannotDeleteCompanyWithAssignedUser() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(COMPANY_DELETION_BLOCKED_NAME)
                 .clickAddUserButton()
                 .fillEmailField(ADMIN_EMAIL)
@@ -475,7 +476,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testAddCompanyWithSameName() {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME_FOR_TEST_RUN)
                 .fillCompanyTypeField(COMPANY_TYPE)
@@ -494,7 +495,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testResetAppliedFilter() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .clickOnResetFilterButton();
 
@@ -515,7 +516,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testVerifyErrorMessageForInvalidCompanyNameLength() {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("1");
 
@@ -548,7 +549,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testAddCompanyFormValidationWhenEmpty() {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton();
 
         Allure.step("Verify: 'Add company' dialog is displayed");
@@ -592,7 +593,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testErrorIsDisplayedWhenCreatingCompanyWithSpecialCharacters(String character) {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField("Company" + character)
                 .fillCompanyTypeField(COMPANY_TYPE);
@@ -612,7 +613,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testErrorForInvalidCompanyNameLengthAndCharacters(String name, String character) {
         AddCompanyDialog addCompanyDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(name + character)
                 .fillCompanyTypeField(COMPANY_TYPE);
@@ -632,7 +633,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testAddCompanyByFillOnlyRequiredField() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(COMPANY_NAME_REQUIRED_FIELD)
                 .clickCreateButton();
@@ -653,7 +654,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testElementsOfEditBusinessUnitDialog() {
         EditBusinessUnitDialog editBusinessUnitDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getTable().clickEditBusinessUnitButton(MERCHANT_ID_FOR_TEST_RUN);
 

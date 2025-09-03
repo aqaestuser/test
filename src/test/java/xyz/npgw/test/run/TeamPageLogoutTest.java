@@ -40,6 +40,7 @@ public class TeamPageLogoutTest extends BaseTest {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -77,6 +78,7 @@ public class TeamPageLogoutTest extends BaseTest {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Password1!")
@@ -115,6 +117,7 @@ public class TeamPageLogoutTest extends BaseTest {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)
@@ -165,6 +168,7 @@ public class TeamPageLogoutTest extends BaseTest {
         loginPage
                 .loginAsSuper("%s.super@email.com".formatted(getUid()), ProjectProperties.getPassword())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()
@@ -192,6 +196,7 @@ public class TeamPageLogoutTest extends BaseTest {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(analystEmail)
                 .fillPasswordField(analystPassword)
@@ -241,6 +246,7 @@ public class TeamPageLogoutTest extends BaseTest {
         loginPage
                 .loginAsAdmin("%s.admin@email.com".formatted(getUid()), ProjectProperties.getPassword())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getTable().clickEditUserButton(analystEmail)
                 .checkActiveRadiobutton()
                 .clickSaveChangesButton()

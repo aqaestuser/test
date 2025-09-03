@@ -62,7 +62,8 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     @Description("User navigate to 'System administration page'")
     public void testNavigateToSystemAdministrationPage() {
         SuperTeamPage systemAdministrationPage = new SuperDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink();
+                .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab();
 
         Allure.step("Verify: System administration Page URL");
         assertThat(systemAdministrationPage.getPage()).hasURL(Constants.SYSTEM_PAGE_URL);
@@ -81,6 +82,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany("super")
                 .clickAddUserButton()
                 .fillEmailField(systemAdminEmail)
@@ -99,6 +101,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testDeleteSystemAdmin() {
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany("super")
                 .getTable().clickDeleteUserIcon(systemAdminEmail)
                 .clickDeleteButton();
@@ -124,6 +127,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(companyAdminEmail)
@@ -143,6 +147,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testDeleteCompanyAdmin() {
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .getTable().clickDeleteUserIcon(companyAdminEmail)
                 .clickDeleteButton();
@@ -168,6 +173,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperAddUserDialog addUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton();
 
@@ -215,6 +221,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testDeletingBusinessUnitWithUsersFailsWithError() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .getTable().clickDeleteBusinessUnitButton(MERCHANT_TITLE)
@@ -233,6 +240,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testDeleteCompanyAnalyst() {
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .getTable().clickDeleteUserIcon(companyAnalystEmail)
                 .clickDeleteButton();
@@ -258,6 +266,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperEditUserDialog editUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -313,6 +322,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -334,6 +344,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -366,6 +377,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -397,6 +409,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -449,6 +462,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)
@@ -481,6 +495,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testCheckSortingListOfUsersAlphabetically() {
         List<String> sortedUsersAlphabetically = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getTable().clickColumnHeader("Username")
                 .getTable().getColumnValues("Username");
@@ -500,6 +515,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     public void testCheckSortingListOfUsersReverse() {
         List<String> sortedUsersReverseAlphabetically = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
                 .getTable().clickColumnHeader("Username")
                 .getTable().clickColumnHeader("Username")
@@ -522,6 +538,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperAddUserDialog addUserDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(companyAdmin)
@@ -548,7 +565,8 @@ public class TeamPageTest extends BaseTestForSingleLogin {
     @Description("'Reset filter' button resets the 'Status' filter to 'All' and clears the selected company")
     public void testResetFilter() {
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
-                .getHeader().clickSystemAdministrationLink();
+                .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab();
 
         Allure.step("Verify: 'Status' filter displays 'All' by default");
         assertThat(teamPage.getSelectStatus().getStatusValue()).hasText("All");
@@ -580,6 +598,7 @@ public class TeamPageTest extends BaseTestForSingleLogin {
 
         SuperTeamPage teamPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .getSelectCompany().selectCompany(getCompanyName())
                 .clickAddUserButton()
                 .fillEmailField(email)

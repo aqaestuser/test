@@ -5,8 +5,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.ReportsPage;
+import xyz.npgw.test.page.component.system.SuperSystemMenuComponent;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
-import xyz.npgw.test.page.system.SuperTeamPage;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
 public class SuperHeaderMenuComponent<CurrentPageT> extends BaseHeaderMenuComponent<CurrentPageT> {
@@ -33,11 +33,10 @@ public class SuperHeaderMenuComponent<CurrentPageT> extends BaseHeaderMenuCompon
     }
 
     @Step("Click on 'System administration' in the Header")
-    public SuperTeamPage clickSystemAdministrationLink() {
+    public SuperSystemMenuComponent clickSystemAdministrationLink() {
         systemAdministrationButton.click();
-        clickTeamTabAndWait();
 
-        return new SuperTeamPage(getPage());
+        return new SuperSystemMenuComponent(getPage());
     }
 
     @Step("Click 'Logo' button")

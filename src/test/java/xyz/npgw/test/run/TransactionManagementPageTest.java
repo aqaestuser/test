@@ -29,7 +29,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
     public void testAddTransactionAdjustment() {
         SuperTransactionManagementPage page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCreateButton();
@@ -46,7 +46,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
     public void testClickCloseButtonWithNoChanges() {
         SuperTransactionManagementPage page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
                 .getTable().clickTransaction()
                 .clickCloseButton();
@@ -62,7 +62,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
     public void testCreateButtonIsDisabledByDefault() {
         AddAdjustmentDialog page = new SuperTransactionManagementPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         assertThat(page.getCreateButton()).isDisabled();
@@ -84,7 +84,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
 
         AddAdjustmentDialog addAdjustmentDialog = new SuperTransactionsPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickTransactionManagementTab()
+                .clickTransactionManagementTab()
                 .clickAddAdjustmentButton();
 
         Allure.step("Verify: check placeholder in the 'NPGW reference' search field.");

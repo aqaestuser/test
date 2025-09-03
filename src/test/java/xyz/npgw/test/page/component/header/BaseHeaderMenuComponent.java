@@ -3,11 +3,8 @@ package xyz.npgw.test.page.component.header;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
-import com.microsoft.playwright.options.LoadState;
 import lombok.Getter;
 import xyz.npgw.test.page.base.BaseComponent;
-
-import java.util.Objects;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -32,16 +29,6 @@ public abstract class BaseHeaderMenuComponent<CurrentPageT> extends BaseComponen
                 .or(getByRole(AriaRole.BUTTON, "next page button")).waitFor();
 
         assertThat(button.locator("..")).hasAttribute("data-active", "true");
-    }
-
-    protected void clickTeamTabAndWait() {
-        Locator button = getByRole(AriaRole.TAB, "Team");
-        button.waitFor();
-        if (Objects.equals(button.getAttribute("aria-selected"), "false")) {
-            button.click();
-            assertThat(button).hasAttribute("data-selected", "true");
-        }
-        getPage().waitForLoadState(LoadState.NETWORKIDLE);
     }
 
     public boolean isLogoImageLoaded() {

@@ -119,7 +119,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testVisibilityHeaderAndAcquirersList() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         Allure.step("Verify: Table column headers");
         assertThat(acquirersPage.getTable().getColumnHeaders()).hasText(COLUMNS_HEADERS);
@@ -136,7 +136,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testVerifyStatusDropdownContainsAllOptions() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectStatus().clickSelector();
 
         Allure.step("Verify: The 'Status' dropdown toggles and contains options");
@@ -151,7 +151,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testFilterAcquirersByStatus(String status) {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectStatus().select(status);
 
         Allure.step(String.format("Verify: The 'Acquirers' list shows only '%s' items after filtering.", status));
@@ -167,7 +167,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testRetainStatusWhenReSelectingSameOption() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         for (String status : STATUS_OPTIONS) {
             acquirersPage
@@ -192,7 +192,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testRowsPerPageDropdownOptions() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         Allure.step("Verify: The default 'Rows per page' value is set to 25");
         assertThat(acquirersPage.getTable().getRowsPerPage()).hasText("25");
@@ -215,7 +215,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testSelectingRowsPerPageOptionUpdatesFieldValue() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         for (String option : ROWS_PER_PAGE_OPTIONS) {
             acquirersPage.getTable().selectRowsPerPageOption(option);
@@ -235,7 +235,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
 
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         for (String option : ROWS_PER_PAGE_OPTIONS) {
             List<Integer> rowsCountPerPage = acquirersPage
@@ -262,7 +262,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void verifyDefaultValuesInAcquirerMidDialogAndClose() {
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton();
 
         Allure.step("Verify: the header contains the expected title text");
@@ -316,7 +316,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testToggleStatusRadioButtonsCorrectly(String status) {
         Locator statusRadiobutton = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .clickStatusRadiobutton(status)
                 .getStatusRadiobutton(status);
@@ -338,7 +338,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
 
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
@@ -389,7 +389,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
 
         SuperAcquirersPage setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
@@ -413,7 +413,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
 
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillChallengeUrlField(DEFAULT_CONFIG.challengeUrl())
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
@@ -438,7 +438,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testSetupAcquirerMid() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(ACQUIRER.getAcquirerName())
                 .fillAcquirerDisplayNameField(ACQUIRER.getAcquirerDisplayName())
@@ -509,7 +509,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testVerifyErrorOnCreatingAcquirerWithDuplicateName() {
         SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(ACQUIRER.getAcquirerName())
                 .fillAcquirerMidField("1234")
@@ -533,7 +533,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testEditAcquirerMid() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .fillAcquirerDisplayNameField(ACQUIRER_EDITED.getAcquirerDisplayName())
@@ -595,7 +595,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testVerifyPlaceholdersEditForm() {
         List<String> actualPlaceholders = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_EDITED.getAcquirerDisplayName())
                 .getTable().clickEditAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .getAllPlaceholders();
@@ -612,7 +612,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testDeleteAcquirerMid() {
         SuperAcquirersPage acquirersPage = new SuperAcquirersPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_EDITED.getAcquirerDisplayName())
                 .clickDeleteAcquirerMidButton()
                 .clickDeleteButton();
@@ -643,7 +643,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testDisplaySingleRowWhenAcquirerIsSelected() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER2.getAcquirerDisplayName());
 
         Allure.step("Verify: List of acquirers has only 1 row in the table");
@@ -706,7 +706,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testColumnHeadersDisplayCorrectlyOnAllPages() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         double pageWidth = getPage().viewportSize().width;
 
@@ -738,7 +738,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
 
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .clickSetupAcquirerMidButton()
                 .fillAcquirerNameField(acquirerName)
                 .fillAcquirerMidField("1234")
@@ -766,7 +766,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testAcquirerCanBeActivatedAndDeactivated() {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
                 .getTable().clickDeactivateAcquirerMidButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
                 .clickDeactivateButton();
@@ -806,7 +806,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testChangeActivityViaBulkActions() {
         DeactivateGroupGatewayItemsDialog deactivateGroupGatewayItemsDialog = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_CHANGE_ACTIVITY_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
                 .clickAddBusinessUnitAcquirerButton()
@@ -875,7 +875,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testResetFilter(String status) {
         SuperAcquirersPage acquirersPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab()
+                .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER2.getAcquirerDisplayName())
                 .getSelectStatus().select(status)
                 .getSelectAcquirerCode().selectAcquirerCode("NGenius")
@@ -899,7 +899,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
     public void testTooltipsForAcquirersTable() {
         SuperAcquirersPage page = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickAcquirersTab();
+                .clickAcquirersTab();
 
         Locator editIconTooltip = page
                 .getTable().hoverOverEditIcon()

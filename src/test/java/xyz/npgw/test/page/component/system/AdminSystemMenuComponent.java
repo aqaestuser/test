@@ -3,10 +3,13 @@ package xyz.npgw.test.page.component.system;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
+import com.microsoft.playwright.options.LoadState;
 import io.qameta.allure.Step;
 import xyz.npgw.test.page.base.BaseComponent;
 import xyz.npgw.test.page.system.AdminBusinessUnitsPage;
 import xyz.npgw.test.page.system.AdminTeamPage;
+
+import java.util.Objects;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -20,20 +23,25 @@ public class AdminSystemMenuComponent extends BaseComponent {
 
     @Step("Click 'Team' tab")
     public AdminTeamPage clickTeamTab() {
-        clickAndCheckActive(teamTab);
+        clickTabIfNeededAndCheckIt(teamTab);
 
         return new AdminTeamPage(getPage());
     }
 
     @Step("Click 'Business units' tab")
     public AdminBusinessUnitsPage clickBusinessUnitsTab() {
-        clickAndCheckActive(businessUnitsTab);
+        clickTabIfNeededAndCheckIt(businessUnitsTab);
 
         return new AdminBusinessUnitsPage(getPage());
     }
 
-    private void clickAndCheckActive(Locator button) {
-        button.click();
-        assertThat(button).hasAttribute("data-selected", "true");
+
+    protected void clickTabIfNeededAndCheckIt(Locator tab) {
+        tab.waitFor();
+        if (Objects.equals(tab.getAttribute("aria-selected"), "false")) {
+            tab.click();
+            assertThat(tab).hasAttribute("data-selected", "true");
+        }
+        getPage().waitForLoadState(LoadState.NETWORKIDLE);
     }
 }

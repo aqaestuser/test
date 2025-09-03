@@ -81,7 +81,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testOpenCurrencyDropdown() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCurrency().clickCurrencySelector();
 
         Allure.step("Verify: The 'Currency' dropdown toggles and contains options");
@@ -96,7 +96,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testRetainCurrencyWhenReSelectingSameOption() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab();
+                .clickGatewayTab();
 
         Locator actualCurrency = gatewayPage
                 .getSelectCurrency().getCurrencySelector();
@@ -123,7 +123,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testBusinessUnitsListUpdatesOnCompanySelection() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME);
 
         Locator selectCompanyField = gatewayPage
@@ -156,7 +156,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
 
         SuperGatewayPage superGatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(companyName)
                 .clickCreateButton()
@@ -191,7 +191,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
 
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab()
+                .clickCompaniesAndBusinessUnitsTab()
                 .clickAddCompanyButton()
                 .fillCompanyNameField(company.companyName())
                 .fillCompanyTypeField(company.companyType())
@@ -234,7 +234,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testSelectAcquirer() {
         SuperGatewayPage page = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
@@ -262,7 +262,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testMoveMerchantAcquirerDownAndUpButtons() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[2])
                 .clickAddBusinessUnitAcquirerButton()
@@ -303,7 +303,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testAddMerchantAcquirer() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[1])
                 .clickAddBusinessUnitAcquirerButton()
@@ -335,7 +335,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testDeleteMerchantAcquirer() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_DELETION_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME_DELETION_TEST)
                 .clickAddBusinessUnitAcquirerButton()
@@ -358,7 +358,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testActivateDeactivateMerchantAcquirer() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
@@ -389,7 +389,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testSortEntries() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
@@ -490,7 +490,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testCancelButtonInChangeMerchantAcquirerActivityDialog() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
@@ -514,7 +514,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     public void testCloseButtonInChangeMerchantAcquirerActivityDialog() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickGatewayTab()
+                .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(expectedBusinessUnitsList[0])
                 .clickAddBusinessUnitAcquirerButton()
