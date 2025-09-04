@@ -21,6 +21,7 @@ import xyz.npgw.test.page.dialog.control.AddControlDialog;
 import xyz.npgw.test.page.dialog.control.ConnectControlToBusinessUnitDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.DeactivateControlDialog;
+import xyz.npgw.test.page.dialog.control.DeleteBusinessUnitControlDialog;
 import xyz.npgw.test.page.dialog.control.DeleteControlDialog;
 import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.SuperFraudControlPage;
@@ -1166,6 +1167,28 @@ public class FraudControlTest extends BaseTestForSingleLogin {
         assertThat(dialog.getModalWindowsMainTextBody())
                 .hasText("Are you sure you want to connect control "
                         + FRAUD_CONTROL_ADD_TWO.getControlName() + " to business unit " + BUSINESS_UNIT_SORT + "?");
+    }
+
+    @Test(dependsOnMethods = {"testBusinessUnitControlTableEntriesSorting"})
+    @TmsLink("1197")
+    @Epic("System/Fraud control")
+    @Feature("'Delete business unit control' dialog text content")
+    @Description("Verify text content for Header and Main body on 'Delete business unit control' dialog")
+    public void testVerifyWarningModalWindowDeleteBusinessUnitControlTable() {
+        DeleteBusinessUnitControlDialog dialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_SORT)
+                .getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0");
+
+        Allure.step("Verify Delete Business unit control modal window text");
+        assertThat(dialog.getDialogHeader()).hasText("Delete business unit control");
+
+        Allure.step("Verify Delete Business unit control modal window main body text");
+        assertThat(dialog.getModalWindowsMainTextBody())
+                .hasText("Are you sure you want to delete business unit control "
+                        + FRAUD_CONTROL_ADD_ONE.getControlDisplayName() + " with priority " + "0?");
     }
 
     @AfterClass
