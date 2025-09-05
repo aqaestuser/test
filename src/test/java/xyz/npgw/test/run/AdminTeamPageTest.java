@@ -494,6 +494,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
+                .clickTeamTab()
                 .clickAddUserButton()
                 .fillEmailField(email)
                 .fillPasswordField("Qwerty123!")

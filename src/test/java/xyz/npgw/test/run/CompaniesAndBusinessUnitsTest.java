@@ -693,7 +693,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     public void testTooltipsContent() {
         SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
-                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
+                .clickCompaniesAndBusinessUnitsTab();
 
         String iconName;
         String tooltip;

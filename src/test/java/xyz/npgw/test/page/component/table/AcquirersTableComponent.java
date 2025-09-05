@@ -9,6 +9,7 @@ import xyz.npgw.test.page.dialog.acquirer.ActivateAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.ActivateGroupGatewayItemsDialog;
 import xyz.npgw.test.page.dialog.acquirer.DeactivateAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.DeactivateGroupGatewayItemsDialog;
+import xyz.npgw.test.page.dialog.acquirer.DeleteAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.EditAcquirerMidDialog;
 import xyz.npgw.test.page.system.SuperAcquirersPage;
 
@@ -18,6 +19,12 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
     private final Locator tableContent = getByLabelExact("merchants table").locator("tbody");
     private final Locator deactivateGatewayConnectionsButton = getByTextExact("Deactivate gateway connections");
     private final Locator activateGatewayConnectionsButton = getByTextExact("Activate gateway connections");
+    private final Locator editAcquirerMidButton = getByTestId("EditAcquirerButton");
+    private final Locator activateAcquirerMidButton = locator("//*[@data-icon='check']/..");
+    private final Locator deactivateAcquirerMidButton = locator("//*[@data-icon='ban']/..");
+    private final Locator acquirerActivityIcon = getByTestId("ChangeAcquirerActivityButton").locator("svg");
+    private final Locator deleteAcquirerMidButton = getByTestId("DeleteAcquirerButton");
+    private final Locator acquirerBulkButton = locator("svg[data-icon='wand-magic-sparkles']");
 
     public AcquirersTableComponent(Page page, SuperAcquirersPage currentPage) {
         super(page, currentPage);
@@ -29,11 +36,23 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
     }
 
     public Locator getEditAcquirerMidButton(String acquirerName) {
-        return getRow(acquirerName).getByTestId("EditAcquirerButton");
+        return getRow(acquirerName).locator(editAcquirerMidButton);
+    }
+
+    public Locator getActivateAcquirerMidButton(String acquirerName) {
+        return getRow(acquirerName).locator(activateAcquirerMidButton);
+    }
+
+    public Locator getDeactivateAcquirerMidButton(String acquirerName) {
+        return getRow(acquirerName).locator(deactivateAcquirerMidButton);
     }
 
     public Locator getAcquirerActivityIcon(String acquirerName) {
-        return getRow(acquirerName).getByTestId("ChangeAcquirerActivityButton").locator("svg");
+        return getRow(acquirerName).locator(acquirerActivityIcon);
+    }
+
+    public Locator getDeleteAcquirerMidButton(String acquirerName) {
+        return getRow(acquirerName).locator(deleteAcquirerMidButton);
     }
 
     @Step("Click 'Edit acquirer MID' button to edit acquirer")
@@ -45,26 +64,26 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
 
     @Step("Click 'Activate acquirer MID' button")
     public ActivateAcquirerDialog clickActivateAcquirerMidButton(String acquirerName) {
-        getRow(acquirerName).locator("//*[@data-icon='check']/..").click();
+        getActivateAcquirerMidButton(acquirerName).click();
 
         return new ActivateAcquirerDialog(getPage());
     }
 
     @Step("Click 'Deactivate acquirer MID' button")
     public DeactivateAcquirerDialog clickDeactivateAcquirerMidButton(String acquirerName) {
-        getRow(acquirerName).locator("//*[@data-icon='ban']/..").click();
+        getDeactivateAcquirerMidButton(acquirerName).click();
 
         return new DeactivateAcquirerDialog(getPage());
     }
 
     @Step("Click 'Bulk actions' button")
     public AcquirersTableComponent clickBulkActionsButton(String entityName) {
-        Locator bulkButton = getRow(entityName).locator("svg[data-icon='wand-magic-sparkles']");
+        Locator bulkButton = getRow(entityName).locator(acquirerBulkButton);
         bulkButton.hover();
         getPage().waitForTimeout(1500);
 
         bulkButton.click();
-        Locator dropdown = getPage().locator("div[aria-label='Options']");
+        Locator dropdown = locator("div[aria-label='Options']");
         dropdown.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.VISIBLE));
 //
 //        activateGatewayConnectionsButton.waitFor();
@@ -89,29 +108,37 @@ public class AcquirersTableComponent extends BaseTableComponent<SuperAcquirersPa
 
     @Step("Hover over 'Edit acquirer MID' icon")
     public SuperAcquirersPage hoverOverEditIcon() {
-        getByTestId("EditAcquirerButton").first().hover();
+        editAcquirerMidButton.first().hover();
 
         return getCurrentPage();
     }
 
     @Step("Hover over 'Deactivate acquirer MID' icon")
     public SuperAcquirersPage hoverOverChangeActivityIcon() {
-        getByTestId("ChangeAcquirerActivityButton").first().hover();
+        acquirerActivityIcon.first().hover();
 
         return getCurrentPage();
     }
 
     @Step("Hover over 'Delete acquirer MID' icon")
     public SuperAcquirersPage hoverOverDeleteIcon() {
-        getByTestId("DeleteAcquirerButton").first().hover();
+        deleteAcquirerMidButton.first().hover();
 
         return getCurrentPage();
     }
 
     @Step("Hover over 'Bulk actions' icon")
     public SuperAcquirersPage hoverOverBulkActionsIcon() {
-        locator("svg[data-icon='wand-magic-sparkles']").first().hover();
+        acquirerBulkButton.first().hover();
 
         return getCurrentPage();
     }
+
+    @Step("Click 'Delete acquirer MID' button")
+    public DeleteAcquirerDialog clickDeleteAcquirerMidButton(String acquirerName) {
+        getDeleteAcquirerMidButton(acquirerName).click();
+
+        return new DeleteAcquirerDialog(getPage());
+    }
+
 }

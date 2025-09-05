@@ -18,7 +18,6 @@ import xyz.npgw.test.page.component.select.SelectAcquirerMidTrait;
 import xyz.npgw.test.page.component.select.SelectStatusTrait;
 import xyz.npgw.test.page.component.system.SuperSystemMenuTrait;
 import xyz.npgw.test.page.component.table.AcquirersTableTrait;
-import xyz.npgw.test.page.dialog.acquirer.DeleteAcquirerDialog;
 import xyz.npgw.test.page.dialog.acquirer.SetupAcquirerMidDialog;
 
 import java.util.Arrays;
@@ -39,7 +38,6 @@ public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
     private final Locator editAcquirerMidDialog = getByRole(AriaRole.DIALOG);
     private final Locator resetFilterButton = getByTestId("ResetFilterButtonAcquirersPage");
     private final Locator refreshDataButton = getByTestId("ApplyFilterButtonAcquirersPage");
-    private final Locator deleteAcquirerMidButton = getByTestId("DeleteAcquirerButton");
 
     public SuperAcquirersPage(Page page) {
         super(page);
@@ -57,13 +55,6 @@ public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
         resetFilterButton.click();
 
         return this;
-    }
-
-    @Step("Click 'Delete acquirer MID' button")
-    public DeleteAcquirerDialog clickDeleteAcquirerMidButton() {
-        deleteAcquirerMidButton.click();
-
-        return new DeleteAcquirerDialog(getPage());
     }
 
     @SneakyThrows

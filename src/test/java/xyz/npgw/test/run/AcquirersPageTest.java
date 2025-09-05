@@ -173,14 +173,16 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
             acquirersPage
                     .getSelectStatus().select(status);
 
+            Locator actualStatus = acquirersPage.getSelectStatus().getStatusValue();
+
             Allure.step("Verify placeholder matches expected value: " + status);
-            assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText(status);
+            assertThat(actualStatus).hasText(status);
 
             acquirersPage
                     .getSelectStatus().select(status);
 
             Allure.step("Verify again placeholder matches expected value: " + status);
-            assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText(status);
+            assertThat(actualStatus).hasText(status);
         }
     }
 
@@ -346,10 +348,10 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .fillAcquirerNameField(invalidControlName3Chars);
 
         String ariaInvalid = setupAcquirerMidDialog.getAcquirerNameField().getAttribute("aria-invalid");
+        Locator createButton = setupAcquirerMidDialog.getCreateButton();
 
         Allure.step("Verify that the 'Entity name' field is highlighted in red");
-        Assert.assertEquals(ariaInvalid, "true", "The 'Entity name' field should be"
-                + " highlighted in red");
+        Assert.assertEquals(ariaInvalid, "true", "The 'Entity name' field should be highlighted in red");
 
         Allure.step("Verify that the 'Entity name' field is marked with '*'");
         Assert.assertTrue(((String) setupAcquirerMidDialog.getAcquirerNameLabel()
@@ -357,19 +359,19 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 "The '*' symbol is not displayed in the 'Entity name' label");
 
         Allure.step("Verify that the Create button is disabled if the 'Entity name' contains 3 characters");
-        assertThat(setupAcquirerMidDialog.getCreateButton()).isDisabled();
+        assertThat(createButton).isDisabled();
 
         setupAcquirerMidDialog
                 .fillAcquirerNameField(validControlName4Chars);
 
         Allure.step("Verify that the Create button is enabled if the 'Entity name' field contains 4 characters");
-        assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+        assertThat(createButton).isEnabled();
 
         setupAcquirerMidDialog
                 .fillAcquirerNameField(validControlName100Chars);
 
         Allure.step("Verify that the Setup button is enabled if the 'Entity name' field contains 100 characters");
-        assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+        assertThat(createButton).isEnabled();
 
         setupAcquirerMidDialog
                 .fillAcquirerNameField(invalidControlName101Chars);
@@ -419,6 +421,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .fillFingerprintUrlField(DEFAULT_CONFIG.fingerprintUrl())
                 .fillResourceUrlField(DEFAULT_CONFIG.resourceUrl());
 
+        Locator createButton = setupAcquirerMidDialog.getCreateButton();
         for (String symbol : validSymbols) {
             String input = "A".repeat(3) + symbol;
 
@@ -426,7 +429,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                     .fillAcquirerNameField(input);
 
             Allure.step("Verify that the 'Create' button is active for symbol: " + symbol);
-            assertThat(setupAcquirerMidDialog.getCreateButton()).isEnabled();
+            assertThat(createButton).isEnabled();
         }
     }
 
@@ -614,7 +617,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_EDITED.getAcquirerDisplayName())
-                .clickDeleteAcquirerMidButton()
+                .getTable().clickDeleteAcquirerMidButton(ACQUIRER_EDITED.getAcquirerName())
                 .clickDeleteButton();
 
         Allure.step("Verify: a success message appears after deleting the acquirer");
@@ -775,12 +778,12 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(acquirersPage.getAlert().getMessage())
                 .hasText("SUCCESSAcquirer was deactivated successfully");
 
-        acquirersPage
-                .getAlert().clickCloseButton();
+        Locator acquirerStatus = acquirersPage
+                .getAlert().clickCloseButton()
+                .getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status");
 
         Allure.step("Verify: Acquirer status changed to Inactive");
-        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status"))
-                .hasText("Inactive");
+        assertThat(acquirerStatus).hasText("Inactive");
 
         acquirersPage
                 .getTable().clickActivateAcquirerMidButton(CHANGE_STATE_ACQUIRER.getAcquirerName())
@@ -794,8 +797,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .getAlert().clickCloseButton();
 
         Allure.step("Verify: Acquirer status changed back to Active");
-        assertThat(acquirersPage.getTable().getCell(CHANGE_STATE_ACQUIRER.getAcquirerName(), "Status"))
-                .hasText("Active");
+        assertThat(acquirerStatus).hasText("Active");
     }
 
     @Test(dependsOnMethods = "testAcquirerCanBeActivatedAndDeactivated")
