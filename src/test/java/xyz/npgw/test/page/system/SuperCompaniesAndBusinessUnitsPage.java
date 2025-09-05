@@ -4,6 +4,7 @@ import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -36,6 +37,9 @@ public class SuperCompaniesAndBusinessUnitsPage extends BaseBusinessUnitsPage<Su
     private final Locator addBusinessUnitButton = getByTestId("ButtonAddMerchant");
     private final Locator resetFilterButton = getByTestId("ResetButtonTeamPage");
     private final Locator refreshDataButton = locator("[data-icon='arrows-rotate']");
+    private final Locator initialCommonIcon = getByRole(AriaRole.TABPANEL).locator(">div>div:first-child [data-testid]:enabled");
+//    private final Locator commonIconButton = getByRole(AriaRole.TABPANEL).locator(">div>div:first-child [data-testid]");
+    private final Locator commonIconButton = locator("[role='tabpanel']>div>div:first-child [data-testid]");
 
     public SuperCompaniesAndBusinessUnitsPage(Page page) {
         super(page);
@@ -96,5 +100,16 @@ public class SuperCompaniesAndBusinessUnitsPage extends BaseBusinessUnitsPage<Su
         log.info("Company absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
 
         return this;
+    }
+
+//    private final Locator initialCommonIconButton = getByRole(AriaRole.TABPANEL).locator(">div>div:first-child [data-testid]:enabled");
+//    public SuperCompaniesAndBusinessUnitsPage getInitialCommonIconName() {
+//       initialCommonIconButton.locator("");
+//
+//        return this;
+//    }
+
+    public String  getIconName(Locator icon) {
+        return icon.locator("svg").getAttribute("data-icon");
     }
 }

@@ -1,5 +1,7 @@
 package xyz.npgw.test.common;
 
+import java.util.Map;
+
 public class Constants {
 
     public static final String BASE_URL = ProjectProperties.getBaseURL();
@@ -37,4 +39,26 @@ public class Constants {
             "PARTIAL_REFUND",
             "REFUND"
     };
+    public static final Map<String, String> TOOLTIPSCONTENT = Map.ofEntries(
+            Map.entry("circle-plus", "Add user"),
+            Map.entry("xmark", "Reset filter"),
+            Map.entry("arrows-rotate", "Refresh data"),
+            Map.entry("gear", "Settings"),
+            Map.entry("pencil", "Edit user"),
+            Map.entry("ban", "Deactivate user"),
+            Map.entry("circle-exclamation", "Reset user password"),
+            Map.entry("trash", "Delete user"),
+            Map.entry("check", "Activate user"),
+            Map.entry("AddCompanyButton", "Add company"),
+            Map.entry("ResetButtonTeamPage", "Reset filter"),
+            Map.entry("SettingsButtonMerchantsPage", "Settings"),
+            Map.entry("ViewDocumentationButtonMerchantsPage", "View documentation"),
+            Map.entry("EditCompanyButton", "Edit selected company"),
+            Map.entry("DeleteCompanyButton", "Delete selected company"),
+            Map.entry("ButtonAddMerchant", "Add business unit"),
+            Map.entry("ApplyFilterButtonsMerchantsPage", "Refresh data"),
+            Map.entry("CopyBusinessUnitIDToClipboardButton", "Copy Business unit ID to clipboard"),
+            Map.entry("EditBusinessUnitButton", "Edit business unit"),
+            Map.entry("DeleteBusinessUnitButton", "Delete business unit")
+    );
 }

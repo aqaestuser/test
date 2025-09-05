@@ -9,6 +9,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.Address;
 import xyz.npgw.test.common.entity.Company;
@@ -30,6 +31,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.MERCHANT_ID_FOR_TEST_RUN;
+import static xyz.npgw.test.common.Constants.TOOLTIPSCONTENT;
 
 public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
 
@@ -60,7 +62,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
             "https://www.editedtest.com", "Catty Smith", "editedtest@yahoo.com",
             false, false
     );
-
 
     @BeforeClass
     @Override
@@ -682,6 +683,56 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
 
         Allure.step("Verify: Dialog 'Edit business unit' is not displayed after clicking on the 'Close' icon");
         assertThat(companiesAndBusinessUnitsPage.getEditBusinessUnitDialog()).isHidden();
+    }
+
+    @Test
+    @TmsLink("1192")
+    @Epic("System/Companies and business units")
+    @Feature("Tooltips")
+    @Description("Verify, that contents of Tooltips, that appear after hovering on the icon-buttons, are correct")
+    public void testTooltipsContent() {
+        SuperCompaniesAndBusinessUnitsPage companiesAndBusinessUnitsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .getSystemMenu().clickCompaniesAndBusinessUnitsTab();
+
+        String iconName;
+        String tooltip;
+        List<Locator> initialCommonIcons = companiesAndBusinessUnitsPage.getInitialCommonIcon().all();
+        for (Locator icon : initialCommonIcons) {
+            iconName =  companiesAndBusinessUnitsPage.getIconName(icon);
+            Allure.step("Hover on '" + iconName + "' icon");
+            icon.hover();
+
+            tooltip = companiesAndBusinessUnitsPage.getTooltip().last().textContent();
+            Allure.step("Verify, over '" + iconName + "' appears '" + tooltip + "'");
+            assertEquals(TOOLTIPSCONTENT.get(icon.getAttribute("data-testid")), tooltip);
+        }
+
+        companiesAndBusinessUnitsPage
+                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN);
+
+        List<Locator> commonIconButtons = companiesAndBusinessUnitsPage.getCommonIconButton().all();
+        for (Locator icon : commonIconButtons) {
+            iconName =  companiesAndBusinessUnitsPage.getIconName(icon);
+            Allure.step("Hover on '" + iconName + "' icon");
+            icon.hover();
+
+            tooltip = companiesAndBusinessUnitsPage.getTooltip().last().textContent();
+            Allure.step("Verify, over '" + iconName + "' appears '" + tooltip + "'");
+            assertEquals(TOOLTIPSCONTENT.get(icon.getAttribute("data-testid")), tooltip);
+        }
+
+        List<Locator> rowIconButtons = companiesAndBusinessUnitsPage
+                .getTable().getRowIcon(Constants.BUSINESS_UNIT_FOR_TEST_RUN).all();
+        for (Locator rowIcon : rowIconButtons) {
+            iconName = companiesAndBusinessUnitsPage.getTable().getIconName(rowIcon);
+            Allure.step("Hover on '" + iconName + "' icon");
+            rowIcon.hover();
+
+            tooltip = companiesAndBusinessUnitsPage.getTooltip().last().textContent();
+            Allure.step("Verify, over '" + iconName + "' appears '" + tooltip + "'");
+            assertEquals(TOOLTIPSCONTENT.get(rowIcon.getAttribute("data-testid")), tooltip);
+        }
     }
 
     @AfterClass

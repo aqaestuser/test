@@ -40,6 +40,7 @@ public abstract class BaseBusinessUnitsPage<CurrentPageT extends HeaderPage<Curr
     private final Locator merchantsTable = getByLabelExact("merchants table");
     private final Locator showRadiobutton = locator("[value='show']");
     private final Locator hideRadiobutton = locator("[value='hide']");
+    private final Locator tooltip = getByRole(AriaRole.TOOLTIP);
 
     public BaseBusinessUnitsPage(Page page) {
         super(page);
