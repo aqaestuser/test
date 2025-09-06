@@ -936,6 +936,46 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(bulkActionsIconTooltip).hasText("Bulk actions");
     }
 
+    @Test
+    @TmsLink("1206")
+    @Epic("System/Acquirers")
+    @Feature("Setup acquirer MID")
+    @Description("Verify: Url fields in the 'Setup acquirer MID' dialog accept Valid URL structures")
+    public void testUrlFieldsAcceptValidUrlStructures() {
+        SetupAcquirerMidDialog setupAcquirerMidDialog = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickAcquirersTab()
+                .clickSetupAcquirerMidButton()
+                .fillAcquirerNameField("test1");
+
+        List<String> positiveUrls = List.of(
+                "https://example.net",
+                "https://example.io",
+                "https://example.lv",
+                /*"https://my-site.net",*/
+                /*"https://x.com",*/
+                "https://www.example.com",
+                "https://blog.example.com",
+                "https://shop.example.co.uk",
+                "https://example.com/?id=123",
+                "https://www.example.com/path/to/page?ref=google#contact"
+        );
+        //    TODO: Delete the comments after bug fix.
+
+        for (String url : positiveUrls) {
+            setupAcquirerMidDialog
+                    .fillChallengeUrlField(url)
+                    .fillFingerprintUrlField(url)
+                    .fillResourceUrlField(url);
+
+            Allure.step("Verify: 'Create button' is enabled for URL fields filled with value:" + url);
+            Assert.assertTrue(
+                    setupAcquirerMidDialog.getCreateButton().isEnabled(),
+                    "'Create button' is disabled for URL fields filled with value:" + url
+            );
+        }
+    }
+
     @AfterClass
     @Override
     protected void afterClass() {
