@@ -92,6 +92,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
     private static final String COMPANY_NAME = "%s company to bend Fraud Control".formatted(RUN_ID);
     private static final String BUSINESS_UNIT_NAME = "Business unit %s".formatted(RUN_ID);
     private static final String BUSINESS_UNIT_SORT = "Business unit sort %s".formatted(RUN_ID);
+    private static final String BUSINESS_UNIT_REPEAT = "Business unit repeat %s".formatted(RUN_ID);
 
     @BeforeClass
     @Override
@@ -100,6 +101,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, BUSINESS_UNIT_NAME);
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, BUSINESS_UNIT_SORT);
+        TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, BUSINESS_UNIT_REPEAT);
 
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_ONE);
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_TWO);
@@ -1189,6 +1191,44 @@ public class FraudControlTest extends BaseTestForSingleLogin {
         assertThat(dialog.getModalWindowsMainTextBody())
                 .hasText("Are you sure you want to delete business unit control "
                         + FRAUD_CONTROL_ADD_ONE.getControlDisplayName() + " with priority " + "0?");
+    }
+
+    @Test
+    @TmsLink("1201")
+    @Epic("System/Fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
+    @Description("Add already added Fraud Control to Business Unit: BU Control Active"
+            + "Add already added Fraud Control to Business Unit: BU Control Inactive")
+    public void testAddAlreadyAddedFraudControlToBusinessUnit() {
+        SuperFraudControlPage superFraudControlPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickFraudControlTab()
+                .getSelectCompany().selectCompany(COMPANY_NAME)
+                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_REPEAT)
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton()
+                .getAlert().clickCloseButton()
+                .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                .clickConnectButton();
+
+        Allure.step("Verify that Warning message is presented");
+        assertThat(superFraudControlPage.getAlert().getMessage())
+                .containsText("Control {" + FRAUD_CONTROL_ADD_ONE.getControlName()
+                        + "} is already exists for merchant {id.merchant.");
+
+        superFraudControlPage.getAlert().clickCloseButton()
+                        .getTableBusinessUnitControls().clickDeactivateBusinessUnitControlButton("0")
+                        .clickDeactivateButton()
+                        .getTableControls().clickConnectControlButton(FRAUD_CONTROL_ADD_ONE.getControlName())
+                        .clickConnectButton();
+
+        Allure.step("Verify that Warning message is presented again");
+        assertThat(superFraudControlPage.getAlert().getMessage())
+                .containsText("Control {" + FRAUD_CONTROL_ADD_ONE.getControlName()
+                        + "} is already exists for merchant {id.merchant.");
+
+        superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
+                .clickDeleteButton();
     }
 
     @AfterClass
