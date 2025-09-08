@@ -87,6 +87,13 @@ public class FraudControlTest extends BaseTestForSingleLogin {
             .controlType(String.valueOf(ControlType.FRAUD_SCREEN))
             .controlDisplayName("ControlDisplayActiveToInactive")
             .build();
+    private static final FraudControl FRAUD_CONTROL_INACTIVE_JUST_DELETE = FraudControl.builder()
+            .controlName("%s Delete me".formatted(RUN_ID))
+            .controlCode("Neutrino")
+            .controlDisplayName("DisplayDelete")
+            .controlConfig("delete")
+            .isActive(false)
+            .build();
     private static final String FRAUD_CONTROL_NAME = "%S Test fraudControl name".formatted(RUN_ID);
 
     private static final String COMPANY_NAME = "%s company to bend Fraud Control".formatted(RUN_ID);
@@ -108,6 +115,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ADD_INACTIVE);
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_THREE);
         TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_ACTIVE_TO_INACTIVE);
+        TestUtils.createFraudControl(getApiRequestContext(), FRAUD_CONTROL_INACTIVE_JUST_DELETE);
     }
 
     @Test
@@ -1039,7 +1047,8 @@ public class FraudControlTest extends BaseTestForSingleLogin {
                 .getHeader().clickSystemAdministrationLink()
                 .clickFraudControlTab()
                 .clickAddFraudControl()
-                .fillFraudControlNameField("a".repeat(3));
+                .fillFraudControlNameField("a".repeat(3))
+                .fillFraudControlCodeField("Neutrino");
 
         Allure.step("Verify that the 'Control Name' field is has attribute aria-invalid set");
         assertThat(addControlDialog.getControlNameInput()).hasAttribute("aria-invalid", "true");
@@ -1229,6 +1238,23 @@ public class FraudControlTest extends BaseTestForSingleLogin {
 
         superFraudControlPage.getTableBusinessUnitControls().clickDeleteBusinessUnitControlButton("0")
                 .clickDeleteButton();
+    }
+
+    @Test
+    @TmsLink("1212")
+    @Epic("System/Fraud control")
+    @Feature("Add/Edit/Delete Fraud Control")
+    @Description("Delete Inactive Fraud Control not added to Business Unit")
+    public void testDeleteInactiveFraudControlNotAddedToBusinessUnit() {
+        SuperFraudControlPage superFraudControlPage = new SuperDashboardPage(getPage())
+                .getHeader().clickSystemAdministrationLink()
+                .clickFraudControlTab()
+                .getTableControls().clickDeleteControlButton(FRAUD_CONTROL_INACTIVE_JUST_DELETE.getControlName())
+                .clickDeleteButton();
+
+        Allure.step("Check if just deleted inactive Fraud Control still presented in the table");
+        assertThat(superFraudControlPage.getTableControls().getRow(FRAUD_CONTROL_INACTIVE_JUST_DELETE.getControlName()))
+                .not().isAttached();
     }
 
     @AfterClass
