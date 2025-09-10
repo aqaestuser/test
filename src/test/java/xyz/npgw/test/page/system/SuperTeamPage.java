@@ -1,6 +1,5 @@
 package xyz.npgw.test.page.system;
 
-import lombok.Getter;
 import com.microsoft.playwright.Page;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -14,9 +13,9 @@ import xyz.npgw.test.page.dialog.user.SuperAddUserDialog;
 @Log4j2
 public class SuperTeamPage extends BaseTeamPage<SuperTeamPage>
         implements SuperHeaderMenuTrait<SuperTeamPage>,
-                   SuperSystemMenuTrait,
-                   SelectCompanyTrait<SuperTeamPage>,
-                   SuperUsersTableTrait {
+        SuperSystemMenuTrait,
+        SelectCompanyTrait<SuperTeamPage>,
+        SuperUsersTableTrait {
 
     public SuperTeamPage(Page page) {
         super(page);

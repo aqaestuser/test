@@ -85,8 +85,7 @@ public class TeamPageLogoutTest extends BaseTest {
                 .checkCompanyAdminRadiobutton()
                 .clickCreateButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName())
-                .getTable()
-                .clickResetUserPasswordIcon(email)
+                .getTable().clickResetUserPasswordIcon(email)
                 .fillPasswordField("NewPassword1!")
                 .clickResetButton();
 
@@ -104,7 +103,6 @@ public class TeamPageLogoutTest extends BaseTest {
         Allure.step("Verify: success message is displayed");
         assertThat(teamPage.getAlert().getMessage()).hasText("SUCCESSPassword is changed successfully");
     }
-
 
     @Test
     @TmsLink("492")

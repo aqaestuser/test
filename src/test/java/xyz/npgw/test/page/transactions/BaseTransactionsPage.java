@@ -407,7 +407,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
 
         String[] lines = text.split("\\R");
         Pattern dateTypePattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+(AUTH|SALE)");
-        Pattern amountLinePattern = Pattern.compile("^(\\S+) (\\d+\\.\\d{2}) (\\w+) (\\w+) (\\w+)$");
+        Pattern amountLinePattern = Pattern.compile("^(\\S+) ([,0-9]*\\.\\d{2}) (\\w+) (\\w+) (\\w+)$");
 
         String creationDate = null;
         String type = null;
@@ -433,7 +433,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
                 String npgwReference = String.join("", middleLines.subList(0, Math.max(0, middleLines.size() - 1)));
 
                 String buCode = amountMatcher.group(1);
-                double amount = Double.parseDouble(amountMatcher.group(2));
+                double amount = Double.parseDouble(amountMatcher.group(2).replaceAll(",", ""));
                 String currency = amountMatcher.group(3);
                 String cardType = amountMatcher.group(4);
                 String status = amountMatcher.group(5);
@@ -448,7 +448,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
                         amount,
                         Currency.valueOf(currency),
                         CardType.valueOf(cardType),
-                        Status.valueOf(status)
+                        Status.valueOf(status.equals("PARTIAL_CAPT") ? "PARTIAL_CAPTURE" : status)
                 );
                 transactions.add(transaction);
 

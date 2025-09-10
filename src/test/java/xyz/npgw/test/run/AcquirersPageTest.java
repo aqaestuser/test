@@ -109,6 +109,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         TestUtils.createAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER);
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST);
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST, BUSINESS_UNIT_NAME);
+        super.openSiteAccordingRole();
     }
 
     @Test
@@ -617,7 +618,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .getHeader().clickSystemAdministrationLink()
                 .clickAcquirersTab()
                 .getSelectAcquirerMid().selectAcquirerMid(ACQUIRER_EDITED.getAcquirerDisplayName())
-                .getTable().clickDeleteAcquirerMidButton(ACQUIRER_EDITED.getAcquirerName())
+                .getTable().clickDeleteAcquirerMidButton(ACQUIRER.getAcquirerName())
                 .clickDeleteButton();
 
         Allure.step("Verify: a success message appears after deleting the acquirer");

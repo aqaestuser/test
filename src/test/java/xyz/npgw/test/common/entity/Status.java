@@ -5,9 +5,11 @@ public enum Status {
     PENDING,
     INITIATED,
     SUCCESS,
+    AUTHORISED,
+    PARTIAL_CAPTURE,
     FAILED,
     CANCELLED,
     EXPIRED,
     PARTIAL_REFUND,
-    REFUNDED,
+    REFUND,
 }

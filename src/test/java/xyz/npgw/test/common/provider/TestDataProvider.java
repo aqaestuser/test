@@ -65,7 +65,7 @@ public class TestDataProvider {
                 {"PENDING", "INITIATED"},
                 {"SUCCESS", "FAILED"},
                 {"CANCELLED", "EXPIRED"},
-                {"PARTIAL_REFUND", "REFUNDED"},
+                {"PARTIAL_REFUND", "REFUND"},
         };
     }
 

@@ -230,7 +230,7 @@ public abstract class BaseTableComponent<CurrentPageT> extends BaseComponent {
     }
 
     public boolean goToNextPage() {
-        if (nextPageButton.isDisabled()) {
+        if (nextPageButton.isHidden() || nextPageButton.isDisabled()) {
             return false;
         }
         clickNextPageButton();

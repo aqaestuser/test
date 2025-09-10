@@ -71,6 +71,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME_DELETION_TEST);
         TestUtils.createBusinessUnit(
                 getApiRequestContext(), COMPANY_NAME_DELETION_TEST, BUSINESS_UNIT_NAME_DELETION_TEST);
+        super.openSiteAccordingRole();
     }
 
     @Test

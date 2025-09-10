@@ -110,7 +110,7 @@ public abstract class BaseTestForSingleLogin {
         });
 
         createBlankPage();
-        openSiteAccordingRole();
+//        openSiteAccordingRole();
     }
 
     @BeforeMethod
@@ -279,7 +279,7 @@ public abstract class BaseTestForSingleLogin {
         });
     }
 
-    private void openSiteAccordingRole() {
+    protected void openSiteAccordingRole() {
         String testClassName = this.getClass().getSimpleName();
         String prefix = Stream.of("Unauthenticated", "TestUser", "TestAdmin", "User", "Admin")
                 .filter(testClassName::startsWith)

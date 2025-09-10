@@ -1,18 +1,19 @@
 package xyz.npgw.test.page.system;
 
-import com.microsoft.playwright.options.AriaRole;
-import lombok.Getter;
 import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.TimeoutError;
+import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.page.base.HeaderPage;
 import xyz.npgw.test.page.component.select.SelectStatusTrait;
+
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 

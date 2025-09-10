@@ -30,6 +30,7 @@ import static org.testng.Assert.assertTrue;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
+import static xyz.npgw.test.common.Constants.STATUSES;
 
 public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
 
@@ -41,6 +42,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, MERCHANT_TITLE);
+        super.openSiteAccordingRole();
     }
 
     @Test
@@ -88,8 +90,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
         assertThat(dashboardPage.getYAxisLabels()).hasText(new String[]{"100%", "80%", "60%", "40%", "20%", "0%"});
 
         Allure.step("Verify: status chart legend labels are correctly displayed");
-        assertThat(dashboardPage.getXAxisTexts()).hasText(new String[]{"INITIATED", "PENDING", "SUCCESS", "FAILED"});
-
+        assertThat(dashboardPage.getXAxisTexts()).hasText(STATUSES);
 //        Allure.step("Verify: currency legend labels are correctly displayed");
 //        assertThat(dashboardPage.getCurrencyLegendLabels()).hasText(new String[]{"EUR", "USD"}); currently no currency
     }

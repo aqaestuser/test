@@ -144,7 +144,7 @@ public final class TestUtils {
                 Type.valueOf(cells.get(1)),
                 cells.get(2),
                 cells.get(3),
-                Double.parseDouble(cells.get(4)),
+                Double.parseDouble(cells.get(4).replaceAll(",", "")),
                 Currency.valueOf(cells.get(5)),
                 CardType.valueOf(cells.get(6)),
                 Status.valueOf(cells.get(7))

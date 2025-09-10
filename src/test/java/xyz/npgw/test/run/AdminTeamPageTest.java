@@ -42,6 +42,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
+        super.openSiteAccordingRole();
     }
 
     @Test

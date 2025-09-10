@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.ProjectProperties;
@@ -16,6 +17,13 @@ import xyz.npgw.test.page.LoginPage;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 public class UnauthenticatedLoginPageTest extends BaseTestForSingleLogin {
+
+    @BeforeClass
+    @Override
+    protected void beforeClass() {
+        super.beforeClass();
+        super.openSiteAccordingRole();
+    }
 
     @Test
     @TmsLink("149")

@@ -34,6 +34,7 @@ public class AdminTransactionsPageTest extends BaseTestForSingleLogin {
         super.beforeClass();
         TestUtils.createBusinessUnits(getApiRequestContext(), getCompanyName(), businessUnitNames);
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
+        super.openSiteAccordingRole();
     }
 
     @Test
