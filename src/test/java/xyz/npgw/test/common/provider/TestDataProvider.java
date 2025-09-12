@@ -77,4 +77,12 @@ public class TestDataProvider {
                 {"PDF"},
         };
     }
+
+    @DataProvider
+    public Object[][] getControlType() {
+        return new Object[][]{
+                {"BIN Check"},
+                {"Fraud Screen"},
+        };
+    }
 }
