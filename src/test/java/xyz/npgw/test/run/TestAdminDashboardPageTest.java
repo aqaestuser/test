@@ -14,10 +14,8 @@ import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Currency;
-import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.TransactionSummary;
-import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 
@@ -34,7 +32,7 @@ import static xyz.npgw.test.common.Constants.STATUSES;
 
 public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
 
-    private static final String MERCHANT_TITLE = "%s dashboard business unit".formatted(RUN_ID);
+    private static final String MERCHANT_TITLE = "%s admin dashboard bu".formatted(RUN_ID);
     private BusinessUnit businessUnit;
 
     @BeforeClass
@@ -247,8 +245,6 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
     @AfterClass
     @Override
     protected void afterClass() {
-        User.removeMerchant(getApiRequestContext(), "testUser@email.com", businessUnit.merchantId());
-        MerchantAcquirer.delete(getApiRequestContext(), businessUnit.merchantId());
         BusinessUnit.deleteWithTimeout(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, businessUnit);
         super.afterClass();
     }

@@ -5,8 +5,30 @@
         <listener class-name="xyz.npgw.test.common.base.RetryListener"/>
     </listeners>
     <test name="test name">
-        <packages>
-            <package name="xyz.npgw.test.run.*"/>
-        </packages>
+<!--        <packages>-->
+<!--            <package name="xyz.npgw.test.run.*"/>-->
+<!--        </packages>-->
+        <classes>
+            <class name="xyz.npgw.test.run.FraudControlTest"/>
+            <class name="xyz.npgw.test.run.TransactionsTableTest"/>
+            <class name="xyz.npgw.test.run.AcquirersPageTest"/>
+            <class name="xyz.npgw.test.run.GatewayPageTest"/>
+            <class name="xyz.npgw.test.run.TeamPageTest"/>
+            <class name="xyz.npgw.test.run.AdminTeamPageTest"/>
+            <class name="xyz.npgw.test.run.CompaniesAndBusinessUnitsTest"/>
+            <class name="xyz.npgw.test.run.TransactionsPageTest"/>
+            <class name="xyz.npgw.test.run.TeamPageLogoutTest"/>
+            <class name="xyz.npgw.test.run.HeaderTest"/>
+            <class name="xyz.npgw.test.run.TransactionDetailsTest"/>
+            <class name="xyz.npgw.test.run.AdminTransactionsPageTest"/>
+            <class name="xyz.npgw.test.run.UserTransactionsPageTest"/>
+            <class name="xyz.npgw.test.run.DashboardPageTest"/>
+            <class name="xyz.npgw.test.run.TestUserDashboardPageTest"/>
+            <class name="xyz.npgw.test.run.TestAdminDashboardPageTest"/>
+            <class name="xyz.npgw.test.run.HeaderLogoutTest"/>
+            <class name="xyz.npgw.test.run.UnauthenticatedLoginPageTest"/>
+            <class name="xyz.npgw.test.run.TestAdminCompaniesAndBusinessUnitsTest"/>
+            <class name="xyz.npgw.test.run.TransactionManagementPageTest"/>
+        </classes>
     </test>
 </suite>

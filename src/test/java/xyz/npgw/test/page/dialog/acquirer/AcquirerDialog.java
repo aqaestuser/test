@@ -135,8 +135,8 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     }
 
     @Step("Enter 'Acquirer MCC'")
-    public CurrentDialogT fillAcquirerMccField(String acquirerMid) {
-        acquirerMccField.fill(acquirerMid);
+    public CurrentDialogT fillAcquirerMccField(int acquirerMid) {
+        acquirerMccField.fill(String.valueOf(acquirerMid));
 
         return (CurrentDialogT) this;
     }

@@ -34,7 +34,7 @@ public class Acquirer {
     @Builder.Default
     private String acquirerName = "acquirer name";
     @Builder.Default
-    private String acquirerMidMcc = "1111";
+    private int acquirerMcc = 1111;
 
     public String getStatus() {
         return isActive ? "Active" : "Inactive";

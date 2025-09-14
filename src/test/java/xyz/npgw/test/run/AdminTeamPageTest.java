@@ -491,7 +491,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     @Feature("Tooltips")
     @Description("For Admin : contents of Tooltips, that appear after hovering on the icon-buttons, are correct")
     public void testTeamTooltipsContentAsAdmin() {
-        String email = "%s.deactivate.and.activate@gmail.com".formatted(TestUtils.now());
+        String email = "%s.tooltipsContentAsAdmin@email.com".formatted(TestUtils.now());
 
         AdminTeamPage teamPage = new AdminDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -502,6 +502,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
                 .checkCompanyAnalystRadiobutton()
                 .checkAllowedBusinessUnitCheckbox(MERCHANT_TITLE)
                 .clickCreateButton()
+                .getAlert().clickCloseButton()
                 .waitForUserPresence(getApiRequestContext(), email, getCompanyName());
 
         String iconAttributeValue;
@@ -530,7 +531,11 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
         teamPage.getTable().clickDeactivateUserButton(email)
                 .clickDeactivateButton()
+                .getAlert().clickCloseButton()
                 .waitForUserDeactivation(getApiRequestContext(), email, getCompanyName());
+
+        assertThat(teamPage.getTable().getCell(email, "Status")).hasText("Inactive");
+
         for (Locator rowIcon : rowIcons) {
             iconAttributeValue = rowIcon.getAttribute("data-icon");
             Allure.step("Hover on " + iconAttributeValue + " icon");
@@ -540,6 +545,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
             Allure.step("Verify, over " + iconAttributeValue + " appears '" + tooltip);
             assertEquals(TOOLTIPSCONTENT.get(iconAttributeValue), tooltip);
         }
+
         User.delete(getApiRequestContext(), email);
     }
 }

@@ -32,25 +32,25 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
     private static final Acquirer ACQUIRER = Acquirer.builder()
             .acquirerDisplayName("acquirer for gateway")
             .acquirerName("%s acquirer for gateway".formatted(RUN_ID))
-            .acquirerMidMcc("4321")
+            .acquirerMcc(4321)
             .build();
     private static final Acquirer ACQUIRER_MOVE = Acquirer.builder()
             .acquirerDisplayName("acquirer for gateway Movable")
             .acquirerName("%s acquirer for gateway Movable".formatted(RUN_ID))
-            .acquirerMidMcc("4321")
+            .acquirerMcc(4321)
             .currencyList(new Currency[]{Currency.USD})
             .build();
     private static final Acquirer ACQUIRER_EUR = Acquirer.builder()
             .acquirerDisplayName("acquirer for gateway EUR")
             .acquirerName("%s acquirer for gateway EUR".formatted(RUN_ID))
             .currencyList(new Currency[]{Currency.EUR})
-            .acquirerMidMcc("4321")
+            .acquirerMcc(4321)
             .build();
     private static final Acquirer ACQUIRER_GBP = Acquirer.builder()
             .acquirerDisplayName("acquirer for gateway GBP")
             .acquirerName("%s acquirer for gateway GBP".formatted(RUN_ID))
             .currencyList(new Currency[]{Currency.GBP})
-            .acquirerMidMcc("4321")
+            .acquirerMcc(4321)
             .build();
     private static final String COMPANY_NAME = "%s company 112172".formatted(RUN_ID);
     private static final String COMPANY_NAME_DELETION_TEST = "%s company 112173".formatted(RUN_ID);

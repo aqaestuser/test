@@ -12,13 +12,9 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
-import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Currency;
-import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
 import xyz.npgw.test.common.entity.TransactionSummary;
-import xyz.npgw.test.common.entity.User;
-import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.UserDashboardPage;
 
 import java.util.ArrayList;
@@ -28,22 +24,16 @@ import java.util.regex.Pattern;
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 import static org.testng.Assert.assertTrue;
 import static xyz.npgw.test.common.Constants.BUSINESS_UNIT_FOR_TEST_RUN;
-import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.MERCHANT_ID_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 import static xyz.npgw.test.common.Constants.STATUSES;
 
 public class TestUserDashboardPageTest extends BaseTestForSingleLogin {
 
-    private static final String MERCHANT_TITLE = "%s dashboard business unit".formatted(RUN_ID);
-    private BusinessUnit businessUnit;
-
     @BeforeClass
     @Override
     protected void beforeClass() {
         super.beforeClass();
-        businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, MERCHANT_TITLE);
-        User.addMerchant(getApiRequestContext(), "testUser@email.com", businessUnit.merchantId());
         super.openSiteAccordingRole();
     }
 
@@ -249,9 +239,6 @@ public class TestUserDashboardPageTest extends BaseTestForSingleLogin {
     @AfterClass
     @Override
     protected void afterClass() {
-        User.removeMerchant(getApiRequestContext(), "testUser@email.com", businessUnit.merchantId());
-        MerchantAcquirer.delete(getApiRequestContext(), businessUnit.merchantId());
-        BusinessUnit.deleteWithTimeout(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, businessUnit);
         super.afterClass();
     }
 }
