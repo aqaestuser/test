@@ -514,7 +514,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
             icon.hover();
 
             tooltip = teamPage.getTooltip().last().textContent();
-            Allure.step("Verify, over '" + iconAttributeValue + "' appears '" + tooltip);
+            Allure.step("Verify, over '" + iconAttributeValue + "' appears '" + tooltip + "'");
             assertEquals(TOOLTIPSCONTENT.get(iconAttributeValue), tooltip);
         }
 
@@ -525,7 +525,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
             rowIcon.hover();
 
             tooltip = teamPage.getTooltip().last().textContent();
-            Allure.step("Verify, over '" + iconAttributeValue + "' appears '" + tooltip);
+            Allure.step("Verify, over '" + iconAttributeValue + "' appears '" + tooltip + "'");
             assertEquals(TOOLTIPSCONTENT.get(iconAttributeValue), tooltip);
         }
 
@@ -542,7 +542,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
             rowIcon.hover();
 
             tooltip = teamPage.getTooltip().last().textContent();
-            Allure.step("Verify, over " + iconAttributeValue + " appears '" + tooltip);
+            Allure.step("Verify, over " + iconAttributeValue + " appears '" + tooltip + "'");
             assertEquals(TOOLTIPSCONTENT.get(iconAttributeValue), tooltip);
         }
 

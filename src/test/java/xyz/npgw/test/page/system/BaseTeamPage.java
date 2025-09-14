@@ -25,6 +25,10 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
     public final Locator addUserButton = getByTestId("AddUserButtonTeamPage");
     private final Locator commonPanelIcon = locator("[role='tabpanel']>div>div:first-child button[data-testid] svg");
     private final Locator tooltip = getByRole(AriaRole.TOOLTIP);
+    private final Locator transactionsTable = getByLabelExact("transactions table");
+    private final Locator settings = getByRole(AriaRole.BUTTON).getByTestId("SettingsButtonTeamPage");
+    private final Locator normalDensity = locator("[type='radio'][value='normal']");
+    private final Locator condensedDensity = locator("[type='radio'][value='condensed']");
 
     public BaseTeamPage(Page page) {
         super(page);
@@ -111,6 +115,27 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
         }
         log.info("User deactivation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
         clickRefreshDataButton();
+
+        return self();
+    }
+
+    @Step("Click 'Settings'")
+    public CurrentPageT clickSettings() {
+        settings.click();
+
+        return self();
+    }
+
+    @Step("Check 'condensed'")
+    public CurrentPageT checkCondensed() {
+        condensedDensity.check();
+
+        return self();
+    }
+
+    @Step("Check 'normal'")
+    public CurrentPageT checkNormal() {
+        normalDensity.check();
 
         return self();
     }
