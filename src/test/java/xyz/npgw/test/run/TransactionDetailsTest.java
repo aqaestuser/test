@@ -48,7 +48,7 @@ public class TransactionDetailsTest extends BaseTestForSingleLogin {
         Allure.step("Verify: The dialog box section names");
         assertThat(transactionDetailsDialog.getSectionNames())
                 .hasText(new String[]{"Amount", "Updated on (GMT)", "NPGW reference", "Business unit reference",
-                        "Card details", "Customer details", "3D Secure", "Transaction lifecycle"});
+                        "Card details", "Customer details", "3D Secure", "Transaction lifecycle", "Acquirer details"});
 
         Allure.step("Verify: The Card details labels");
         assertThat(transactionDetailsDialog.getCardDetailsLabels())
@@ -56,7 +56,8 @@ public class TransactionDetailsTest extends BaseTestForSingleLogin {
 
         Allure.step("Verify: The Customer details labels");
         assertThat(transactionDetailsDialog.getCustomerDetailsLabels())
-                .hasText(new String[]{"E-Mail", "Name", "Address", "City", "ZIP", "Country", "Phone", "Date of birth"});
+                .hasText(new String[]{"External ID", "E-Mail", "Name", "Address", "City", "State", "ZIP", "Country",
+                        "Phone", "Date of birth"});
     }
 
     @Test
@@ -73,46 +74,46 @@ public class TransactionDetailsTest extends BaseTestForSingleLogin {
                 .getTable().clickOnFirstTransaction()
                 .clickSection("Card details");
 
-        Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field ");
+        Allure.step("Verify: Parameter 'Payment method' is hidden after click on chevron in Card details field");
         assertThat(transactionDetailsDialog.getPaymentMethodValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Card holder' is hidden after click on chevron in Card details field ");
+        Allure.step("Verify: Parameter 'Card holder' is hidden after click on chevron in Card details field");
         assertThat(transactionDetailsDialog.getCardHolderValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Card number' is hidden after click on chevron in Card details field ");
+        Allure.step("Verify: Parameter 'Card number' is hidden after click on chevron in Card details field");
         assertThat(transactionDetailsDialog.getCardNumberValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field ");
+        Allure.step("Verify: Parameter 'Expiry date' is hidden after click on chevron in Card details field");
         assertThat(transactionDetailsDialog.getExpiryDateValue()).isHidden();
 
         transactionDetailsDialog
                 .clickSection("Customer details");
 
-        Allure.step("Verify: Parameter 'Name' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'Name' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getNameValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Date of birth' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'Date of birth' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getDateOfBirthValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'E-Mail' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'E-Mail' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getEmailValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Phone' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'Phone' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getPhoneValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Country' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'Country' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getCountryValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'State' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'State' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getStateValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'City' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'City' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getCityValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'ZIP' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'ZIP' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getZipValue()).isHidden();
 
-        Allure.step("Verify: Parameter 'Address' is hidden after click on chevron in Customer details field ");
+        Allure.step("Verify: Parameter 'Address' is hidden after click on chevron in Customer details field");
         assertThat(transactionDetailsDialog.getAddressValue()).isHidden();
     }
 
@@ -130,14 +131,14 @@ public class TransactionDetailsTest extends BaseTestForSingleLogin {
                 .getTable().clickOnFirstTransaction()
                 .clickCloseButton();
 
-        Allure.step("Verify: Transaction details dialog is closed ");
+        Allure.step("Verify: Transaction details dialog is closed");
         assertThat(transactionsPage.getDialog()).not().isAttached();
 
         transactionsPage
                 .getTable().clickOnFirstTransaction()
                 .clickCloseIcon();
 
-        Allure.step("Verify: Transaction details dialog is closed ");
+        Allure.step("Verify: Transaction details dialog is closed");
         assertThat(transactionsPage.getDialog()).not().isAttached();
     }
 

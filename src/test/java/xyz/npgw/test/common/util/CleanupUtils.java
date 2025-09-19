@@ -21,7 +21,7 @@ public class CleanupUtils {
         deleteCompanies(request);
         deleteAcquirers(request);
         deleteUsersFromSuper(request);
-        deleteFraudControl(request);
+        deleteFraudControls(request);
     }
 
     public static void deleteCompanies(APIRequestContext request) {
@@ -43,13 +43,13 @@ public class CleanupUtils {
 
     private static void deleteUsersFromSuper(APIRequestContext request) {
         Arrays.stream(User.getAll(request, "super"))
-                .filter(user -> !USER.contains(user.email()))
-                .filter(user -> user.email().matches("^\\d{4}\\.\\d{6}.*$"))
-                .filter(user -> TestUtils.isOneHourOld(user.email()))
-                .forEach(user -> User.delete(request, user.email()));
+                .filter(user -> !USER.contains(user.getEmail()))
+                .filter(user -> user.getEmail().matches("^\\d{4}\\.\\d{6}.*$"))
+                .filter(user -> TestUtils.isOneHourOld(user.getEmail()))
+                .forEach(user -> User.delete(request, user.getEmail()));
     }
 
-    private static void deleteFraudControl(APIRequestContext request) {
+    private static void deleteFraudControls(APIRequestContext request) {
         Arrays.stream(FraudControl.getAll(request))
                 .filter(control -> !CONTROL.contains(control.getControlName()))
                 .filter(control -> control.getControlName().matches("^\\d{4}\\.\\d{6}.*$"))

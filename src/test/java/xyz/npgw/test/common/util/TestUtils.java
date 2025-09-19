@@ -1,18 +1,23 @@
 package xyz.npgw.test.common.util;
 
 import com.microsoft.playwright.APIRequestContext;
+import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.Page;
+import com.microsoft.playwright.Playwright;
 import com.microsoft.playwright.TimeoutError;
+import com.microsoft.playwright.assertions.PlaywrightAssertions;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.client.TransactionResponse;
 import xyz.npgw.test.common.entity.Acquirer;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.CardType;
 import xyz.npgw.test.common.entity.Company;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.FraudControl;
-import xyz.npgw.test.common.entity.MerchantAcquirer;
 import xyz.npgw.test.common.entity.Status;
+import xyz.npgw.test.common.entity.TempMerchantAcquirer;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.entity.Type;
 import xyz.npgw.test.common.entity.User;
@@ -27,6 +32,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
 @Log4j2
 public final class TestUtils {
@@ -63,12 +70,12 @@ public final class TestUtils {
         }
         while (Company.delete(request, companyName) == 409) {
             Arrays.stream(User.getAll(request, companyName))
-                    .forEach(user -> User.delete(request, user.email()));
+                    .forEach(user -> User.delete(request, user.getEmail()));
             Arrays.stream(BusinessUnit.getAll(request, companyName))
                     .forEach(businessUnit -> {
 //                        BusinessUnit.deleteWithTimeout(request, companyName, businessUnit);
                         while (BusinessUnit.delete(request, companyName, businessUnit) == 409) {
-                            MerchantAcquirer.delete(request, businessUnit.merchantId());
+                            TempMerchantAcquirer.delete(request, businessUnit.merchantId());
                         }
                     });
         }
@@ -100,7 +107,7 @@ public final class TestUtils {
     @SneakyThrows
     public static void waitForUserPresence(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
-        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
+        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.getEmail().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {
@@ -149,5 +156,22 @@ public final class TestUtils {
                 CardType.valueOf(cells.get(6)),
                 Status.valueOf(cells.get(7))
         );
+    }
+
+    public static void pay(Playwright playwright, TransactionResponse transactionResponse) {
+        log.info("pay for {}", transactionResponse.paymentUrl());
+
+        Browser browser = BrowserUtils.createBrowser(playwright);
+        Page page = browser.newPage();
+        PlaywrightAssertions.setDefaultAssertionTimeout(15_000);
+
+        page.navigate(transactionResponse.paymentUrl());
+        log.info("Redirected to: {}", page.title());
+
+        assertThat(page).hasURL(transactionResponse.redirectUrlSuccess());
+
+        browser.close();
+
+        PlaywrightAssertions.setDefaultAssertionTimeout(5_000);
     }
 }

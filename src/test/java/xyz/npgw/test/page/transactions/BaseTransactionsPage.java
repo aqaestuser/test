@@ -436,7 +436,11 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
                 double amount = Double.parseDouble(amountMatcher.group(2).replaceAll(",", ""));
                 String currency = amountMatcher.group(3);
                 String cardType = amountMatcher.group(4);
-                String status = amountMatcher.group(5);
+                String status = switch (amountMatcher.group(5)) {
+                    case "PARTIAL_CAPT" -> "PARTIAL_CAPTURE";
+                    case "PARTIAL_REFU" -> "PARTIAL_REFUND";
+                    default -> amountMatcher.group(5);
+                };
 
                 businessUnitReference = businessUnitReference + buCode;
 
@@ -448,7 +452,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
                         amount,
                         Currency.valueOf(currency),
                         CardType.valueOf(cardType),
-                        Status.valueOf(status.equals("PARTIAL_CAPT") ? "PARTIAL_CAPTURE" : status)
+                        Status.valueOf(status)
                 );
                 transactions.add(transaction);
 

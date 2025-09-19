@@ -8,10 +8,10 @@ public record SystemConfig(
 
     public SystemConfig() {
         this(
-                "https://test.npgw.xyz/challenge/url",
-                "https://test.npgw.xyz/fingerprint/url",
-                "https://test.npgw.xyz/resource/url",
-                "notificationQueue");
+                "https://test.npgw.xyz/merchant-v1/challenge",
+                "https://test.npgw.xyz/merchant-v1/fingerprint",
+                "https://test.npgw.xyz/merchant-v1/resource",
+                "notification.fifo");
     }
 
     @Override

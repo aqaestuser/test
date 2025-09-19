@@ -246,15 +246,14 @@ public abstract class BaseTest {
 
         String email = "%s.%s@email.com".formatted(uid, userRole.toString().toLowerCase());
         if (!User.exists(apiRequestContext, email)) {
-            User user = new User(
-                    (userRole == UserRole.SUPER) ? "super" : companyName,
-                    true,
-                    userRole,
-                    (userRole == UserRole.USER) ? new String[]{businessUnit.merchantId()} : new String[]{},
-                    email,
-                    ProjectProperties.getPassword());
+            User user = User.builder()
+                    .companyName((userRole == UserRole.SUPER ? "super" : companyName))
+                    .userRole(userRole)
+                    .merchantIds(userRole == UserRole.USER ? new String[]{businessUnit.merchantId()} : new String[]{})
+                    .email(email)
+                    .build();
             User.create(apiRequestContext, user);
-            User.passChallenge(apiRequestContext, user.email(), user.password());
+            User.passChallenge(apiRequestContext, user.getEmail(), user.getPassword());
         }
 
         new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getPassword(), userRole.getName());

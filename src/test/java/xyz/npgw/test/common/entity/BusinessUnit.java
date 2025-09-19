@@ -39,6 +39,13 @@ public record BusinessUnit(
         return new Gson().fromJson(response.text(), BusinessUnit[].class);
     }
 
+    public static String getNewApikey(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
+        APIResponse response = request.post("portal-v1/company/%s/merchant/%s".formatted(encode(companyName), businessUnit.merchantId));
+        log.response(response, "get api key for merchant %s of company %s".formatted(businessUnit.merchantTitle, companyName));
+
+        return response.text();
+    }
+
     @SneakyThrows
     public static void deleteWithTimeout(APIRequestContext request, String companyName, BusinessUnit businessUnit) {
         double timeout = ProjectProperties.getDefaultTimeout();

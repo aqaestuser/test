@@ -1,17 +1,26 @@
 package xyz.npgw.test.run;
 
+import com.microsoft.playwright.APIRequestContext;
 import com.microsoft.playwright.Locator;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import lombok.extern.log4j.Log4j2;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
+import xyz.npgw.test.common.entity.Acquirer;
+import xyz.npgw.test.common.entity.AddMerchantAcquirerItem;
+import xyz.npgw.test.common.entity.BusinessUnit;
+import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.User;
+import xyz.npgw.test.common.entity.UserRole;
+import xyz.npgw.test.common.util.AuthTransactionUtils;
+import xyz.npgw.test.common.util.SaleTransactionUtils;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
 import xyz.npgw.test.page.dialog.user.AdminAddUserDialog;
@@ -28,6 +37,7 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 import static xyz.npgw.test.common.Constants.TOOLTIPSCONTENT;
 
+@Log4j2
 public class AdminTeamPageTest extends BaseTestForSingleLogin {
 
     private static final String MERCHANT_TITLE = "Business unit 1";
@@ -43,6 +53,75 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
         super.beforeClass();
         TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
         super.openSiteAccordingRole();
+
+//        super.initPageRequestContext();
+//        log.info("apiKey of current admin user = {}", BusinessUnit.getNewApikey(getPage().request(), getCompanyName(), businessUnit));
+    }
+
+    @Test
+    @TmsLink("---")
+    @Epic("---")
+    @Feature("---")
+    @Description("---")
+    public void testCreateTransactions() {
+
+        final String company = "%s company for transactions".formatted(RUN_ID);
+        final String merchant = "%s merchant for transactions".formatted(RUN_ID);
+        final String acquirerName = "%s acquirer for transactions".formatted(RUN_ID);
+        final Acquirer acquirer = Acquirer.builder()
+                .acquirerName(acquirerName)
+                .acquirerDisplayName(acquirerName)
+                .currencyList(new Currency[]{Currency.EUR})
+                .build();
+        final User admin = User.builder()
+                .companyName(company)
+                .userRole(UserRole.ADMIN)
+                .email("%s.admin@email.com".formatted(RUN_ID))
+                .build();
+
+        TestUtils.createCompany(getApiRequestContext(), company);
+
+        User.create(getApiRequestContext(), admin);
+        User.passChallenge(getApiRequestContext(), admin.getEmail(), admin.getPassword());
+
+        BusinessUnit businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), company, merchant);
+        String apiKey = BusinessUnit.getNewApikey(
+                getApiRequestContext(getPlaywright(), admin.getCredentials()),
+                company,
+                businessUnit);
+        log.info("apiKey {}", apiKey);
+        APIRequestContext apiRequestContext = getApiRequestContext(getPlaywright(), apiKey);
+
+        TestUtils.createAcquirer(getApiRequestContext(), acquirer);
+        AddMerchantAcquirerItem.create(getApiRequestContext(), businessUnit, acquirer);
+
+        SaleTransactionUtils.createPendingTransaction(apiRequestContext, 1234, businessUnit, "SALE0PENDING");
+        SaleTransactionUtils.createSuccessTransaction(
+                getPlaywright(), apiRequestContext, 2345, businessUnit, "SALE0SUCCESS");
+//        SaleTransactionUtils.createRefundTransaction(
+//        getPlaywright(), apiRequestContext, 3456, businessUnit, "SALE0REFUND0FULL");
+//        SaleTransactionUtils.createPartialRefundTransaction(
+//        getPlaywright(), apiRequestContext, 4567, businessUnit, "SALE0REFUND0HALF");
+
+        AuthTransactionUtils.createPendingTransaction(apiRequestContext, 7891, businessUnit, "AUTH0PENDING");
+        AuthTransactionUtils.createAuthorisedTransaction(
+                getPlaywright(), apiRequestContext, 8912, businessUnit, "AUTH0AUTHORISED");
+        AuthTransactionUtils.createCancelAuthorisedTransaction(
+                getPlaywright(), apiRequestContext, 9123, businessUnit, "AUTH0CANCEL");
+        AuthTransactionUtils.createSuccessByFullCaptureTransaction(
+                getPlaywright(), apiRequestContext, 1234, businessUnit, "AUTH0SUCCESS0FULL");
+        AuthTransactionUtils.createSuccessByPartialCaptureTransaction(
+                getPlaywright(), apiRequestContext, 2346, businessUnit, "AUTH0SUCCESS0PARTIAL");
+
+        AuthTransactionUtils.createPartialCaptureTransaction(
+                getPlaywright(), apiRequestContext, 4568, businessUnit, "AUTH0PARTIAL0CAPTURE");
+//        AuthTransactionUtils.createPartialRefundTransaction(
+//        getPlaywright(), apiRequestContext, 70000, businessUnit, "AUTH0PARTIAL0CAPTURE0REFUND");
+
+//        AuthTransactionUtils.createRefundSuccessByFullCaptureTransaction(
+//        getPlaywright(), apiRequestContext, 80000, businessUnit, "AUTH0SUCCESS0FULL0REFUND");
+//        AuthTransactionUtils.createRefundSuccessByPartialCaptureTransaction(
+//        getPlaywright(), apiRequestContext, 90000, businessUnit, "AUTH0SUCCESS0PARTIAL0REFUND");
     }
 
     @Test

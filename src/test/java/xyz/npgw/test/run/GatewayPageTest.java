@@ -30,24 +30,24 @@ import static xyz.npgw.test.common.Constants.CURRENCY_OPTIONS;
 public class GatewayPageTest extends BaseTestForSingleLogin {
 
     private static final Acquirer ACQUIRER = Acquirer.builder()
-            .acquirerDisplayName("acquirer for gateway")
+            .acquirerDisplayName("%s acquirer for gateway".formatted(RUN_ID))
             .acquirerName("%s acquirer for gateway".formatted(RUN_ID))
             .acquirerMcc(4321)
             .build();
     private static final Acquirer ACQUIRER_MOVE = Acquirer.builder()
-            .acquirerDisplayName("acquirer for gateway Movable")
+            .acquirerDisplayName("%s acquirer for gateway Movable".formatted(RUN_ID))
             .acquirerName("%s acquirer for gateway Movable".formatted(RUN_ID))
             .acquirerMcc(4321)
             .currencyList(new Currency[]{Currency.USD})
             .build();
     private static final Acquirer ACQUIRER_EUR = Acquirer.builder()
-            .acquirerDisplayName("acquirer for gateway EUR")
+            .acquirerDisplayName("%s acquirer for gateway EUR".formatted(RUN_ID))
             .acquirerName("%s acquirer for gateway EUR".formatted(RUN_ID))
             .currencyList(new Currency[]{Currency.EUR})
             .acquirerMcc(4321)
             .build();
     private static final Acquirer ACQUIRER_GBP = Acquirer.builder()
-            .acquirerDisplayName("acquirer for gateway GBP")
+            .acquirerDisplayName("%s acquirer for gateway GBP".formatted(RUN_ID))
             .acquirerName("%s acquirer for gateway GBP".formatted(RUN_ID))
             .currencyList(new Currency[]{Currency.GBP})
             .acquirerMcc(4321)
@@ -269,10 +269,13 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
                 .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
+                .getAlert().clickCloseButton()
                 .clickAddBusinessUnitAcquirerButton()
                 .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton();
+
+        assertThat(gatewayPage.getTable().getRows()).hasCount(2);
 
         Allure.step("Check that the first created acquirer priority is 0");
         assertThat(gatewayPage.getTable().getCell(0, "Acquirer MID")).hasText(ACQUIRER.getAcquirerDisplayName());

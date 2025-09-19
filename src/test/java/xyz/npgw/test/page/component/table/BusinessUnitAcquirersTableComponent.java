@@ -20,14 +20,14 @@ public class BusinessUnitAcquirersTableComponent extends BaseTableComponent<Supe
 
     @Step("Click 'Move business unit acquirer down' button")
     public SuperGatewayPage clickMoveBusinessUnitAcquirerDownButton(String priority) {
-        getRow(priority).getByTestId("MoveMerchantAcquirerDownButton").click();
+        getRowByDataKey(priority).getByTestId("MoveMerchantAcquirerDownButton").click();
 
         return getCurrentPage();
     }
 
     @Step("Click 'Move business unit acquirer up' button")
     public SuperGatewayPage clickMoveBusinessUnitAcquirerUpButton(String priority) {
-        getRow(priority).getByTestId("MoveMerchantAcquirerUpButton").click();
+        getRowByDataKey(priority).getByTestId("MoveMerchantAcquirerUpButton").click();
 
         return getCurrentPage();
     }

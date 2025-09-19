@@ -56,7 +56,7 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
     @SneakyThrows
     public CurrentPageT waitForUserPresence(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
-        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.email().equals(email))) {
+        while (Arrays.stream(User.getAll(request, companyName)).noneMatch(user -> user.getEmail().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {
@@ -72,7 +72,7 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
     @SneakyThrows
     public CurrentPageT waitForUserAbsence(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
-        while (Arrays.stream(User.getAll(request, companyName)).anyMatch(user -> user.email().equals(email))) {
+        while (Arrays.stream(User.getAll(request, companyName)).anyMatch(user -> user.getEmail().equals(email))) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {
@@ -89,7 +89,7 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
     public CurrentPageT waitForUserActivation(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName))
-                .noneMatch(user -> user.email().equals(email) && user.enabled())) {
+                .noneMatch(user -> user.getEmail().equals(email) && user.isEnabled())) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {
@@ -106,7 +106,7 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
     public CurrentPageT waitForUserDeactivation(APIRequestContext request, String email, String companyName) {
         double timeout = ProjectProperties.getDefaultTimeout();
         while (Arrays.stream(User.getAll(request, companyName))
-                .noneMatch(user -> user.email().equals(email) && !user.enabled())) {
+                .noneMatch(user -> user.getEmail().equals(email) && !user.isEnabled())) {
             TimeUnit.MILLISECONDS.sleep(300);
             timeout -= 300;
             if (timeout <= 0) {

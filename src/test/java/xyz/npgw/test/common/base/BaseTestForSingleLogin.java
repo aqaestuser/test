@@ -24,6 +24,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
+import xyz.npgw.test.common.client.Client;
 import xyz.npgw.test.common.entity.BusinessUnit;
 import xyz.npgw.test.common.entity.Credentials;
 import xyz.npgw.test.common.entity.Token;
@@ -53,6 +54,7 @@ public abstract class BaseTestForSingleLogin {
 
     protected static final String RUN_ID = TestUtils.now();
     private final HashMap<String, Response> requestMap = new HashMap<>();
+    @Getter(AccessLevel.PROTECTED)
     private Playwright playwright;
     private Browser browser;
     private BrowserContext browserContext;
@@ -115,6 +117,8 @@ public abstract class BaseTestForSingleLogin {
 
     @BeforeMethod
     protected void beforeMethod(Method method, ITestResult testResult, Object[] args) {
+        initApiRequestContext();
+
         testId = "%s/%s/%s(%d)%s".formatted(
                 ProjectProperties.getArtefactDir(),
                 method.getDeclaringClass().getSimpleName(),
@@ -202,15 +206,14 @@ public abstract class BaseTestForSingleLogin {
 
         String email = "%s.%s@email.com".formatted(uid, userRole.toString().toLowerCase());
         if (!User.exists(apiRequestContext, email)) {
-            User user = new User(
-                    (userRole == UserRole.SUPER) ? "super" : companyName,
-                    true,
-                    userRole,
-                    (userRole == UserRole.USER) ? new String[]{businessUnit.merchantId()} : new String[]{},
-                    email,
-                    ProjectProperties.getPassword());
+            User user = User.builder()
+                    .companyName((userRole == UserRole.SUPER ? "super" : companyName))
+                    .userRole(userRole)
+                    .merchantIds(userRole == UserRole.USER ? new String[]{businessUnit.merchantId()} : new String[]{})
+                    .email(email)
+                    .build();
             User.create(apiRequestContext, user);
-            User.passChallenge(apiRequestContext, user.email(), user.password());
+            User.passChallenge(apiRequestContext, user.getEmail(), user.getPassword());
         }
 
         new AboutBlankPage(page).navigate("/").loginAs(email, ProjectProperties.getPassword(), userRole.getName());
@@ -228,7 +231,7 @@ public abstract class BaseTestForSingleLogin {
         }
     }
 
-    private void initPageRequestContext() {
+    protected void initPageRequestContext() {
         StorageState storageState = new Gson().fromJson(browserContext.storageState(), StorageState.class);
         LocalStorage[] localStorage = storageState.origins()[0].localStorage();
         String tokenData = Arrays.stream(localStorage)
@@ -252,7 +255,42 @@ public abstract class BaseTestForSingleLogin {
         return token;
     }
 
+    private Token getTokenFromApiResponse(Playwright playwright, Credentials credentials) {
+        APIRequestContext context = playwright.request()
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
+        Token token = User.getTokenResponse(context, credentials).token();
+        context.dispose();
+
+        return token;
+    }
+
+    private Token getTokenFromApiResponse(Playwright playwright, String apiKey) {
+        APIRequestContext context = playwright.request()
+                .newContext(new APIRequest.NewContextOptions().setBaseURL(ProjectProperties.getBaseURL()));
+        Token token = Client.getToken(context, apiKey);
+        context.dispose();
+
+        return token;
+    }
+
     private APIRequestContext getApiRequestContext(Playwright playwright, Token token) {
+        return playwright.request()
+                .newContext(new APIRequest.NewContextOptions()
+                        .setBaseURL(ProjectProperties.getBaseURL())
+                        .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+    }
+
+    protected APIRequestContext getApiRequestContext(Playwright playwright, Credentials credentials) {
+        Token token = getTokenFromApiResponse(playwright, credentials);
+        return playwright.request()
+                .newContext(new APIRequest.NewContextOptions()
+                        .setBaseURL(ProjectProperties.getBaseURL())
+                        .setExtraHTTPHeaders(Map.of("Authorization", "Bearer %s".formatted(token.idToken()))));
+    }
+
+
+    protected APIRequestContext getApiRequestContext(Playwright playwright, String apiKey) {
+        Token token = getTokenFromApiResponse(playwright, apiKey);
         return playwright.request()
                 .newContext(new APIRequest.NewContextOptions()
                         .setBaseURL(ProjectProperties.getBaseURL())
