@@ -8,7 +8,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
-import xyz.npgw.test.common.base.BaseTest;
+import xyz.npgw.test.common.base.BaseTestForLogout;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.LoginPage;
 import xyz.npgw.test.page.dashboard.AdminDashboardPage;
@@ -18,7 +18,7 @@ import xyz.npgw.test.page.system.SuperTeamPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-public class TeamPageLogoutTest extends BaseTest {
+public class TeamPageLogoutTest extends BaseTestForLogout {
 
     private static final String MERCHANT_TITLE = "Business unit 1";
     private static final String SUCCESS_MESSAGE_USER_CREATED = "SUCCESSUser was created successfully";

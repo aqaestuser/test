@@ -736,7 +736,7 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
         }
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     @Override
     protected void afterClass() {
         User.delete(getApiRequestContext(), ADMIN_EMAIL);

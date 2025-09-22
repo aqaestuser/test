@@ -60,8 +60,10 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
     private final Locator trxIdClearIcon = getByRoleExact(AriaRole.BUTTON, "close chip");
 
     private final Locator npgwReferenceField = getByLabelExact("NPGW reference");
-    private final Locator npgwReferenceFieldClearIcon = getByRole(AriaRole.BUTTON, "clear input").first();
-
+    private final Locator npgwReferenceAcceptButton = npgwReferenceField.locator("..")
+            .locator("svg[data-icon='circle-check']");
+    private final Locator npgwReferenceFieldClearIcon = npgwReferenceField.locator("..")
+            .locator("svg[data-icon='circle-xmark']");
     private final Locator businessUnitReference = getByLabelExact("Business unit reference");
     private final Locator businessUnitReferenceClear = getByRole(AriaRole.BUTTON, "clear input").last();
 
@@ -299,9 +301,9 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
         return self();
     }
 
-    @Step("Click 'Trx Id' button")
-    public CurrentPageT clickTrxIdAppliedButton() {
-        trxIdAppliedButton.click();
+    @Step("Click NPGW reference acceptation button")
+    public CurrentPageT clickNpgwReferenceAcceptButton() {
+        npgwReferenceAcceptButton.click();
 
         return self();
     }

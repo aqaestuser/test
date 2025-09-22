@@ -58,6 +58,11 @@ public class TransactionDetailsTest extends BaseTestForSingleLogin {
         assertThat(transactionDetailsDialog.getCustomerDetailsLabels())
                 .hasText(new String[]{"External ID", "E-Mail", "Name", "Address", "City", "State", "ZIP", "Country",
                         "Phone", "Date of birth"});
+
+        Allure.step("Verify: The Customer details labels");
+        assertThat(transactionDetailsDialog.getAcquirerDetailsLabels())
+                .hasText(new String[]{"Response code", "Response message", "Auth code", "Acquirer reference", "Acquirer code",
+                        "Acquirer MID", "Acquirer MCC"});
     }
 
     @Test

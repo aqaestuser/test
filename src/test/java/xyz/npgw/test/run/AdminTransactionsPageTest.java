@@ -386,7 +386,7 @@ public class AdminTransactionsPageTest extends BaseTestForSingleLogin {
         assertThat(transactionsPage.getBusinessUnitReference()).isVisible();
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     @Override
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);

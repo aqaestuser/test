@@ -261,7 +261,7 @@ public class ReportsPageTest extends BaseTestForSingleLogin {
                 "Filenames are not in alphabetical order");
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     @Override
     protected void afterClass() {
         TestUtils.deleteCompany(getApiRequestContext(), COMPANY_NAME);

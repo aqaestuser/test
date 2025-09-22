@@ -977,7 +977,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         }
     }
 
-    @AfterClass
+    @AfterClass(alwaysRun = true)
     @Override
     protected void afterClass() {
         TestUtils.deleteAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER.getAcquirerName());

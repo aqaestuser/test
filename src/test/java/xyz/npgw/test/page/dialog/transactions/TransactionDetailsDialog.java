@@ -30,6 +30,9 @@ public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, 
     private final Locator customerDetailsRegion = getByRole(AriaRole.REGION, "Customer details");
     private final Locator customerDetailsLabels = customerDetailsRegion.locator(".labelText");
 
+    private final Locator acquirerDetailsRegion = getByRole(AriaRole.REGION, "Acquirer details");
+    private final Locator acquirerDetailsLabels = acquirerDetailsRegion.locator(".labelText");
+
     private final Locator paymentMethodValue = parameter("Payment method", CARD_DETAILS_SECTION);
     private final Locator cardHolderValue = parameter("Card holder", CARD_DETAILS_SECTION);
     private final Locator cardNumberValue = parameter("Card number", CARD_DETAILS_SECTION);
