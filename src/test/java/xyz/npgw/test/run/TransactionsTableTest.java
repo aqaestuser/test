@@ -14,7 +14,6 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -538,7 +537,6 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
         assertEquals(uiTransactionList, csvTransactionList);
     }
 
-    @Ignore("externalTransactionId and transactionId parse problem")
     @Test
     @TmsLink("957")
     @Epic("Transactions")

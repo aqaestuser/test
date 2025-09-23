@@ -6,7 +6,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
@@ -287,24 +286,6 @@ public class TransactionsPageTest extends BaseTestForSingleLogin {
 
         Allure.step("Verify: PDF option is visible");
         assertThat(transactionsPage.getDownloadPdfOption()).isVisible();
-    }
-
-    @Ignore
-    @Test(dataProvider = "getExportFileType", dataProviderClass = TestDataProvider.class)
-    @TmsLink("357")
-    @Epic("Transactions")
-    @Feature("Export table data")
-    @Description("Download files: PDF, Excel, CSV")
-    public void testDownloadFiles(String fileType) {
-        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
-                .getHeader().clickTransactionsLink()
-                .getSelectDateRange().setDateRangeFields(ONE_DATE_FOR_TABLE)
-                .getSelectCompany().selectCompany(COMPANY_NAME_FOR_TEST_RUN)
-                .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_FOR_TEST_RUN)
-                .clickDownloadButton();
-
-        Allure.step("Verify: that files can be downloaded");
-        Assert.assertTrue(transactionsPage.isFileAvailableAndNotEmpty(fileType));
     }
 
     @Test

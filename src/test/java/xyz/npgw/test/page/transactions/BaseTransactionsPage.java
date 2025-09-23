@@ -1,6 +1,5 @@
 package xyz.npgw.test.page.transactions;
 
-import com.microsoft.playwright.Download;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
@@ -12,8 +11,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.testng.Assert;
-import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.entity.CardType;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.Status;
@@ -30,7 +27,6 @@ import xyz.npgw.test.page.component.table.TransactionsTableTrait;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -267,20 +263,6 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
         return self();
     }
 
-    public boolean isFileAvailableAndNotEmpty(String fileType) {
-        Download download = getPage().waitForDownload(
-                new Page.WaitForDownloadOptions().setTimeout(ProjectProperties.getDefaultTimeout() * 6),
-                () -> getByRole(AriaRole.MENUITEM, fileType).click());
-
-        int length = 0;
-        try (InputStream inputStream = download.createReadStream()) {
-            length = inputStream.readAllBytes().length;
-        } catch (IOException e) {
-            Assert.fail(e.getMessage());
-        }
-        return length > 0;
-    }
-
     @Step("Click 'Reset filter' button")
     public CurrentPageT clickResetFilterButton() {
         resetFilterButton.click();
@@ -431,8 +413,16 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
 
             Matcher amountMatcher = amountLinePattern.matcher(line);
             if (amountMatcher.find() && creationDate != null) {
-                String businessUnitReference = middleLines.isEmpty() ? "" : middleLines.get(middleLines.size() - 1);
-                String npgwReference = String.join("", middleLines.subList(0, Math.max(0, middleLines.size() - 1)));
+                String fullMiddleText = String.join("", middleLines);
+                String npgwReference = "";
+                String businessUnitReference = "";
+
+                if (fullMiddleText.length() > 207) {
+                    npgwReference = fullMiddleText.substring(0, 207);
+                    businessUnitReference = fullMiddleText.substring(207);
+                } else {
+                    npgwReference = fullMiddleText;
+                }
 
                 String buCode = amountMatcher.group(1);
                 double amount = Double.parseDouble(amountMatcher.group(2).replaceAll(",", ""));
