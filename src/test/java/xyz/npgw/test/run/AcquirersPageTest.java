@@ -812,7 +812,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .clickGatewayTab()
                 .getSelectCompany().selectCompany(COMPANY_NAME_CHANGE_ACTIVITY_TEST)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME)
-                .clickAddBusinessUnitAcquirerButton()
+                .clickConnectAcquirerMidButton()
                 .getSelectAcquirerMid().selectAcquirerMidInDialog(CHANGE_STATE_ACQUIRER.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().waitUntilSuccessAlertIsGone()

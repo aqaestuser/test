@@ -11,13 +11,13 @@ import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.system.SuperGatewayPage;
 
 @Getter
-public class AddBusinessUnitAcquirerDialog extends BaseDialog<SuperGatewayPage, AddBusinessUnitAcquirerDialog>
-        implements SelectAcquirerMidTrait<AddBusinessUnitAcquirerDialog>, AlertTrait<AddBusinessUnitAcquirerDialog> {
+public class ConectAcquirerMidDialog extends BaseDialog<SuperGatewayPage, ConectAcquirerMidDialog>
+        implements SelectAcquirerMidTrait<ConectAcquirerMidDialog>, AlertTrait<ConectAcquirerMidDialog> {
 
     private final Locator acquirerNameField = getByPlaceholder("Enter acquirer name");
     private final Locator connectButton = getByRole(AriaRole.BUTTON, "Connect");
 
-    public AddBusinessUnitAcquirerDialog(Page page) {
+    public ConectAcquirerMidDialog(Page page) {
         super(page);
     }
 
@@ -34,14 +34,14 @@ public class AddBusinessUnitAcquirerDialog extends BaseDialog<SuperGatewayPage, 
     }
 
     @Step("Check 'Active' status radiobutton")
-    public AddBusinessUnitAcquirerDialog checkActiveRadiobutton() {
+    public ConectAcquirerMidDialog checkActiveRadiobutton() {
         getByRole(AriaRole.RADIO, "Active").setChecked(true);
 
         return this;
     }
 
     @Step("Check 'Inactive' status radiobutton")
-    public AddBusinessUnitAcquirerDialog checkInactiveRadiobutton() {
+    public ConectAcquirerMidDialog checkInactiveRadiobutton() {
         getByRole(AriaRole.RADIO, "Inactive").setChecked(true);
 
         return this;
