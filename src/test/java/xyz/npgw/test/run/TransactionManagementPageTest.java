@@ -5,7 +5,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -20,13 +19,6 @@ import static xyz.npgw.test.common.Constants.COMPANY_NAME_FOR_TEST_RUN;
 import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 
 public class TransactionManagementPageTest extends BaseTestForSingleLogin {
-
-    @BeforeClass
-    @Override
-    protected void beforeClass() {
-        super.beforeClass();
-        super.openSiteAccordingRole();
-    }
 
     @Ignore("Invalid key=value pair (missing equal-sign) in Authorization header ERROR with Create button")
     @Test

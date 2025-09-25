@@ -35,7 +35,6 @@ public class ReportsPageTest extends BaseTestForSingleLogin {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
-        super.openSiteAccordingRole();
     }
 
     @Ignore("Reports")

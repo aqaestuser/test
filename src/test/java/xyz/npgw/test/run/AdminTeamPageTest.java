@@ -52,7 +52,6 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
-        super.openSiteAccordingRole();
 
 //        super.initPageRequestContext();
 //        log.info("apiKey of current admin user = {}", BusinessUnit.getNewApikey(getPage().request(), getCompanyName(), businessUnit));

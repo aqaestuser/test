@@ -40,7 +40,6 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_FOR_TEST_RUN, MERCHANT_TITLE);
-        super.openSiteAccordingRole();
     }
 
     @Test

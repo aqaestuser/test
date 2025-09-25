@@ -45,7 +45,6 @@ public class TransactionsPageTest extends BaseTestForSingleLogin {
         TestUtils.createBusinessUnits(getApiRequestContext(), getCompanyName(), businessUnitNames);
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
-        super.openSiteAccordingRole();
     }
 
     @Test

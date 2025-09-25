@@ -40,10 +40,7 @@ public abstract class BaseTestForLogout extends BaseTest {
             BrowserUtils.startTracing(browserContext);
         }
 
-        page = browserContext.newPage();
-        page.setDefaultTimeout(ProjectProperties.getDefaultTimeout());
-        page.addLocatorHandler(page.getByText("Loading..."), locator -> {
-        });
+        createBlankPage();
 
         initApiRequestContext();
 

@@ -68,7 +68,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_DELETION_BLOCKED_NAME);
-        super.openSiteAccordingRole();
     }
 
     @Test

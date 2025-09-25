@@ -108,7 +108,6 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         TestUtils.createAcquirer(getApiRequestContext(), CHANGE_STATE_ACQUIRER);
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST);
         TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME_CHANGE_ACTIVITY_TEST, BUSINESS_UNIT_NAME);
-        super.openSiteAccordingRole();
     }
 
     @Test

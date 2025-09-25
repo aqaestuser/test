@@ -33,7 +33,6 @@ public abstract class BaseTestForSingleLogin extends BaseTest {
     protected void beforeClass() {
         super.beforeClass();
         browserContext = BrowserUtils.createContext(browser);
-        createBlankPage();
     }
 
     @BeforeMethod
@@ -47,13 +46,16 @@ public abstract class BaseTestForSingleLogin extends BaseTest {
                 testResult.getMethod().getCurrentInvocationCount(),
                 new SimpleDateFormat("_MMdd_HHmmss").format(new Date()));
 
-        if (page.isClosed()) {
-            createBlankPage();
-            new AboutBlankPage(page).navigate("/dashboard");
-        }
-
         if (ProjectProperties.isTracingMode()) {
             BrowserUtils.startTracing(browserContext);
+        }
+
+        if (page == null) {
+            createBlankPage();
+            openSiteAccordingRole();
+        } else {
+            createBlankPage();
+            new AboutBlankPage(page).navigate("/dashboard");
         }
     }
 

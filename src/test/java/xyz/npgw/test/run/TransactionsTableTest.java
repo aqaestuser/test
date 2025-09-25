@@ -74,7 +74,6 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
     protected void beforeClass() {
         super.beforeClass();
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), getCompanyName(), MERCHANT_TITLE);
-        super.openSiteAccordingRole();
     }
 
     @Test

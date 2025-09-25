@@ -42,7 +42,6 @@ public class DashboardPageTest extends BaseTestForSingleLogin {
         super.beforeClass();
         TestUtils.createCompany(getApiRequestContext(), COMPANY_NAME);
         businessUnit = TestUtils.createBusinessUnit(getApiRequestContext(), COMPANY_NAME, MERCHANT_TITLE);
-        super.openSiteAccordingRole();
     }
 
     @Test

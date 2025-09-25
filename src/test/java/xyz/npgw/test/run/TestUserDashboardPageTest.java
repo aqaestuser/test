@@ -7,7 +7,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -28,13 +27,6 @@ import static xyz.npgw.test.common.Constants.ONE_DATE_FOR_TABLE;
 import static xyz.npgw.test.common.Constants.STATUSES;
 
 public class TestUserDashboardPageTest extends BaseTestForSingleLogin {
-
-    @BeforeClass
-    @Override
-    protected void beforeClass() {
-        super.beforeClass();
-        super.openSiteAccordingRole();
-    }
 
     @Test
     @TmsLink("151")
