@@ -60,8 +60,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
             "Enter challenge URL",
             "Enter fingerprint URL",
             "Enter resource URL",
-            "Enter notification queue",
-            "Enter acquirer config"
+            "Enter notification queue"
     );
 
     private static final SystemConfig DEFAULT_CONFIG = new SystemConfig();
@@ -296,6 +295,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(setupAcquirerMidDialog.getCreateButton()).isDisabled();
 
         Allure.step("Verify: all placeholders are correct for each field");
+        setupAcquirerMidDialog.getAllPlaceholders().forEach(System.out::println);
         assertEquals(setupAcquirerMidDialog.getAllPlaceholders(), PLACEHOLDER_LIST);
 
         Allure.step("Verify: the Status Switch visible and contains switch Active&Inactive");
@@ -307,7 +307,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         SuperAcquirersPage acquirersPage = setupAcquirerMidDialog
                 .clickCloseButton();
 
-        Allure.step("Verify: the 'Add acquirer' dialog is no longer visible");
+        Allure.step("Verify: the 'Setup acquirer MID' dialog is no longer visible");
         assertThat(acquirersPage.getSetupAcquirerMidDialog()).isHidden();
     }
 
@@ -453,7 +453,9 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .fillResourceUrlField(ACQUIRER.getSystemConfig().resourceUrl())
                 .fillNotificationQueueField(ACQUIRER.getSystemConfig().notificationQueue())
                 .clickCheckboxCurrency(ACQUIRER.getCurrency())
-                .fillAcquirerConfigField(ACQUIRER.getAcquirerConfig())
+                .clickEditAcquirerConfigButton()
+                .fillAcquirerConfigArea(ACQUIRER.getAcquirerConfig())
+                .clickSaveButton()
                 .clickCreateButton();
 
         Allure.step("Verify: The 'Add acquirer' dialog is no longer visible");
@@ -493,8 +495,8 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .hasText(ACQUIRER.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(acquirerRow, "Acquirer config"))
-                .hasText(ACQUIRER.getAcquirerConfig());
+        assertThat(acquirersPage.getTable().getCellInput(acquirerRow, "Acquirer config"))
+                .hasValue(ACQUIRER.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
         assertThat(acquirersPage.getTable().getCell(acquirerRow, "System config"))
@@ -547,7 +549,9 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .fillFingerprintUrlField(ACQUIRER_EDITED.getSystemConfig().fingerprintUrl())
                 .fillResourceUrlField(ACQUIRER_EDITED.getSystemConfig().resourceUrl())
                 .fillNotificationQueueField(ACQUIRER_EDITED.getSystemConfig().notificationQueue())
-                .fillAcquirerConfigField(ACQUIRER_EDITED.getAcquirerConfig())
+                .clickEditAcquirerConfigButton()
+                .fillAcquirerConfigArea(ACQUIRER_EDITED.getAcquirerConfig())
+                .clickSaveButton()
                 .clickStatusRadiobutton(ACQUIRER_EDITED.getStatus())
                 .clickCheckboxCurrency(ACQUIRER_EDITED.getCurrency())
                 .clickSaveChangesButton();
@@ -579,8 +583,8 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
                 .hasText(ACQUIRER_EDITED.getCurrency());
 
         Allure.step("Verify: Acquirer config matches expected");
-        assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "Acquirer config"))
-                .hasText(ACQUIRER_EDITED.getAcquirerConfig());
+        assertThat(acquirersPage.getTable().getCellInput(editedAcquirerRow, "Acquirer config"))
+                .hasValue(ACQUIRER_EDITED.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
         assertThat(acquirersPage.getTable().getCell(editedAcquirerRow, "System config"))

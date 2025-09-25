@@ -24,6 +24,7 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
     private final Locator resourceUrlField = getByPlaceholder("Enter resource URL");
     private final Locator notificationQueueField = getByPlaceholder("Enter notification queue");
     private final Locator acquirerConfigField = getByPlaceholder("Enter acquirer config");
+    private final Locator editAcquirerConfigButton = getDialog().getByTestId("EditConfigButton");
     private final Locator acquirerCodeField = getByPlaceholder("Enter acquirer code");
     private final Locator acquirerDisplayNameField = getByPlaceholder("Enter display name");
     private final Locator acquirerMidField = getByPlaceholder("Enter MID");
@@ -94,6 +95,13 @@ public abstract class AcquirerDialog<CurrentDialogT extends AcquirerDialog<Curre
         getByRole(AriaRole.RADIO, currency).check();
 
         return (CurrentDialogT) this;
+    }
+
+    @Step("Click 'Edit acquirer config' button")
+    public EditAcquirerConfigDialog<CurrentDialogT> clickEditAcquirerConfigButton() {
+        editAcquirerConfigButton.click();
+
+        return new EditAcquirerConfigDialog<>(getPage(), (CurrentDialogT) this);
     }
 
     @Step("Enter acquirer config '{acquirerConfig}'")

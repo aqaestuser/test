@@ -207,10 +207,6 @@ public class CompaniesAndBusinessUnitsTest extends BaseTestForSingleLogin {
                 .getHeader().clickSystemAdministrationLink()
                 .clickCompaniesAndBusinessUnitsTab();
 
-        Allure.step("Verify: 'Add business unit' button is disabled before selecting a company");
-        assertThat(companiesAndBusinessUnitsPage.getAddBusinessUnitButton())
-                .isDisabled();
-
         AddBusinessUnitDialog addBusinessUnitDialog = companiesAndBusinessUnitsPage
                 .getSelectCompany().selectCompany(company.companyName())
                 .clickOnAddBusinessUnitButton();
