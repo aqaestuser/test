@@ -9,7 +9,6 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.ControlType;
@@ -318,7 +317,6 @@ public class FraudControlTest extends BaseTestForSingleLogin {
                 .hasText(FRAUD_CONTROL.toString());
     }
 
-    @Ignore("no tooltips atm")
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1001")
     @Epic("System/Fraud control")
@@ -331,46 +329,23 @@ public class FraudControlTest extends BaseTestForSingleLogin {
                 .getSelectCompany().selectCompany(COMPANY_NAME)
                 .getSelectBusinessUnit().selectBusinessUnit(BUSINESS_UNIT_NAME);
 
-        Locator editIconTooltip = superFraudControlPage
-                .getTableControls().hoverOverEditIcon(FRAUD_CONTROL.getControlName())
-                .getTableControls().getTooltip();
+        Locator actionsListInactive = superFraudControlPage
+                .getTableControls().getActionsList(FRAUD_CONTROL_INACTIVE.getControlName());
 
-        Allure.step("Verify that Edit icon Tooltip is presented on Control table");
-        assertThat(editIconTooltip).isVisible();
+        Allure.step("Verify Actions list content on Control table for inactive control");
+        assertThat(actionsListInactive).containsText("Edit control");
+        assertThat(actionsListInactive).containsText("Activate control");
+        assertThat(actionsListInactive).containsText("Delete control");
+        assertThat(actionsListInactive).containsText("Connect control to business unit");
 
-        assertThat(editIconTooltip).hasText("Edit control");
+        Locator actionsListActive = superFraudControlPage
+                .getTableControls().getActionsList(FRAUD_CONTROL.getControlName());
 
-        Locator activateIconTooltip = superFraudControlPage
-                .getTableControls().hoverOverActivateControlIcon(FRAUD_CONTROL_INACTIVE.getControlName())
-                .getTableControls().getTooltip();
-
-        Allure.step("Verify that Activate icon Tooltip is presented on Control table");
-        assertThat(activateIconTooltip).isVisible();
-        assertThat(activateIconTooltip).hasText("Activate control");
-
-        Locator deactivateIconTooltip = superFraudControlPage
-                .getTableControls().hoverOverDeactivateControlIcon(FRAUD_CONTROL.getControlName())
-                .getTableControls().getTooltip();
-
-        Allure.step("Verify that Deactivate icon Tooltip is presented on Control table");
-        assertThat(deactivateIconTooltip).isVisible();
-        assertThat(deactivateIconTooltip).hasText("Deactivate control");
-
-        Locator deleteIconTooltip = superFraudControlPage
-                .getTableControls().hoverOverDeleteIcon(FRAUD_CONTROL.getControlName())
-                .getTableControls().getTooltip();
-
-        Allure.step("Verify that Delete icon Tooltip is presented on Control table");
-        assertThat(deleteIconTooltip).isVisible();
-        assertThat(deleteIconTooltip).hasText("Delete control");
-
-        Locator connectControlIconTooltip = superFraudControlPage
-                .getTableControls().hoverOverConnectControlIcon(FRAUD_CONTROL.getControlName())
-                .getTableControls().getTooltip();
-
-        Allure.step("Verify that Connect control icon Tooltip is presented on Control table");
-        assertThat(connectControlIconTooltip).isVisible();
-        assertThat(connectControlIconTooltip).hasText("Connect control to business unit");
+        Allure.step("Verify Actions list content on Control table for active control");
+        assertThat(actionsListActive).containsText("Edit control");
+        assertThat(actionsListActive).containsText("Deactivate control");
+        assertThat(actionsListActive).containsText("Delete control");
+        assertThat(actionsListActive).containsText("Connect control to business unit");
     }
 
     @Test(dependsOnMethods = {"testBusinessUnitControlTableEntriesSorting"})
@@ -428,7 +403,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
 
     @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl",
             "testCancelDeactivationFraudControl", "testCancelEditingFraudControl",
-            /*"testTooltipsForActionsControlTable", "testBusinessUnitControlTableEntriesSorting",*/
+            "testTooltipsForActionsControlTable", /*"testBusinessUnitControlTableEntriesSorting",*/
             "testVerifyWarningModalWindowChangeActivityForControlTable"})
     @TmsLink("949")
     @Epic("System/Fraud control")
