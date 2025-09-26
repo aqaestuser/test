@@ -126,14 +126,14 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
         return self();
     }
 
-    @Step("Check 'condensed'")
+    @Step("Check 'Condensed'")
     public CurrentPageT checkCondensed() {
         condensedDensity.check();
 
         return self();
     }
 
-    @Step("Check 'normal'")
+    @Step("Check 'Normal'")
     public CurrentPageT checkNormal() {
         normalDensity.check();
 

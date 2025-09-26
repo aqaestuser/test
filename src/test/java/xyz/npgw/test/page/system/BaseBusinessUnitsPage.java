@@ -5,10 +5,8 @@ import com.microsoft.playwright.Page;
 import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import xyz.npgw.test.page.base.HeaderPage;
 
-@Log4j2
 @Getter
 public abstract class BaseBusinessUnitsPage<CurrentPageT extends HeaderPage<CurrentPageT>>
         extends HeaderPage<CurrentPageT> {

@@ -47,3 +47,4 @@ browser.properties
 docker-compose*.yml
 downloads/
 /.run/
+durations.csv

@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/java:v1.51.0-noble
+FROM mcr.microsoft.com/playwright/java:v1.53.0
 
 # Usage:
 # 1. build jar:

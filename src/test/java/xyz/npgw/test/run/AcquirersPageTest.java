@@ -294,7 +294,6 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(setupAcquirerMidDialog.getCreateButton()).isDisabled();
 
         Allure.step("Verify: all placeholders are correct for each field");
-        setupAcquirerMidDialog.getAllPlaceholders().forEach(System.out::println);
         assertEquals(setupAcquirerMidDialog.getAllPlaceholders(), PLACEHOLDER_LIST);
 
         Allure.step("Verify: the Status Switch visible and contains switch Active&Inactive");

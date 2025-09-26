@@ -14,6 +14,7 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -417,6 +418,7 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
         assertThat(transactionsPage.getTable().getFirstRowCell("NPGW reference")).hasText("12345");
     }
 
+    @Ignore("AUTH type refundable per operation")
     @Test
     @TmsLink("818")
     @Epic("Transactions")
