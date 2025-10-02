@@ -79,7 +79,6 @@ public abstract class BaseDialog<
         return getReturnPage();
     }
 
-    @Step("Get Modal window title")
     public Locator getModalWindowHeaderTitle() {
         dialogHeader.waitFor();
 

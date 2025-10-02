@@ -11,6 +11,8 @@ import xyz.npgw.test.page.dialog.control.DeleteControlDialog;
 import xyz.npgw.test.page.dialog.control.EditControlDialog;
 import xyz.npgw.test.page.system.SuperFraudControlPage;
 
+import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+
 public class ControlsTableComponent extends BaseTableComponent<SuperFraudControlPage> {
 
     private final Locator actionsList = getByRole(AriaRole.DIALOG);
@@ -37,7 +39,11 @@ public class ControlsTableComponent extends BaseTableComponent<SuperFraudControl
 
     @Step("Click 'List icon' button")
     public void clickListIconButton(String controlName) {
-        getRow(controlName).locator("//*[@data-icon='list']/..").click();
+        Locator button = getRow(controlName).locator("//*[@data-icon='list']/..");
+        assertThat(button).hasAttribute("aria-expanded", "false");
+        button.waitFor();
+        button.click();
+        assertThat(button).hasAttribute("aria-expanded", "true");
     }
 
     @Step("Click 'Edit control' button")

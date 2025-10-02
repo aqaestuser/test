@@ -6,6 +6,7 @@ import com.microsoft.playwright.options.AriaRole;
 import io.qameta.allure.Step;
 import xyz.npgw.test.common.entity.Transaction;
 import xyz.npgw.test.common.util.TestUtils;
+import xyz.npgw.test.page.dialog.transactions.CancelTransactionDialog;
 import xyz.npgw.test.page.dialog.transactions.RefundTransactionDialog;
 import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent<CurrentPageT> {
@@ -169,4 +171,41 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
                 .map(TestUtils::mapToTransaction)
                 .toList();
     }
+
+    @Step("Click 'Cancel' button for transaction {transactionId}")
+    public CancelTransactionDialog clickCancelTransactionButton(String transactionId) {
+        getRawByTransactionId(transactionId).getByTestId("CancelTransactionButton").click();
+
+        return new CancelTransactionDialog(getPage());
+    }
+
+    public Locator getRawByTransactionId(String transactionId) {
+        do {
+            if (locator("tr[data-key]").all().stream()
+                    .anyMatch(x -> {
+                        String key = x.getAttribute("data-key");
+                        return key != null && key.contains(transactionId);
+                    })) {
+                return locator("tr[data-key*='%s']".formatted(transactionId));
+            }
+        } while (goToNextPage());
+
+        throw new NoSuchElementException(
+                "Row with data-key containing '" + transactionId + "' not found on any page."
+        );
+    }
+
+    @Step("Get cell for column '{columnHeader}' in transaction {transactionId}")
+    public Locator getCellByTransactionId(String transactionId, String columnHeader) {
+        return getCell(getRawByTransactionId(transactionId), columnHeader);
+    }
+
+    @Step("Click 'NPGW reference' for transaction {transactionId} to open details")
+    public TransactionDetailsDialog clickTransactionId(String transactionId) {
+        getRawByTransactionId(transactionId).locator(columnSelector("NPGW reference")).click();
+
+        return new TransactionDetailsDialog(getPage());
+    }
 }
+
+

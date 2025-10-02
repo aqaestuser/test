@@ -95,7 +95,7 @@ public class GatewayTableComponent extends BaseTableComponent<SuperGatewayPage> 
         return new DeactivateBusinessUnitAcquirerDialog(getPage());
     }
 
-    @Step("Hover over 'Delete acquirer MID' button for {name}")
+    @Step("Hover over 'Delete acquirer MID' button for {priority} priority")
     public SuperGatewayPage hoverOverDeleteAcquirerMidButton(String priority) {
         getDeleteAcquirerMidButton(priority).hover();
 

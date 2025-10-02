@@ -29,6 +29,7 @@
             <class name="xyz.npgw.test.run.UnauthenticatedLoginPageTest"/>
             <class name="xyz.npgw.test.run.TestAdminCompaniesAndBusinessUnitsTest"/>
             <class name="xyz.npgw.test.run.TransactionManagementPageTest"/>
+            <class name="xyz.npgw.test.run.TransactionFlowTest"/>
         </classes>
     </test>
 </suite>

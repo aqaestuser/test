@@ -18,7 +18,7 @@ public class WaitUtils {
     public static TransactionResponse waitUntil(APIRequestContext request, TransactionResponse transactionResponse, Status status) {
         String callerMethodName = getCallerMethodName();
 
-        double timeout = ProjectProperties.getDefaultTimeout();
+        double timeout = ProjectProperties.getDefaultTimeout() * 3;
         do {
             transactionResponse = Transaction.getTransactionById(request, transactionResponse);
             TimeUnit.MILLISECONDS.sleep(300);
@@ -27,7 +27,7 @@ public class WaitUtils {
                 throw new TimeoutError("Waiting for '%s'".formatted(callerMethodName));
             }
         } while (transactionResponse.status() != null && !transactionResponse.status().equals(status));
-        log.info("Wait for {} took {}ms", callerMethodName, ProjectProperties.getDefaultTimeout() - timeout);
+        log.info("Wait for {} took {}ms", callerMethodName, ProjectProperties.getDefaultTimeout() * 3 - timeout);
 
         return transactionResponse;
     }

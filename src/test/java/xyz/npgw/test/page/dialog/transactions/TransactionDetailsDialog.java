@@ -23,6 +23,7 @@ public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, 
 
     private final Locator paymentLifecycleTable = getByLabelExact("payment lifecycle table");
     private final Locator paymentLifecycleType = paymentLifecycleTable.getByRole(AriaRole.ROWHEADER);
+    private final Locator lastLifecycleStatus = paymentLifecycleTable.locator("[data-first='true'] span");
 
     private final Locator cardDetailsRegion = getByRole(AriaRole.REGION, "Card details");
     private final Locator cardDetailsLabels = cardDetailsRegion.locator(".labelText");

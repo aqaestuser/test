@@ -36,6 +36,10 @@ public class SaleTransactionUtils {
         TransactionResponse transactionResponse = createPendingTransaction(
                 request, amount, businessUnit, externalTransactionId);
 
+        if (transactionResponse.paymentUrl() == null) {
+            throw new RuntimeException("create pending SALE transaction returned null paymentUrl");
+        }
+
         TestUtils.pay(playwright, transactionResponse);
 
         return WaitUtils.waitUntil(request, transactionResponse, Status.SUCCESS);

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.Type;
+import xyz.npgw.test.common.util.TestUtils;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,7 @@ public class Transaction {
     private String redirectUrlFail = "https://hkdk.events/zj36a72tes7hhz";
 
     public static TransactionResponse create(APIRequestContext request, Transaction transaction) {
+        transaction.setExternalTransactionId(TestUtils.now().replace(".", "") + transaction.externalTransactionId);
         APIResponse response = request.post("/merchant-v1/transaction?async=true",
                 RequestOptions.create().setData(transaction));
         log.response(response, "create %s %s transaction %.2f%s for %s".formatted(
@@ -55,6 +57,10 @@ public class Transaction {
                 transaction.amount / 100.0,
                 transaction.currency,
                 transaction.merchantId));
+
+        if (response.status() / 100 != 2) {
+            throw new RuntimeException("Status code is not group 200.");
+        }
 
         return new Gson().fromJson(response.text(), TransactionResponse.class);
     }

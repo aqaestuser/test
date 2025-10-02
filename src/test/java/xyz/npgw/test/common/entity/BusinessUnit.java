@@ -9,6 +9,7 @@ import lombok.CustomLog;
 import lombok.SneakyThrows;
 import xyz.npgw.test.common.ProjectProperties;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 import static xyz.npgw.test.common.util.TestUtils.encode;
@@ -26,6 +27,14 @@ public record BusinessUnit(
         APIResponse response = request.post("portal-v1/company/%s/merchant".formatted(encode(companyName)),
                 RequestOptions.create().setData(new BusinessUnit(merchantTitle)));
         log.response(response, "create merchant for company %s".formatted(companyName));
+
+        if (response.status() == 422) {
+            return Arrays.stream(getAll(request, companyName))
+                    .filter(m -> m.merchantTitle.equals(merchantTitle))
+                    .findFirst()
+                    .orElseThrow();
+        }
+
         return new Gson().fromJson(response.text(), BusinessUnit.class);
     }
 

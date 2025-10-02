@@ -33,6 +33,10 @@ public class AuthTransactionUtils {
         TransactionResponse transactionResponse = createPendingTransaction(
                 request, amount, businessUnit, externalTransactionId);
 
+        if (transactionResponse.paymentUrl() == null) {
+            throw new RuntimeException("create pending AUTH transaction returned null paymentUrl");
+        }
+
         TestUtils.pay(playwright, transactionResponse);
 
         return Transaction.getTransactionById(request, transactionResponse);
