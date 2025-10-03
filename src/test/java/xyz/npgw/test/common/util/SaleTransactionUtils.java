@@ -47,29 +47,44 @@ public class SaleTransactionUtils {
 
     //only for settled transactions
     @SneakyThrows
-    public static TransactionResponse createRefundTransaction(Playwright playwright, APIRequestContext request,
-                                                              int amount, BusinessUnit businessUnit,
-                                                              String externalTransactionId) {
+    public static TransactionResponse createFailedFullRefundAttemptTransaction(Playwright playwright, APIRequestContext request,
+                                                                               int amount, BusinessUnit businessUnit,
+                                                                               String externalTransactionId) {
 
         TransactionResponse transactionResponse = createSuccessTransaction(
                 playwright, request, amount, businessUnit, externalTransactionId);
 
         Transaction.refund(request, transactionResponse, amount);
 
-        return WaitUtils.waitUntil(request, transactionResponse, Status.REFUND);
+        return WaitUtils.waitUntil(request, transactionResponse, Status.SUCCESS);
+    }
+
+    @SneakyThrows
+    public static TransactionResponse createThreeFailedRefundAttemptTransaction(Playwright playwright, APIRequestContext request,
+                                                                                int amount, BusinessUnit businessUnit,
+                                                                                String externalTransactionId) {
+
+        TransactionResponse transactionResponse = createSuccessTransaction(
+                playwright, request, amount, businessUnit, externalTransactionId);
+
+        Transaction.refund(request, transactionResponse, 1);
+        Transaction.refund(request, transactionResponse, 2);
+        Transaction.refund(request, transactionResponse, 3);
+
+        return WaitUtils.waitUntil(request, transactionResponse, Status.SUCCESS);
     }
 
     //only for settled transactions
     @SneakyThrows
-    public static TransactionResponse createPartialRefundTransaction(Playwright playwright, APIRequestContext request,
-                                                                     int amount, BusinessUnit businessUnit,
-                                                                     String externalTransactionId) {
+    public static TransactionResponse createOneFailedPartialRefundTransaction(Playwright playwright, APIRequestContext request,
+                                                                              int amount, BusinessUnit businessUnit,
+                                                                              String externalTransactionId) {
 
         TransactionResponse transactionResponse = createSuccessTransaction(
                 playwright, request, amount, businessUnit, externalTransactionId);
 
         Transaction.refund(request, transactionResponse, amount / 2);
 
-        return WaitUtils.waitUntil(request, transactionResponse, Status.PARTIAL_REFUND);
+        return WaitUtils.waitUntil(request, transactionResponse, Status.SUCCESS);
     }
 }

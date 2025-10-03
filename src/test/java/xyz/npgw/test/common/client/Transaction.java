@@ -104,8 +104,8 @@ public class Transaction {
             APIRequestContext request, TransactionResponse transactionResponse, String operationId) {
         APIResponse response = request.post("/merchant-v1/transaction/%s/refund/capture/%s"
                 .formatted(transactionResponse.transactionId(), operationId));
-        log.response(response, "refund capture operation %s for %s"
-                .formatted(operationId, transactionResponse.externalTransactionId()));
+        log.response(response, "%s refund capture operation %s for %s"
+                .formatted(transactionResponse.operationList(), operationId, transactionResponse.externalTransactionId()));
 
         return new Gson().fromJson(response.text(), TransactionResponse.class);
     }
