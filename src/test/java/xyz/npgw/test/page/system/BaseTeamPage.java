@@ -63,7 +63,10 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
                 throw new TimeoutError("Waiting for user '%s' presence".formatted(email));
             }
         }
-        log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("User presence wait took {}ms", waitTime);
+        }
         clickRefreshDataButton();
 
         return self();
@@ -79,7 +82,10 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
                 throw new TimeoutError("Waiting for user '%s' absence".formatted(email));
             }
         }
-        log.info("User absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("User absence wait took {}ms", waitTime);
+        }
         clickRefreshDataButton();
 
         return self();
@@ -96,7 +102,10 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
                 throw new TimeoutError("Waiting for user '%s' activation".formatted(email));
             }
         }
-        log.info("User activation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("User activation wait took {}ms", waitTime);
+        }
         clickRefreshDataButton();
 
         return self();
@@ -113,7 +122,10 @@ public abstract class BaseTeamPage<CurrentPageT extends HeaderPage<CurrentPageT>
                 throw new TimeoutError("Waiting for user '%s' deactivation".formatted(email));
             }
         }
-        log.info("User deactivation wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("User deactivation wait took {}ms", waitTime);
+        }
         clickRefreshDataButton();
 
         return self();

@@ -114,7 +114,10 @@ public final class TestUtils {
                 throw new TimeoutError("Waiting for user '%s' presence".formatted(email));
             }
         }
-        log.info("User presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("User presence wait took {}ms", waitTime);
+        }
     }
 
     @SneakyThrows
@@ -128,7 +131,10 @@ public final class TestUtils {
                 throw new TimeoutError("Waiting for company '%s' present".formatted(companyName));
             }
         }
-        log.info("Company present wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("Company present wait took {}ms", waitTime);
+        }
     }
 
     @SneakyThrows
@@ -142,7 +148,10 @@ public final class TestUtils {
                 throw new TimeoutError("Waiting for Fraud Control '%s' present".formatted(fraudControlName));
             }
         }
-        log.info("Fraud Control present wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("Fraud Control present wait took {}ms", waitTime);
+        }
     }
 
     public static Transaction mapToTransaction(List<String> cells) {

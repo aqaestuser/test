@@ -96,7 +96,10 @@ public class SuperCompaniesAndBusinessUnitsPage extends BaseBusinessUnitsPage<Su
                 throw new TimeoutError("Waiting for company '%s' absence".formatted(companyName));
             }
         }
-        log.info("Company absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("Company absence wait took {}ms", waitTime);
+        }
 
         return this;
     }

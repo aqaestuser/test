@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/playwright/java:v1.53.0
 # mvn clean package -DskipTests
 #
 # 2. build image:
-#   docker build -t ui-test:latest
+#   docker build -t ui-test:latest .
 #
 # 3. run container:
 #   docker run ui-test:latest

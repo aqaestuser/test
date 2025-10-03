@@ -27,7 +27,10 @@ public class WaitUtils {
                 throw new TimeoutError("Waiting for '%s'".formatted(callerMethodName));
             }
         } while (transactionResponse.status() != null && !transactionResponse.status().equals(status));
-        log.info("Wait for {} took {}ms", callerMethodName, ProjectProperties.getDefaultTimeout() * 3 - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() * 3 - timeout;
+        if (waitTime > 0) {
+            log.info("Wait for {} took {}ms", callerMethodName, waitTime);
+        }
 
         return transactionResponse;
     }

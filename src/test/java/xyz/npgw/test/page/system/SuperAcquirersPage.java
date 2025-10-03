@@ -67,7 +67,10 @@ public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
                 throw new TimeoutError("Waiting for acquirer '%s' presence".formatted(acquirerName));
             }
         }
-        log.info("Acquirer presence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("Acquirer presence wait took {}ms", waitTime);
+        }
         refreshDataButton.click();
 
         return this;
@@ -83,7 +86,10 @@ public class SuperAcquirersPage extends HeaderPage<SuperAcquirersPage>
                 throw new TimeoutError("Waiting for acquirer '%s' absence".formatted(acquirerName));
             }
         }
-        log.info("Acquirer absence wait took {}ms", ProjectProperties.getDefaultTimeout() - timeout);
+        double waitTime = ProjectProperties.getDefaultTimeout() - timeout;
+        if (waitTime > 0) {
+            log.info("Acquirer absence wait took {}ms", waitTime);
+        }
         refreshDataButton.click();
 
         return this;

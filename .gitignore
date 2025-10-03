@@ -44,7 +44,6 @@ browser.properties
 .env
 .properties
 *.dockerfile
-docker-compose*.yml
 downloads/
 /.run/
 durations.csv

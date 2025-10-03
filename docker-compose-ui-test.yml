@@ -1,0 +1,8 @@
+services:
+
+  ui-test:
+    image: npgw/ui-test:latest
+    container_name: ui-test
+    build:
+      context: .
+      dockerfile: Dockerfile
