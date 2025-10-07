@@ -35,7 +35,7 @@ public class SelectStatusComponent<CurrentPageT extends HeaderPage<?>> extends B
 
     @Step("Click 'Status' Selector")
     public CurrentPageT clickSelector() {
-        statusValue.click();
+        statusValue.dispatchEvent("click");
 
         return currentPage;
     }

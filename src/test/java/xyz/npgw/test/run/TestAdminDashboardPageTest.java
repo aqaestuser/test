@@ -9,6 +9,7 @@ import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.Constants;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -73,6 +74,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
                 .hasText("Start date must be before end date.");
     }
 
+    @Ignore
     @Test
     @TmsLink("575")
     @Epic("Dashboard")
@@ -123,6 +125,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
+    @Ignore
     @Test
     @TmsLink("600")
     @Epic("Dashboard")

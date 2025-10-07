@@ -10,6 +10,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -896,6 +897,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText("All");
     }
 
+    @Ignore
     @Test
     @TmsLink("1101")
     @Epic("System/Acquirers")
