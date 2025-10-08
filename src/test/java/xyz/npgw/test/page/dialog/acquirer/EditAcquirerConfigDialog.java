@@ -33,7 +33,11 @@ public class EditAcquirerConfigDialog<ReturnPageT extends BaseModel>
 
     @Step("Fill acquirer config area")
     public EditAcquirerConfigDialog<ReturnPageT> fillAcquirerConfigArea(String acquirerConfig) {
-        enterConfigArea.fill(acquirerConfig);
+
+        getPage().getByText("root:").hover();
+        getPage().getByRole(AriaRole.IMG).nth(2).click();
+        getPage().locator("[id=\"_textarea\"]").fill(acquirerConfig);
+        getPage().getByRole(AriaRole.IMG).nth(1).click();
 
         return this;
     }
