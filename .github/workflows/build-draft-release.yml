@@ -1,0 +1,59 @@
+name: Build draft release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+
+jobs:
+  build-draft-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get RELEASE_VERSION
+        run: |
+          if [[ -z "${{ github.event.inputs.version }}" ]]; then
+            echo "Error: No version passed"
+            exit 1
+          fi
+
+          RELEASE_VERSION="${{ github.event.inputs.version }}"
+          echo "Release version (name): $RELEASE_VERSION"
+          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Set version to pom.xml
+        run: |
+          sed -i "s/<revision>.*<\/revision>/<revision>${{ env.RELEASE_VERSION }}<\/revision>/g" ./pom.xml
+
+      - name: Package
+        run: mvn clean package -DskipTests
+
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_VERSION }}
+          draft: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload built JAR to draft release
+        run: |
+          ARTIFACT=$(ls target/*-with-dependencies.jar | head -n 1)
+          echo "Uploading build artifact: $ARTIFACT"
+          gh release upload ${{ env.RELEASE_VERSION }} "$ARTIFACT" --clobber
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
