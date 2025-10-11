@@ -32,10 +32,10 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
         this.cardTypeImage = locator("img[alt='logo']");
     }
 
-    @Override
-    protected CurrentPageT getCurrentPage() {
-        return currentPage;
-    }
+//    @Override
+//    protected CurrentPageT getCurrentPage() {
+//        return currentPage;
+//    }
 
     @Step("Click on the first transaction from the table")
     public TransactionDetailsDialog clickOnFirstTransaction() {
@@ -56,7 +56,7 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
     }
 
     public List<LocalDateTime> getAllCreationDates() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
         return getColumnValuesFromAllPages("Creation Date (GMT)", s -> LocalDateTime.parse(s, formatter));
     }
@@ -207,5 +207,3 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
         return new TransactionDetailsDialog(getPage());
     }
 }
-
-

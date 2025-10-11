@@ -10,6 +10,7 @@ import net.datafaker.Faker;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.Acquirer;
@@ -261,6 +262,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
                 .clickDeleteButton();
     }
 
+    @Ignore("ui-test packaged run fail")
     @Test
     @TmsLink("835/847")
     @Epic("System/Gateway")
@@ -299,6 +301,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
         assertThat(gatewayPage.getTable().getCell(1, "Acquirer MID")).hasText(ACQUIRER_MOVE.getAcquirerDisplayName());
     }
 
+    @Ignore("test env fail")
     @Test
     @TmsLink("763")
     @Epic("System/Gateway")

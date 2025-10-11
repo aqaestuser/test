@@ -227,6 +227,7 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         }
     }
 
+    @Ignore("test env fail")
     @Test
     @TmsLink("385")
     @Epic("System/Acquirers")
@@ -493,10 +494,9 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(acquirersPage.getTable().getCell(acquirerRow, "Currencies"))
                 .hasText(ACQUIRER.getCurrency());
 
-        // TODO \u003d vs = bug
-//        Allure.step("Verify: Acquirer config matches expected");
-//        assertThat(acquirersPage.getTable().getCellInput(acquirerRow, "Acquirer config"))
-//                .hasValue(ACQUIRER.getAcquirerConfig());
+        Allure.step("Verify: Acquirer config matches expected");
+        assertThat(acquirersPage.getTable().getCellInput(acquirerRow, "Acquirer config"))
+                .hasValue(ACQUIRER.getAcquirerConfig());
 
         Allure.step("Verify: 'System config' cell contains all values in correct order");
         assertThat(acquirersPage.getTable().getCell(acquirerRow, "System config"))

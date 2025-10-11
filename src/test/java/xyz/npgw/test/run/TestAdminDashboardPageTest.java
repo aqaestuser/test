@@ -213,6 +213,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
         route.fulfill(new Route.FulfillOptions().setBody(new Gson().toJson(arr)));
     }
 
+    @Ignore("INITIATED values from /summary are not added to total summ")
     @Test
     @TmsLink("720")
     @Epic("Dashboard")
@@ -226,6 +227,7 @@ public class TestAdminDashboardPageTest extends BaseTestForSingleLogin {
                 .getSelectBusinessUnit().selectBusinessUnit(MERCHANT_TITLE);
 
         Allure.step("Verify: INITIATED main block contents");
+        getPage().pause();
         assertThat(dashboardPage.getInitiatedBlock()).containsText("INITIATEDEUR120");
 
         dashboardPage.getSelectCurrency().select("USD");

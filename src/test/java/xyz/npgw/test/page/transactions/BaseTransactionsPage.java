@@ -390,7 +390,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
         List<Transaction> transactions = new ArrayList<>();
 
         String[] lines = text.split("\\R");
-        Pattern dateTypePattern = Pattern.compile("(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2})\\s+(AUTH|SALE)");
+        Pattern dateTypePattern = Pattern.compile("(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2}:\\d{2})\\s+(AUTH|SALE)");
         Pattern amountLinePattern = Pattern.compile("^(\\S+) ([,0-9]*\\.\\d{2}) (\\w+) (\\w+) (\\w+)$");
 
         String creationDate = null;
@@ -414,7 +414,7 @@ public abstract class BaseTransactionsPage<CurrentPageT extends BaseTransactions
             Matcher amountMatcher = amountLinePattern.matcher(line);
             if (amountMatcher.find() && creationDate != null) {
                 String fullMiddleText = String.join("", middleLines);
-                String npgwReference = "";
+                String npgwReference;
                 String businessUnitReference = "";
 
                 if (fullMiddleText.length() > 207) {

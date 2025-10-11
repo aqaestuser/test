@@ -24,7 +24,7 @@ public class Acquirer {
     @Builder.Default
     private String acquirerCode = "NGenius";
     @Builder.Default
-    private String acquirerConfig = new Gson().toJson(new AcquirerConfig());
+    private String acquirerConfig = new Gson().newBuilder().disableHtmlEscaping().create().toJson(new AcquirerConfig());
     @Builder.Default
     private Currency[] currencyList = new Currency[]{Currency.USD, Currency.EUR};
     @Builder.Default
