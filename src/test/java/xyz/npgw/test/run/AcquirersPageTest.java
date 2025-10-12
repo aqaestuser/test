@@ -898,7 +898,6 @@ public class AcquirersPageTest extends BaseTestForSingleLogin {
         assertThat(acquirersPage.getSelectStatus().getStatusValue()).hasText("All");
     }
 
-    @Ignore
     @Test
     @TmsLink("1101")
     @Epic("System/Acquirers")

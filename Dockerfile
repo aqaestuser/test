@@ -17,6 +17,10 @@ FROM mcr.microsoft.com/playwright/java:v1.53.0
 USER root
 WORKDIR /
 
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jre-headless && \
+    apt-get clean;
+
 ENV DOCKER_RUN=1
 
 ENV PROJECT_PROPERTIES="setBaseURL=https://test.npgw.xyz;setEmail=test@email.com;setPassword=Qwerty123!;setTracingMode=false;setVideoMode=false;setCloseBrowserIfError=true;setColorScheme=DARK;setArtefactDir=target/artefact;setDefaultTimeout=5000;setAdditionalRetries=0"
@@ -26,7 +30,9 @@ ENV PLAYWRIGHT_OPTIONS_LAUNCH="setHeadless=;setSlowMo=;setArgs=;setEnv="
 ENV PLAYWRIGHT_OPTIONS_CONTEXT="setLocale=en-GB;setTimezoneId=Europe/Paris;setColorScheme=DARK;setViewportSize=1920,964;setBaseURL=https://test.npgw.xyz;setRecordVideoDir=;setRecordVideoSize="
 #ENV PLAYWRIGHT_OPTIONS_TRACING="setName=;setScreenshots=true;setSnapshots=true;setSources=true;setTitle="
 
+VOLUME /tmp
+
 COPY target/npgw-ui-test-*-jar-with-dependencies.jar /npgw-ui-test-jar-with-dependencies.jar
 COPY testng.xml .
 
-ENTRYPOINT ["java", "-jar", "npgw-ui-test-jar-with-dependencies.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar npgw-ui-test-jar-with-dependencies.jar"]

@@ -78,7 +78,7 @@ public class DashboardPageTest extends BaseTestForSingleLogin {
                 .hasText("Start date must be before end date.");
     }
 
-    @Ignore
+    @Ignore("failing due to negative values in summary")
     @Test
     @TmsLink("575")
     @Epic("Dashboard")
@@ -135,7 +135,6 @@ public class DashboardPageTest extends BaseTestForSingleLogin {
         assertTrue(dashboardPage.getRequestData().contains(businessUnit.merchantId()));
     }
 
-    @Ignore
     @Test
     @TmsLink("600")
     @Epic("Dashboard")

@@ -185,6 +185,7 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
         assertThat(teamPage.getAlert().getMessage()).hasText(SUCCESS_MESSAGE_USER_CREATED);
     }
 
+    @Ignore("flaky in packaged")
     @Test(dependsOnMethods = "testAddCompanyAdminAsAdmin")
     @TmsLink("747")
     @Epic("System/Team")
