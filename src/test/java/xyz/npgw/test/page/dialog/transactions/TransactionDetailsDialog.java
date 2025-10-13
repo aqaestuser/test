@@ -8,6 +8,8 @@ import lombok.Getter;
 import xyz.npgw.test.page.dialog.BaseDialog;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
+import java.util.NoSuchElementException;
+
 @Getter
 public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, TransactionDetailsDialog> {
 
@@ -24,6 +26,9 @@ public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, 
     private final Locator paymentLifecycleTable = getByLabelExact("payment lifecycle table");
     private final Locator paymentLifecycleType = paymentLifecycleTable.getByRole(AriaRole.ROWHEADER);
     private final Locator lastLifecycleStatus = paymentLifecycleTable.locator("[data-first='true'] span");
+
+    private final Locator operationList = getByLabelExact("Operation list");
+    private final Locator latestOperation = operationList.locator("[data-slot='base']").first();
 
     private final Locator cardDetailsRegion = getByRole(AriaRole.REGION, "Card details");
     private final Locator cardDetailsLabels = cardDetailsRegion.locator(".labelText");
@@ -111,5 +116,29 @@ public class TransactionDetailsDialog extends BaseDialog<SuperTransactionsPage, 
         paymentLifecycleType.last().waitFor();
 
         return paymentLifecycleType.getByText(name);
+    }
+
+    public String getLatestOperationValue() {
+        return getPage().locator("[aria-roledescription='Number field']").first()
+                .getAttribute("value").replace('\u00A0', ' ');
+    }
+
+    private Locator getRawByOperationId(String operationId) {
+        Locator row = getPage().locator("tr[data-key*='" + operationId + "']");
+
+        if (row.count() == 0) {
+            throw new NoSuchElementException(
+                    "Row with data-key containing '" + operationId + "' not found."
+            );
+        }
+
+        return row;
+    }
+
+    @Step("Click Refund for operation {operationId}")
+    public RefundCapturedTransactionDialog clickRefundOperation(String operationId) {
+        getRawByOperationId(operationId).getByTestId("RefundCapturedTransactionButton").click();
+
+        return new RefundCapturedTransactionDialog(getPage());
     }
 }
