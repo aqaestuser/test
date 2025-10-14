@@ -87,6 +87,12 @@ public class TransactionsTableComponent<CurrentPageT> extends BaseTableComponent
         return getColumnValuesFromAllPages("Status");
     }
 
+    public List<String> getAllTransactionsTypeList() {
+        getPaginationItems().last().waitFor();
+
+        return getColumnValuesFromAllPages("Type");
+    }
+
     public List<Boolean> getRefundButtonVisibilityFromAllPages() {
         selectRowsPerPageOption("100");
         goToFirstPageIfNeeded();

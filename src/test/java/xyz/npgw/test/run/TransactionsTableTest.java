@@ -14,7 +14,6 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -418,12 +417,11 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
         assertThat(transactionsPage.getTable().getFirstRowCell("NPGW reference")).hasText("12345");
     }
 
-    @Ignore("AUTH type refundable per operation")
     @Test
     @TmsLink("818")
     @Epic("Transactions")
     @Feature("Actions")
-    @Description("Refund button is visible only for transactions with status 'SUCCESS'")
+    @Description("Refund button is visible only for transactions with status 'SUCCESS' and type 'SALE'")
     public void testRefundButtonVisibility() {
         SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
                 .getHeader().clickTransactionsLink()
@@ -433,6 +431,7 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
 
         List<String> statuses = transactionsPage
                 .getTable().getAllTransactionsStatusList();
+        List<String> types = transactionsPage.getTable().getAllTransactionsTypeList();
 
         List<Boolean> refundVisible = transactionsPage
                 .getTable().getRefundButtonVisibilityFromAllPages();
@@ -441,14 +440,17 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
 
         for (int i = 0; i < statuses.size(); i++) {
             String status = statuses.get(i).trim();
+            String type = types != null && i < types.size() ? types.get(i).trim() : "UNKNOWN";
             boolean isVisible = refundVisible.get(i);
 
-            if ("SUCCESS".equals(status)) {
-                Allure.step("Verify: refund button is visible at row " + i + " with status: " + status);
-                assertTrue(isVisible);
+            if ("SUCCESS".equals(status) && "SALE".equals(type)) {
+                Allure.step(String.format(
+                        "Verify: refund button IS visible for SALE transaction with status '%s' (row %d)", status, i));
+                assertTrue(isVisible, "Refund button should be visible for SUCCESS SALE transactions");
             } else {
-                Allure.step("Verify: refund button is NOT visible at row " + i + " with status: " + status);
-                assertFalse(isVisible);
+                Allure.step(String.format(
+                        "Verify: refund button is NOT visible for %s transaction with status '%s' (row %d)", type, status, i));
+                assertFalse(isVisible, "Refund button should NOT be visible for non-SUCCESS or non-SALE transactions");
             }
         }
     }
