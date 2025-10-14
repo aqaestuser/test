@@ -18,14 +18,19 @@ import xyz.npgw.test.common.entity.Currency;
 import xyz.npgw.test.common.entity.User;
 import xyz.npgw.test.common.entity.UserRole;
 import xyz.npgw.test.common.util.AuthTransactionUtils;
+import xyz.npgw.test.common.util.SaleTransactionUtils;
 import xyz.npgw.test.common.util.TestUtils;
 import xyz.npgw.test.page.dashboard.SuperDashboardPage;
 import xyz.npgw.test.page.dialog.transactions.TransactionDetailsDialog;
 import xyz.npgw.test.page.transactions.SuperTransactionsPage;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class TransactionFlowTest extends BaseTestForLogout {
 
@@ -160,5 +165,87 @@ public class TransactionFlowTest extends BaseTestForLogout {
         Allure.step("Verify: alert message shows successful refund");
         assertThat(transactionDetailsDialog.getAlert().getMessage())
                 .hasText("SUCCESSThe refund request has been sent successfully");
+    }
+
+    @Test
+    @TmsLink("1307")
+    @Epic("Transactions")
+    @Feature("Sale type transaction with SUCCESS status")
+    @Description("Created SALE type transaction with SUCCESS status is displayed correctly in the Transactions table.")
+    public void testCreateSaleTypeSuccessTransaction() {
+        TransactionResponse transactionResponse = SaleTransactionUtils
+                .createSuccessTransaction(
+                        getPlaywright(), apiRequestContext, 5001, businessUnit, "SALESUCCESS");
+
+        String creationDate = transactionResponse.createdOn();
+        OffsetDateTime dateTime = OffsetDateTime.parse(creationDate);
+        String formattedCreatedDate = dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss", Locale.ENGLISH));
+
+        String type = String.valueOf(transactionResponse.type());
+        String npgwReference = transactionResponse.transactionId();
+        String businessUnitReference = transactionResponse.externalTransactionId();
+        String amount = String.format("%.2f", transactionResponse.amount() / 100.0);
+        String currency = String.valueOf(transactionResponse.currency());
+        String cardType = String.valueOf(transactionResponse.paymentDetails().cardType());
+
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
+                .getSelectCompany().selectCompany(company)
+                .getSelectBusinessUnit().selectBusinessUnit(merchant);
+
+        Allure.step("Verify: Creation Date (GMT) matches the API response");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Creation Date (GMT)"))
+                .hasText(formattedCreatedDate);
+
+        Allure.step("Verify: Type matches the API response");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Type"))
+                .hasText(type);
+
+        Allure.step("Verify: Business unit reference matches the API response");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Business unit reference"))
+                .hasText(businessUnitReference);
+
+        Allure.step("Verify: Amount matches the API response");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Amount"))
+                .hasText(amount);
+
+        Allure.step("Verify: Currency matches the API response");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Currency"))
+                .hasText(currency);
+
+        Allure.step("Verify:  Card Type matches the API response");
+        assertEquals(transactionsPage.getTable().getCardTypeByTransactionId(npgwReference), cardType);
+
+        Allure.step("Verify: Status is SUCCESS");
+        assertThat(transactionsPage.getTable().getCellByTransactionId(npgwReference, "Status"))
+                .hasText("SUCCESS");
+
+        Allure.step("Verify: Refund button is visible in Actions column");
+        assertThat(transactionsPage.getTable()
+                .getRefundButtonByTransactionId(npgwReference)).isVisible();
+    }
+
+    //TODO Add await for acquirer answer
+    @Test
+    @TmsLink("1308")
+    @Epic("Transactions")
+    @Feature("Sale type transaction with SUCCESS status")
+    @Description("SALE type transaction with SUCCESS status can be refunded successfully")
+    public void testRefundSaleTypeTransactionWithSuccessStatus() {
+        String transactionId = SaleTransactionUtils
+                .createSuccessTransaction(
+                        getPlaywright(), apiRequestContext, 4001, businessUnit, "SALESUCCESS")
+                .transactionId();
+
+        SuperTransactionsPage transactionsPage = new SuperDashboardPage(getPage())
+                .getHeader().clickTransactionsLink()
+                .getSelectCompany().selectCompany(company)
+                .getSelectBusinessUnit().selectBusinessUnit(merchant)
+                .getTable().clickRefundTransaction(transactionId)
+                .clickRefundButton();
+
+        Allure.step("Verify: Verify that transaction shows success message after refund");
+        assertThat(transactionsPage.getAlert().getSuccessMessage())
+                .hasText("SUCCESSTransaction was refunded successfully");
     }
 }
