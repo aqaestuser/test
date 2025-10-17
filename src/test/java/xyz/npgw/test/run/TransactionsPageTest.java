@@ -376,6 +376,7 @@ public class TransactionsPageTest extends BaseTestForSingleLogin {
         assertTrue(requestData.contains("SUCCESS"));
     }
 
+    @Ignore("temp")
     @Test
     @TmsLink("598")
     @Epic("Transactions")

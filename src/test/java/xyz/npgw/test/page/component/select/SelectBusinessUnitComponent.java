@@ -13,7 +13,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends SelectComponent<C
     @Getter
     private final Locator selectBusinessUnitField = getByLabelExact("Business unit");
     @Getter
-    private final Locator selectBusinessUnitPlaceholder = locator("input[aria-label='Business unit']");
+    private final Locator selectBusinessUnitPlaceholder = selectBusinessUnitField.locator("../input");
     @Getter
     private final Locator businessUnitDropdown = locator("div[aria-label='Suggestions']");
     @Getter
@@ -23,7 +23,7 @@ public class SelectBusinessUnitComponent<CurrentPageT> extends SelectComponent<C
     private final Locator selectBusinessUnitDropdownChevron = selectBusinessUnitContainer
             .locator("button[aria-label='Show suggestions']:last-child");
     private final Locator selectBusinessUnitClearIcon = selectBusinessUnitContainer
-            .locator("button[aria-label='Show suggestions']:first-child");
+            .locator("button:first-child");
 
     public SelectBusinessUnitComponent(Page page, CurrentPageT currentPage) {
         super(page, currentPage);

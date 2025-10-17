@@ -9,9 +9,10 @@ import lombok.Getter;
 public class SelectAcquirerMidComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
     @Getter
-    private final Locator selectAcquirerMidField = locator("input[aria-label='Select acquirer MID']");
+    private final Locator selectAcquirerMidField = getByLabelExact("Select acquirer MID");
     private final Locator dialogSelectAcquirerMidField = getByRole(AriaRole.DIALOG)
-            .locator("input[aria-label='Select acquirer MID']");
+            .getByLabel("Select acquirer MID", new Locator.GetByLabelOptions().setExact(true))
+            .locator("../input");
     private final Locator selectAcquirerDialogField = locator("input[aria-label='Select acquirer']");
     @Getter
     private final Locator dropdownOptionList = getByRole(AriaRole.OPTION);
@@ -19,7 +20,7 @@ public class SelectAcquirerMidComponent<CurrentPageT> extends SelectComponent<Cu
     private final Locator selectAcquirerDropdownChevron = selectAcquirerContainer
             .locator("button[aria-label='Show suggestions']:last-child");
     private final Locator selectAcquirerClearIcon = selectAcquirerContainer
-            .locator("button[aria-label='Show suggestions']:first-child");
+            .locator("button:first-child");
 
     public SelectAcquirerMidComponent(Page page, CurrentPageT currentPage) {
         super(page, currentPage);

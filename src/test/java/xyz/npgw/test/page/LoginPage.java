@@ -24,8 +24,8 @@ public final class LoginPage extends BasePage implements AlertTrait<LoginPage> {
     private final Locator rememberMeCheckbox = getByRole(AriaRole.CHECKBOX, "Remember me");
     @Getter
     private final Locator loginFormTitle = locator(".login-form-container h3");
-    private final Locator newPasswordField = locator("input[aria-label='New password']");
-    private final Locator repeatNewPasswordField = locator("input[aria-label='Repeat password']");
+    private final Locator newPasswordField = getByPlaceholder("Enter new password");
+    private final Locator repeatNewPasswordField = getByPlaceholder("Repeat new password");
     private final Locator saveButton = getByRole(AriaRole.BUTTON, "Save");
 
     public LoginPage(Page page) {

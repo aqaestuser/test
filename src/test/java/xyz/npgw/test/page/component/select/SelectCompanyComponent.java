@@ -17,7 +17,7 @@ public class SelectCompanyComponent<CurrentPageT> extends SelectComponent<Curren
     private final Locator selectCompanyDropdownChevron = selectCompanyContainer
             .locator("button[aria-label='Show suggestions']:last-child");
     private final Locator selectCompanyClearIcon = selectCompanyContainer
-            .locator("button[aria-label='Show suggestions']:first-child");
+            .locator("button:first-child");
 
     public SelectCompanyComponent(Page page, CurrentPageT currentPage) {
         super(page, currentPage);

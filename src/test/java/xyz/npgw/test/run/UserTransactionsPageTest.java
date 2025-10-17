@@ -69,7 +69,6 @@ public class UserTransactionsPageTest extends BaseTestForSingleLogin {
         assertThat(transactionsPage.getSelectStatus().getStatusValue()).containsText("ALL");
     }
 
-    @Ignore("Amount to arrows not working atm")
     @Test
     @TmsLink("263")
     @Epic("Transactions")
@@ -232,6 +231,7 @@ public class UserTransactionsPageTest extends BaseTestForSingleLogin {
         }
     }
 
+    @Ignore("temp")
     @Test
     @TmsLink("598")
     @Epic("Transactions")

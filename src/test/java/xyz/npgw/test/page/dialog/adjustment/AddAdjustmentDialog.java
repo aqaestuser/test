@@ -13,7 +13,7 @@ import xyz.npgw.test.page.system.SuperTransactionManagementPage;
 public class AddAdjustmentDialog extends BaseDialog<SuperTransactionManagementPage, AddAdjustmentDialog> implements
         AddAdjustmentTableTrait {
 
-    private final Locator npgwReferenceInput = locator("input[aria-label='NPGW reference']");
+    private final Locator npgwReferenceInput = getByLabelExact("NPGW reference").locator("../input");
     private final Locator npgwReferenceFieldLabel = locator("label[data-slot='label']").first();
     private final Locator buReferenceFieldLabel = locator("label[data-slot='label']").last();
     private final Locator createButton = getByRole(AriaRole.BUTTON, "Create");

@@ -89,7 +89,6 @@ public class AdminTeamPageTest extends BaseTestForSingleLogin {
                 getApiRequestContext(getPlaywright(), admin.getCredentials()),
                 company,
                 businessUnit);
-        log.info("apiKey {}", apiKey);
         APIRequestContext apiRequestContext = getApiRequestContext(getPlaywright(), apiKey);
 
         TestUtils.createAcquirer(getApiRequestContext(), acquirer);

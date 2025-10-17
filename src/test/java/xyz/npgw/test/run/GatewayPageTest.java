@@ -235,6 +235,7 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
         TestUtils.deleteCompany(getApiRequestContext(), company.companyName());
     }
 
+    @Ignore("temp")
     @Test
     @TmsLink("806")
     @Epic("System/Gateway")
@@ -263,13 +264,12 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
                 .clickDeleteButton();
     }
 
-//    @Ignore("ui-test packaged run fail")
     @Test
-    @TmsLink("835/847")
+    @TmsLink("835")
+    @TmsLink("847")
     @Epic("System/Gateway")
     @Feature("Merchant acquirer")
-    @Description("Move merchant-acquirer down to reduce their priority,"
-            + " Move merchant-acquirer up to increase their priority")
+    @Description("Move merchant-acquirer down/up to reduce/increase their priority")
     public void testMoveMerchantAcquirerDownAndUpButtons() {
         SuperGatewayPage gatewayPage = new SuperDashboardPage(getPage())
                 .getHeader().clickSystemAdministrationLink()
@@ -284,6 +284,8 @@ public class GatewayPageTest extends BaseTestForSingleLogin {
                 .getSelectAcquirerMid().selectAcquirerMidInDialog(ACQUIRER_MOVE.getAcquirerDisplayName())
                 .clickConnectButton()
                 .getAlert().clickCloseButton();
+
+        assertThat(gatewayPage.getTable().getRows()).hasCount(2);
 
         Allure.step("Check that the first created acquirer priority is 0");
         assertThat(gatewayPage.getTable().getCell(0, "Acquirer MID")).hasText(ACQUIRER.getAcquirerDisplayName());

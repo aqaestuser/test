@@ -52,7 +52,7 @@ public class TransactionFlowTest extends BaseTestForLogout {
         final User admin = User.builder()
                 .companyName(company)
                 .userRole(UserRole.ADMIN)
-                .email("the.user@email.com")
+                .email("the.admin@email.com")
                 .build();
 
         TestUtils.createCompany(getApiRequestContext(), company);
@@ -246,6 +246,6 @@ public class TransactionFlowTest extends BaseTestForLogout {
 
         Allure.step("Verify: Verify that transaction shows success message after refund");
         assertThat(transactionsPage.getAlert().getSuccessMessage())
-                .hasText("SUCCESSTransaction was refunded successfully");
+                .hasText("SUCCESSRefund request for transaction was sent successfully");
     }
 }

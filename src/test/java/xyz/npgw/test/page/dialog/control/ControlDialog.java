@@ -73,7 +73,7 @@ public abstract class ControlDialog<CurrentDialogT extends ControlDialog<Current
     @Step("Fill in fraud control type: {controlType}")
     public CurrentDialogT selectFraudControlTypeField(ControlType controlType) {
         controlTypeLabel.click();
-        locator("role=option >> text=" + controlType.getDisplayText()).click();
+        locator("[role=option] >> text='" + controlType.getDisplayText() + "'").click();
 
         return (CurrentDialogT) this;
     }

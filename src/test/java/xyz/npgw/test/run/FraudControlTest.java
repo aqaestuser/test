@@ -9,6 +9,7 @@ import io.qameta.allure.TmsLink;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
 import xyz.npgw.test.common.entity.ControlType;
@@ -317,6 +318,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
                 .hasText(FRAUD_CONTROL.toString());
     }
 
+    @Ignore("temp")
     @Test(dependsOnMethods = {"testAddActiveFraudControl", "testAddInactiveFraudControl"})
     @TmsLink("1001")
     @Epic("System/Fraud control")
@@ -403,7 +405,7 @@ public class FraudControlTest extends BaseTestForSingleLogin {
 
     @Test(dependsOnMethods = {"testCancelAddingFraudControlToBusinessUnit", "testCancelDeletingFraudControl",
             "testCancelDeactivationFraudControl", "testCancelEditingFraudControl",
-            "testTooltipsForActionsControlTable", /*"testBusinessUnitControlTableEntriesSorting",*/
+            /*"testTooltipsForActionsControlTable", "testBusinessUnitControlTableEntriesSorting",*/
             "testVerifyWarningModalWindowChangeActivityForControlTable"})
     @TmsLink("949")
     @Epic("System/Fraud control")

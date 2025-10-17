@@ -8,7 +8,8 @@ import lombok.Getter;
 @Getter
 public class SelectAcquirerCodeComponent<CurrentPageT> extends SelectComponent<CurrentPageT> {
 
-    private final Locator selectAcquirerCodeField = locator("input[aria-label='Select acquirer code']");
+    private final Locator selectAcquirerCodeField = getByLabelExact("Select acquirer code")
+            .locator("../input");
 
     public SelectAcquirerCodeComponent(Page page, CurrentPageT currentPage) {
         super(page, currentPage);

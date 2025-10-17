@@ -14,6 +14,7 @@ public class RefundTransactionDialog
 
     private final Locator amountToRefundInput = locator("[aria-roledescription='Number field']");
     private final Locator increaseAmountToRefundButton = getByLabelExact("Increase Amount to refund");
+    private final Locator decreaseAmountToRefundButton = getByLabelExact("Decrease Amount to refund");
 
     public RefundTransactionDialog(Page page) {
         super(page);

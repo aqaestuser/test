@@ -60,6 +60,7 @@ public abstract class BaseDialog<
     @Step("Click on the 'Close' button to close form")
     public ReturnPageT clickCloseButton() {
         closeButton.click();
+        dialog.waitFor(new Locator.WaitForOptions().setState(WaitForSelectorState.HIDDEN));
 
         return getReturnPage();
     }

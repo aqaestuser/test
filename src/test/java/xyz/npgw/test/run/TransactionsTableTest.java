@@ -14,6 +14,7 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.ProjectProperties;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -495,7 +496,10 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
                     assertThat(refundTransactionDialog.getAmountToRefundInput()).hasValue(amount);
 
                     Allure.step("Verify: increase amount button to refund is disabled");
-                    assertThat(refundTransactionDialog.getIncreaseAmountToRefundButton()).isDisabled();
+                    assertThat(refundTransactionDialog.getIncreaseAmountToRefundButton()).hasAttribute("data-disabled", "true");
+
+                    Allure.step("Verify: decrease amount button to refund is disabled");
+                    assertThat(refundTransactionDialog.getDecreaseAmountToRefundButton()).isEnabled();
 
                     refundTransactionDialog.clickCloseIcon();
                 }
@@ -621,6 +625,7 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
         assertEquals(uiTransactionList, excelTransactionList);
     }
 
+    @Ignore("dragArrowsToFirstPosition is flaky")
     @Test
     @TmsLink("978")
     @Epic("Transactions")

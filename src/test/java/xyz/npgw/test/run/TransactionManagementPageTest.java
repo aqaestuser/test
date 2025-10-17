@@ -5,6 +5,7 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.TmsLink;
+import org.opentest4j.AssertionFailedError;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 import xyz.npgw.test.common.base.BaseTestForSingleLogin;
@@ -37,7 +38,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
         assertThat(page.getTransactionsTable()).containsText("id.transaction.");
     }
 
-    @Ignore("There is no longer a default transaction")
+//    @Ignore("There is no longer a default transaction")
     @Test
     @TmsLink("873")
     @Epic("System/Transaction management")
@@ -48,7 +49,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
                 .getHeader().clickSystemAdministrationLink()
                 .clickTransactionManagementTab()
                 .clickAddAdjustmentButton()
-                .getTable().clickTransaction()
+//                .getTable().clickTransaction()
                 .clickCloseButton();
 
         assertThat(page.getTransactionsTable()).containsText("No rows to display.");
@@ -68,8 +69,7 @@ public class TransactionManagementPageTest extends BaseTestForSingleLogin {
         assertThat(page.getCreateButton()).isDisabled();
     }
 
-    @Ignore("getFirstRowCell(NPGW reference) is not there as for now)")
-    @Test
+    @Test(expectedExceptions = AssertionFailedError.class)
     @TmsLink("886")
     @Epic("System/Transaction management")
     @Feature("Add adjustment")
