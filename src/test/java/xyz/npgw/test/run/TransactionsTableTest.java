@@ -625,7 +625,6 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
         assertEquals(uiTransactionList, excelTransactionList);
     }
 
-    @Ignore("dragArrowsToFirstPosition is flaky")
     @Test
     @TmsLink("978")
     @Epic("Transactions")
@@ -650,13 +649,12 @@ public class TransactionsTableTest extends BaseTestForSingleLogin {
                 .dragArrowsToFirstPosition(amount) // amount currency status...
                 .dragArrowsToFirstPosition(creationDate) // creationDate amount currency status...
                 .dragArrowsToLastPosition(currency) // creationDate amount status currency...
-//                .dragArrows(creationDate, status) // amount status creationDate currency...
-//                .dragArrows(amount, creationDate) // status creationDate amount currency...
+                .dragArrows(creationDate, status) // amount status creationDate currency...
+                .dragArrows(amount, creationDate) // status creationDate amount currency...
                 .pressEscapeKey();
 
         Allure.step("Verify: Selected column headers are displayed in the correct order in the transactions table.");
         assertThat(transactionsPage.getTable().getColumnHeaders())
-//                .hasText(new String[]{status, creationDate, amount, currency, "Actions"});
-                .hasText(new String[]{creationDate, amount, status, currency, "Actions"});
+                .hasText(new String[]{status, creationDate, amount, currency, "Actions"});
     }
 }
