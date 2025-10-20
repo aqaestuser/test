@@ -113,10 +113,10 @@ jobs:
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Clean up gh-pages branch (optional)
-        run: |
-             git checkout -f gh-pages
-             git rm -rf .
+#      - name: Clean up gh-pages branch (optional)
+#        run: |
+#             git checkout -f gh-pages
+#             git rm -rf .
 
       - name: Deploy Allure report to GitHub pages
         uses: peaceiris/actions-gh-pages@v4.0.0
@@ -125,3 +125,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
+          force_orphan: true
