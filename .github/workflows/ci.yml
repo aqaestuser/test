@@ -106,12 +106,12 @@ jobs:
         with:
           allure_results: './target/allure-results'
 
-      - name: Queue deployment
-        uses: softprops/turnstyle@v2.3.1
-        with:
-          poll-interval-seconds: 20
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      - name: Queue deployment
+#        uses: softprops/turnstyle@v2.3.1
+#        with:
+#          poll-interval-seconds: 20
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Clean up gh-pages branch (optional)
         run: |
