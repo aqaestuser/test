@@ -1,0 +1,2 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"User email is NOT remembered after first successful login with unchecked 'Remember me'","5850","testRememberMeUncheckedDontSaveUserEmailUnauthenticated","Surefire suite","Mon Oct 20 22:49:54 GMT 2025","passed","Mon Oct 20 22:50:00 GMT 2025","xyz.npgw.test.run.UnauthenticatedLoginPageTest","Surefire test","xyz.npgw.test.run.UnauthenticatedLoginPageTest","testRememberMeUncheckedDontSaveUserEmailUnauthenticated"
