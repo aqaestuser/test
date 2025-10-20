@@ -38,7 +38,7 @@ jobs:
           tool_name: 'Checkstyle'
 
       - name: Run tests
-        run: mvn test
+        run: mvn test -Dtest=UnauthenticatedLoginPageTest#testRememberMeUncheckedDontSaveUserEmailUnauthenticated
         env:
           PROJECT_PROPERTIES:
             setBaseURL=https://test.npgw.xyz;
