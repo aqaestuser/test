@@ -43,7 +43,7 @@ jobs:
           tool_name: 'Checkstyle'
 
       - name: Run tests
-        run: mvn test -Dtest=UnauthenticatedLoginPageTest#testRememberMeUncheckedDontSaveUserEmailUnauthenticated
+        run: mvn test -Dtest=UnauthenticatedLoginPageTest#testRememberMeUncheckedDontSaveUserEmailUnauthenticated allure:report
         env:
           PROJECT_PROPERTIES:
             setBaseURL=https://test.npgw.xyz;
@@ -97,19 +97,19 @@ jobs:
           path: target/artefact/
           retention-days: 1
 
-      - name: Get Allure history
-        uses: actions/checkout@v4.2.2
-        if: always()
-        continue-on-error: true
-        with:
-          ref: gh-pages
-          path: gh-pages
-
-      - name: Build Allure report with history
-        uses: simple-elf/allure-report-action@v1.12
-        if: always()
-        with:
-          allure_results: './target/allure-results'
+#      - name: Get Allure history
+#        uses: actions/checkout@v4.2.2
+#        if: always()
+#        continue-on-error: true
+#        with:
+#          ref: gh-pages
+#          path: gh-pages
+#
+#      - name: Build Allure report with history
+#        uses: simple-elf/allure-report-action@v1.12
+#        if: always()
+#        with:
+#          allure_results: './target/allure-results'
 
 #      - name: Setup Pages
 #        if: github.ref == 'refs/heads/main'
@@ -120,7 +120,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           name: github-pages
-          path: "./target/allure-report"
+          path: "./target/site/allure-maven-plugin"
 
 
   deploy:
