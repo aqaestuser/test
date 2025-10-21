@@ -17,6 +17,7 @@ FROM mcr.microsoft.com/playwright/java:v1.53.0
 USER root
 WORKDIR /
 
+
 RUN apt-get update && \
     apt-get install -y openjdk-17-jre-headless && \
     apt-get clean;
