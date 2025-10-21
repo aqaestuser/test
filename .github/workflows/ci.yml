@@ -11,10 +11,10 @@ permissions:
   id-token: write
   checks: write
 
-environment:
-  # environment created automatically by GitHub
-  name: github-pages
-  url: ${{ steps.deployment.outputs.page_url }}
+#  environment:
+    # environment created automatically by GitHub
+#    name: github-pages
+#    url: ${{ steps.deployment.outputs.page_url }}
 
 jobs:
   run-tests:
