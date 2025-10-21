@@ -116,7 +116,6 @@ jobs:
 #        uses: actions/configure-pages@v3
 
       - name: Upload Artifact
-        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v4
         with:
           name: github-pages
