@@ -122,7 +122,6 @@ jobs:
           name: github-pages
           path: "./target/site/allure-maven-plugin"
 
-
   deploy:
     environment:
       name: github-pages
