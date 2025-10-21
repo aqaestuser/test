@@ -34,7 +34,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-
 public class AcquirersPageTest extends BaseTestForSingleLogin {
 
     private static final String[] STATUS_OPTIONS = {"All", "Active", "Inactive"};
