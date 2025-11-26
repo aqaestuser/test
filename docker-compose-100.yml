@@ -1,0 +1,24 @@
+services:
+
+  ui-test:
+#    environment:
+#      OLD_ACCESS_OPTIONS: |
+#        baseURL=${baseURL};
+#        userEmail=${userEmail};
+#        userPassword=${userPassword}
+#      OLD_BROWSER_OPTIONS: |
+#        browserType=chromium;
+#        viewportWidth=1920;
+#        viewportHeight=1080;
+#        headlessMode=true;
+#        slowMoMode=0;
+#        tracingMode=true;
+#        videoMode=true
+#      CI_RUN: true
+    container_name: ui-test
+    build:
+      context: .
+      dockerfile: npgw.dockerfile
+    volumes:
+      - /home/user/.m2:/root/.m2
+#      - /mnt/wdone/target:/tests/target
